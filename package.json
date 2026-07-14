@@ -5,8 +5,9 @@
   "type": "module",
   "description": "Neutral Genesis protocol workspace. Tooling is non-normative.",
   "scripts": {
-    "validate": "node tools/validate_workspace.mjs",
-    "test": "node tools/validate_workspace.mjs"
+    "validate": "node tools/run_conformance.mjs",
+    "test": "node tools/run_conformance.mjs",
+    "validate:node": "node tools/validate_workspace.mjs"
   },
   "engines": {
     "node": ">=20"

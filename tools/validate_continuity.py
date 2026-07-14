@@ -10,6 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 import hashlib
 import json
+import re
 import sys
 import unicodedata
 
@@ -33,6 +34,19 @@ def hash_fields(domain: str, fields: list[str]) -> str:
 
 def optional_text(value: object) -> str:
     return "" if value is None else str(value)
+
+
+def safe_relative_path(value: str) -> bool:
+    if not isinstance(value, str) or not value or "\x00" in value:
+        return False
+    if unicodedata.normalize("NFC", value) != value:
+        return False
+    if value.startswith("/") or "\\" in value:
+        return False
+    if re.match(r"^[A-Za-z]:", value):
+        return False
+    segments = value.split("/")
+    return not any(segment in {"", ".", ".."} for segment in segments)
 
 
 def compute_body_registry(case: dict) -> str:
@@ -67,6 +81,34 @@ def compute_body_registry(case: dict) -> str:
     return hash_fields(case["domain"], fields)
 
 
+def compute_transfer_package(case: dict) -> str:
+    data = case["input"]
+    contents = data["contents"]
+    paths = [item["path"] for item in contents]
+    if len(paths) != len(set(paths)):
+        raise ValueError("duplicate_package_path")
+    if any(not safe_relative_path(path) for path in paths):
+        raise ValueError("invalid_relative_path")
+
+    fields = [
+        data["schema_version"],
+        data["transfer_id"],
+        data["instance_id"],
+        data["source_body_id"],
+        optional_text(data.get("destination_body_id")),
+        data["mode"],
+        data["created_at"],
+        data["checkpoint_hash"],
+        data["last_event_hash"],
+        data["continuity_status"],
+        data["authorization_ref"],
+        str(len(contents)),
+    ]
+    for item in sorted(contents, key=lambda value: value["path"].encode("utf-8")):
+        fields.extend([item["kind"], item["path"], item["digest"]])
+    return hash_fields(case["domain"], fields)
+
+
 def compute_transfer_receipt(case: dict) -> str:
     data = case["input"]
     if data["continuity_status"] == "known_gap" and not data.get("continuity_gap_ref"):
@@ -77,6 +119,7 @@ def compute_transfer_receipt(case: dict) -> str:
         data["instance_id"],
         data["source_body_id"],
         data["destination_body_id"],
+        data["accepted_package_digest"],
         data["accepted_checkpoint_hash"],
         data["accepted_last_event_hash"],
         str(data["accepted_last_sequence"]),
@@ -113,12 +156,20 @@ def compute_transfer_finalization(case: dict) -> str:
 
 def main() -> int:
     vectors = json.loads(VECTORS.read_text(encoding="utf-8"))
+    package_actual = compute_transfer_package(vectors["transfer_package"])
+    package_expected = vectors["transfer_package"]["expected_package_digest"]
+
+    if vectors["transfer_receipt"]["input"]["accepted_package_digest"] != package_expected:
+        print("FAIL receipt_not_linked_to_expected_package")
+        return 1
+
     checks = [
         (
             "body_registry",
             compute_body_registry(vectors["body_registry"]),
             vectors["body_registry"]["expected_registry_digest"],
         ),
+        ("transfer_package", package_actual, package_expected),
         (
             "transfer_receipt",
             compute_transfer_receipt(vectors["transfer_receipt"]),

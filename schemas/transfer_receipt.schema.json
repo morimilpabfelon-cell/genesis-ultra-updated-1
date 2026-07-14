@@ -10,6 +10,7 @@
     "instance_id",
     "source_body_id",
     "destination_body_id",
+    "accepted_package_digest",
     "accepted_checkpoint_hash",
     "accepted_last_event_hash",
     "accepted_last_sequence",
@@ -23,6 +24,7 @@
     "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "source_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "destination_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "accepted_package_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "accepted_checkpoint_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "accepted_last_event_hash": {
       "oneOf": [
