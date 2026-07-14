@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:body-registry:v0.1",
+  "title": "Genesis Body Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "instance_id",
+    "registry_epoch",
+    "bodies",
+    "updated_at",
+    "registry_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.body.registry.v0.1" },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "registry_epoch": { "type": "integer", "minimum": 0 },
+    "bodies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "body_id",
+          "status",
+          "platform_profile",
+          "public_key_fingerprint",
+          "created_at"
+        ],
+        "properties": {
+          "body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+          "status": {
+            "type": "string",
+            "enum": [
+              "candidate",
+              "active_writer",
+              "read_only",
+              "suspended",
+              "revoked",
+              "lost"
+            ]
+          },
+          "platform_profile": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "public_key_fingerprint": { "type": "string", "minLength": 16, "maxLength": 256 },
+          "created_at": { "type": "string", "format": "date-time" },
+          "last_seen_at": { "type": ["string", "null"], "format": "date-time" },
+          "revocation_ref": { "type": ["string", "null"], "maxLength": 256 }
+        }
+      }
+    },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "registry_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}

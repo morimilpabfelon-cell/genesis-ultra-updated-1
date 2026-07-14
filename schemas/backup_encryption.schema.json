@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:backup-encryption:v0.1",
+  "title": "Genesis Backup Encryption",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "backup_id",
+    "instance_id",
+    "encryption_profile",
+    "kdf_profile",
+    "salt",
+    "nonce",
+    "associated_data_digest",
+    "ciphertext_digest",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.backup.encryption.v0.1" },
+    "backup_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "encryption_profile": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "kdf_profile": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "kdf_parameters": { "type": "object" },
+    "salt": { "type": "string", "minLength": 16 },
+    "nonce": { "type": "string", "minLength": 16 },
+    "associated_data_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "ciphertext_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "wrapped_key": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

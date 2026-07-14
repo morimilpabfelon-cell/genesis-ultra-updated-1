@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:seed-manifest:v0.1",
+  "title": "Genesis Seed Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "protocol_version",
+    "hash_profile",
+    "seed_id",
+    "identity_digest",
+    "doctrine_digest",
+    "files",
+    "root_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "genesis.seed.manifest.v0.1"
+    },
+    "protocol_version": {
+      "const": "genesis.protocol.v0.1"
+    },
+    "hash_profile": {
+      "const": "genesis.hash.fields.v0.1"
+    },
+    "seed_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "identity_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "doctrine_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "files": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/file_record"
+      }
+    },
+    "root_hash": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$)).+$"
+    },
+    "file_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "kind",
+        "required",
+        "digest"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "identity",
+            "doctrine",
+            "policy",
+            "contract",
+            "ontology",
+            "other"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

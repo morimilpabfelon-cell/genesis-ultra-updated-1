@@ -1,0 +1,152 @@
+#!/usr/bin/env python3
+"""Reference validator for Genesis Ultra continuity hashes.
+
+Auxiliary implementation only. The normative field order lives in
+spec/CONTINUITY_HASHES.md.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+import hashlib
+import json
+import sys
+import unicodedata
+
+ROOT = Path(__file__).resolve().parents[1]
+VECTORS = ROOT / "conformance" / "continuity_vectors.json"
+
+
+def encode_field(value: str) -> bytes:
+    if not isinstance(value, str):
+        raise TypeError("field_must_be_string")
+    if unicodedata.normalize("NFC", value) != value:
+        raise ValueError("text_not_nfc")
+    encoded = value.encode("utf-8")
+    return str(len(encoded)).encode("ascii") + b":" + encoded + b"\n"
+
+
+def hash_fields(domain: str, fields: list[str]) -> str:
+    preimage = encode_field(domain) + b"".join(encode_field(field) for field in fields)
+    return "sha256:" + hashlib.sha256(preimage).hexdigest()
+
+
+def optional_text(value: object) -> str:
+    return "" if value is None else str(value)
+
+
+def compute_body_registry(case: dict) -> str:
+    data = case["input"]
+    bodies = data["bodies"]
+    ids = [body["body_id"] for body in bodies]
+    if len(ids) != len(set(ids)):
+        raise ValueError("duplicate_body_id")
+    active = sum(1 for body in bodies if body["status"] == "active_writer")
+    if active > 1:
+        raise ValueError("multiple_active_writers")
+
+    fields = [
+        data["schema_version"],
+        data["instance_id"],
+        str(data["registry_epoch"]),
+        str(len(bodies)),
+    ]
+    for body in sorted(bodies, key=lambda item: item["body_id"].encode("utf-8")):
+        fields.extend(
+            [
+                body["body_id"],
+                body["status"],
+                body["platform_profile"],
+                body["public_key_fingerprint"],
+                body["created_at"],
+                optional_text(body.get("last_seen_at")),
+                optional_text(body.get("revocation_ref")),
+            ]
+        )
+    fields.append(data["updated_at"])
+    return hash_fields(case["domain"], fields)
+
+
+def compute_transfer_receipt(case: dict) -> str:
+    data = case["input"]
+    if data["continuity_status"] == "known_gap" and not data.get("continuity_gap_ref"):
+        raise ValueError("missing_continuity_gap_ref")
+    fields = [
+        data["schema_version"],
+        data["transfer_id"],
+        data["instance_id"],
+        data["source_body_id"],
+        data["destination_body_id"],
+        data["accepted_checkpoint_hash"],
+        data["accepted_last_event_hash"],
+        str(data["accepted_last_sequence"]),
+        data["accepted_at"],
+        data["continuity_status"],
+        optional_text(data.get("continuity_gap_ref")),
+        optional_text(data.get("guardian_authorization_ref")),
+    ]
+    return hash_fields(case["domain"], fields)
+
+
+def compute_transfer_finalization(case: dict) -> str:
+    data = case["input"]
+    if data["destination_final_status"] != "active_writer":
+        raise ValueError("destination_not_active_writer")
+    if data["source_final_status"] not in {"read_only", "revoked", "lost"}:
+        raise ValueError("invalid_source_final_status")
+    if data["source_body_id"] == data["destination_body_id"]:
+        raise ValueError("source_destination_same_body")
+    fields = [
+        data["schema_version"],
+        data["transfer_id"],
+        data["instance_id"],
+        data["source_body_id"],
+        data["destination_body_id"],
+        data["receipt_digest"],
+        data["source_final_status"],
+        data["destination_final_status"],
+        data["finalized_at"],
+        data["guardian_authorization_ref"],
+    ]
+    return hash_fields(case["domain"], fields)
+
+
+def main() -> int:
+    vectors = json.loads(VECTORS.read_text(encoding="utf-8"))
+    checks = [
+        (
+            "body_registry",
+            compute_body_registry(vectors["body_registry"]),
+            vectors["body_registry"]["expected_registry_digest"],
+        ),
+        (
+            "transfer_receipt",
+            compute_transfer_receipt(vectors["transfer_receipt"]),
+            vectors["transfer_receipt"]["expected_receipt_digest"],
+        ),
+        (
+            "transfer_finalization",
+            compute_transfer_finalization(vectors["transfer_finalization"]),
+            vectors["transfer_finalization"]["expected_finalization_digest"],
+        ),
+    ]
+
+    failed = False
+    for name, actual, expected in checks:
+        if actual == expected:
+            print(f"OK {name}")
+        else:
+            failed = True
+            print(f"FAIL {name}")
+            print(f"  actual:   {actual}")
+            print(f"  expected: {expected}")
+
+    if failed:
+        return 1
+    print("OK continuity vectors")
+    print("NOTE Reference conformance check; not a production security certification.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

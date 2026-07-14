@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:memory-event:v0.1",
+  "title": "Genesis Memory Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "event_id",
+    "instance_id",
+    "body_id",
+    "sequence",
+    "previous_event_hash",
+    "event_type",
+    "actor",
+    "content_digest",
+    "content_type",
+    "observed_at",
+    "provenance_digest",
+    "privacy",
+    "event_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "genesis.memory.event.v0.1"
+    },
+    "hash_profile": {
+      "const": "genesis.hash.fields.v0.1"
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "instance_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "body_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "previous_event_hash": {
+      "oneOf": [
+        {
+          "const": "GENESIS"
+        },
+        {
+          "$ref": "#/$defs/event_hash"
+        }
+      ]
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "actor": {
+      "type": "string",
+      "enum": [
+        "guardian",
+        "instance",
+        "system",
+        "body",
+        "external"
+      ]
+    },
+    "content_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "content_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "content_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1024
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provenance_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "provenance_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1024
+    },
+    "privacy": {
+      "type": "string",
+      "enum": [
+        "private_local",
+        "guardian_shared",
+        "export_approved",
+        "quarantined"
+      ]
+    },
+    "event_hash": {
+      "$ref": "#/$defs/event_hash"
+    },
+    "signature": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^evsha256:[a-f0-9]{64}$"
+    }
+  }
+}

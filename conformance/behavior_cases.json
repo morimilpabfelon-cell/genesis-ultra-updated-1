@@ -1,0 +1,57 @@
+{
+  "purpose": "Casos de comportamiento normativo compartidos: TODA implementacion debe RECHAZAR cada caso. Curan el error mas delicado: dos implementaciones aceptando datos distintos bajo el mismo protocolo.",
+  "must_reject_encoding": [
+    {
+      "case_id": "enc-nfd-001",
+      "reason": "texto en NFD (no NFC)",
+      "value": "nin\u0303o"
+    },
+    {
+      "case_id": "enc-nfd-002",
+      "reason": "acento combinante suelto",
+      "value": "cafe\u0301"
+    }
+  ],
+  "must_reject_paths": [
+    {
+      "case_id": "path-nul-001",
+      "value": "a\u0000b",
+      "reason": "byte NUL"
+    },
+    {
+      "case_id": "path-abs-001",
+      "value": "/etc/passwd",
+      "reason": "ruta absoluta"
+    },
+    {
+      "case_id": "path-bslash-001",
+      "value": "a\\b",
+      "reason": "barra invertida"
+    },
+    {
+      "case_id": "path-drive-001",
+      "value": "C:/windows",
+      "reason": "letra de unidad"
+    },
+    {
+      "case_id": "path-dotdot-001",
+      "value": "a/../b",
+      "reason": "segmento .."
+    },
+    {
+      "case_id": "path-dot-001",
+      "value": "./a",
+      "reason": "segmento ."
+    },
+    {
+      "case_id": "path-empty-001",
+      "value": "a//b",
+      "reason": "segmento vacio"
+    },
+    {
+      "case_id": "path-nfd-001",
+      "value": "nin\u0303o/doc.md",
+      "reason": "ruta no NFC"
+    }
+  ]
+}

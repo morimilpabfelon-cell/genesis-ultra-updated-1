@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:key-epoch:v0.1",
+  "title": "Genesis Key Epoch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "key_epoch_id",
+    "instance_id",
+    "body_id",
+    "epoch_number",
+    "public_key_fingerprint",
+    "created_at",
+    "status",
+    "epoch_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.key.epoch.v0.1" },
+    "key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "epoch_number": { "type": "integer", "minimum": 0 },
+    "public_key_fingerprint": { "type": "string", "minLength": 16, "maxLength": 256 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "status": { "type": "string", "enum": ["active", "retired", "revoked", "compromised"] },
+    "previous_epoch_id": { "type": ["string", "null"], "maxLength": 128 },
+    "rotation_authorization_ref": { "type": ["string", "null"], "maxLength": 256 },
+    "epoch_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "signature": { "type": ["object", "null"] }
+  }
+}

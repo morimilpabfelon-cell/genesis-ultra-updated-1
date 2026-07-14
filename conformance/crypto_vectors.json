@@ -1,0 +1,88 @@
+{
+  "profile": "genesis.crypto.digests.v0.1",
+  "status": "draft",
+  "vectors": [
+    {
+      "case_id": "guardian-authorization-digest-001",
+      "domain": "genesis.guardian.authorization.v0.1",
+      "fields": [
+        "genesis.guardian.authorization.v0.1",
+        "auth_01HNEUTRAL00000000000001",
+        "inst_01HNEUTRAL00000000000001",
+        "guardian_01HNEUTRAL000000000001",
+        "transfer.finalize",
+        "transfer_01HNEUTRAL0000000001",
+        "2026-07-12T00:00:00Z",
+        "2026-07-12T00:10:00Z",
+        "1",
+        "0",
+        "false"
+      ],
+      "expected_digest": "sha256:404fc3303cd8828d34a324fed6d8bff7c38918324bd1899990b4d5038215d121"
+    },
+    {
+      "case_id": "body-possession-digest-001",
+      "domain": "genesis.body.possession.v0.1",
+      "fields": [
+        "genesis.body.possession.v0.1",
+        "proof_01HNEUTRAL0000000000001",
+        "inst_01HNEUTRAL00000000000001",
+        "body_01HNEUTRAL00000000000001",
+        "nonce_01HNEUTRAL0000000000001",
+        "2026-07-12T00:00:00Z",
+        "2026-07-12T00:05:00Z",
+        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "expected_digest": "sha256:43949d320e32c16e34ca2e06c4e8de72188f79c7b6927478844db5d73bc30abf"
+    },
+    {
+      "case_id": "key-epoch-digest-001",
+      "domain": "genesis.key.epoch.v0.1",
+      "fields": [
+        "genesis.key.epoch.v0.1",
+        "epoch_01HNEUTRAL0000000000001",
+        "inst_01HNEUTRAL00000000000001",
+        "body_01HNEUTRAL00000000000001",
+        "1",
+        "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "2026-07-12T00:00:00Z",
+        "active"
+      ],
+      "expected_digest": "sha256:87e9286776d2ed339bdea91c54f0078a57192d8f0d9c5bd85663b24625ebc7df"
+    }
+  ],
+  "algorithms": {
+    "ed25519": {
+      "algorithm": "genesis.signature.ed25519.v0.1",
+      "seed_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+      "public_key_hex": "d04ab232742bb4ab3a1368bd4615e4e6d0224ab71a016baf8520a332c9778737",
+      "message": "genesis ultra signature test v0.1",
+      "signed_bytes": "encode_field(domain) + encode_field(message)",
+      "signature_hex": "4fa557e33c2cd7a1b4a938120734f3c23e1682064b631b50ecd754651b31f44647abf2889acbf165a0c505ae692f402955bfe27cf6b4e0bcbe3fe186aa435e02",
+      "corruption": {
+        "flip_first_signature_byte_must_fail": true
+      }
+    },
+    "xchacha20poly1305_ietf": {
+      "algorithm": "genesis.backup.xchacha20poly1305.v0.1",
+      "key_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+      "nonce_hex": "333333333333333333333333333333333333333333333333",
+      "aad_utf8": "genesis.backup.aad.v0.1",
+      "plaintext_utf8": "backup de prueba genesis ultra",
+      "ciphertext_with_tag_hex": "f09b4706b0b445e2c53879d92b83c9460d076467388d37c22ca482731ce17050660e22ef117a9aeae00abf54e506",
+      "corruption": {
+        "flip_first_ciphertext_byte_must_fail": true
+      }
+    },
+    "argon2id": {
+      "algorithm": "genesis.kdf.argon2id.v0.1",
+      "password_utf8": "genesis-test-password",
+      "salt_hex": "44444444444444444444444444444444",
+      "opslimit": 1,
+      "memlimit": 8192,
+      "derived_key_len": 32,
+      "derived_key_hex": "6f8cc0d7a27becedd327395060ec091b4c6853e4f2180277a247ac761899c663",
+      "note": "Parametros MINIMOS solo para vector de prueba; produccion usara parametros altos."
+    }
+  }
+}

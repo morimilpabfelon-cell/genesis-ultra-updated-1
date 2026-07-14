@@ -1,0 +1,113 @@
+# Genesis Ultra — hashes de continuidad v0.1
+
+## 1. Alcance
+
+Este documento fija las preimágenes normativas iniciales para tres objetos críticos:
+
+- registro de cuerpos;
+- recibo de transferencia;
+- finalización de transferencia.
+
+Todos usan `genesis.hash.fields.v0.1`: campos UTF-8 NFC, longitud explícita y separación de dominio.
+
+## 2. Registro de cuerpos
+
+Dominio:
+
+```text
+genesis.body.registry.v0.1
+```
+
+Campos, en orden:
+
+1. `schema_version`;
+2. `instance_id`;
+3. `registry_epoch` como entero decimal mínimo;
+4. cantidad de cuerpos;
+5. por cada cuerpo, ordenado por bytes UTF-8 de `body_id`:
+   - `body_id`;
+   - `status`;
+   - `platform_profile`;
+   - `public_key_fingerprint`;
+   - `created_at`;
+   - `last_seen_at` o cadena vacía;
+   - `revocation_ref` o cadena vacía;
+6. `updated_at`.
+
+Resultado:
+
+```text
+registry_digest = "sha256:" + hex_lower(SHA-256(preimage))
+```
+
+Antes del hash deben rechazarse identificadores duplicados y más de un `active_writer`.
+
+## 3. Recibo de transferencia
+
+Dominio:
+
+```text
+genesis.transfer.receipt.v0.1
+```
+
+Campos, en orden:
+
+1. `schema_version`;
+2. `transfer_id`;
+3. `instance_id`;
+4. `source_body_id`;
+5. `destination_body_id`;
+6. `accepted_checkpoint_hash`;
+7. `accepted_last_event_hash`;
+8. `accepted_last_sequence`;
+9. `accepted_at`;
+10. `continuity_status`;
+11. `continuity_gap_ref` o cadena vacía;
+12. `guardian_authorization_ref` o cadena vacía.
+
+Resultado:
+
+```text
+receipt_digest = "sha256:" + hex_lower(SHA-256(preimage))
+```
+
+`known_gap` exige `continuity_gap_ref`. Un recibo no concede por sí mismo autoridad de escritura.
+
+## 4. Finalización de transferencia
+
+Dominio:
+
+```text
+genesis.transfer.finalization.v0.1
+```
+
+Campos, en orden:
+
+1. `schema_version`;
+2. `transfer_id`;
+3. `instance_id`;
+4. `source_body_id`;
+5. `destination_body_id`;
+6. `receipt_digest`;
+7. `source_final_status`;
+8. `destination_final_status`;
+9. `finalized_at`;
+10. `guardian_authorization_ref`.
+
+Resultado:
+
+```text
+finalization_digest = "sha256:" + hex_lower(SHA-256(preimage))
+```
+
+La finalización solo es válida cuando:
+
+- el destino queda `active_writer`;
+- el origen queda `read_only`, `revoked` o `lost`;
+- los identificadores coinciden con el recibo;
+- el `receipt_digest` es verificable;
+- la autorización del guardián es válida.
+
+## 5. Firmas
+
+Las firmas y reconocimientos quedan fuera de estas preimágenes. Deben firmar el digest terminado con un dominio criptográfico versionado. Los algoritmos concretos se definirán en un perfil criptográfico separado.

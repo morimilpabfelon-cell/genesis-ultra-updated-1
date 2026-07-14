@@ -1,0 +1,71 @@
+{
+  "profile": "genesis.hash.fields.v0.1",
+  "status": "draft",
+  "body_registry": {
+    "case_id": "body-registry-001",
+    "domain": "genesis.body.registry.v0.1",
+    "input": {
+      "schema_version": "genesis.body.registry.v0.1",
+      "instance_id": "inst_01HNEUTRAL00000000000001",
+      "registry_epoch": 1,
+      "bodies": [
+        {
+          "body_id": "body_01HNEUTRAL00000000000001",
+          "status": "active_writer",
+          "platform_profile": "android-app",
+          "public_key_fingerprint": "pkfp:aaaaaaaaaaaaaaaa",
+          "created_at": "2026-07-12T00:00:00Z",
+          "last_seen_at": "2026-07-12T00:05:00Z",
+          "revocation_ref": null
+        },
+        {
+          "body_id": "body_01HNEUTRAL00000000000002",
+          "status": "read_only",
+          "platform_profile": "windows-app",
+          "public_key_fingerprint": "pkfp:bbbbbbbbbbbbbbbb",
+          "created_at": "2026-07-12T00:01:00Z",
+          "last_seen_at": "2026-07-12T00:04:00Z",
+          "revocation_ref": null
+        }
+      ],
+      "updated_at": "2026-07-12T00:05:00Z"
+    },
+    "expected_registry_digest": "sha256:8dffd4f6802167db9ea2eaf95d39b00fa8f518667c7df01963f50cf1ee1baa73"
+  },
+  "transfer_receipt": {
+    "case_id": "transfer-receipt-001",
+    "domain": "genesis.transfer.receipt.v0.1",
+    "input": {
+      "schema_version": "genesis.transfer.receipt.v0.1",
+      "transfer_id": "transfer_01HNEUTRAL000000000001",
+      "instance_id": "inst_01HNEUTRAL00000000000001",
+      "source_body_id": "body_01HNEUTRAL00000000000001",
+      "destination_body_id": "body_01HNEUTRAL00000000000002",
+      "accepted_checkpoint_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "accepted_last_event_hash": "evsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "accepted_last_sequence": 42,
+      "accepted_at": "2026-07-12T00:10:00Z",
+      "continuity_status": "complete",
+      "continuity_gap_ref": null,
+      "guardian_authorization_ref": "auth_01HNEUTRAL00000000000001"
+    },
+    "expected_receipt_digest": "sha256:d1c1847458c48a530cfd88ea0021b041144b88a475db8e2cc717f1174a2dece6"
+  },
+  "transfer_finalization": {
+    "case_id": "transfer-finalization-001",
+    "domain": "genesis.transfer.finalization.v0.1",
+    "input": {
+      "schema_version": "genesis.transfer.finalization.v0.1",
+      "transfer_id": "transfer_01HNEUTRAL000000000001",
+      "instance_id": "inst_01HNEUTRAL00000000000001",
+      "source_body_id": "body_01HNEUTRAL00000000000001",
+      "destination_body_id": "body_01HNEUTRAL00000000000002",
+      "receipt_digest": "sha256:d1c1847458c48a530cfd88ea0021b041144b88a475db8e2cc717f1174a2dece6",
+      "source_final_status": "read_only",
+      "destination_final_status": "active_writer",
+      "finalized_at": "2026-07-12T00:11:00Z",
+      "guardian_authorization_ref": "auth_01HNEUTRAL00000000000001"
+    },
+    "expected_finalization_digest": "sha256:60d2d9328ab9af683c292fe6440a5e57a7260adcce30d6ca9e34794e0ef17830"
+  }
+}

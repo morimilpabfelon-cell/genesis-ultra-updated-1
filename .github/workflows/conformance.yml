@@ -1,0 +1,48 @@
+name: Genesis Ultra Conformance
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  reference-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node (segunda implementacion de referencia)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install crypto dependency (PyNaCl) for signature simulations
+        run: pip install pynacl
+
+      - name: Validate workspace (Python)
+        run: python tools/validate_workspace.py
+
+      - name: Validate workspace (Node — segunda implementacion)
+        run: node tools/validate_workspace.mjs
+
+      - name: Validate continuity vectors
+        run: python tools/validate_continuity.py
+
+      - name: Validate crypto vectors
+        run: python tools/validate_crypto_vectors.py
+
+      - name: Simulate transfer A -> B (positive end-to-end)
+        run: python tools/simulate_transfer.py
+
+      - name: Simulate negative cases (attacks must be rejected)
+        run: python tools/simulate_negatives.py

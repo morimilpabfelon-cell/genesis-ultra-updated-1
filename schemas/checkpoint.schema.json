@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:checkpoint:v0.1",
+  "title": "Genesis Continuity Checkpoint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "checkpoint_id",
+    "instance_id",
+    "created_by_body_id",
+    "sequence",
+    "last_event_hash",
+    "seed_root_hash",
+    "body_registry_digest",
+    "state_digest",
+    "created_at",
+    "checkpoint_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "genesis.checkpoint.v0.1"
+    },
+    "hash_profile": {
+      "const": "genesis.hash.fields.v0.1"
+    },
+    "checkpoint_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "instance_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "created_by_body_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "last_event_hash": {
+      "$ref": "#/$defs/event_hash"
+    },
+    "seed_root_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "body_registry_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "state_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "checkpoint_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "signature": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^evsha256:[a-f0-9]{64}$"
+    }
+  }
+}

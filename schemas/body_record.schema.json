@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:body-record:v0.1",
+  "title": "Genesis Body Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "instance_id", "body_id", "status", "created_at", "platform_profile", "public_key_fingerprint"],
+  "properties": {
+    "schema_version": {"const": "genesis.body.record.v0.1"},
+    "instance_id": {"type": "string", "minLength": 16},
+    "body_id": {"type": "string", "minLength": 16},
+    "status": {"enum": ["candidate", "active_writer", "read_only", "suspended", "revoked", "lost"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "platform_profile": {"type": "string", "minLength": 1},
+    "public_key_fingerprint": {"type": "string", "minLength": 16},
+    "revoked_at": {"type": ["string", "null"], "format": "date-time"},
+    "revocation_reason": {"type": ["string", "null"]}
+  }
+}

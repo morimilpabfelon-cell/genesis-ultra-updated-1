@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:body-possession-proof:v0.1",
+  "title": "Genesis Body Possession Proof",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "proof_id",
+    "instance_id",
+    "body_id",
+    "challenge_nonce",
+    "issued_at",
+    "expires_at",
+    "public_key_fingerprint",
+    "proof_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.body.possession.v0.1" },
+    "proof_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "challenge_nonce": { "type": "string", "minLength": 16, "maxLength": 256 },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "public_key_fingerprint": { "type": "string", "minLength": 16, "maxLength": 256 },
+    "proof_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "key_epoch_id", "value"],
+      "properties": {
+        "profile": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+        "value": { "type": "string", "minLength": 16 }
+      }
+    }
+  }
+}

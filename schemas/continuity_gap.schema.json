@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:continuity-gap:v0.1",
+  "title": "Genesis Continuity Gap",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "gap_id",
+    "instance_id",
+    "detected_at",
+    "first_missing_sequence",
+    "last_missing_sequence",
+    "reason",
+    "last_trusted_event_hash",
+    "recovery_event_ref",
+    "gap_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.continuity.gap.v0.1" },
+    "gap_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "detected_at": { "type": "string", "format": "date-time" },
+    "first_missing_sequence": { "type": "integer", "minimum": 0 },
+    "last_missing_sequence": { "type": "integer", "minimum": 0 },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "device_lost",
+        "device_destroyed",
+        "backup_lag",
+        "storage_corruption",
+        "fork_resolution",
+        "unknown"
+      ]
+    },
+    "last_trusted_event_hash": {
+      "oneOf": [
+        { "const": "GENESIS" },
+        { "type": "string", "pattern": "^evsha256:[a-f0-9]{64}$" }
+      ]
+    },
+    "recovery_event_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "notes_digest": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "gap_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:recovery-record:v0.1",
+  "title": "Genesis Recovery Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "recovery_id",
+    "instance_id",
+    "source_backup_id",
+    "new_body_id",
+    "previous_body_id",
+    "restored_checkpoint_hash",
+    "restored_last_event_hash",
+    "restored_last_sequence",
+    "continuity_status",
+    "guardian_authorization_ref",
+    "performed_at",
+    "recovery_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.recovery.record.v0.1" },
+    "recovery_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "source_backup_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "new_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "previous_body_id": { "type": ["string", "null"], "maxLength": 128 },
+    "restored_checkpoint_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "restored_last_event_hash": {
+      "oneOf": [
+        { "const": "GENESIS" },
+        { "type": "string", "pattern": "^evsha256:[a-f0-9]{64}$" }
+      ]
+    },
+    "restored_last_sequence": { "type": "integer", "minimum": 0 },
+    "continuity_status": {
+      "type": "string",
+      "enum": ["complete", "known_gap", "fork_risk"]
+    },
+    "continuity_gap_ref": { "type": ["string", "null"], "maxLength": 256 },
+    "guardian_authorization_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "performed_at": { "type": "string", "format": "date-time" },
+    "recovery_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "signature": { "type": ["object", "null"] }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "continuity_status": { "const": "known_gap" } },
+        "required": ["continuity_status"]
+      },
+      "then": {
+        "required": ["continuity_gap_ref"],
+        "properties": { "continuity_gap_ref": { "type": "string", "minLength": 1 } }
+      }
+    }
+  ]
+}

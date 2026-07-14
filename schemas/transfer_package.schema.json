@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:transfer-package:v0.1",
+  "title": "Genesis Transfer Package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "transfer_id", "instance_id", "source_body_id", "mode", "created_at", "checkpoint_hash", "last_event_hash", "contents", "package_hash", "authorization_ref"],
+  "properties": {
+    "schema_version": {"const": "genesis.transfer.package.v0.1"},
+    "transfer_id": {"type": "string", "minLength": 16},
+    "instance_id": {"type": "string", "minLength": 16},
+    "source_body_id": {"type": "string", "minLength": 16},
+    "destination_body_id": {"type": ["string", "null"]},
+    "mode": {"enum": ["transfer", "recovery"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "checkpoint_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "last_event_hash": {"type": "string", "pattern": "^evsha256:[a-f0-9]{64}$"},
+    "contents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "path", "digest"],
+        "properties": {
+          "kind": {"type": "string"},
+          "path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"},
+          "digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+        }
+      }
+    },
+    "package_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "authorization_ref": {"type": "string", "minLength": 1},
+    "continuity_status": {"enum": ["complete", "known_gap", "fork_risk"]}
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:guardian-recovery-policy:v0.1",
+  "title": "Genesis Guardian Recovery Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_id",
+    "instance_id",
+    "factor_count",
+    "threshold",
+    "allowed_factor_types",
+    "waiting_period_seconds",
+    "created_at",
+    "policy_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.guardian.recovery.policy.v0.1" },
+    "policy_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "factor_count": { "type": "integer", "minimum": 1, "maximum": 32 },
+    "threshold": { "type": "integer", "minimum": 1, "maximum": 32 },
+    "allowed_factor_types": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "recovery_secret",
+          "registered_device",
+          "hardware_key",
+          "threshold_share",
+          "designated_custodian",
+          "offline_recovery_kit"
+        ]
+      }
+    },
+    "waiting_period_seconds": { "type": "integer", "minimum": 0 },
+    "allow_existing_key_cancellation": { "type": "boolean", "default": true },
+    "restricted_mode_during_wait": { "type": "boolean", "default": true },
+    "created_at": { "type": "string", "format": "date-time" },
+    "policy_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  }
+}

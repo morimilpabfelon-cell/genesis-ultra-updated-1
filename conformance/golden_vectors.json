@@ -1,0 +1,66 @@
+{
+  "profile": "genesis.hash.fields.v0.1",
+  "status": "draft",
+  "field_encoding": [
+    {
+      "case_id": "field-ascii-001",
+      "value": "hola",
+      "expected_hex": "343a686f6c610a"
+    },
+    {
+      "case_id": "field-unicode-001",
+      "value": "niño",
+      "expected_hex": "353a6e69c3b16f0a"
+    },
+    {
+      "case_id": "field-emoji-001",
+      "value": "🧬",
+      "expected_hex": "343af09fa7ac0a"
+    }
+  ],
+  "seed_root": {
+    "case_id": "seed-root-001",
+    "domain": "genesis.seed.root.v0.1",
+    "input": {
+      "protocol_version": "genesis.protocol.v0.1",
+      "seed_id": "seed_01HNEUTRAL000000000000001",
+      "identity_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "doctrine_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "files": [
+        {
+          "path": "identity/companion.identity.json",
+          "kind": "identity",
+          "required": true,
+          "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        {
+          "path": "doctrine/doctrine.md",
+          "kind": "doctrine",
+          "required": true,
+          "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ]
+    },
+    "expected_root_hash": "sha256:0acaca2f62840715cfec8f7149bd5ab5fffd039fc8f0105bf5752ad25f385568"
+  },
+  "memory_event": {
+    "case_id": "memory-event-001",
+    "domain": "genesis.memory.event.v0.1",
+    "input": {
+      "schema_version": "genesis.memory.event.v0.1",
+      "event_id": "evt_01HNEUTRAL000000000000001",
+      "instance_id": "inst_01HNEUTRAL00000000000001",
+      "body_id": "body_01HNEUTRAL00000000000001",
+      "sequence": 0,
+      "previous_event_hash": "GENESIS",
+      "event_type": "instance.birth",
+      "actor": "system",
+      "content_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-11T00:00:00Z",
+      "provenance_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "privacy": "private_local"
+    },
+    "expected_event_hash": "evsha256:b388c82e3b2bf70be735d5bba29e8498e3c728aa6a19e46dbf7eb6a2dab11fb9"
+  }
+}

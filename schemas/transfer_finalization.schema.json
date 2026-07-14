@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:transfer-finalization:v0.1",
+  "title": "Genesis Transfer Finalization",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "transfer_id",
+    "instance_id",
+    "source_body_id",
+    "destination_body_id",
+    "receipt_digest",
+    "source_final_status",
+    "destination_final_status",
+    "finalized_at",
+    "guardian_authorization_ref",
+    "finalization_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.transfer.finalization.v0.1" },
+    "transfer_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "source_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "destination_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "receipt_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "source_final_status": { "type": "string", "enum": ["read_only", "revoked", "lost"] },
+    "destination_final_status": { "const": "active_writer" },
+    "finalized_at": { "type": "string", "format": "date-time" },
+    "guardian_authorization_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "finalization_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "source_acknowledgement": { "type": ["object", "null"] },
+    "destination_acknowledgement": { "type": ["object", "null"] }
+  }
+}

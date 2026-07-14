@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:body-revocation:v0.1",
+  "title": "Genesis Body Revocation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "instance_id",
+    "body_id",
+    "revoked_at",
+    "reason",
+    "last_trusted_event_hash",
+    "guardian_authorization_ref",
+    "revocation_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "genesis.body.revocation.v0.1"
+    },
+    "instance_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "body_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "lost",
+        "stolen",
+        "damaged",
+        "replaced",
+        "compromised",
+        "guardian_request"
+      ]
+    },
+    "last_trusted_event_hash": {
+      "oneOf": [
+        {
+          "const": "NONE"
+        },
+        {
+          "$ref": "#/$defs/event_hash"
+        }
+      ]
+    },
+    "guardian_authorization_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "revocation_digest": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^evsha256:[a-f0-9]{64}$"
+    }
+  }
+}

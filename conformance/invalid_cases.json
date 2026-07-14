@@ -1,0 +1,122 @@
+{
+  "profile": "genesis.protocol.v0.1",
+  "status": "draft",
+  "invalid_cases": [
+    {
+      "case_id": "path-traversal-001",
+      "category": "seed_path",
+      "input": "../secret.txt",
+      "expected_error": "invalid_relative_path"
+    },
+    {
+      "case_id": "absolute-path-001",
+      "category": "seed_path",
+      "input": "/private/secret.txt",
+      "expected_error": "invalid_relative_path"
+    },
+    {
+      "case_id": "backslash-path-001",
+      "category": "seed_path",
+      "input": "identity\\companion.json",
+      "expected_error": "invalid_relative_path"
+    },
+    {
+      "case_id": "dot-segment-001",
+      "category": "seed_path",
+      "input": "identity/./companion.json",
+      "expected_error": "invalid_relative_path"
+    },
+    {
+      "case_id": "duplicate-path-001",
+      "category": "seed_manifest",
+      "input": [
+        "identity/companion.json",
+        "identity/companion.json"
+      ],
+      "expected_error": "duplicate_manifest_path"
+    },
+    {
+      "case_id": "non-nfc-001",
+      "category": "canonical_text",
+      "input": "niño",
+      "expected_error": "text_not_nfc"
+    },
+    {
+      "case_id": "multiple-writers-001",
+      "category": "body_registry",
+      "input": [
+        {
+          "body_id": "body_a",
+          "status": "active_writer"
+        },
+        {
+          "body_id": "body_b",
+          "status": "active_writer"
+        }
+      ],
+      "expected_error": "multiple_active_writers"
+    },
+    {
+      "case_id": "revoked-writer-001",
+      "category": "memory_append",
+      "input": {
+        "body_status": "revoked",
+        "action": "append_event"
+      },
+      "expected_error": "body_not_authorized"
+    },
+    {
+      "case_id": "fork-001",
+      "category": "memory_chain",
+      "input": {
+        "parent": "evsha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "children": [
+          "evsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "evsha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        ]
+      },
+      "expected_error": "fork_detected"
+    },
+    {
+      "case_id": "cross-instance-transfer-001",
+      "category": "transfer",
+      "input": {
+        "package_instance_id": "instance_a",
+        "destination_instance_id": "instance_b"
+      },
+      "expected_error": "instance_id_mismatch"
+    },
+    {
+      "case_id": "hidden-gap-001",
+      "category": "recovery",
+      "input": {
+        "last_backup_sequence": 80,
+        "last_known_sequence": 100,
+        "continuity_status": "complete"
+      },
+      "expected_error": "undeclared_memory_gap"
+    },
+    {
+      "case_id": "expired-authorization-001",
+      "category": "guardian_authorization",
+      "input": {
+        "evaluated_at": "2026-07-12T00:00:00Z",
+        "expires_at": "2026-07-11T00:00:00Z",
+        "revoked": false,
+        "use_limit": 1,
+        "used_count": 0
+      },
+      "expected_error": "authorization_expired"
+    },
+    {
+      "case_id": "exhausted-authorization-001",
+      "category": "guardian_authorization",
+      "input": {
+        "revoked": false,
+        "use_limit": 1,
+        "used_count": 1
+      },
+      "expected_error": "authorization_use_limit_reached"
+    }
+  ]
+}

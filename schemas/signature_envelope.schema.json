@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:signature-envelope:v0.1",
+  "title": "Genesis Signature Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "signature_profile",
+    "signer_type",
+    "signer_id",
+    "key_epoch_id",
+    "signed_domain",
+    "signed_digest",
+    "signature_value",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.signature.envelope.v0.1" },
+    "signature_profile": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "signer_type": { "type": "string", "enum": ["guardian", "body", "recovery_authority"] },
+    "signer_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "signed_domain": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "signed_digest": { "type": "string", "pattern": "^(sha256|evsha256):[a-f0-9]{64}$" },
+    "signature_value": { "type": "string", "minLength": 32, "maxLength": 4096 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "public_key_ref": { "type": ["string", "null"], "maxLength": 512 }
+  }
+}

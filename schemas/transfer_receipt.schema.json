@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:transfer-receipt:v0.1",
+  "title": "Genesis Transfer Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "transfer_id",
+    "instance_id",
+    "source_body_id",
+    "destination_body_id",
+    "accepted_checkpoint_hash",
+    "accepted_last_event_hash",
+    "accepted_last_sequence",
+    "accepted_at",
+    "continuity_status",
+    "receipt_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.transfer.receipt.v0.1" },
+    "transfer_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "source_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "destination_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "accepted_checkpoint_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "accepted_last_event_hash": {
+      "oneOf": [
+        { "const": "GENESIS" },
+        { "type": "string", "pattern": "^evsha256:[a-f0-9]{64}$" }
+      ]
+    },
+    "accepted_last_sequence": { "type": "integer", "minimum": 0 },
+    "accepted_at": { "type": "string", "format": "date-time" },
+    "continuity_status": { "type": "string", "enum": ["complete", "known_gap", "fork_risk"] },
+    "continuity_gap_ref": { "type": ["string", "null"], "maxLength": 256 },
+    "guardian_authorization_ref": { "type": ["string", "null"], "maxLength": 256 },
+    "receipt_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "signature": { "type": ["object", "null"] }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "continuity_status": { "const": "known_gap" } },
+        "required": ["continuity_status"]
+      },
+      "then": {
+        "required": ["continuity_gap_ref"],
+        "properties": { "continuity_gap_ref": { "type": "string", "minLength": 1 } }
+      }
+    }
+  ]
+}

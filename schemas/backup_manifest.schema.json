@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:backup-manifest:v0.1",
+  "title": "Genesis Backup Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "backup_id",
+    "instance_id",
+    "seed_root_hash",
+    "checkpoint_hash",
+    "last_event_hash",
+    "last_sequence",
+    "body_registry_digest",
+    "created_at",
+    "created_by_body_id",
+    "encryption_profile",
+    "contents",
+    "package_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "genesis.backup.manifest.v0.1"
+    },
+    "backup_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "instance_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "seed_root_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "checkpoint_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "last_event_hash": {
+      "$ref": "#/$defs/event_hash"
+    },
+    "last_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "body_registry_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by_body_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "encryption_profile": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "key_recovery_profile": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 128
+    },
+    "contents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/content_record"
+      }
+    },
+    "package_digest": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^evsha256:[a-f0-9]{64}$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$)).+$"
+    },
+    "content_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path",
+        "digest",
+        "encrypted"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "seed",
+            "identity",
+            "memory",
+            "checkpoint",
+            "body_registry",
+            "policy_state",
+            "attachment_index",
+            "attachment",
+            "other"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "encrypted": {
+          "const": true
+        }
+      }
+    }
+  }
+}

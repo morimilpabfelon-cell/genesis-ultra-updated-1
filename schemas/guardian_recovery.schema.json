@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:guardian-recovery:v0.1",
+  "title": "Genesis Guardian Recovery",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "recovery_id",
+    "instance_id",
+    "guardian_id",
+    "recovery_method",
+    "previous_key_epoch_id",
+    "new_key_epoch_id",
+    "reason",
+    "issued_at",
+    "effective_at",
+    "recovery_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.guardian.recovery.v0.1" },
+    "recovery_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "recovery_method": {
+      "type": "string",
+      "enum": ["recovery_secret", "trusted_devices", "offline_recovery_kit", "multi_party_recovery", "manual_verified_migration"]
+    },
+    "previous_key_epoch_id": { "type": ["string", "null"], "maxLength": 128 },
+    "new_key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "reason": { "type": "string", "enum": ["lost", "destroyed", "compromised", "forgotten", "rotation", "migration"] },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "effective_at": { "type": "string", "format": "date-time" },
+    "continuity_status": { "type": "string", "enum": ["complete", "known_gap", "fork_risk"] },
+    "evidence_digest": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" },
+    "recovery_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "authorization_signatures": {
+      "type": "array",
+      "items": { "$ref": "signature_envelope.schema.json" }
+    }
+  }
+}
