@@ -9,12 +9,12 @@ Genesis Ultra combina las mejores ideas de `Genesis-core` y `Genesis-corev2` sin
 ## Separación fundamental
 
 ```text
-Seed       = origen verificable e inmutable
-Instance   = identidad continua
-Body       = dispositivo, aplicación o sistema temporal
-Engine     = motor de razonamiento intercambiable
-Guardian   = autoridad humana final
-Protocol   = reglas neutrales
+Seed        = origen verificable e inmutable
+Instance    = identidad continua
+Body        = dispositivo, aplicación o sistema temporal
+Engine      = motor de razonamiento intercambiable
+Guardian    = autoridad humana final
+Protocol    = reglas neutrales
 Conformance = pruebas compartidas entre implementaciones
 ```
 
@@ -49,21 +49,20 @@ tools/          Herramientas auxiliares no normativas.
 reference/      Futuras implementaciones por lenguaje.
 ```
 
-## Validación local
+## Validación local completa
 
-Desde PowerShell:
-
-```powershell
-py tools\validate_workspace.py
-```
-
-Alternativa:
+Requisitos: Python 3.12+, Node 20+ y npm.
 
 ```powershell
-python tools\validate_workspace.py
+python -m pip install -r requirements.txt
+npm test
 ```
 
-El validador actual comprueba estructura, sintaxis JSON, vectores de hashing y casos inválidos iniciales. No constituye todavía una certificación de seguridad.
+En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
+
+La suite ejecuta los validadores Python y Node, los vectores de continuidad y criptografía,
+la simulación A→B y los casos negativos. Pasar la suite no constituye una certificación
+de seguridad ni convierte el borrador en producción.
 
 ## Neutralidad
 

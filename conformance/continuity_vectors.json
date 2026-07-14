@@ -32,6 +32,36 @@
     },
     "expected_registry_digest": "sha256:8dffd4f6802167db9ea2eaf95d39b00fa8f518667c7df01963f50cf1ee1baa73"
   },
+  "transfer_package": {
+    "case_id": "transfer-package-001",
+    "domain": "genesis.transfer.package.v0.1",
+    "input": {
+      "schema_version": "genesis.transfer.package.v0.1",
+      "transfer_id": "transfer_01HNEUTRAL000000000001",
+      "instance_id": "inst_01HNEUTRAL00000000000001",
+      "source_body_id": "body_01HNEUTRAL00000000000001",
+      "destination_body_id": "body_01HNEUTRAL00000000000002",
+      "mode": "transfer",
+      "created_at": "2026-07-12T00:09:00Z",
+      "checkpoint_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "last_event_hash": "evsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "continuity_status": "complete",
+      "authorization_ref": "auth_01HNEUTRAL00000000000001",
+      "contents": [
+        {
+          "kind": "memory",
+          "path": "memory/events.ndjson",
+          "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        {
+          "kind": "seed",
+          "path": "seed/manifest.json",
+          "digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        }
+      ]
+    },
+    "expected_package_digest": "sha256:916a61910b999f683a2a58da57dd3bf867b41c00e7548f06625ebb2dcae57a0b"
+  },
   "transfer_receipt": {
     "case_id": "transfer-receipt-001",
     "domain": "genesis.transfer.receipt.v0.1",
@@ -41,6 +71,7 @@
       "instance_id": "inst_01HNEUTRAL00000000000001",
       "source_body_id": "body_01HNEUTRAL00000000000001",
       "destination_body_id": "body_01HNEUTRAL00000000000002",
+      "accepted_package_digest": "sha256:916a61910b999f683a2a58da57dd3bf867b41c00e7548f06625ebb2dcae57a0b",
       "accepted_checkpoint_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "accepted_last_event_hash": "evsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "accepted_last_sequence": 42,
@@ -49,7 +80,7 @@
       "continuity_gap_ref": null,
       "guardian_authorization_ref": "auth_01HNEUTRAL00000000000001"
     },
-    "expected_receipt_digest": "sha256:d1c1847458c48a530cfd88ea0021b041144b88a475db8e2cc717f1174a2dece6"
+    "expected_receipt_digest": "sha256:ef6b3fbc63edc10dd010139eb74b527fc5c3edbba96ef93bbec66947005376bd"
   },
   "transfer_finalization": {
     "case_id": "transfer-finalization-001",
@@ -60,12 +91,12 @@
       "instance_id": "inst_01HNEUTRAL00000000000001",
       "source_body_id": "body_01HNEUTRAL00000000000001",
       "destination_body_id": "body_01HNEUTRAL00000000000002",
-      "receipt_digest": "sha256:d1c1847458c48a530cfd88ea0021b041144b88a475db8e2cc717f1174a2dece6",
+      "receipt_digest": "sha256:ef6b3fbc63edc10dd010139eb74b527fc5c3edbba96ef93bbec66947005376bd",
       "source_final_status": "read_only",
       "destination_final_status": "active_writer",
       "finalized_at": "2026-07-12T00:11:00Z",
       "guardian_authorization_ref": "auth_01HNEUTRAL00000000000001"
     },
-    "expected_finalization_digest": "sha256:60d2d9328ab9af683c292fe6440a5e57a7260adcce30d6ca9e34794e0ef17830"
+    "expected_finalization_digest": "sha256:8a0ddd4de9f0e1dbfa4d1ef273e73092b88a71648a135c52c9f1434d4c6805c2"
   }
 }

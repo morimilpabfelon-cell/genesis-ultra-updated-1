@@ -1,0 +1,2 @@
+# Version intentionally pinned for reproducible draft conformance checks.
+PyNaCl==1.5.0

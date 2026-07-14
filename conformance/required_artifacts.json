@@ -1,5 +1,5 @@
 {
-  "purpose": "Fuente UNICA de artefactos requeridos, consumida por TODOS los validadores.",
+  "purpose": "Fuente única de artefactos requeridos, consumida por todos los validadores.",
   "required": [
     "spec/BODY_REGISTRY_AND_AUTHORITY.md",
     "spec/CONFORMANCE_LEVELS.md",
@@ -42,6 +42,7 @@
     "docs/ARCHITECTURE_DECISIONS.md",
     "docs/SOURCE_EXTRACTION_MAP.md",
     "docs/V0_1_COMPLETION_CHECKLIST.md",
+    "tools/run_conformance.mjs",
     "tools/simulate_negatives.py",
     "tools/simulate_transfer.py",
     "tools/validate_continuity.py",
@@ -50,6 +51,7 @@
     "tools/validate_workspace.py",
     "README.md",
     "NOTICE.md",
+    "requirements.txt",
     ".github/workflows/conformance.yml"
   ]
 }

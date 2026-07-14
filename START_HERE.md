@@ -5,23 +5,26 @@ Genesis Ultra está en fase de diseño. El orden recomendado de revisión es:
 1. `docs/SOURCE_EXTRACTION_MAP.md`
 2. `spec/GENESIS_PROTOCOL_DRAFT.md`
 3. `spec/CONTINUITY_AND_MIGRATION.md`
-4. `spec/HASHING_PROFILE_DRAFT.md`
-5. `spec/CONFORMANCE_LEVELS.md`
-6. `schemas/`
-7. `conformance/`
+4. `spec/HASH_PROFILE_DRAFT.md`
+5. `spec/CONTINUITY_HASHES.md`
+6. `spec/CONFORMANCE_LEVELS.md`
+7. `schemas/`
+8. `conformance/`
 
-## Comprobar el borrador en PowerShell
+## Comprobar el borrador
 
 ```powershell
-git clone https://github.com/morimilpabfelon-cell/Genesis-ultra.git
-cd Genesis-ultra
-py tools\validate_workspace.py
+git clone https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1.git
+cd genesis-ultra-updated-1
+python -m pip install -r requirements.txt
+npm test
 ```
 
-Cuando el comando `py` no exista:
+En Windows, cuando `python` no exista pero sí el launcher:
 
 ```powershell
-python tools\validate_workspace.py
+py -m pip install -r requirements.txt
+npm test
 ```
 
 ## Regla de trabajo
@@ -39,11 +42,10 @@ Para considerarla conforme debe existir:
 
 ## Estado pendiente
 
-Antes de una primera versión candidata todavía deben definirse:
+Antes de una primera versión candidata todavía deben completarse:
 
-- perfil criptográfico;
 - administración y recuperación de claves;
-- firmas de cuerpo y guardián;
+- firmas de cuerpo y guardián dentro de los flujos;
 - formato de contenido y adjuntos;
 - checkpoint completo;
 - paquete cifrado real;

@@ -1,0 +1,41 @@
+import { spawnSync } from "node:child_process";
+import path from "node:path";
+import process from "node:process";
+import { fileURLToPath } from "node:url";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+function resolvePython() {
+  const candidates = process.platform === "win32" ? ["py", "python"] : ["python3", "python"];
+  for (const candidate of candidates) {
+    const result = spawnSync(candidate, ["--version"], { cwd: ROOT, encoding: "utf8" });
+    if (result.status === 0) return candidate;
+  }
+  throw new Error("Python 3 no encontrado. Instala Python 3.12+ y vuelve a ejecutar npm test.");
+}
+
+const python = resolvePython();
+const commands = [
+  ["Validate workspace (Python)", python, ["tools/validate_workspace.py"]],
+  ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
+  ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
+  ["Validate crypto vectors", python, ["tools/validate_crypto_vectors.py"]],
+  ["Simulate transfer A -> B", python, ["tools/simulate_transfer.py"]],
+  ["Simulate negative cases", python, ["tools/simulate_negatives.py"]]
+];
+
+for (const [label, command, args] of commands) {
+  console.log(`\n=== ${label} ===`);
+  const result = spawnSync(command, args, { cwd: ROOT, stdio: "inherit" });
+  if (result.error) {
+    console.error(`FAIL ${label}: ${result.error.message}`);
+    process.exit(1);
+  }
+  if (result.status !== 0) {
+    console.error(`FAIL ${label}: exit ${result.status}`);
+    process.exit(result.status ?? 1);
+  }
+}
+
+console.log("\nGenesis Ultra conformance suite: OK");
+console.log("Passing this suite does not make the draft production-ready.");
