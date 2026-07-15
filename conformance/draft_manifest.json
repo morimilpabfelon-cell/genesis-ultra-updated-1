@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 124,
+  "file_count": 122,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -85,8 +85,8 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 5339,
-      "digest": "sha256:403b0197625cbffb187d95a5d8ddd159f92d1e67d49b3d8fa291622aac41701e"
+      "size_bytes": 5238,
+      "digest": "sha256:480ead175025c0848c17a7fad18845dd29a5091b7b61a0d6bed69ab5261f1a08"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
@@ -175,8 +175,8 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 1213,
-      "digest": "sha256:9db632309b66a4be891e8aa39e9863ac97cfb9c7f1a8f3d47a0d386b7c2cc600"
+      "size_bytes": 1205,
+      "digest": "sha256:1e9221763d02d1e00fe3ea29d241485a04718eab5e26ec987889cc8ae7c55e48"
     },
     {
       "path": "reference/README.md",
@@ -480,8 +480,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 5145,
-      "digest": "sha256:791ba65aac9a43a752d082d9b6b96a8a754d07baa1094183b8276b70a4b489ab"
+      "size_bytes": 5129,
+      "digest": "sha256:c9057fa372d10222d68b68ab2f83f5ff80f7ab2acb42e8de430884c1e1e5a931"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -579,16 +579,6 @@
       "digest": "sha256:46c75df86a1f968b68ba355f0ac8101e54249c7fa16e0b434751045f1744da52"
     },
     {
-      "path": "tools/validate_memory_retrieval_vectors.mjs",
-      "size_bytes": 1506,
-      "digest": "sha256:bfd6819bf66d5643228997272bf933b41f348ed5c9b0954428a57d03bf339ceb"
-    },
-    {
-      "path": "tools/validate_memory_retrieval_vectors.py",
-      "size_bytes": 1735,
-      "digest": "sha256:f607746a27a5fc739759be1460eb06f011691d65cfc2b837adc771f0be5784ae"
-    },
-    {
       "path": "tools/validate_protocol_vectors.mjs",
       "size_bytes": 18434,
       "digest": "sha256:eea060ed9a33f18214f11e34de8bd6bfd0989934eecdfdbcf12af487c25b31e2"
@@ -629,5 +619,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:6c4ab930991916c9525cb1c63bfc02a65d48c916e964a604bf3f4e1e2f8abb22"
+  "root_digest": "sha256:850915a04510faa30f47b9a40ac991a5a6bd7e4186f84b3d42e79766546dcb71"
 }
