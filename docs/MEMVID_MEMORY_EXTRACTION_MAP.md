@@ -54,3 +54,19 @@ parser, formato de archivo, dependencias ni código fuente de Memvid.
 
 Estado: contrato, schema, vectores y validación Python/Node implementados. Un parser general de
 lenguaje natural y zonas horarias ambiguas permanece diferido como adaptador reemplazable.
+
+## Cuarta extracción implementada: cápsulas portables
+
+La portabilidad de archivo único de Memvid se adaptó como un formato propio y neutral:
+
+- JSON UTF-8 transparente en lugar de `.mv2`;
+- subconjunto canónico autorizado por ACL;
+- anclas redactadas para continuidad sin divulgación;
+- proyecciones léxicas y temporales opcionales y reconstruibles;
+- manifiesto de componentes con tamaño y SHA-256;
+- recibo ligado a destinatario, cutoff y decisión ACL;
+- verificación independiente Python/Node;
+- salida atómica y operación sin servidor.
+
+No se importaron el formato, codecs, índices o código de Memvid. Compresión, cifrado de destinatario
+y contenedor binario permanecen diferidos para perfiles separados.

@@ -19,6 +19,7 @@
     "validate:hybrid-retrieval": "node tools/hybrid_memory_retrieval.mjs validate",
     "validate:retrieval-acl": "node tools/memory_retrieval_acl.mjs validate",
     "validate:temporal-metadata": "node tools/temporal_memory_metadata.mjs validate",
+    "validate:portable-capsules": "node tools/portable_memory_capsule.mjs validate",
     "memory:build": "node tools/memory_retrieval.mjs build",
     "memory:query": "node tools/memory_retrieval.mjs query",
     "memory:bridge:build": "node tools/memory_gate_retrieval_bridge.mjs build",
@@ -31,6 +32,10 @@
     "memory:temporal:build": "node tools/temporal_memory_metadata.mjs build",
     "memory:temporal:sync": "node tools/temporal_memory_metadata.mjs sync",
     "memory:temporal:query": "node tools/temporal_memory_metadata.mjs query",
+    "memory:capsule:build": "node tools/portable_memory_capsule.mjs build",
+    "memory:capsule:sync": "node tools/portable_memory_capsule.mjs sync",
+    "memory:capsule:verify": "node tools/portable_memory_capsule.mjs verify",
+    "memory:capsule:inspect": "node tools/portable_memory_capsule.mjs inspect",
     "validate:vectors": "node tools/validate_protocol_vectors.mjs",
     "validate:schemas": "node tools/validate_artifacts.mjs"
   },

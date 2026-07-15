@@ -10,6 +10,7 @@
 - [x] Suite completa verde para el puente compuerta→recuperación en el [PR #16](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/16).
 - [x] Suite completa verde para la búsqueda híbrida neutral en el [PR #17](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/17).
 - [x] Suite completa verde para metadata temporal verificable en el [PR #20](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/20).
+- [x] Suite completa verde para cápsulas portables verificables en el [PR #21](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/21).
 - [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
 ## Implementado y verificado por la suite
@@ -24,8 +25,8 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 37 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [x] Cuarenta y cinco regresiones que demuestran el rechazo de artefactos inválidos por los
+- [x] Compilación de los 38 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Cuarenta y seis regresiones que demuestran el rechazo de artefactos inválidos por los
       schemas reales, con cobertura obligatoria para cada schema.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -77,12 +78,15 @@
       captura/almacenamiento/tiempo mencionado, relaciones verificadas, ACL previa, aislamiento
       histórico y veinticinco cruces de frontera rechazados por Python y Node.
 
+- [x] Cápsulas portables neutrales reproducidas por Python y Node: tres exportaciones,
+      manifiesto de componentes, continuidad redactada, recibo ACL, proyecciones reconstruibles,
+      35 cruces previos a exportación y 17 alteraciones posteriores rechazadas.
+
 ## Pendiente real
 
 - [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.
 - [ ] Adaptador semántico real con modelo local neutral, digest versionado y evaluación
       reproducible de calidad; el fixture actual prueba el protocolo, no un modelo entrenado.
-- [ ] Cápsulas portables neutrales y reconstruibles.
 - [ ] Extracción multimodal detrás de sentidos y compuerta de memoria.
 - [ ] Revisión criptográfica y de seguridad externa.
 

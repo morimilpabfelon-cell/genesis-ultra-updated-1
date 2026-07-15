@@ -39,6 +39,9 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `temporal_memory_metadata_vectors.json`: cinco eventos aceptados, separación entre captura,
   almacenamiento y tiempo mencionado, relaciones temporales, ocho consultas autorizadas por ACL,
   digests reproducibles y veinticinco mutaciones que deben rechazarse.
+- `portable_memory_capsule_vectors.json`: cinco eventos fuente, dos decisiones ACL,
+  tres exportaciones portables, proyecciones opcionales, continuidad redactada, 35 mutaciones
+  previas a exportación y 17 alteraciones de cápsula que deben rechazarse.
 - `continuity_vectors.json`: hashes compartidos de registro y transferencia.
 - `crypto_vectors.json`: digests y algoritmos criptográficos de borrador.
 - `draft_manifest.json`: tamaños y hashes reproducibles de todos los artefactos requeridos,
@@ -109,6 +112,11 @@ Python y Node reconstruyen además la misma proyección temporal. La capa copia 
 de captura, liga el almacenamiento al registro aceptado, verifica intervalos y relaciones, y
 aplica ACL y corte histórico antes de cada predicado temporal. El fixture prueba cinco
 anotaciones, ocho consultas y veinticinco rechazos sin afirmar comprensión general del lenguaje.
+
+Python y Node construyen además cápsulas portables idénticas para cuerpo, archivo del
+guardián y backup offline. El manifiesto compromete componentes, tamaños y digests; las anclas
+redactadas preservan continuidad sin exponer eventos no exportados. La verificación rechaza
+cuarentena, referencias fuera de ACL, rutas inválidas, autoridad incrustada y alteraciones.
 
 ## Requisitos para una implementación
 

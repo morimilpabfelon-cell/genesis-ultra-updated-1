@@ -147,6 +147,24 @@
       ]
     },
     {
+      "id": "portable_capsules",
+      "name": "Cápsulas portables",
+      "layer": "continuity",
+      "maturity": "verified",
+      "description": "Exporta subconjuntos ACL en cápsulas JSON verificables con continuidad redactada, manifiesto y recibo.",
+      "keywords": [
+        "portable_memory_capsule",
+        "portable_capsules",
+        "gencap"
+      ],
+      "required_evidence": [
+        "spec",
+        "schema",
+        "conformance",
+        "implementation"
+      ]
+    },
+    {
       "id": "temporal_memory",
       "name": "Metadata temporal",
       "layer": "perception",
@@ -349,6 +367,7 @@
     "memory_chain",
     "associative_memory",
     "memory_retrieval",
+    "portable_capsules",
     "temporal_memory",
     "reasoning",
     "action"
