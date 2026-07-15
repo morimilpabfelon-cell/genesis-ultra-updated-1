@@ -36,7 +36,7 @@
     "recovery_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "authorization_signatures": {
       "type": "array",
-      "items": { "$ref": "signature_envelope.schema.json" }
+      "items": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
     }
   }
 }

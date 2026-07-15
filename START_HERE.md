@@ -17,6 +17,7 @@ Genesis Ultra está en fase de diseño. El orden recomendado de revisión es:
 git clone https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1.git
 cd genesis-ultra-updated-1
 python -m pip install -r requirements.txt
+npm ci
 npm test
 ```
 
@@ -24,6 +25,7 @@ En Windows, cuando `python` no exista pero sí el launcher:
 
 ```powershell
 py -m pip install -r requirements.txt
+npm ci
 npm test
 ```
 

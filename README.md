@@ -55,14 +55,16 @@ Requisitos: Python 3.12+, Node 20+ y npm.
 
 ```powershell
 python -m pip install -r requirements.txt
+npm ci
 npm test
 ```
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, los vectores de continuidad y criptografía,
-la simulación A→B y los casos negativos. Pasar la suite no constituye una certificación
-de seguridad ni convierte el borrador en producción.
+La suite ejecuta los validadores Python y Node, compila los 20 JSON Schema, exige que
+los artefactos generados por la simulación A→B sean válidos y estén enlazados, y ejecuta
+los vectores de continuidad, criptografía y casos negativos. Pasar la suite no constituye
+una certificación de seguridad ni convierte el borrador en producción.
 
 ## Neutralidad
 

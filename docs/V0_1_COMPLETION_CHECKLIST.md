@@ -19,15 +19,18 @@
 - [ ] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [ ] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [ ] Lista compartida de artefactos requeridos.
+- [ ] Compilación de los 20 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [ ] Casos de regresión que demuestran el rechazo de artefactos inválidos por los schemas reales.
+- [ ] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
+      recibo y finalización completos y válidos contra sus schemas.
+- [ ] Validación cruzada de los enlaces checkpoint→paquete→recibo→finalización y de la
+      autoridad final única.
 - [ ] Suite única local y CI mediante `npm test`.
 
 Marcar estos elementos únicamente después de una ejecución verde reproducible.
 
 ## Pendiente real
 
-- [ ] Validación de instancias contra JSON Schema, no solo sintaxis de los esquemas.
-- [ ] Checkpoint completo que cumpla `checkpoint.schema.json`.
-- [ ] Prueba de posesión completa con nonce, expiración, fingerprint y época de clave.
 - [ ] Autorización del guardián firmada, verificada, consumida y no reutilizable.
 - [ ] Tests negativos integrados contra la misma implementación positiva.
 - [ ] Backup, transfer y recovery como flujos transaccionales completos.

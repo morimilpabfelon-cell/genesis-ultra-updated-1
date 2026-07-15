@@ -1,0 +1,89 @@
+{
+  "purpose": "Regresiones que deben ser rechazadas por los JSON Schema reales, no por predicados auxiliares.",
+  "cases": [
+    {
+      "case_id": "memory-event-invalid-actor",
+      "schema": "memory_event.schema.json",
+      "artifact": {
+        "schema_version": "genesis.memory.event.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "event_id": "evt_01HSCHEMA0000000000000001",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "body_id": "body_01HSCHEMA000000000000001",
+        "sequence": 1,
+        "previous_event_hash": "evsha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "event_type": "chat.companion",
+        "actor": "companion",
+        "content_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "content_type": "text/plain",
+        "observed_at": "2026-07-14T00:00:00Z",
+        "provenance_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "privacy": "private_local",
+        "event_hash": "evsha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      }
+    },
+    {
+      "case_id": "checkpoint-legacy-partial-shape",
+      "schema": "checkpoint.schema.json",
+      "artifact": {
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "body_id": "body_01HSCHEMA000000000000001",
+        "last_sequence": 2,
+        "last_event_hash": "evsha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "created_at": "2026-07-14T00:00:00Z"
+      }
+    },
+    {
+      "case_id": "signature-legacy-shape",
+      "schema": "signature_envelope.schema.json",
+      "artifact": {
+        "algorithm": "genesis.signature.ed25519.v0.1",
+        "public_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "signature": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "case_id": "transfer-package-without-final-digest",
+      "schema": "transfer_package.schema.json",
+      "artifact": {
+        "schema_version": "genesis.transfer.package.v0.1",
+        "transfer_id": "xfer_01HSCHEMA000000000000001",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "source_body_id": "body_01HSCHEMA000000000000001",
+        "destination_body_id": "body_01HSCHEMA000000000000002",
+        "mode": "transfer",
+        "created_at": "2026-07-14T00:00:00Z",
+        "checkpoint_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "last_event_hash": "evsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "authorization_ref": "gauth_01HSCHEMA00000000000001",
+        "continuity_status": "complete",
+        "contents": [
+          {
+            "kind": "memory",
+            "path": "memory/events.json",
+            "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "receipt-known-gap-without-reference",
+      "schema": "transfer_receipt.schema.json",
+      "artifact": {
+        "schema_version": "genesis.transfer.receipt.v0.1",
+        "transfer_id": "xfer_01HSCHEMA000000000000001",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "source_body_id": "body_01HSCHEMA000000000000001",
+        "destination_body_id": "body_01HSCHEMA000000000000002",
+        "accepted_package_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "accepted_checkpoint_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "accepted_last_event_hash": "evsha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "accepted_last_sequence": 2,
+        "accepted_at": "2026-07-14T00:00:00Z",
+        "continuity_status": "known_gap",
+        "continuity_gap_ref": null,
+        "receipt_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      }
+    }
+  ]
+}
