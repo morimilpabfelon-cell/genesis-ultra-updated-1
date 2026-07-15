@@ -285,8 +285,8 @@
     },
     {
       "path": "schemas/hybrid_memory_retrieval_projection.schema.json",
-      "size_bytes": 6417,
-      "digest": "sha256:4449d1724e030d051e2e48898682f94d1749c82c17e39ad1a1f8dca2f8708317"
+      "size_bytes": 6451,
+      "digest": "sha256:175dd0a6822e87e7c859d08cef06f403a0167de8718aa1691457ae660a83d354"
     },
     {
       "path": "schemas/instance_identity.schema.json",
@@ -664,5 +664,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:28657b647c9293efbb90f2dbd2ff20685a3233dc9c7f13972f2ee0e5b22c2de2"
+  "root_digest": "sha256:0b43b97ef35a74ca65286671645f50f3cbfdaeb93b1c730c3f59d9d888fd3711"
 }
