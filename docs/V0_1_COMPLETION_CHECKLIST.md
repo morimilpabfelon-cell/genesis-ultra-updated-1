@@ -7,7 +7,8 @@
 ## Evidencia de CI y publicación
 
 - [x] Suite completa verde para la recuperación determinista en el [PR #15](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/15).
-- [x] PR #15 autorizado para fusión en `main` después de CI verde.
+- [x] Suite completa verde para el puente compuerta→recuperación en el [PR #16](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/16).
+- [x] Suite completa verde para la búsqueda híbrida neutral en el [PR #17](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/17).
 - [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
 ## Implementado y verificado por la suite
@@ -22,8 +23,8 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 34 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [x] Cuarenta y dos regresiones que demuestran el rechazo de artefactos inválidos por los
+- [x] Compilación de los 35 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Cuarenta y tres regresiones que demuestran el rechazo de artefactos inválidos por los
       schemas reales, con cobertura obligatoria para cada schema.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -65,12 +66,19 @@
 - [x] Recuperación determinista de memoria aceptada con cinco frames, 38 términos, cuatro
       consultas y cinco checkpoints de replay, reproducida por Python y Node con el mismo
       digest y veintidós ataques de autoridad, integridad, ranking o filtración futura rechazados.
+- [x] Búsqueda híbrida neutral con cinco consultas, perfil semántico ligado por digest,
+      recuperación sin coincidencia literal, fallback léxico, aislamiento histórico y
+      veinticuatro cruces de autoridad, integridad, proveedor o cobertura rechazados por Python y Node.
 
 ## Pendiente real
 
 - [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.
-- [ ] Recuperación semántica opcional con embeddings neutrales, perfiles versionados y
-      evaluación reproducible; no forma parte de la proyección léxica v0.1.
+- [ ] Adaptador semántico real con modelo local neutral, digest versionado y evaluación
+      reproducible de calidad; el fixture actual prueba el protocolo, no un modelo entrenado.
+- [ ] Filtros, scopes y ACL de consulta enlazados con privacidad y autoridad.
+- [ ] Metadata temporal derivada con procedencia verificable.
+- [ ] Cápsulas portables neutrales y reconstruibles.
+- [ ] Extracción multimodal detrás de sentidos y compuerta de memoria.
 - [ ] Revisión criptográfica y de seguridad externa.
 
 ## Prohibido declarar
