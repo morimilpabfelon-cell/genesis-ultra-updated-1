@@ -2,14 +2,14 @@
 
 Genesis Ultra está en fase de diseño. El orden recomendado de revisión es:
 
-1. `docs/SOURCE_EXTRACTION_MAP.md`
-2. `spec/GENESIS_PROTOCOL_DRAFT.md`
-3. `spec/CONTINUITY_AND_MIGRATION.md`
-4. `spec/HASH_PROFILE_DRAFT.md`
-5. `spec/CONTINUITY_HASHES.md`
-6. `spec/CONFORMANCE_LEVELS.md`
-7. `schemas/`
-8. `conformance/`
+1. [`docs/SOURCE_EXTRACTION_MAP.md`](./docs/SOURCE_EXTRACTION_MAP.md)
+2. [`spec/GENESIS_PROTOCOL_DRAFT.md`](./spec/GENESIS_PROTOCOL_DRAFT.md)
+3. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
+4. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
+5. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
+6. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
+7. [`schemas/`](./schemas)
+8. [`conformance/`](./conformance)
 
 ## Comprobar el borrador
 
@@ -42,15 +42,8 @@ Para considerarla conforme debe existir:
 - al menos dos implementaciones independientes que coincidan;
 - evidencia reproducible de las pruebas.
 
-## Estado pendiente
+## Estado verificable
 
-Antes de una primera versión candidata todavía deben completarse:
-
-- administración y recuperación de claves;
-- firmas de cuerpo y guardián dentro de los flujos;
-- formato de contenido y adjuntos;
-- checkpoint completo;
-- paquete cifrado real;
-- reconciliación y detección de forks;
-- migración de versiones del protocolo;
-- implementaciones independientes iniciales.
+La lista única de funciones comprobadas, evidencia y trabajo pendiente vive en
+[`docs/V0_1_COMPLETION_CHECKLIST.md`](./docs/V0_1_COMPLETION_CHECKLIST.md). No se mantiene
+otra lista de estado aquí para evitar contradicciones.

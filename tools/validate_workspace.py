@@ -12,12 +12,19 @@ from pathlib import Path
 import hashlib
 import json
 import re
+import subprocess
 import sys
 import unicodedata
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 
-REQUIRED_FILES = json.loads((ROOT / "conformance" / "required_artifacts.json").read_text(encoding="utf-8"))["required"]
+WORKSPACE_MANIFEST = json.loads(
+    (ROOT / "conformance" / "required_artifacts.json").read_text(encoding="utf-8")
+)
+REQUIRED_FILES = WORKSPACE_MANIFEST["required"]
+FORBIDDEN_FILES = WORKSPACE_MANIFEST["forbidden"]
+MARKDOWN_LINK = re.compile(r'\[[^\]]+\]\(([^)\s]+)(?:\s+"[^"]*")?\)')
 
 
 def encode_field(value: str) -> bytes:
@@ -51,6 +58,72 @@ def safe_relative_path(value: str) -> bool:
     if any(segment in {"", ".", ".."} for segment in segments):
         return False
     return True
+
+
+def validate_workspace_hygiene() -> list[str]:
+    failures: list[str] = []
+
+    for label, paths in (("required", REQUIRED_FILES), ("forbidden", FORBIDDEN_FILES)):
+        if len(paths) != len(set(paths)):
+            failures.append(f"duplicate_{label}_workspace_path")
+        for relative in paths:
+            if not safe_relative_path(relative):
+                failures.append(f"unsafe_{label}_workspace_path:{relative}")
+
+    overlap = sorted(set(REQUIRED_FILES) & set(FORBIDDEN_FILES))
+    for relative in overlap:
+        failures.append(f"required_and_forbidden_workspace_path:{relative}")
+
+    for relative in REQUIRED_FILES:
+        if not (ROOT / relative).is_file():
+            failures.append(f"missing_file:{relative}")
+
+    for relative in FORBIDDEN_FILES:
+        if (ROOT / relative).exists():
+            failures.append(f"forbidden_legacy_file:{relative}")
+
+    if (ROOT / ".git").exists():
+        result = subprocess.run(
+            ["git", "ls-files", "-z"],
+            cwd=ROOT,
+            check=False,
+            capture_output=True,
+        )
+        if result.returncode != 0:
+            failures.append("tracked_file_inventory_unavailable")
+        else:
+            tracked = {
+                entry.decode("utf-8")
+                for entry in result.stdout.split(b"\0")
+                if entry and (ROOT / entry.decode("utf-8")).is_file()
+            }
+            for relative in sorted(tracked - set(REQUIRED_FILES)):
+                failures.append(f"unlisted_tracked_file:{relative}")
+
+    root_resolved = ROOT.resolve()
+    for markdown in ROOT.rglob("*.md"):
+        if any(part in {".git", "node_modules"} for part in markdown.parts):
+            continue
+        content = markdown.read_text(encoding="utf-8")
+        for match in MARKDOWN_LINK.finditer(content):
+            target = match.group(1)
+            if target.startswith("#") or re.match(r"^(?:https?|mailto):", target, re.IGNORECASE):
+                continue
+            local_target = unquote(target.split("#", 1)[0])
+            if not local_target:
+                continue
+            resolved = (markdown.parent / local_target).resolve()
+            try:
+                resolved.relative_to(root_resolved)
+            except ValueError:
+                failures.append(
+                    f"markdown_link_outside_workspace:{markdown.relative_to(ROOT)}:{target}"
+                )
+                continue
+            if not resolved.exists():
+                failures.append(f"broken_markdown_link:{markdown.relative_to(ROOT)}:{target}")
+
+    return failures
 
 
 def compute_seed_root(vector: dict) -> str:
@@ -174,11 +247,7 @@ def run_behavior_cases() -> list[str]:
     return failures
 
 def main() -> int:
-    failures: list[str] = []
-
-    for relative in REQUIRED_FILES:
-        if not (ROOT / relative).is_file():
-            failures.append(f"missing_file:{relative}")
+    failures = validate_workspace_hygiene()
 
     for path in ROOT.rglob("*.json"):
         try:
@@ -231,6 +300,7 @@ def main() -> int:
         return 1
     print("OK behavior parity cases")
     print("OK workspace structure")
+    print("OK workspace hygiene and Markdown links")
     print("OK JSON syntax")
     print("OK hashing vectors")
     print("OK invalid-case reference checks")

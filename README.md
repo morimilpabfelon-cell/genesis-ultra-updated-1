@@ -2,6 +2,8 @@
 
 **Estado:** borrador de arquitectura y conformidad en desarrollo. No es una release estable.
 
+La ruta de lectura y el estado verificable están en [`START_HERE.md`](./START_HERE.md).
+
 Genesis Ultra combina las mejores ideas de `Genesis-core` y `Genesis-corev2` sin convertir ningún lenguaje, sistema operativo, aplicación, dispositivo o proveedor en la fuente de verdad.
 
 > El protocolo define. Los vectores prueban. Los lenguajes implementan.

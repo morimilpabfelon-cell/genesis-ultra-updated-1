@@ -1,12 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const failures = [];
 
-const REQUIRED = JSON.parse(fs.readFileSync(path.join(ROOT, "conformance/required_artifacts.json"), "utf8")).required;
+const WORKSPACE_MANIFEST = JSON.parse(
+  fs.readFileSync(path.join(ROOT, "conformance/required_artifacts.json"), "utf8")
+);
+const REQUIRED = WORKSPACE_MANIFEST.required;
+const FORBIDDEN = WORKSPACE_MANIFEST.forbidden;
 
 function fail(message) {
   failures.push(message);
@@ -98,6 +103,77 @@ function isSafePath(value) {
   return !segments.some((segment) => segment === "" || segment === "." || segment === "..");
 }
 
+function validateWorkspaceHygiene() {
+  for (const [label, paths] of [["required", REQUIRED], ["forbidden", FORBIDDEN]]) {
+    if (new Set(paths).size !== paths.length) fail(`duplicate_${label}_workspace_path`);
+    for (const relativePath of paths) {
+      if (!isSafePath(relativePath)) fail(`unsafe_${label}_workspace_path:${relativePath}`);
+    }
+  }
+
+  const forbiddenSet = new Set(FORBIDDEN);
+  for (const relativePath of REQUIRED) {
+    if (forbiddenSet.has(relativePath)) {
+      fail(`required_and_forbidden_workspace_path:${relativePath}`);
+    }
+    if (!fs.existsSync(path.join(ROOT, relativePath))) {
+      fail(`missing_required_file:${relativePath}`);
+    }
+  }
+
+  for (const relativePath of FORBIDDEN) {
+    if (fs.existsSync(path.join(ROOT, relativePath))) {
+      fail(`forbidden_legacy_file:${relativePath}`);
+    }
+  }
+
+  if (fs.existsSync(path.join(ROOT, ".git"))) {
+    const result = spawnSync("git", ["ls-files", "-z"], { cwd: ROOT, encoding: "buffer" });
+    if (result.status !== 0) {
+      fail("tracked_file_inventory_unavailable");
+    } else {
+      const requiredSet = new Set(REQUIRED);
+      const tracked = result.stdout
+        .toString("utf8")
+        .split("\0")
+        .filter(Boolean)
+        .filter((relativePath) => fs.existsSync(path.join(ROOT, relativePath)));
+      for (const relativePath of tracked.sort()) {
+        if (!requiredSet.has(relativePath)) fail(`unlisted_tracked_file:${relativePath}`);
+      }
+    }
+  }
+
+  for (const file of walk(ROOT).filter((item) => item.endsWith(".md"))) {
+    const content = fs.readFileSync(file, "utf8");
+    const linkPattern = /\[[^\]]+\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+    for (const match of content.matchAll(linkPattern)) {
+      const target = match[1];
+      if (target.startsWith("#") || /^(?:https?|mailto):/i.test(target)) continue;
+
+      let localTarget;
+      try {
+        localTarget = decodeURIComponent(target.split("#", 1)[0]);
+      } catch {
+        fail(`invalid_markdown_link:${path.relative(ROOT, file).replaceAll("\\", "/")}:${target}`);
+        continue;
+      }
+      if (!localTarget) continue;
+
+      const resolved = path.resolve(path.dirname(file), localTarget);
+      const relativeToRoot = path.relative(ROOT, resolved);
+      const displayFile = path.relative(ROOT, file).replaceAll("\\", "/");
+      if (relativeToRoot === ".." || relativeToRoot.startsWith(`..${path.sep}`) || path.isAbsolute(relativeToRoot)) {
+        fail(`markdown_link_outside_workspace:${displayFile}:${target}`);
+      } else if (!fs.existsSync(resolved)) {
+        fail(`broken_markdown_link:${displayFile}:${target}`);
+      }
+    }
+  }
+}
+
+validateWorkspaceHygiene();
+
 
 // Paridad de comportamiento: toda implementacion debe RECHAZAR estos casos.
 const behavior = JSON.parse(fs.readFileSync(path.join(ROOT, "conformance/behavior_cases.json"), "utf8"));
@@ -108,10 +184,6 @@ for (const c of behavior.must_reject_encoding) {
 }
 for (const c of behavior.must_reject_paths) {
   if (isSafePath(c.value)) fail(`ruta_no_rechazada:${c.case_id}`);
-}
-
-for (const relativePath of REQUIRED) {
-  if (!fs.existsSync(path.join(ROOT, relativePath))) fail(`missing_required_file:${relativePath}`);
 }
 
 for (const file of walk(ROOT).filter((item) => item.endsWith(".json"))) {
@@ -195,6 +267,7 @@ if (failures.length > 0) {
 }
 
 console.log("Genesis Ultra workspace: OK");
-console.log(`Checked ${REQUIRED.length} required artifacts.`);
+console.log(`Checked ${REQUIRED.length} required artifacts and ${FORBIDDEN.length} forbidden legacy paths.`);
+console.log("Workspace hygiene and local Markdown links are consistent.");
 console.log("Golden seed and memory hashes match genesis.hash.fields.v0.1.");
 console.log("Reminder: passing this tool does not make the draft production-ready.");

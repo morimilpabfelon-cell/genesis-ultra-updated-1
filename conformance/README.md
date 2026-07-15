@@ -55,8 +55,6 @@ Los vectores son de borrador. Antes de congelarlos deben ampliarse con:
 - límites enteros;
 - archivos vacíos y grandes;
 - rutas equivalentes y no normalizadas;
-- eventos de transferencia y recuperación;
-- firmas y revocación;
-- corrupción deliberada;
-- bifurcaciones de cadena;
+- reconciliación completa de bifurcaciones de cadena;
+- adaptadores de almacenamiento real por plataforma;
 - compatibilidad cruzada entre al menos tres implementaciones independientes.

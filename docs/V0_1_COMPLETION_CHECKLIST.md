@@ -1,49 +1,48 @@
 # Genesis Ultra v0.1 — estado comprobable
 
-> Ninguna función se declara verificada por CI hasta que exista una ejecución verde
-> visible del workflow `.github/workflows/conformance.yml` en este repositorio.
+> Una casilla implementada solo se marca después de una ejecución verde reproducible de
+> `.github/workflows/conformance.yml`. Esto demuestra conformidad del borrador, no seguridad
+> de producción.
 
-## Evidencia de CI
+## Evidencia de CI y publicación
 
-- [ ] Primera ejecución verde del workflow en `main`.
-- [ ] Protección de `main` exige el check `reference-checks`.
-- [ ] Evidencia enlazada desde este documento.
+- [x] Suite completa verde en el [PR #3](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/3), workflow `Genesis Ultra Conformance` #7.
+- [x] Cambios verificados fusionados en `main` mediante el [commit `7123364`](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/commit/7123364c5a012a73f44ccc58e38a7c7f682246ef).
+- [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
-## Implementado en el código, pendiente de primera evidencia CI
+## Implementado y verificado por la suite
 
-- [ ] Canonicalización Python/Node con rechazo de texto no-NFC y rutas peligrosas.
-- [ ] Vectores dorados de seed root y memory event.
-- [ ] Vector canónico de paquete de transferencia.
-- [ ] Recibo vinculado mediante `accepted_package_digest` al paquete exacto aceptado.
-- [ ] Vectores de registro, paquete, recibo y finalización encadenados.
-- [ ] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
-- [ ] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
-- [ ] Lista compartida de artefactos requeridos.
-- [ ] Compilación de los 26 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [ ] Casos de regresión que demuestran el rechazo de artefactos inválidos por los schemas reales.
-- [ ] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
+- [x] Canonicalización Python/Node con rechazo de texto no-NFC y rutas peligrosas.
+- [x] Vectores dorados de seed root y memory event.
+- [x] Vector canónico de paquete de transferencia.
+- [x] Recibo vinculado mediante `accepted_package_digest` al paquete exacto aceptado.
+- [x] Vectores de registro, paquete, recibo y finalización encadenados.
+- [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
+- [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
+- [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
+- [x] Compilación de los 26 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Casos de regresión que demuestran el rechazo de artefactos inválidos por los schemas reales.
+- [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
-- [ ] Validación cruzada de los enlaces checkpoint→paquete→recibo→finalización y de la
+- [x] Validación cruzada de los enlaces checkpoint→paquete→recibo→finalización y de la
       autoridad final única.
-- [ ] Suite única local y CI mediante `npm test`.
-- [ ] Autorización permanente del guardián firmada, registrada y consumida por el
+- [x] Suite única local y CI mediante `npm test`.
+- [x] Autorización permanente del guardián firmada, registrada y consumida por el
       `transfer_id` exacto.
-- [ ] Ledger de autoridad append-only para registro de cuerpos, grants, consumos,
+- [x] Ledger de autoridad append-only para registro de cuerpos, grants, consumos,
       revocaciones y épocas.
-- [ ] Misma evaluación de autoridad usada por la simulación positiva y por los rechazos
+- [x] Misma evaluación de autoridad usada por la simulación positiva y por los rechazos
       de permiso ausente, expirado, agotado, revocado, de época antigua o destino desconocido.
-- [ ] Backup XChaCha20-Poly1305 con Argon2id, AAD enlazado al manifiesto y commit firmado.
-- [ ] Recuperación B→C autorizada para un commit y destino exactos, con registro y prueba
+- [x] Backup XChaCha20-Poly1305 con Argon2id, AAD enlazado al manifiesto y commit firmado.
+- [x] Recuperación B→C autorizada para un commit y destino exactos, con registro y prueba
       de posesión del cuerpo nuevo.
-- [ ] Brecha de memoria declarada, cuerpo anterior marcado `lost`, primer evento posterior
+- [x] Brecha de memoria declarada, cuerpo anterior marcado `lost`, primer evento posterior
       a la brecha y finalización firmada con un único `active_writer`.
-- [ ] Catorce rechazos de backup/recovery evaluados por la misma lógica del flujo positivo.
-- [ ] Journal transaccional firmado, encadenado y neutral con estado anterior, candidato y
+- [x] Catorce rechazos de backup/recovery evaluados por la misma lógica del flujo positivo.
+- [x] Journal transaccional firmado, encadenado y neutral con estado anterior, candidato y
       marcador vinculado a la finalización.
-- [ ] Ocho reinicios simulados antes, durante y después del commit, reproducidos por Python
+- [x] Ocho reinicios simulados antes, durante y después del commit, reproducidos por Python
       y Node, más doce journals alterados rechazados.
-
-Marcar estos elementos únicamente después de una ejecución verde reproducible.
 
 ## Pendiente real
 
