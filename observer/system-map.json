@@ -48,8 +48,8 @@
       "name": "Compuerta de memoria",
       "layer": "perception",
       "maturity": "verified",
-      "description": "Decide qué observaciones pueden convertirse en eventos aceptados.",
-      "keywords": ["memory_gate", "observation_and_memory_gate"],
+      "description": "Decide qué observaciones pueden convertirse en eventos aceptados y prueba el enlace firmado hacia recuperación.",
+      "keywords": ["memory_gate", "memory_gate_retrieval_bridge", "observation_and_memory_gate"],
       "required_evidence": ["spec", "schema", "conformance", "implementation"]
     },
     {
@@ -66,8 +66,8 @@
       "name": "Recuperación de memoria",
       "layer": "perception",
       "maturity": "verified",
-      "description": "Índice reconstruible con búsqueda léxica, replay temporal y ranking asistido por grafo.",
-      "keywords": ["memory_retrieval", "deterministic_memory_retrieval"],
+      "description": "Índice reconstruible con búsqueda léxica, replay temporal, ranking asistido por grafo y entrada verificada desde la compuerta.",
+      "keywords": ["deterministic_memory_retrieval", "memory_gate_retrieval_bridge", "memory_retrieval"],
       "required_evidence": ["spec", "schema", "conformance", "implementation"]
     },
     {
