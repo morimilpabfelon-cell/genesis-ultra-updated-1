@@ -1,0 +1,41 @@
+name: Retrieval Schema Regression
+
+on:
+  push:
+    branches:
+      - agent/deterministic-memory-retrieval
+    paths-ignore:
+      - conformance/schema_invalid_cases.json
+
+permissions:
+  contents: write
+
+jobs:
+  add-regression:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Add schema regression
+        run: python tools/add_retrieval_schema_regression.py
+
+      - name: Commit regression when changed
+        shell: bash
+        run: |
+          if git diff --quiet -- conformance/schema_invalid_cases.json; then
+            echo "Regression already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add conformance/schema_invalid_cases.json
+          git commit -m "Add memory retrieval schema regression"
+          git push origin HEAD:agent/deterministic-memory-retrieval
