@@ -40,6 +40,11 @@ const commands = [
     ["tools/generate_draft_manifest.py", "--check"]
   ],
   ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
+  [
+    "Validate live observer boundaries",
+    process.execPath,
+    ["--test", "observer/test/core.test.mjs"]
+  ],
   ["Validate immutable birth identity (Python)", python, ["tools/validate_instance_identity.py"]],
   [
     "Validate immutable birth identity independently (Node)",

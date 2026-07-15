@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Genesis Live Observatory</title>
+  <meta name="description" content="Observador local, verificable y de solo lectura para Genesis Ultra.">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">GENESIS ULTRA · v0.1-draft</p>
+      <h1>Live Observatory</h1>
+      <p class="subtitle">Estado local, memoria asociativa y actividad de GitHub sin autoridad de escritura.</p>
+    </div>
+    <div class="connection-stack" aria-label="Estado de conexiones">
+      <span id="liveBadge" class="badge pending">Conectando</span>
+      <span id="sourceBadge" class="badge neutral">Fuente desconocida</span>
+      <span id="githubBadge" class="badge neutral">GitHub</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="truthNotice" class="truth-notice">
+      <strong>Frontera de verdad:</strong> la cadena append-only es memoria. El grafo es una proyección reconstruible. Este panel solo observa.
+    </section>
+
+    <section class="metrics" aria-label="Resumen de Genesis">
+      <article class="metric"><span>Eventos</span><strong id="eventCount">—</strong><small id="latestEvent">Sin datos</small></article>
+      <article class="metric"><span>Nodos</span><strong id="nodeCount">—</strong><small id="nodeKinds">—</small></article>
+      <article class="metric"><span>Relaciones</span><strong id="edgeCount">—</strong><small id="derivations">—</small></article>
+      <article class="metric"><span>Cadena</span><strong id="chainStatus">—</strong><small id="chainRange">—</small></article>
+      <article class="metric"><span>CI GitHub</span><strong id="ciStatus">—</strong><small id="ciRun">—</small></article>
+      <article class="metric"><span>Actualización</span><strong id="lastUpdate">—</strong><small id="repositoryName">—</small></article>
+    </section>
+
+    <section class="workspace">
+      <article class="panel brain-panel">
+        <header class="panel-header">
+          <div>
+            <p class="eyebrow">PROYECCIÓN ASOCIATIVA</p>
+            <h2>Cerebro observable</h2>
+          </div>
+          <div class="graph-tools">
+            <label>
+              <span class="sr-only">Buscar nodo</span>
+              <input id="nodeSearch" type="search" placeholder="Buscar tipo, ID o relación">
+            </label>
+            <button id="resetGraph" type="button">Recentrar</button>
+          </div>
+        </header>
+        <div id="graphEmpty" class="empty-state">Esperando una proyección asociativa.</div>
+        <svg id="brainGraph" role="img" aria-label="Grafo asociativo de Genesis" tabindex="0">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z"></path>
+            </marker>
+          </defs>
+          <g id="viewport"><g id="edgesLayer"></g><g id="nodesLayer"></g></g>
+        </svg>
+        <footer class="legend">
+          <span><i class="dot observation"></i>Observación</span>
+          <span><i class="dot concept"></i>Concepto</span>
+          <span><i class="dot decision"></i>Decisión</span>
+          <span><i class="line extracted"></i>Extraída</span>
+          <span><i class="line inferred"></i>Inferida</span>
+          <span><i class="line confirmed"></i>Confirmada</span>
+        </footer>
+      </article>
+
+      <aside class="panel detail-panel">
+        <header class="panel-header"><div><p class="eyebrow">INSPECCIÓN</p><h2>Detalle verificable</h2></div></header>
+        <div id="detailContent" class="detail-content"><p>Selecciona un nodo o una relación.</p></div>
+      </aside>
+    </section>
+
+    <section class="lower-grid">
+      <article class="panel">
+        <header class="panel-header"><div><p class="eyebrow">MEMORIA</p><h2>Cadena append-only</h2></div></header>
+        <ol id="memoryTimeline" class="timeline"><li class="empty-state">Sin eventos.</li></ol>
+      </article>
+
+      <article class="panel">
+        <header class="panel-header"><div><p class="eyebrow">DESARROLLO</p><h2>Actividad de GitHub</h2></div></header>
+        <div id="githubError" class="inline-warning" hidden></div>
+        <ul id="githubActivity" class="activity"><li class="empty-state">Esperando GitHub.</li></ul>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span id="instanceId">Instancia: —</span>
+    <span id="projectionId">Proyección: —</span>
+    <span>127.0.0.1 · solo lectura</span>
+  </footer>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

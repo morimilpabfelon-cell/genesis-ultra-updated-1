@@ -57,6 +57,7 @@ schemas/        Contratos neutrales de datos.
 conformance/    Vectores válidos y casos que deben rechazarse.
 docs/           Decisiones y mapa de extracción de los núcleos anteriores.
 tools/          Herramientas auxiliares no normativas.
+observer/       Panel local de solo lectura para estado y actividad en vivo.
 reference/      Futuras implementaciones por lenguaje.
 ```
 
@@ -89,6 +90,18 @@ ni permitir que un estado candidato no comprometido se convierta en escritor.
 El manifiesto reproducible `conformance/draft_manifest.json` registra tamaño y SHA-256 de
 cada artefacto requerido. Python y Node rechazan omisiones, archivos inesperados, cambios de
 bytes, orden no canónico o un hash raíz incorrecto.
+
+## Observabilidad local en vivo
+
+```powershell
+npm run observe
+```
+
+Abre `http://127.0.0.1:4317`. El **Genesis Live Observatory** muestra la cadena de memoria,
+la proyección asociativa, procedencia, integridad y actividad de commits, pull requests y
+GitHub Actions mediante actualizaciones en vivo. Es una herramienta local no normativa y de
+solo lectura: no escribe recuerdos, no confirma inferencias y no modifica identidad ni
+autoridad. Configuración y conexión a un estado runtime en [`observer/README.md`](observer/README.md).
 
 ## Neutralidad
 
