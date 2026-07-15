@@ -1,0 +1,36 @@
+
+def validate_assertion(assertion: dict, events: dict[str, dict], instance_id: str) -> None:
+    validate_nfc(assertion)
+    ensure_no_forbidden(assertion)
+    if set(assertion) != ASSERTION_FIELDS:
+        raise ConformanceError("assertion_fields_invalid")
+    if assertion["schema_version"] != "genesis.memory.structured.assertion.v0.1" or assertion["hash_profile"] != "genesis.hash.fields.v0.1":
+        raise ConformanceError("assertion_profile_invalid")
+    if assertion["instance_id"] != instance_id:
+        raise ConformanceError("assertion_instance_mismatch")
+    event = events.get(assertion["source_event_ref"])
+    if event is None:
+        raise ConformanceError("assertion_source_event_missing")
+    if assertion["source_event_hash"] != event["event_hash"]:
+        raise ConformanceError("assertion_source_hash_mismatch")
+    if assertion["source_content_digest"] != event["content_digest"]:
+        raise ConformanceError("assertion_source_content_digest_mismatch")
+    if assertion["source_sequence"] != event["sequence"]:
+        raise ConformanceError("assertion_source_sequence_mismatch")
+    if assertion["asserted_at"] != event["observed_at"]:
+        raise ConformanceError("assertion_timestamp_mismatch")
+    if assertion["privacy"] != event["privacy"]:
+        raise ConformanceError("assertion_privacy_mismatch")
+    if assertion["kind"] not in KINDS:
+        raise ConformanceError("assertion_kind_invalid")
+    if assertion["operation"] not in OPERATIONS:
+        raise ConformanceError("assertion_operation_invalid")
+    if assertion["polarity"] not in POLARITIES:
+        raise ConformanceError("assertion_polarity_invalid")
+    if assertion["privacy"] not in PRIVACY:
+        raise ConformanceError("assertion_privacy_invalid")
+    if not assertion["entity"] or not assertion["slot"] or not assertion["scope"] or not assertion["value"]:
+        raise ConformanceError("assertion_text_required")
+    expected_version_key = assertion["entity"] + ":" + assertion["slot"]
+    if assertion["version_key"] != expected_version_key:
+        raise ConformanceError("assertion_version_key_mismatch")
