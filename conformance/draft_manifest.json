@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 80,
+  "file_count": 85,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,8 +25,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 3489,
-      "digest": "sha256:a44b29c5ce64cd0cbdde28a389323ffb9a94922851d4de277f06ce8e0e3de318"
+      "size_bytes": 3742,
+      "digest": "sha256:eddf6bfbcdb4c6ab2eb6b5357f3fffe65e053b1b5f568bd9ac79f17f532547bc"
     },
     {
       "path": "START_HERE.md",
@@ -35,8 +35,8 @@
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 3044,
-      "digest": "sha256:098d92d502a5a0b9827d03b9964f0938f6df3b8810afde91af6f7d7818e95fd7"
+      "size_bytes": 3475,
+      "digest": "sha256:cc02c8c355758bda8cb4721b9f09260475ebe9029d57020f84d9205dddce2b29"
     },
     {
       "path": "conformance/behavior_cases.json",
@@ -59,24 +59,29 @@
       "digest": "sha256:003dc879bcf83dfc59cd3e512fd270becc79a2226047b1e3184b6db264e3239d"
     },
     {
+      "path": "conformance/host_adapter_vectors.json",
+      "size_bytes": 7733,
+      "digest": "sha256:d72221405167802e873bbc6ab186236450dfd688e1c724a3f4947c5073e91ff0"
+    },
+    {
       "path": "conformance/invalid_cases.json",
       "size_bytes": 3253,
       "digest": "sha256:b68e86a2480d0961a0ad04404abd1ae423e735dec228bbcf4f7dab8bb2edf598"
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 3427,
-      "digest": "sha256:d9c972569cc3894bbdac5763b350bbef34d8e135f9147027a7ed655f3282207d"
+      "size_bytes": 3638,
+      "digest": "sha256:fc71c855c9c639a398fd75018f8ef0508c0e4e6c3433f619e48cd03ff7f4541c"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 18117,
-      "digest": "sha256:ed1b112bc269f5fdaeda70625e2659c99956e671c54cf04c95f6ff8e28ddc6a3"
+      "size_bytes": 20516,
+      "digest": "sha256:805027cfa91dc7aa01bf55f252feffd5e6ae602829f6d8b3395e2e910a862b35"
     },
     {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
-      "size_bytes": 11860,
-      "digest": "sha256:ebd8f1885c51637470a782ff7d1c9284ad4824dac4fb06ab8350670e87caf5b2"
+      "size_bytes": 12649,
+      "digest": "sha256:83ac38d3c5d991720d3fc50e38496568b926586659421ee79e6aec8c1b99f44d"
     },
     {
       "path": "docs/SOURCE_EXTRACTION_MAP.md",
@@ -85,8 +90,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 3670,
-      "digest": "sha256:a9316aac04263eed86637c0f560387d47ef7c91d764f50015735cd16f36585c9"
+      "size_bytes": 3838,
+      "digest": "sha256:645f6ce12c3f8886f66059773e8e22226f660053ae1a5cb51e5ad803d8a26792"
     },
     {
       "path": "package-lock.json",
@@ -95,13 +100,13 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 633,
-      "digest": "sha256:f2e75dd0e13c9e55456b865b91d0354f174dcd3c88ab537bc793029eec0b1935"
+      "size_bytes": 694,
+      "digest": "sha256:ba57e6029b73098dc62d99ffba0f2c49b26f6a11dac7e40a2eb7d5deb3be40ac"
     },
     {
       "path": "reference/README.md",
-      "size_bytes": 1124,
-      "digest": "sha256:2d30de56210ace8975a3bae7623b2e56c0d76576fcbb798aa5cc9dec89fbadd2"
+      "size_bytes": 1154,
+      "digest": "sha256:b0044b64cffc683a9115395d1e9aa3144b3f3e97078e1e8e6783828a254644cb"
     },
     {
       "path": "requirements.txt",
@@ -182,6 +187,11 @@
       "path": "schemas/guardian_recovery_policy.schema.json",
       "size_bytes": 1558,
       "digest": "sha256:613256d01b3fb4359f0e079c39650a1c03fc67d4660c2976c5227f126a3c1e26"
+    },
+    {
+      "path": "schemas/host_capability_manifest.schema.json",
+      "size_bytes": 2434,
+      "digest": "sha256:edee85aea57e37aee736001cf276562d86f63a2b11f12ccaef23b23563550c55"
     },
     {
       "path": "schemas/instance_identity.schema.json",
@@ -309,6 +319,11 @@
       "digest": "sha256:81816f2a4c261a3a18c8498fbbf73d807113c1bf95de212f6e1f22388353fae3"
     },
     {
+      "path": "spec/HOST_ADAPTER_CONTRACT.md",
+      "size_bytes": 5914,
+      "digest": "sha256:b0ddc4f1a9f07438e57340b22f011dc1389a4c2d51207777cad76b226d6dabdf"
+    },
+    {
       "path": "spec/RECOVERY_TRUST_MODEL.md",
       "size_bytes": 4031,
       "digest": "sha256:cbbe2978be3d5c2ff60a95ed404e3b13e9053e851e7a67f1d79d6efb1aa201c1"
@@ -330,8 +345,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 3535,
-      "digest": "sha256:999835063274cf68cdddf5381e815f69d2fb715c129152196146d457c34ef742"
+      "size_bytes": 3756,
+      "digest": "sha256:6763693c16e5f8487698773e912ca01360470657d00337e90a6b232b0735f150"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -365,8 +380,8 @@
     },
     {
       "path": "tools/validate_artifacts.mjs",
-      "size_bytes": 45987,
-      "digest": "sha256:af1507c9fc66ee0139cae35ea029b6643c7affe9f023ca69c03fd16c0eab16f8"
+      "size_bytes": 46555,
+      "digest": "sha256:7dae764f01f6c9bc8203e6599bdd417069275390b30d4ba01542bbf230464a0a"
     },
     {
       "path": "tools/validate_authority.py",
@@ -389,6 +404,16 @@
       "digest": "sha256:2e4acc1e87243e33d5b5ba428ca8ed3a94b4e2b4a88340e0e650ecd1bf724c48"
     },
     {
+      "path": "tools/validate_host_adapter.mjs",
+      "size_bytes": 9233,
+      "digest": "sha256:278e5df45c0d9bc76c69f61dd6451ceedd71e9911b4f057ee0a50d50fb580a69"
+    },
+    {
+      "path": "tools/validate_host_adapter.py",
+      "size_bytes": 8882,
+      "digest": "sha256:e63702b5d80890ca81205e49c793b64b15f3c5f6f196d9e9881f4c2f2eb650be"
+    },
+    {
       "path": "tools/validate_protocol_vectors.mjs",
       "size_bytes": 17332,
       "digest": "sha256:e79ca8f260d6f05bd16c5361260fb09be0cf06f62a1f43c9ba12808f264734bb"
@@ -409,5 +434,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:04a115df26a090167d09d85fb8ac41f0c6d96f855ccda4ab3dfbe321f93fee1c"
+  "root_digest": "sha256:df5e2c578c9702932d373479acc9987ab86fde9aec271875964203e7977bdac2"
 }

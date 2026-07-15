@@ -20,7 +20,7 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 27 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Compilación de los 28 JSON Schema con JSON Schema 2020-12 y formatos activos.
 - [x] Casos de regresión que demuestran el rechazo de artefactos inválidos por los schemas reales.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -47,6 +47,8 @@
       autoexclusión explícita y hash raíz reproducido por Python y Node.
 - [x] Segunda implementación independiente en Node para todos los vectores compartidos,
       incluidos continuidad, autoridad, Ed25519, XChaCha20-Poly1305, Argon2id y rechazos.
+- [x] Contrato neutral core↔adaptador, anchor portable y doce rechazos anti-lock-in
+      reproducidos por Python y Node para declaraciones Android, Apple y Windows.
 
 ## Pendiente real
 

@@ -63,7 +63,7 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 27 JSON Schema, exige que
+La suite ejecuta los validadores Python y Node, compila los 28 JSON Schema, exige que
 los artefactos generados por la simulación A→B sean válidos y estén enlazados, verifica
 el permiso permanente, los dispositivos registrados y el ledger de autoridad, simula un
 backup cifrado comprometido seguido de pérdida y recuperación B→C, y ejecuta los vectores
@@ -83,3 +83,6 @@ bytes, orden no canónico o un hash raíz incorrecto.
 Kotlin, JavaScript, Python, Swift, Rust, Rego, Java o .NET pueden implementar Genesis Ultra. Ninguno de ellos es Genesis Ultra por sí mismo.
 
 Las implementaciones deben superar los mismos vectores de conformidad y permitir que la instancia salga de su plataforma sin perder identidad ni ocultar discontinuidades.
+La frontera obligatoria entre core y plataforma está definida en
+[`spec/HOST_ADAPTER_CONTRACT.md`](spec/HOST_ADAPTER_CONTRACT.md): el core conserva estado
+portable y cada cuerpo aporta capacidades reemplazables, nunca una cuenta o runtime obligatorio.

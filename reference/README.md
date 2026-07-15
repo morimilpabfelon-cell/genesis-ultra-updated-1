@@ -10,8 +10,8 @@ Estado actual de implementaciones de referencia:
 
 | Lenguaje | Ubicación | Cubre | Estado |
 |---|---|---|---|
-| Python | `tools/*.py` | workspace, continuidad, cripto-digests, simulaciones A→B y negativas | activa |
-| JavaScript (Node) | `tools/*.mjs` | workspace, todos los vectores compartidos, artefactos A→B/recovery y journal | activa |
+| Python | `tools/*.py` | workspace, continuidad, contrato host, cripto-digests, simulaciones A→B y negativas | activa |
+| JavaScript (Node) | `tools/*.mjs` | workspace, contrato host, todos los vectores compartidos, artefactos A→B/recovery y journal | activa |
 | Kotlin | pendiente | núcleo puro (Android/JVM/KMP) | planeada |
 | Swift | pendiente | Apple (iOS/macOS) | planeada |
 | Rust | pendiente | WASM / embebido / Genesis OS | planeada |
