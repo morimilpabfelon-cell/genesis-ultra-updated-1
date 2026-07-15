@@ -142,6 +142,16 @@ nombre de archivo o existencia de la copia nueva.
 permite revertir un candidato sin commit o reproducir uno ya comprometido. La existencia
 física de ambas generaciones no concede autoridad a ambas; el journal selecciona una sola.
 
+## AD-12 — Manifiesto reproducible con una única autoexclusión
+**Decisión:** cada artefacto requerido se registra por ruta, tamaño y SHA-256 de sus bytes.
+El manifiesto se excluye únicamente a sí mismo y compromete la lista mediante un hash raíz
+con framing neutral.
+**Alternativa descartada:** incluir el digest del manifiesto dentro del mismo manifiesto o
+depender del árbol interno de Git.
+**Motivo:** la autorreferencia no tiene una representación finita estable y Git no está
+disponible en todos los cuerpos. Declarar y verificar una sola exclusión produce el mismo
+resultado en cualquier sistema de archivos sin esconder otras omisiones.
+
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con
 vectores y crítica independiente antes de cualquier declaración de estabilidad.

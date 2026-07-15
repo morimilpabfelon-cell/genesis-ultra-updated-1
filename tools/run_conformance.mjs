@@ -34,6 +34,11 @@ function resolvePython() {
 const python = resolvePython();
 const commands = [
   ["Validate workspace (Python)", python, ["tools/validate_workspace.py"]],
+  [
+    "Validate draft integrity manifest (Python)",
+    python,
+    ["tools/generate_draft_manifest.py", "--check"]
+  ],
   ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
   ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
   ["Validate crypto vectors", python, ["tools/validate_crypto_vectors.py"]],

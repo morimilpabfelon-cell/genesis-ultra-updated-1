@@ -7,9 +7,10 @@ Genesis Ultra está en fase de diseño. El orden recomendado de revisión es:
 3. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
 4. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
 5. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
-6. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
-7. [`schemas/`](./schemas)
-8. [`conformance/`](./conformance)
+6. [`spec/DRAFT_INTEGRITY_MANIFEST.md`](./spec/DRAFT_INTEGRITY_MANIFEST.md)
+7. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
+8. [`schemas/`](./schemas)
+9. [`conformance/`](./conformance)
 
 ## Comprobar el borrador
 

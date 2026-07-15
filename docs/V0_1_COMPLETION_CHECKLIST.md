@@ -20,7 +20,7 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 26 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Compilación de los 27 JSON Schema con JSON Schema 2020-12 y formatos activos.
 - [x] Casos de regresión que demuestran el rechazo de artefactos inválidos por los schemas reales.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -43,12 +43,13 @@
       marcador vinculado a la finalización.
 - [x] Ocho reinicios simulados antes, durante y después del commit, reproducidos por Python
       y Node, más doce journals alterados rechazados.
+- [x] Manifiesto neutral del borrador con tamaño y SHA-256 de todos los artefactos requeridos,
+      autoexclusión explícita y hash raíz reproducido por Python y Node.
 
 ## Pendiente real
 
 - [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.
 - [ ] Segunda implementación independiente que reproduzca todos los vectores.
-- [ ] Manifiesto del borrador con hashes de todos los archivos.
 - [ ] Revisión criptográfica y de seguridad externa.
 
 ## Prohibido declarar
