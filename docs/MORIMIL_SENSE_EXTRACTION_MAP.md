@@ -58,8 +58,8 @@ implementada.
 
 ## Orden de integración
 
-1. Definir un schema neutral de observación con procedencia y vectores negativos.
-2. Implementar una compuerta que transforme una observación aceptada en evento append-only.
+1. **Completado en el borrador:** schema neutral de observación con procedencia y vectores negativos.
+2. **Completado en el borrador:** compuerta firmada que enlaza una observación aceptada con un evento append-only.
 3. Conectar primero Vista, Propiocepción e Interocepción mediante adaptadores sustituibles.
 4. Añadir Tacto, Oído y sentido temporal solo con permisos y pruebas de privacidad.
 5. Integrar memoria, cognición, defensa, crecimiento y movilidad como sistemas separados.

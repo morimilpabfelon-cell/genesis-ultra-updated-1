@@ -174,6 +174,16 @@ los hashes posteriores fueron recalculados.
 La instancia puede ampliar conocimiento, habilidades, motores y cuerpos, pero ese crecimiento
 se expresa con eventos nuevos. Semilla, identidad e historia aceptada nunca se sobrescriben.
 
+## AD-15 — Un sentido observa; una compuerta decide; la memoria registra
+**Decisión:** los sentidos producen artefactos firmados con payload y evidencia por digest.
+No conocen el repositorio de memoria. Una compuerta separada emite `accepted`, `rejected` o
+`quarantined`; solo `accepted` enlaza exactamente un evento append-only.
+**Alternativa descartada:** permitir que cámara, micrófono, navegador, interfaz o monitor de
+salud escriban directamente en memoria o ejecuten instrucciones detectadas.
+**Motivo:** una fuente puede fallar, ser manipulada o contener datos no confiables. Separar
+observación, decisión y registro conserva procedencia, privacidad y un punto auditable donde
+aplicar políticas sin convertir cada sensor en una autoridad sobre identidad o acciones.
+
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con
 vectores y crítica independiente antes de cualquier declaración de estabilidad.

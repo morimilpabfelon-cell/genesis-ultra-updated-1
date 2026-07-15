@@ -138,6 +138,26 @@ provenance_digest
 Esto permite almacenar contenido grande o privado fuera del registro principal sin
 perder integridad. La implementación debe comprobar los digests antes de aceptar el evento.
 
+### 6.1. Hash de observación de un sentido
+
+Dominio: `genesis.sense.observation.v0.1`.
+
+Orden exacto: `schema_version`, `hash_profile`, `observation_id`, `instance_id`, `body_id`,
+`observation_sequence`, `sense`, `source_kind`, `captured_at`, `payload_digest`,
+`payload_media_type`, `evidence_digest`, `privacy`.
+
+Resultado: `observation_digest = "sha256:" + lowercase_hex(SHA-256(bytes))`.
+
+### 6.2. Hash de decisión de compuerta
+
+Dominio: `genesis.memory.gate.decision.v0.1`.
+
+Orden exacto: `schema_version`, `hash_profile`, `decision_id`, `observation_id`,
+`observation_digest`, `instance_id`, `body_id`, `decision`, `reason_code`, `policy_profile`,
+`decided_at`, `memory_event_ref`. Un `memory_event_ref` nulo se representa como texto vacío.
+
+Resultado: `decision_digest = "sha256:" + lowercase_hex(SHA-256(bytes))`.
+
 ## 7. Rechazo obligatorio
 
 Una implementación debe rechazar, sin intentar corregir silenciosamente:

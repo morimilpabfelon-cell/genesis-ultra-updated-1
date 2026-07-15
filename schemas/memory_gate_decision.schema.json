@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:memory-gate-decision:v0.1",
+  "title": "Genesis Memory Gate Decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "decision_id",
+    "observation_id",
+    "observation_digest",
+    "instance_id",
+    "body_id",
+    "decision",
+    "reason_code",
+    "policy_profile",
+    "decided_at",
+    "memory_event_ref",
+    "decision_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.memory.gate.decision.v0.1" },
+    "hash_profile": { "const": "genesis.hash.fields.v0.1" },
+    "decision_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "observation_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "observation_digest": { "$ref": "#/$defs/sha256" },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "decision": { "type": "string", "enum": ["accepted", "rejected", "quarantined"] },
+    "reason_code": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "policy_profile": { "type": "string", "minLength": 3, "maxLength": 128 },
+    "decided_at": { "type": "string", "format": "date-time" },
+    "memory_event_ref": { "type": ["string", "null"], "minLength": 16, "maxLength": 128 },
+    "decision_digest": { "$ref": "#/$defs/sha256" },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "decision": { "const": "accepted" } } },
+      "then": { "properties": { "memory_event_ref": { "type": "string", "minLength": 16 } } },
+      "else": { "properties": { "memory_event_ref": { "type": "null" } } }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}

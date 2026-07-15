@@ -46,6 +46,12 @@ const commands = [
     process.execPath,
     ["tools/validate_instance_identity.mjs"]
   ],
+  ["Validate signed sense observations (Python)", python, ["tools/validate_sense_observations.py"]],
+  [
+    "Validate signed sense observations independently (Node)",
+    process.execPath,
+    ["tools/validate_sense_observations.mjs"]
+  ],
   ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
   ["Validate neutral host contract (Python)", python, ["tools/validate_host_adapter.py"]],
   [

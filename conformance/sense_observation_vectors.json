@@ -1,0 +1,524 @@
+{
+  "profile": "genesis.sense.memory-gate.v0.1",
+  "status": "draft",
+  "domains": {
+    "observation": "genesis.sense.observation.v0.1",
+    "observation_signature": "genesis.sense.observation.signature.v0.1",
+    "gate_decision": "genesis.memory.gate.decision.v0.1",
+    "gate_signature": "genesis.memory.gate.decision.signature.v0.1"
+  },
+  "test_signing_key": {
+    "warning": "TEST ONLY - never use this seed outside conformance fixtures",
+    "seed_hex": "5555555555555555555555555555555555555555555555555555555555555555",
+    "public_key_hex": "c6822637c7d310ec57627be00ba259d253749f4aaf644470cffbe53a35f73242",
+    "public_key_fingerprint": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+  },
+  "sense_observations": [
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_01HSENSE000000000000001",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "observation_sequence": 0,
+      "sense": "vision",
+      "source_kind": "network_evidence",
+      "captured_at": "2026-07-15T00:00:00Z",
+      "payload_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "payload_media_type": "application/vnd.genesis.vision-evidence+json",
+      "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "privacy": "private_local",
+      "observation_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HSENSE000000000000001",
+        "key_epoch_id": "epoch_01HSENSE000000000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+        "signature_value": "9e9864d61cc508fea27c4270fd8927eee9f880a4609d197cd424f45b76eea247e54107a100a697d24873693eae1ff9b085738f7372aafeb898c704b13b053b01",
+        "created_at": "2026-07-15T00:00:00Z",
+        "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+      }
+    },
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_01HSENSE000000000000002",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "observation_sequence": 1,
+      "sense": "hearing",
+      "source_kind": "local_sensor",
+      "captured_at": "2026-07-15T00:00:01Z",
+      "payload_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "payload_media_type": "audio/opus",
+      "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "privacy": "private_local",
+      "observation_digest": "sha256:b02451b1d4cd69b57679038b7931d4ba95a1c139dbff1e2f5b9b2a7ff6735317",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HSENSE000000000000001",
+        "key_epoch_id": "epoch_01HSENSE000000000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:b02451b1d4cd69b57679038b7931d4ba95a1c139dbff1e2f5b9b2a7ff6735317",
+        "signature_value": "91ed172b8f3d865db9aa990b159bd23f5bcfbbe3e95cd07cd665132a277c8ad4f4431c42002951e29a13757bcbdb2bd4b0b4493282a742e9c62c820eb57ea803",
+        "created_at": "2026-07-15T00:00:01Z",
+        "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+      }
+    },
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_01HSENSE000000000000003",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "observation_sequence": 2,
+      "sense": "touch",
+      "source_kind": "user_input",
+      "captured_at": "2026-07-15T00:00:02Z",
+      "payload_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "payload_media_type": "application/vnd.genesis.touch-input+json",
+      "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "privacy": "private_local",
+      "observation_digest": "sha256:3c4ff79fa3adaa1e5bc0298fc7639d257df34810c54276c0b28e846501f80cba",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HSENSE000000000000001",
+        "key_epoch_id": "epoch_01HSENSE000000000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:3c4ff79fa3adaa1e5bc0298fc7639d257df34810c54276c0b28e846501f80cba",
+        "signature_value": "bbd9521edb2a112d48435b5ce53a3cee13bd96555e16228a51cbfefce34e786a103dc1480cf3beb9090c2cb7a7e9df79f6df81d6ce496e4541cca09e6203b904",
+        "created_at": "2026-07-15T00:00:02Z",
+        "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+      }
+    },
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_01HSENSE000000000000004",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "observation_sequence": 3,
+      "sense": "proprioception",
+      "source_kind": "runtime_state",
+      "captured_at": "2026-07-15T00:00:03Z",
+      "payload_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "payload_media_type": "application/vnd.genesis.runtime-capabilities+json",
+      "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "privacy": "private_local",
+      "observation_digest": "sha256:13ff590d764ca3c6df47b97b8232efc6f177a109e43ea0e78b20609b51e51b80",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HSENSE000000000000001",
+        "key_epoch_id": "epoch_01HSENSE000000000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:13ff590d764ca3c6df47b97b8232efc6f177a109e43ea0e78b20609b51e51b80",
+        "signature_value": "e35f5e39de58e5ca5a1f0f99d46cff8c07187838a698a1af89c5273a7b38972e24aaa724cf59a6ee3b653a23677c56059d544c52cd8e39fdd4166c5cb073bf07",
+        "created_at": "2026-07-15T00:00:03Z",
+        "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+      }
+    },
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_01HSENSE000000000000005",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "observation_sequence": 4,
+      "sense": "interoception",
+      "source_kind": "runtime_state",
+      "captured_at": "2026-07-15T00:00:04Z",
+      "payload_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "payload_media_type": "application/vnd.genesis.integrity-state+json",
+      "evidence_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "privacy": "quarantined",
+      "observation_digest": "sha256:07f8f71ddaba7907911c5a0a811cbfbbd07d22b02737a36ae863151269a84311",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HSENSE000000000000001",
+        "key_epoch_id": "epoch_01HSENSE000000000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:07f8f71ddaba7907911c5a0a811cbfbbd07d22b02737a36ae863151269a84311",
+        "signature_value": "ec87f097e5571d559273db7a5313887594ad328d623a5e74e7582a3a843f6036a82566b5ab1ccfa189cc70ca6f9f55f0682d585b60b6d16405f2b8ec74992c02",
+        "created_at": "2026-07-15T00:00:04Z",
+        "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+      }
+    },
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_01HSENSE000000000000006",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "observation_sequence": 5,
+      "sense": "temporal",
+      "source_kind": "clock",
+      "captured_at": "2026-07-15T00:00:05Z",
+      "payload_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "payload_media_type": "application/vnd.genesis.temporal-evidence+json",
+      "evidence_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "privacy": "private_local",
+      "observation_digest": "sha256:1b5fbe87d2e3ad1f99b9a27bc6f41fa9a5cd9e8a63cfd2764351059b5322a173",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HSENSE000000000000001",
+        "key_epoch_id": "epoch_01HSENSE000000000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:1b5fbe87d2e3ad1f99b9a27bc6f41fa9a5cd9e8a63cfd2764351059b5322a173",
+        "signature_value": "5338876421158eb6bd2bfebe4fb27c9d35c69faf8be17a307a3c08f5a1d40bf6926b50bb028c96a6a6f72e0110599f52b92f10bdc5ce6b57836fb0824326c906",
+        "created_at": "2026-07-15T00:00:05Z",
+        "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+      }
+    }
+  ],
+  "accepted_pipeline": {
+    "observation_ref": "obs_01HSENSE000000000000001",
+    "gate_decision": {
+      "schema_version": "genesis.memory.gate.decision.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "decision_id": "gate_01HSENSE000000000000001",
+      "observation_id": "obs_01HSENSE000000000000001",
+      "observation_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "decision": "accepted",
+      "reason_code": "policy.accepted.provenance_verified",
+      "policy_profile": "genesis.memory.gate.policy.v0.1",
+      "decided_at": "2026-07-15T00:00:01Z",
+      "memory_event_ref": "evt_01HSENSE000000000000001",
+      "decision_digest": "sha256:cd26e25fefdf0b490fa5ae4f260c1826a5091d1f476f79856ba92fc7f7558a03",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HSENSE000000000000001",
+        "key_epoch_id": "epoch_01HSENSE000000000000001",
+        "signed_domain": "genesis.memory.gate.decision.signature.v0.1",
+        "signed_digest": "sha256:cd26e25fefdf0b490fa5ae4f260c1826a5091d1f476f79856ba92fc7f7558a03",
+        "signature_value": "ad121eb5ff0575fd618bd91c3907ac4196cc7caa9d1a5501217e5a357271fc9ed12d84a34c6c79a36a7fd209eb56a239f18860b3cd617dbdaba626846a678f06",
+        "created_at": "2026-07-15T00:00:01Z",
+        "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+      }
+    },
+    "memory_event": {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSENSE000000000000001",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "sequence": 0,
+      "previous_event_hash": "GENESIS",
+      "event_type": "sense.vision.observation",
+      "actor": "body",
+      "content_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "content_type": "application/vnd.genesis.vision-evidence+json",
+      "observed_at": "2026-07-15T00:00:00Z",
+      "provenance_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+      "privacy": "private_local",
+      "event_hash": "evsha256:4f9b12646ece05403172791b57aa511c5838ff3362d9530199bd7640c03d8d7e"
+    }
+  },
+  "must_reject": [
+    {
+      "case_id": "observation-direct-memory-write-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "memory_event_ref"
+          ],
+          "value": "evt_01HSENSE000000000000001"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": false,
+      "expected_error": "observation_direct_memory_write_forbidden"
+    },
+    {
+      "case_id": "observation-platform-path-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "absolute_path"
+          ],
+          "value": "C:/private/sense.json"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": false,
+      "expected_error": "observation_platform_binding"
+    },
+    {
+      "case_id": "observation-unsupported-sense-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "sense"
+          ],
+          "value": "telepathy"
+        }
+      ],
+      "recompute_digest": true,
+      "resign": true,
+      "recompute_event_hash": false,
+      "expected_error": "unsupported_sense_profile"
+    },
+    {
+      "case_id": "observation-non-nfc-text-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "payload_media_type"
+          ],
+          "value": "application/évidence"
+        }
+      ],
+      "recompute_digest": true,
+      "resign": false,
+      "recompute_event_hash": false,
+      "expected_error": "text_not_nfc"
+    },
+    {
+      "case_id": "observation-digest-corrupted-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "observation_digest"
+          ],
+          "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": false,
+      "expected_error": "observation_digest_mismatch"
+    },
+    {
+      "case_id": "observation-signature-digest-detached-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "signature",
+            "signed_digest"
+          ],
+          "value": "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": false,
+      "expected_error": "observation_signature_digest_mismatch"
+    },
+    {
+      "case_id": "observation-signer-mismatch-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "signature",
+            "signer_id"
+          ],
+          "value": "body_01HSENSE000000000000002"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": false,
+      "expected_error": "observation_signer_mismatch"
+    },
+    {
+      "case_id": "observation-signature-corrupted-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "signature",
+            "signature_value"
+          ],
+          "value": "009864d61cc508fea27c4270fd8927eee9f880a4609d197cd424f45b76eea247e54107a100a697d24873693eae1ff9b085738f7372aafeb898c704b13b053b01"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": false,
+      "expected_error": "observation_signature_invalid"
+    },
+    {
+      "case_id": "gate-cross-instance-001",
+      "target": "gate",
+      "mutations": [
+        {
+          "path": [
+            "instance_id"
+          ],
+          "value": "inst_01HSENSE000000000000002"
+        }
+      ],
+      "recompute_digest": true,
+      "resign": true,
+      "recompute_event_hash": false,
+      "expected_error": "gate_instance_mismatch"
+    },
+    {
+      "case_id": "gate-observation-digest-detached-001",
+      "target": "gate",
+      "mutations": [
+        {
+          "path": [
+            "observation_digest"
+          ],
+          "value": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+        }
+      ],
+      "recompute_digest": true,
+      "resign": true,
+      "recompute_event_hash": false,
+      "expected_error": "gate_observation_digest_mismatch"
+    },
+    {
+      "case_id": "gate-accepted-without-event-001",
+      "target": "gate",
+      "mutations": [
+        {
+          "path": [
+            "memory_event_ref"
+          ],
+          "value": null
+        }
+      ],
+      "recompute_digest": true,
+      "resign": true,
+      "recompute_event_hash": false,
+      "expected_error": "gate_memory_event_ref_required"
+    },
+    {
+      "case_id": "gate-rejected-with-event-001",
+      "target": "gate",
+      "mutations": [
+        {
+          "path": [
+            "decision"
+          ],
+          "value": "rejected"
+        },
+        {
+          "path": [
+            "reason_code"
+          ],
+          "value": "policy.rejected.untrusted"
+        }
+      ],
+      "recompute_digest": true,
+      "resign": true,
+      "recompute_event_hash": false,
+      "expected_error": "gate_memory_event_ref_forbidden"
+    },
+    {
+      "case_id": "memory-content-detached-001",
+      "target": "memory_event",
+      "mutations": [
+        {
+          "path": [
+            "content_digest"
+          ],
+          "value": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": true,
+      "expected_error": "memory_content_digest_mismatch"
+    },
+    {
+      "case_id": "memory-provenance-detached-001",
+      "target": "memory_event",
+      "mutations": [
+        {
+          "path": [
+            "provenance_digest"
+          ],
+          "value": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": true,
+      "expected_error": "memory_provenance_digest_mismatch"
+    },
+    {
+      "case_id": "memory-event-ref-detached-001",
+      "target": "memory_event",
+      "mutations": [
+        {
+          "path": [
+            "event_id"
+          ],
+          "value": "evt_01HSENSE000000000000002"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": true,
+      "expected_error": "gate_memory_event_ref_mismatch"
+    },
+    {
+      "case_id": "memory-actor-invalid-001",
+      "target": "memory_event",
+      "mutations": [
+        {
+          "path": [
+            "actor"
+          ],
+          "value": "instance"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": true,
+      "expected_error": "memory_actor_invalid_for_observation"
+    },
+    {
+      "case_id": "memory-time-detached-001",
+      "target": "memory_event",
+      "mutations": [
+        {
+          "path": [
+            "observed_at"
+          ],
+          "value": "2026-07-15T00:00:09Z"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": true,
+      "expected_error": "memory_observed_at_mismatch"
+    }
+  ]
+}

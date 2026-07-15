@@ -16,6 +16,8 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
   Android/Apple/Windows y cambios de identidad que deben rechazarse aunque se recalculen hashes.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
 - `schema_invalid_cases.json`: artefactos que los JSON Schema reales deben rechazar.
+- `sense_observation_vectors.json`: seis observaciones firmadas, una decisión de compuerta,
+  su evento de memoria enlazado y mutaciones que intentan saltarse la frontera.
 - `continuity_vectors.json`: hashes compartidos de registro y transferencia.
 - `crypto_vectors.json`: digests y algoritmos criptográficos de borrador.
 - `draft_manifest.json`: tamaños y hashes reproducibles de todos los artefactos requeridos,
@@ -46,6 +48,10 @@ Android, Apple y Windows. Los fixtures prueban la frontera neutral, pero permane
 Python y Node reproducen también la identidad de nacimiento exacta en esas tres plataformas.
 Cambiar nombre, semilla, instancia, guardián o fecha de nacimiento invalida la continuidad;
 un digest recalculado no convierte el cambio en válido.
+
+Python y Node verifican de forma independiente las firmas Ed25519 de Vista, Oído, Tacto,
+Propiocepción, Interocepción y sentido temporal. También exigen que solo una decisión
+`accepted` firmada produzca un evento append-only con contenido y procedencia exactos.
 
 ## Requisitos para una implementación
 

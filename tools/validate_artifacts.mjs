@@ -16,6 +16,10 @@ const INSTANCE_IDENTITY_VECTORS = path.join(
   ROOT,
   "conformance/instance_identity_vectors.json"
 );
+const SENSE_OBSERVATION_VECTORS = path.join(
+  ROOT,
+  "conformance/sense_observation_vectors.json"
+);
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -1130,11 +1134,38 @@ function validateInstanceIdentityFixture(validators) {
   return vectors.continuity_cases.length;
 }
 
+function validateSenseObservationFixtures(validators) {
+  const vectors = readJson(SENSE_OBSERVATION_VECTORS);
+  for (const observation of vectors.sense_observations) {
+    requireValid(
+      validators,
+      "sense_observation.schema.json",
+      observation,
+      observation.observation_id
+    );
+  }
+  const pipeline = vectors.accepted_pipeline;
+  requireValid(
+    validators,
+    "memory_gate_decision.schema.json",
+    pipeline.gate_decision,
+    pipeline.gate_decision.decision_id
+  );
+  requireValid(
+    validators,
+    "memory_event.schema.json",
+    pipeline.memory_event,
+    pipeline.memory_event.event_id
+  );
+  return vectors.sense_observations.length;
+}
+
 function main() {
   const validators = loadValidators();
   const invalidCount = validateNegativeSchemaCases(validators);
   const hostAdapterCount = validateHostAdapterFixtures(validators);
   const identityPlatformCount = validateInstanceIdentityFixture(validators);
+  const senseObservationCount = validateSenseObservationFixtures(validators);
   requireValid(
     validators,
     "draft_manifest.schema.json",
@@ -1154,6 +1185,7 @@ function main() {
   console.log(
     `Immutable birth identity fixture: OK (${identityPlatformCount} platform declarations).`
   );
+  console.log(`Signed sense observation fixtures: OK (${senseObservationCount} senses).`);
   console.log("Draft integrity manifest schema: OK.");
   if (artifactPath) console.log("Generated A -> B artifacts and cross-links: OK.");
   if (backupRecoveryPath) console.log("Generated backup -> recovery artifacts and cross-links: OK.");

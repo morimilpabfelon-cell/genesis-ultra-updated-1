@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:sense-observation:v0.1",
+  "title": "Genesis Sense Observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "observation_id",
+    "instance_id",
+    "body_id",
+    "observation_sequence",
+    "sense",
+    "source_kind",
+    "captured_at",
+    "payload_digest",
+    "payload_media_type",
+    "evidence_digest",
+    "privacy",
+    "observation_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.sense.observation.v0.1" },
+    "hash_profile": { "const": "genesis.hash.fields.v0.1" },
+    "observation_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "observation_sequence": { "type": "integer", "minimum": 0 },
+    "sense": {
+      "type": "string",
+      "enum": [
+        "vision",
+        "hearing",
+        "touch",
+        "proprioception",
+        "interoception",
+        "temporal"
+      ]
+    },
+    "source_kind": {
+      "type": "string",
+      "enum": [
+        "local_sensor",
+        "user_input",
+        "runtime_state",
+        "network_evidence",
+        "clock"
+      ]
+    },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "payload_digest": { "$ref": "#/$defs/sha256" },
+    "payload_media_type": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "evidence_digest": { "$ref": "#/$defs/sha256" },
+    "privacy": {
+      "type": "string",
+      "enum": ["private_local", "guardian_shared", "export_approved", "quarantined"]
+    },
+    "observation_digest": { "$ref": "#/$defs/sha256" },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}
