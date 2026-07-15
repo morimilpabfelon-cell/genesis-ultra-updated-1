@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import { fileURLToPath } from 'node:url';
+
+const MAX_INT = Number.MAX_SAFE_INTEGER;
+const TS_RE = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$/;
+const SHA_RE = /^sha256:[0-9a-f]{64}$/;
+const KINDS = new Set(['fact','preference','event','profile','relationship','goal','other']);
+const OPERATIONS = new Set(['sets','updates','extends','retracts']);
+const POLARITIES = new Set(['positive','negative','neutral']);
+const PRIVACY = new Set(['private_local','guardian_shared','export_approved']);
+const FORBIDDEN_FIELDS = new Set(['guardian_id','authority_epoch','active_writer','private_key','token','credential','absolute_path','raw_bytes','base64_payload','write_memory']);
+const EVENT_FIELDS = new Set(['schema_version','hash_profile','event_id','instance_id','body_id','sequence','previous_event_hash','event_type','actor','content_digest','content_type','observed_at','provenance_digest','privacy','event_hash']);
+const EVENT_HASH_FIELDS = ['schema_version','event_id','instance_id','body_id','sequence','previous_event_hash','event_type','actor','content_digest','content_type','observed_at','provenance_digest','privacy'];
+const ASSERTION_FIELDS = new Set(['schema_version','hash_profile','assertion_id','instance_id','source_event_ref','source_event_hash','source_content_digest','source_sequence','source_ordinal','kind','entity','slot','version_key','operation','previous_assertion_ref','value','polarity','valid_from','valid_to','extractor_profile','extractor_digest','confidence_milli','asserted_at','privacy','scope','assertion_digest']);
+const ASSERTION_DIGEST_FIELDS = ['schema_version','hash_profile','assertion_id','instance_id','source_event_ref','source_event_hash','source_content_digest','source_sequence','source_ordinal','kind','entity','slot','version_key','operation','previous_assertion_ref','value','polarity','valid_from','valid_to','extractor_profile','extractor_digest','confidence_milli','asserted_at','privacy','scope'];
+
+class ConformanceError extends Error {}
+function fail(code){ throw new ConformanceError(code); }
+function encodeField(value){
+  if(typeof value !== 'string') fail('field_must_be_string');
+  if(value.normalize('NFC') !== value) fail('text_not_nfc');
+  const raw=Buffer.from(value,'utf8');
+  return Buffer.concat([Buffer.from(`${raw.length}:`,'ascii'),raw,Buffer.from('\n','ascii')]);
+}
+function hashFields(domain, fields, prefix='sha256:'){
+  const data=Buffer.concat([encodeField(domain),...fields.map(encodeField)]);
+  return prefix+crypto.createHash('sha256').update(data).digest('hex');
+}
+function sha256Text(value){ return 'sha256:'+crypto.createHash('sha256').update(Buffer.from(value,'utf8')).digest('hex'); }
+function optionalText(value){ return value===null || value===undefined ? '' : String(value); }
+function validateNfc(value){
+  if(typeof value === 'string'){ if(value.normalize('NFC')!==value) fail('text_not_nfc'); }
+  else if(Array.isArray(value)){ for(const child of value) validateNfc(child); }
+  else if(value && typeof value === 'object'){ for(const [key,child] of Object.entries(value)){ validateNfc(key); validateNfc(child); } }
+}
+function ensureNoForbidden(value){
+  if(Array.isArray(value)){ for(const child of value) ensureNoForbidden(child); return; }
+  if(value && typeof value==='object'){
+    for(const key of Object.keys(value)) if(FORBIDDEN_FIELDS.has(key)) fail('forbidden_authority_or_platform_field');
+    for(const child of Object.values(value)) ensureNoForbidden(child);
+  }
+}
+function setEquals(obj,set){ const keys=Object.keys(obj); return keys.length===set.size && keys.every(k=>set.has(k)); }
+function computeEventHash(event){ return hashFields('genesis.memory.event.v0.1',EVENT_HASH_FIELDS.map(f=>f==='sequence'?String(event[f]):event[f]),'evsha256:'); }
+function computeAssertionDigest(a){ return hashFields('genesis.memory.structured.assertion.v0.1',ASSERTION_DIGEST_FIELDS.map(f=>['source_sequence','source_ordinal','confidence_milli'].includes(f)?String(a[f]):optionalText(a[f])),'svasha256:'); }
+function computeSlotId(instanceId,entity,slot){ return hashFields('genesis.memory.structured.slot.id.v0.1',[instanceId,entity,slot],'slotsha256:'); }
+function computeHistoryDigest(item){ return hashFields('genesis.memory.structured.history.v0.1',[item.assertion_id,item.assertion_digest,item.source_event_ref,item.source_event_hash,String(item.source_sequence),String(item.source_ordinal),item.operation,item.value,item.value_digest,item.polarity,optionalText(item.valid_from),optionalText(item.valid_to),item.status_after],'svhsha256:'); }
+function computeSlotDigest(slot){
+  const fields=[slot.slot_id,slot.version_key,slot.kind,slot.entity,slot.slot,slot.privacy,slot.scope,slot.status,String(slot.current_items.length)];
+  for(const item of slot.current_items) fields.push(item.value,item.value_digest,item.assertion_ref);
+  fields.push(String(slot.history.length));
