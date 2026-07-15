@@ -158,6 +158,17 @@ Orden exacto: `schema_version`, `hash_profile`, `decision_id`, `observation_id`,
 
 Resultado: `decision_digest = "sha256:" + lowercase_hex(SHA-256(bytes))`.
 
+### 6.3. Hash de resultado de captura
+
+Dominio: `genesis.sense.capture.result.v0.1`.
+
+Orden exacto: `schema_version`, `hash_profile`, `capture_id`, `adapter_id`,
+`adapter_version`, `sense`, `source_kind`, `status`, `captured_at`,
+`payload_digest`, `payload_media_type`, `privacy`, `permission_state`,
+`diagnostic_code`. Todo valor nulo se representa como texto vacío.
+
+Resultado: `result_digest = "sha256:" + lowercase_hex(SHA-256(bytes))`.
+
 ## 7. Rechazo obligatorio
 
 Una implementación debe rechazar, sin intentar corregir silenciosamente:

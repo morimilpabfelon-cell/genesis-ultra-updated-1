@@ -52,6 +52,12 @@ const commands = [
     process.execPath,
     ["tools/validate_sense_observations.mjs"]
   ],
+  ["Validate neutral sense adapters (Python)", python, ["tools/validate_sense_adapters.py"]],
+  [
+    "Validate neutral sense adapters independently (Node)",
+    process.execPath,
+    ["tools/validate_sense_adapters.mjs"]
+  ],
   ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
   ["Validate neutral host contract (Python)", python, ["tools/validate_host_adapter.py"]],
   [

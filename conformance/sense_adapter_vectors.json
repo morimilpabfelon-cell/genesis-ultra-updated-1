@@ -1,0 +1,731 @@
+{
+  "profile": "genesis.sense.adapters.v0.1",
+  "status": "draft",
+  "domains": {
+    "capture_result": "genesis.sense.capture.result.v0.1",
+    "observation": "genesis.sense.observation.v0.1",
+    "observation_signature": "genesis.sense.observation.signature.v0.1"
+  },
+  "required_capabilities": [
+    "genesis.sense.capture.digest_only.v0.1",
+    "genesis.sense.capture.fail_closed.v0.1",
+    "genesis.sense.capture.permission_aware.v0.1",
+    "genesis.sense.capture.provenance.v0.1"
+  ],
+  "forbidden_adapter_identity_fields": [
+    "body_id",
+    "companion_name",
+    "guardian_id",
+    "instance_id",
+    "seed_id"
+  ],
+  "forbidden_adapter_memory_fields": [
+    "memory",
+    "memory_event",
+    "memory_event_ref",
+    "write_memory"
+  ],
+  "forbidden_capture_result_fields": [
+    "absolute_path",
+    "account_id",
+    "credential",
+    "platform_handle",
+    "raw_payload",
+    "token"
+  ],
+  "test_signing_key": {
+    "warning": "TEST ONLY - never use this seed outside conformance fixtures",
+    "seed_hex": "5555555555555555555555555555555555555555555555555555555555555555",
+    "public_key_hex": "c6822637c7d310ec57627be00ba259d253749f4aaf644470cffbe53a35f73242",
+    "public_key_fingerprint": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+  },
+  "adapters": [
+    {
+      "case_id": "vision-network-evidence-001",
+      "manifest": {
+        "schema_version": "genesis.sense.adapter.manifest.v0.1",
+        "adapter_id": "reference.vision.network-evidence",
+        "adapter_version": "0.1.0-draft",
+        "platform_profile": "reference-neutral",
+        "sense": "vision",
+        "source_kinds": [
+          "network_evidence"
+        ],
+        "verification_state": "simulated",
+        "permission_model": "os_runtime",
+        "capabilities": [
+          "genesis.sense.capture.digest_only.v0.1",
+          "genesis.sense.capture.fail_closed.v0.1",
+          "genesis.sense.capture.permission_aware.v0.1",
+          "genesis.sense.capture.provenance.v0.1"
+        ],
+        "boundary": {
+          "emits_raw_payload": false,
+          "exports_platform_handles": false,
+          "writes_memory": false,
+          "executes_actions": false,
+          "mutates_identity": false
+        }
+      },
+      "capture_result": {
+        "schema_version": "genesis.sense.capture.result.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "capture_id": "capture_01HADAPTER00000000000001",
+        "adapter_id": "reference.vision.network-evidence",
+        "adapter_version": "0.1.0-draft",
+        "sense": "vision",
+        "source_kind": "network_evidence",
+        "status": "captured",
+        "captured_at": "2026-07-15T01:00:00Z",
+        "payload_digest": "sha256:8a336202bf6e4f11c86b20524d984c31cbc52fddcb6a37201f7ebb67ea375f59",
+        "payload_media_type": "application/vnd.genesis.vision-evidence+json",
+        "privacy": "private_local",
+        "permission_state": "granted",
+        "diagnostic_code": "capture.completed",
+        "result_digest": "sha256:48ca9264b52039d2a77d5f4529712c48bbed76ef153481842bfeca94e5cec410"
+      },
+      "observation": {
+        "schema_version": "genesis.sense.observation.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "observation_id": "obs_01HADAPTER000000000000001",
+        "instance_id": "inst_01HADAPTER00000000000001",
+        "body_id": "body_01HADAPTER00000000000001",
+        "observation_sequence": 0,
+        "sense": "vision",
+        "source_kind": "network_evidence",
+        "captured_at": "2026-07-15T01:00:00Z",
+        "payload_digest": "sha256:8a336202bf6e4f11c86b20524d984c31cbc52fddcb6a37201f7ebb67ea375f59",
+        "payload_media_type": "application/vnd.genesis.vision-evidence+json",
+        "evidence_digest": "sha256:48ca9264b52039d2a77d5f4529712c48bbed76ef153481842bfeca94e5cec410",
+        "privacy": "private_local",
+        "observation_digest": "sha256:f24a4dfdd4144307326b4e1568d512bc85862a28546f33bea209995c5e0dd02b",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HADAPTER00000000000001",
+          "key_epoch_id": "epoch_01HADAPTER00000000000001",
+          "signed_domain": "genesis.sense.observation.signature.v0.1",
+          "signed_digest": "sha256:f24a4dfdd4144307326b4e1568d512bc85862a28546f33bea209995c5e0dd02b",
+          "signature_value": "7c7ac24aa598945918d240b2ac60d667a2203149541892bd84ef8a8c33d44f39f8354addc5d364e6186500996508f65b8a8c1d9222c9b163c84d396060018b09",
+          "created_at": "2026-07-15T01:00:00Z",
+          "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+        }
+      }
+    },
+    {
+      "case_id": "proprioception-runtime-state-001",
+      "manifest": {
+        "schema_version": "genesis.sense.adapter.manifest.v0.1",
+        "adapter_id": "reference.proprioception.runtime-state",
+        "adapter_version": "0.1.0-draft",
+        "platform_profile": "reference-neutral",
+        "sense": "proprioception",
+        "source_kinds": [
+          "runtime_state"
+        ],
+        "verification_state": "simulated",
+        "permission_model": "local_runtime",
+        "capabilities": [
+          "genesis.sense.capture.digest_only.v0.1",
+          "genesis.sense.capture.fail_closed.v0.1",
+          "genesis.sense.capture.permission_aware.v0.1",
+          "genesis.sense.capture.provenance.v0.1"
+        ],
+        "boundary": {
+          "emits_raw_payload": false,
+          "exports_platform_handles": false,
+          "writes_memory": false,
+          "executes_actions": false,
+          "mutates_identity": false
+        }
+      },
+      "capture_result": {
+        "schema_version": "genesis.sense.capture.result.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "capture_id": "capture_01HADAPTER00000000000002",
+        "adapter_id": "reference.proprioception.runtime-state",
+        "adapter_version": "0.1.0-draft",
+        "sense": "proprioception",
+        "source_kind": "runtime_state",
+        "status": "captured",
+        "captured_at": "2026-07-15T01:00:01Z",
+        "payload_digest": "sha256:d51f7685e3b22c1c2e4849cd69ab57348345753540267bb5a43245377e28346a",
+        "payload_media_type": "application/vnd.genesis.runtime-capabilities+json",
+        "privacy": "private_local",
+        "permission_state": "not_required",
+        "diagnostic_code": "capture.completed",
+        "result_digest": "sha256:8a856d927722a61a09f86a1efdd62c3dca6af1013b69e4f59c9f23076d0536ce"
+      },
+      "observation": {
+        "schema_version": "genesis.sense.observation.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "observation_id": "obs_01HADAPTER000000000000002",
+        "instance_id": "inst_01HADAPTER00000000000001",
+        "body_id": "body_01HADAPTER00000000000001",
+        "observation_sequence": 1,
+        "sense": "proprioception",
+        "source_kind": "runtime_state",
+        "captured_at": "2026-07-15T01:00:01Z",
+        "payload_digest": "sha256:d51f7685e3b22c1c2e4849cd69ab57348345753540267bb5a43245377e28346a",
+        "payload_media_type": "application/vnd.genesis.runtime-capabilities+json",
+        "evidence_digest": "sha256:8a856d927722a61a09f86a1efdd62c3dca6af1013b69e4f59c9f23076d0536ce",
+        "privacy": "private_local",
+        "observation_digest": "sha256:3be8194faa3b1e3585cef547bd939cfe64829185044b594abca417416f3fc7fb",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HADAPTER00000000000001",
+          "key_epoch_id": "epoch_01HADAPTER00000000000001",
+          "signed_domain": "genesis.sense.observation.signature.v0.1",
+          "signed_digest": "sha256:3be8194faa3b1e3585cef547bd939cfe64829185044b594abca417416f3fc7fb",
+          "signature_value": "416b29cee9736386b387dc9fc52bbc24b9e7c34a84451db93a38270294dc30824d02c0ed55943a8251a0f5501247107d702aefec165fe954fa3a6696e096570a",
+          "created_at": "2026-07-15T01:00:01Z",
+          "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+        }
+      }
+    },
+    {
+      "case_id": "interoception-integrity-state-001",
+      "manifest": {
+        "schema_version": "genesis.sense.adapter.manifest.v0.1",
+        "adapter_id": "reference.interoception.integrity-state",
+        "adapter_version": "0.1.0-draft",
+        "platform_profile": "reference-neutral",
+        "sense": "interoception",
+        "source_kinds": [
+          "runtime_state"
+        ],
+        "verification_state": "simulated",
+        "permission_model": "local_runtime",
+        "capabilities": [
+          "genesis.sense.capture.digest_only.v0.1",
+          "genesis.sense.capture.fail_closed.v0.1",
+          "genesis.sense.capture.permission_aware.v0.1",
+          "genesis.sense.capture.provenance.v0.1"
+        ],
+        "boundary": {
+          "emits_raw_payload": false,
+          "exports_platform_handles": false,
+          "writes_memory": false,
+          "executes_actions": false,
+          "mutates_identity": false
+        }
+      },
+      "capture_result": {
+        "schema_version": "genesis.sense.capture.result.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "capture_id": "capture_01HADAPTER00000000000003",
+        "adapter_id": "reference.interoception.integrity-state",
+        "adapter_version": "0.1.0-draft",
+        "sense": "interoception",
+        "source_kind": "runtime_state",
+        "status": "captured",
+        "captured_at": "2026-07-15T01:00:02Z",
+        "payload_digest": "sha256:2236c1c143f76b34c90d4fa88b999769ace867684f5a8434c54fddb9122776f3",
+        "payload_media_type": "application/vnd.genesis.integrity-state+json",
+        "privacy": "quarantined",
+        "permission_state": "not_required",
+        "diagnostic_code": "capture.integrity-sampled",
+        "result_digest": "sha256:4a3568e7e6bf9af4b6469cd143a8558c3cb7e2ef0f2e7ee4c624bbb72988c34b"
+      },
+      "observation": {
+        "schema_version": "genesis.sense.observation.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "observation_id": "obs_01HADAPTER000000000000003",
+        "instance_id": "inst_01HADAPTER00000000000001",
+        "body_id": "body_01HADAPTER00000000000001",
+        "observation_sequence": 2,
+        "sense": "interoception",
+        "source_kind": "runtime_state",
+        "captured_at": "2026-07-15T01:00:02Z",
+        "payload_digest": "sha256:2236c1c143f76b34c90d4fa88b999769ace867684f5a8434c54fddb9122776f3",
+        "payload_media_type": "application/vnd.genesis.integrity-state+json",
+        "evidence_digest": "sha256:4a3568e7e6bf9af4b6469cd143a8558c3cb7e2ef0f2e7ee4c624bbb72988c34b",
+        "privacy": "quarantined",
+        "observation_digest": "sha256:a793686ea42726b258d80592150f34ca33bc1320c025656cd8af63cf5b04754a",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HADAPTER00000000000001",
+          "key_epoch_id": "epoch_01HADAPTER00000000000001",
+          "signed_domain": "genesis.sense.observation.signature.v0.1",
+          "signed_digest": "sha256:a793686ea42726b258d80592150f34ca33bc1320c025656cd8af63cf5b04754a",
+          "signature_value": "54a9a54c7e2c40755dbd0e19b08fe78762506d991595878cb6a135ea15d80714400adb4d0611d3918869be26a632eac360f71108c0070e16aab1ad5b07c4a801",
+          "created_at": "2026-07-15T01:00:02Z",
+          "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+        }
+      }
+    }
+  ],
+  "no_observation_cases": [
+    {
+      "case_id": "vision-permission-denied-001",
+      "adapter_ref": "vision-network-evidence-001",
+      "capture_result": {
+        "schema_version": "genesis.sense.capture.result.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "capture_id": "capture_01HADAPTER_NOOBS00000001",
+        "adapter_id": "reference.vision.network-evidence",
+        "adapter_version": "0.1.0-draft",
+        "sense": "vision",
+        "source_kind": "network_evidence",
+        "status": "denied",
+        "captured_at": null,
+        "payload_digest": null,
+        "payload_media_type": null,
+        "privacy": "private_local",
+        "permission_state": "denied",
+        "diagnostic_code": "permission.denied",
+        "result_digest": "sha256:a9e23d85ef2188d8edfc8799e11d15e2bd34a2b01fc773607d9e5a6bb5dd8545"
+      },
+      "observation": null
+    },
+    {
+      "case_id": "proprioception-source-unavailable-001",
+      "adapter_ref": "proprioception-runtime-state-001",
+      "capture_result": {
+        "schema_version": "genesis.sense.capture.result.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "capture_id": "capture_01HADAPTER_NOOBS00000002",
+        "adapter_id": "reference.proprioception.runtime-state",
+        "adapter_version": "0.1.0-draft",
+        "sense": "proprioception",
+        "source_kind": "runtime_state",
+        "status": "unavailable",
+        "captured_at": null,
+        "payload_digest": null,
+        "payload_media_type": null,
+        "privacy": "private_local",
+        "permission_state": "unavailable",
+        "diagnostic_code": "source.unavailable",
+        "result_digest": "sha256:d8ae70cdb0addb0ee0756991a7449137ef77d5ef84d48498da5bde5879e008f4"
+      },
+      "observation": null
+    },
+    {
+      "case_id": "interoception-capture-failed-001",
+      "adapter_ref": "interoception-integrity-state-001",
+      "capture_result": {
+        "schema_version": "genesis.sense.capture.result.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "capture_id": "capture_01HADAPTER_NOOBS00000003",
+        "adapter_id": "reference.interoception.integrity-state",
+        "adapter_version": "0.1.0-draft",
+        "sense": "interoception",
+        "source_kind": "runtime_state",
+        "status": "failed",
+        "captured_at": null,
+        "payload_digest": null,
+        "payload_media_type": null,
+        "privacy": "private_local",
+        "permission_state": "not_required",
+        "diagnostic_code": "capture.failed",
+        "result_digest": "sha256:fc9446b8a7043731f42d45cfeb5d4cd2020a1c3a8714f78c34cdea62826e0490"
+      },
+      "observation": null
+    }
+  ],
+  "must_reject": [
+    {
+      "case_id": "adapter-instance-identity-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "instance_id"
+          ],
+          "value": "inst_01HADAPTER00000000000001"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "adapter_manifest_contains_identity"
+    },
+    {
+      "case_id": "adapter-memory-field-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "memory_event_ref"
+          ],
+          "value": "evt_01HADAPTER00000000000001"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "adapter_manifest_contains_memory"
+    },
+    {
+      "case_id": "adapter-missing-capability-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "capabilities"
+          ],
+          "value": [
+            "genesis.sense.capture.digest_only.v0.1",
+            "genesis.sense.capture.fail_closed.v0.1",
+            "genesis.sense.capture.permission_aware.v0.1"
+          ]
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "missing_adapter_capability"
+    },
+    {
+      "case_id": "adapter-duplicate-capability-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "capabilities"
+          ],
+          "value": [
+            "genesis.sense.capture.digest_only.v0.1",
+            "genesis.sense.capture.fail_closed.v0.1",
+            "genesis.sense.capture.permission_aware.v0.1",
+            "genesis.sense.capture.digest_only.v0.1"
+          ]
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "duplicate_adapter_capability"
+    },
+    {
+      "case_id": "adapter-unsorted-capabilities-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "capabilities"
+          ],
+          "value": [
+            "genesis.sense.capture.provenance.v0.1",
+            "genesis.sense.capture.permission_aware.v0.1",
+            "genesis.sense.capture.fail_closed.v0.1",
+            "genesis.sense.capture.digest_only.v0.1"
+          ]
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "unsorted_adapter_capabilities"
+    },
+    {
+      "case_id": "adapter-writes-memory-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "boundary",
+            "writes_memory"
+          ],
+          "value": true
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "adapter_memory_write_forbidden"
+    },
+    {
+      "case_id": "adapter-executes-action-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "boundary",
+            "executes_actions"
+          ],
+          "value": true
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "adapter_action_forbidden"
+    },
+    {
+      "case_id": "adapter-mutates-identity-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "boundary",
+            "mutates_identity"
+          ],
+          "value": true
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "adapter_identity_mutation_forbidden"
+    },
+    {
+      "case_id": "adapter-exports-handle-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "boundary",
+            "exports_platform_handles"
+          ],
+          "value": true
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "adapter_platform_handle_export_forbidden"
+    },
+    {
+      "case_id": "adapter-emits-raw-payload-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "boundary",
+            "emits_raw_payload"
+          ],
+          "value": true
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "adapter_raw_payload_forbidden"
+    },
+    {
+      "case_id": "reference-adapter-false-verification-001",
+      "target": "manifest",
+      "mutations": [
+        {
+          "path": [
+            "verification_state"
+          ],
+          "value": "platform_verified"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "reference_adapter_cannot_claim_platform_verification"
+    },
+    {
+      "case_id": "capture-result-raw-payload-001",
+      "target": "capture_result",
+      "mutations": [
+        {
+          "path": [
+            "raw_payload"
+          ],
+          "value": "forbidden"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "capture_result_raw_payload_forbidden"
+    },
+    {
+      "case_id": "capture-result-platform-path-001",
+      "target": "capture_result",
+      "mutations": [
+        {
+          "path": [
+            "absolute_path"
+          ],
+          "value": "C:/forbidden"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "capture_result_platform_binding"
+    },
+    {
+      "case_id": "capture-result-instance-identity-001",
+      "target": "capture_result",
+      "mutations": [
+        {
+          "path": [
+            "instance_id"
+          ],
+          "value": "inst_01HADAPTER00000000000001"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "capture_result_contains_identity"
+    },
+    {
+      "case_id": "capture-result-memory-field-001",
+      "target": "capture_result",
+      "mutations": [
+        {
+          "path": [
+            "memory_event_ref"
+          ],
+          "value": "evt_01HADAPTER00000000000001"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "capture_result_contains_memory"
+    },
+    {
+      "case_id": "capture-result-sense-detached-001",
+      "target": "capture_result",
+      "mutations": [
+        {
+          "path": [
+            "sense"
+          ],
+          "value": "proprioception"
+        }
+      ],
+      "recompute_result_digest": true,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "capture_result_sense_mismatch"
+    },
+    {
+      "case_id": "capture-result-source-detached-001",
+      "target": "capture_result",
+      "mutations": [
+        {
+          "path": [
+            "source_kind"
+          ],
+          "value": "clock"
+        }
+      ],
+      "recompute_result_digest": true,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "capture_result_source_not_declared"
+    },
+    {
+      "case_id": "capture-result-digest-corrupted-001",
+      "target": "capture_result",
+      "mutations": [
+        {
+          "path": [
+            "result_digest"
+          ],
+          "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "capture_result_digest_mismatch"
+    },
+    {
+      "case_id": "observation-evidence-detached-001",
+      "target": "observation",
+      "mutations": [
+        {
+          "path": [
+            "evidence_digest"
+          ],
+          "value": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": true,
+      "resign": true,
+      "expected_error": "observation_evidence_digest_mismatch"
+    },
+    {
+      "case_id": "observation-payload-detached-001",
+      "target": "observation",
+      "mutations": [
+        {
+          "path": [
+            "payload_digest"
+          ],
+          "value": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": true,
+      "resign": true,
+      "expected_error": "observation_payload_digest_mismatch"
+    },
+    {
+      "case_id": "observation-signature-corrupted-001",
+      "target": "observation",
+      "mutations": [
+        {
+          "path": [
+            "signature",
+            "signature_value"
+          ],
+          "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "observation_signature_invalid"
+    },
+    {
+      "case_id": "denied-result-emits-observation-001",
+      "target": "noncaptured_emission",
+      "no_observation_index": 0,
+      "mutations": [],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "noncaptured_result_must_not_emit_observation"
+    },
+    {
+      "case_id": "captured-result-permission-denied-001",
+      "target": "capture_result",
+      "mutations": [
+        {
+          "path": [
+            "permission_state"
+          ],
+          "value": "denied"
+        }
+      ],
+      "recompute_result_digest": true,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "captured_result_permission_invalid"
+    },
+    {
+      "case_id": "capture-result-adapter-detached-001",
+      "target": "capture_result",
+      "mutations": [
+        {
+          "path": [
+            "adapter_id"
+          ],
+          "value": "reference.other.adapter"
+        }
+      ],
+      "recompute_result_digest": true,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "capture_result_adapter_mismatch"
+    }
+  ]
+}

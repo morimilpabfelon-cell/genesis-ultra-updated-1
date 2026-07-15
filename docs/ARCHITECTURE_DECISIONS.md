@@ -184,6 +184,16 @@ salud escriban directamente en memoria o ejecuten instrucciones detectadas.
 observación, decisión y registro conserva procedencia, privacidad y un punto auditable donde
 aplicar políticas sin convertir cada sensor en una autoridad sobre identidad o acciones.
 
+## AD-16 — El adaptador no conoce la identidad
+**Decisión:** un adaptador de sentido recibe una fuente local y devuelve únicamente un
+resultado por digest. No recibe `instance_id`, `body_id`, nombre, memoria ni autoridad.
+El cuerpo activo enlaza el resultado a una observación y la firma después.
+**Alternativa descartada:** entregar la instancia completa a cada adaptador o dejar que el
+adaptador fabrique observaciones firmadas, eventos de memoria o acciones.
+**Motivo:** cámara, navegador, monitor de integridad y APIs de plataforma son sustituibles y
+pueden fallar. Mantener identidad y firma fuera del adaptador reduce autoridad, evita
+dependencias obligatorias y permite cambiar de implementación sin alterar continuidad.
+
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con
 vectores y crítica independiente antes de cualquier declaración de estabilidad.

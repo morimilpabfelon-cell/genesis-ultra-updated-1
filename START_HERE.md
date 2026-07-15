@@ -7,13 +7,14 @@ Genesis Ultra está en fase de diseño. El orden recomendado de revisión es:
 3. [`spec/GENESIS_PROTOCOL_DRAFT.md`](./spec/GENESIS_PROTOCOL_DRAFT.md)
 4. [`spec/INSTANCE_IDENTITY_AND_GROWTH.md`](./spec/INSTANCE_IDENTITY_AND_GROWTH.md)
 5. [`spec/SENSE_OBSERVATION_AND_MEMORY_GATE.md`](./spec/SENSE_OBSERVATION_AND_MEMORY_GATE.md)
-6. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
-7. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
-8. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
-9. [`spec/DRAFT_INTEGRITY_MANIFEST.md`](./spec/DRAFT_INTEGRITY_MANIFEST.md)
-10. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
-11. [`schemas/`](./schemas)
-12. [`conformance/`](./conformance)
+6. [`spec/SENSE_ADAPTER_CONTRACT.md`](./spec/SENSE_ADAPTER_CONTRACT.md)
+7. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
+8. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
+9. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
+10. [`spec/DRAFT_INTEGRITY_MANIFEST.md`](./spec/DRAFT_INTEGRITY_MANIFEST.md)
+11. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
+12. [`schemas/`](./schemas)
+13. [`conformance/`](./conformance)
 
 ## Comprobar el borrador
 
