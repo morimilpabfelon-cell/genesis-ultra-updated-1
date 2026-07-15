@@ -1,1 +1,1186 @@
-{"profile":"genesis.memory.retrieval.conformance.v0.1","status":"draft","domains":{"memory_event":"genesis.memory.event.v0.1","record":"genesis.memory.retrieval.record.v0.1","frame":"genesis.memory.retrieval.frame.v0.1","checkpoint":"genesis.memory.retrieval.checkpoint.v0.1","query":"genesis.memory.retrieval.query.v0.1","query_result":"genesis.memory.retrieval.query.result.v0.1","projection_id":"genesis.memory.retrieval.projection.id.v0.1","projection":"genesis.memory.retrieval.projection.v0.1"},"source_memory_events":[{"schema_version":"genesis.memory.event.v0.1","hash_profile":"genesis.hash.fields.v0.1","event_id":"evt_01HRETRIEVAL00000000001","instance_id":"inst_01HRETRIEVAL00000000001","body_id":"body_01HRETRIEVAL00000000001","sequence":0,"previous_event_hash":"GENESIS","event_type":"sense.vision.observation","actor":"body","content_digest":"sha256:1111111111111111111111111111111111111111111111111111111111111111","content_type":"text/plain; charset=utf-8","observed_at":"2026-07-15T12:00:00Z","provenance_digest":"sha256:7171717171717171717171717171717171717171717171717171717171717171","privacy":"private_local","event_hash":"evsha256:bf12c5c95c24534392d34845c33c95c237ed3d8a49fec00159d5a772c05b1076"},{"schema_version":"genesis.memory.event.v0.1","hash_profile":"genesis.hash.fields.v0.1","event_id":"evt_01HRETRIEVAL00000000002","instance_id":"inst_01HRETRIEVAL00000000001","body_id":"body_01HRETRIEVAL00000000001","sequence":1,"previous_event_hash":"evsha256:bf12c5c95c24534392d34845c33c95c237ed3d8a49fec00159d5a772c05b1076","event_type":"guardian.transfer.authorized","actor":"guardian","content_digest":"sha256:1212121212121212121212121212121212121212121212121212121212121212","content_type":"text/plain; charset=utf-8","observed_at":"2026-07-15T12:00:01Z","provenance_digest":"sha256:7272727272727272727272727272727272727272727272727272727272727272","privacy":"guardian_shared","event_hash":"evsha256:15548a8694ada76358d72bb2c74ba49efc1f851cfb431b68983bd3553812f716"},{"schema_version":"genesis.memory.event.v0.1","hash_profile":"genesis.hash.fields.v0.1","event_id":"evt_01HRETRIEVAL00000000003","instance_id":"inst_01HRETRIEVAL00000000001","body_id":"body_01HRETRIEVAL00000000001","sequence":2,"previous_event_hash":"evsha256:15548a8694ada76358d72bb2c74ba49efc1f851cfb431b68983bd3553812f716","event_type":"knowledge.requirement.recorded","actor":"instance","content_digest":"sha256:1313131313131313131313131313131313131313131313131313131313131313","content_type":"text/plain; charset=utf-8","observed_at":"2026-07-15T12:00:02Z","provenance_digest":"sha256:7373737373737373737373737373737373737373737373737373737373737373","privacy":"private_local","event_hash":"evsha256:0f602da20afec001cb5d4bbaa4dfd7a5794352260b56ef593200375b2bd1aca0"},{"schema_version":"genesis.memory.event.v0.1","hash_profile":"genesis.hash.fields.v0.1","event_id":"evt_01HRETRIEVAL00000000004","instance_id":"inst_01HRETRIEVAL00000000001","body_id":"body_01HRETRIEVAL00000000001","sequence":3,"previous_event_hash":"evsha256:0f602da20afec001cb5d4bbaa4dfd7a5794352260b56ef593200375b2bd1aca0","event_type":"knowledge.relation.confirmed","actor":"guardian","content_digest":"sha256:1414141414141414141414141414141414141414141414141414141414141414","content_type":"text/plain; charset=utf-8","observed_at":"2026-07-15T12:00:03Z","provenance_digest":"sha256:7474747474747474747474747474747474747474747474747474747474747474","privacy":"guardian_shared","event_hash":"evsha256:37431d3d75184f09fc47771146ec29f3bd07db55e073aacc71b6c1614182276e"},{"schema_version":"genesis.memory.event.v0.1","hash_profile":"genesis.hash.fields.v0.1","event_id":"evt_01HRETRIEVAL00000000005","instance_id":"inst_01HRETRIEVAL00000000001","body_id":"body_01HRETRIEVAL00000000001","sequence":4,"previous_event_hash":"evsha256:37431d3d75184f09fc47771146ec29f3bd07db55e073aacc71b6c1614182276e","event_type":"recovery.continuity.verified","actor":"body","content_digest":"sha256:1515151515151515151515151515151515151515151515151515151515151515","content_type":"text/plain; charset=utf-8","observed_at":"2026-07-15T12:00:04Z","provenance_digest":"sha256:7575757575757575757575757575757575757575757575757575757575757575","privacy":"private_local","event_hash":"evsha256:61c3f801f69117e36b5f2efc983abedbe0a98610b0213802150c94365668b28a"}],"accepted_records":[{"record_id":"rrsha256:21862533e38b37cf62ce1875e8137a40da651c82d0bffd7a7d3a78978c2199b3","event_id":"evt_01HRETRIEVAL00000000001","gate_decision_ref":"gate_01HRETRIEVAL00000000001","content_digest":"sha256:1111111111111111111111111111111111111111111111111111111111111111","normalized_text":"Genesis observed the blue workshop door and registered the local environment.","accepted_at":"2026-07-15T12:00:10Z"},{"record_id":"rrsha256:892428f6f2d77d74d0473fb99791966c3846242aa8eb5e8843aa97c46e663d56","event_id":"evt_01HRETRIEVAL00000000002","gate_decision_ref":"gate_01HRETRIEVAL00000000002","content_digest":"sha256:1212121212121212121212121212121212121212121212121212121212121212","normalized_text":"The guardian authorized memory transfer from body alpha to body beta.","accepted_at":"2026-07-15T12:00:11Z"},{"record_id":"rrsha256:2c42fb1f633952757e55997ce42061ee1b355427766198426f2a266f46ea83b3","event_id":"evt_01HRETRIEVAL00000000003","gate_decision_ref":"gate_01HRETRIEVAL00000000003","content_digest":"sha256:1313131313131313131313131313131313131313131313131313131313131313","normalized_text":"Project Aurora needs a portable offline memory index with deterministic recovery.","accepted_at":"2026-07-15T12:00:12Z"},{"record_id":"rrsha256:24d6197e27a3323bb312d887fec166370183f4adabb8d58920cca154ce9be5ad","event_id":"evt_01HRETRIEVAL00000000004","gate_decision_ref":"gate_01HRETRIEVAL00000000004","content_digest":"sha256:1414141414141414141414141414141414141414141414141414141414141414","normalized_text":"The associative graph connected Aurora memory with the transfer decision.","accepted_at":"2026-07-15T12:00:13Z"},{"record_id":"rrsha256:4ad57296bdef4dbe0ded5fd4479d1bfd177e5b414bd246a8fa397a949f35c127","event_id":"evt_01HRETRIEVAL00000000005","gate_decision_ref":"gate_01HRETRIEVAL00000000005","content_digest":"sha256:1515151515151515151515151515151515151515151515151515151515151515","normalized_text":"After recovery body gamma verified the Aurora index and preserved continuity.","accepted_at":"2026-07-15T12:00:14Z"}],"associative_projection":{"nodes":[{"node_id":"node_aurora","source_event_refs":["evt_01HRETRIEVAL00000000003"]},{"node_id":"node_relation","source_event_refs":["evt_01HRETRIEVAL00000000004"]},{"node_id":"node_recovery","source_event_refs":["evt_01HRETRIEVAL00000000005"]}],"edges":[{"source_node_id":"node_aurora","target_node_id":"node_relation"},{"source_node_id":"node_relation","target_node_id":"node_recovery"}]},"queries":[{"query_id":"query_aurora_memory","text":"Aurora portable memory","top_k":3,"as_of_sequence":4,"anchor_event_refs":[]},{"query_id":"query_guardian_transfer","text":"guardian transfer","top_k":3,"as_of_sequence":2,"anchor_event_refs":[]},{"query_id":"query_graph_neighbors","text":"","top_k":3,"as_of_sequence":4,"anchor_event_refs":["evt_01HRETRIEVAL00000000003"]},{"query_id":"query_replay_before_future","text":"Aurora index","top_k":5,"as_of_sequence":2,"anchor_event_refs":[]}],"must_reject":[{"case_id":"retrieval-identity-authority-forbidden-001","mutation":{"operation":"projection_add_field","field":"companion_name","value":"Altered"},"expected_error":"retrieval_contains_identity_authority"},{"case_id":"retrieval-raw-output-forbidden-001","mutation":{"operation":"frame_add_field","index":0,"field":"normalized_text","value":"plaintext"},"expected_error":"retrieval_contains_raw_or_platform_data"},{"case_id":"retrieval-embedding-forbidden-001","mutation":{"operation":"frame_add_field","index":0,"field":"embedding","value":[0.1]},"expected_error":"retrieval_contains_raw_or_platform_data"},{"case_id":"retrieval-vendor-profile-forbidden-001","mutation":{"operation":"projection_set","field":"projection_profile","value":"memvid-2.0.140"},"expected_error":"retrieval_projection_profile_invalid"},{"case_id":"retrieval-source-chain-broken-001","mutation":{"operation":"source_event_set","index":1,"field":"previous_event_hash","value":"evsha256:1111111111111111111111111111111111111111111111111111111111111111","recompute_event_hash":true},"expected_error":"source_memory_chain_broken"},{"case_id":"retrieval-source-hash-corrupt-001","mutation":{"operation":"source_event_set","index":2,"field":"event_hash","value":"evsha256:2222222222222222222222222222222222222222222222222222222222222222"},"expected_error":"source_memory_event_hash_mismatch"},{"case_id":"retrieval-source-instance-changed-001","mutation":{"operation":"source_event_set","index":2,"field":"instance_id","value":"inst_other","recompute_event_hash":true},"expected_error":"source_instance_id_mismatch"},{"case_id":"retrieval-record-unknown-event-001","mutation":{"operation":"record_set","index":0,"field":"event_id","value":"evt_unknown","recompute_record_id":true},"expected_error":"accepted_record_event_unknown"},{"case_id":"retrieval-record-digest-mismatch-001","mutation":{"operation":"record_set","index":0,"field":"content_digest","value":"sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff","recompute_record_id":true},"expected_error":"accepted_record_content_digest_mismatch"},{"case_id":"retrieval-record-id-corrupt-001","mutation":{"operation":"record_set","index":0,"field":"record_id","value":"rrsha256:0000000000000000000000000000000000000000000000000000000000000000"},"expected_error":"accepted_record_id_mismatch"},{"case_id":"retrieval-record-duplicate-001","mutation":{"operation":"record_duplicate","index":0},"expected_error":"accepted_record_coverage_invalid"},{"case_id":"retrieval-record-non-nfc-001","mutation":{"operation":"record_set","index":0,"field":"normalized_text","value":"Café memory"},"expected_error":"retrieval_text_not_nfc"},{"case_id":"retrieval-query-topk-invalid-001","mutation":{"operation":"query_set","index":0,"field":"top_k","value":0},"expected_error":"query_top_k_invalid"},{"case_id":"retrieval-query-asof-invalid-001","mutation":{"operation":"query_set","index":0,"field":"as_of_sequence","value":99},"expected_error":"query_as_of_sequence_invalid"},{"case_id":"retrieval-query-anchor-future-001","mutation":{"operation":"query_set","index":1,"field":"anchor_event_refs","value":["evt_01HRETRIEVAL00000000005"]},"expected_error":"query_anchor_event_unknown_or_future"},{"case_id":"retrieval-frame-id-corrupt-001","mutation":{"operation":"frame_set","index":0,"field":"frame_id","value":"rfsha256:0000000000000000000000000000000000000000000000000000000000000000"},"expected_error":"retrieval_frames_mismatch"},{"case_id":"retrieval-frame-frequency-changed-001","mutation":{"operation":"frame_set","index":0,"field":"token_count","value":999},"expected_error":"retrieval_frames_mismatch"},{"case_id":"retrieval-lexicon-df-changed-001","mutation":{"operation":"lexicon_set","index":0,"field":"document_frequency","value":99},"expected_error":"retrieval_lexicon_mismatch"},{"case_id":"retrieval-checkpoint-changed-001","mutation":{"operation":"checkpoint_set","index":0,"field":"frames_digest","value":"sha256:0000000000000000000000000000000000000000000000000000000000000000"},"expected_error":"retrieval_checkpoints_mismatch"},{"case_id":"retrieval-query-ranking-changed-001","mutation":{"operation":"query_result_set","query_index":0,"result_index":0,"field":"score","value":1},"expected_error":"retrieval_query_results_mismatch"},{"case_id":"retrieval-query-future-leak-001","mutation":{"operation":"query_result_set","query_index":3,"result_index":0,"field":"sequence","value":4},"expected_error":"retrieval_query_results_mismatch"},{"case_id":"retrieval-projection-digest-corrupt-001","mutation":{"operation":"projection_set","field":"projection_digest","value":"sha256:0000000000000000000000000000000000000000000000000000000000000000"},"expected_error":"retrieval_projection_digest_mismatch"}],"expected":{"projection_id":"rpsha256:8c2287aaaf8c3027ab0dac0f6f97e96d94fafdee4f8510f2f9e9d0efdf8ce00c","projection_digest":"sha256:6737752e07cd2ef180181e89d8d01a3148737449ea6801d00e3558af4f1f08a6","frame_count":5,"lexicon_count":38,"checkpoint_count":5,"query_result_digests":["sha256:a4c72d6904f16ac51d8f5d2d59a8b65b0e592fc67fa326dddfe940836575a2dc","sha256:046b28b3d4344e2712ff4665c8b3b17ffacab087e1a528cf24ee343b7a10230f","sha256:49e917906cf3cdfba792d709ad810d6bb0cff656fff5f6d74cd2cf4ac356147e","sha256:70ba4f7d6eda80b86808ca3ac70b6b901aeb25113b8cc557860b9beb9ff3dd8b"]}}
+{
+  "profile": "genesis.memory.retrieval.conformance.v0.1",
+  "status": "draft",
+  "domains": {
+    "memory_event": "genesis.memory.event.v0.1",
+    "record": "genesis.memory.retrieval.record.v0.1",
+    "frame": "genesis.memory.retrieval.frame.v0.1",
+    "checkpoint": "genesis.memory.retrieval.checkpoint.v0.1",
+    "query": "genesis.memory.retrieval.query.v0.1",
+    "query_result": "genesis.memory.retrieval.query.result.v0.1",
+    "projection_id": "genesis.memory.retrieval.projection.id.v0.1",
+    "projection": "genesis.memory.retrieval.projection.v0.1"
+  },
+  "source_memory_events": [
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HRETRIEVAL00000000001",
+      "instance_id": "inst_01HRETRIEVAL00000000001",
+      "body_id": "body_01HRETRIEVAL00000000001",
+      "sequence": 0,
+      "previous_event_hash": "GENESIS",
+      "event_type": "sense.vision.observation",
+      "actor": "body",
+      "content_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-15T12:00:00Z",
+      "provenance_digest": "sha256:7171717171717171717171717171717171717171717171717171717171717171",
+      "privacy": "private_local",
+      "event_hash": "evsha256:bf12c5c95c24534392d34845c33c95c237ed3d8a49fec00159d5a772c05b1076"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HRETRIEVAL00000000002",
+      "instance_id": "inst_01HRETRIEVAL00000000001",
+      "body_id": "body_01HRETRIEVAL00000000001",
+      "sequence": 1,
+      "previous_event_hash": "evsha256:bf12c5c95c24534392d34845c33c95c237ed3d8a49fec00159d5a772c05b1076",
+      "event_type": "guardian.transfer.authorized",
+      "actor": "guardian",
+      "content_digest": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-15T12:00:01Z",
+      "provenance_digest": "sha256:7272727272727272727272727272727272727272727272727272727272727272",
+      "privacy": "guardian_shared",
+      "event_hash": "evsha256:15548a8694ada76358d72bb2c74ba49efc1f851cfb431b68983bd3553812f716"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HRETRIEVAL00000000003",
+      "instance_id": "inst_01HRETRIEVAL00000000001",
+      "body_id": "body_01HRETRIEVAL00000000001",
+      "sequence": 2,
+      "previous_event_hash": "evsha256:15548a8694ada76358d72bb2c74ba49efc1f851cfb431b68983bd3553812f716",
+      "event_type": "knowledge.requirement.recorded",
+      "actor": "instance",
+      "content_digest": "sha256:1313131313131313131313131313131313131313131313131313131313131313",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-15T12:00:02Z",
+      "provenance_digest": "sha256:7373737373737373737373737373737373737373737373737373737373737373",
+      "privacy": "private_local",
+      "event_hash": "evsha256:0f602da20afec001cb5d4bbaa4dfd7a5794352260b56ef593200375b2bd1aca0"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HRETRIEVAL00000000004",
+      "instance_id": "inst_01HRETRIEVAL00000000001",
+      "body_id": "body_01HRETRIEVAL00000000001",
+      "sequence": 3,
+      "previous_event_hash": "evsha256:0f602da20afec001cb5d4bbaa4dfd7a5794352260b56ef593200375b2bd1aca0",
+      "event_type": "knowledge.relation.confirmed",
+      "actor": "guardian",
+      "content_digest": "sha256:1414141414141414141414141414141414141414141414141414141414141414",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-15T12:00:03Z",
+      "provenance_digest": "sha256:7474747474747474747474747474747474747474747474747474747474747474",
+      "privacy": "guardian_shared",
+      "event_hash": "evsha256:37431d3d75184f09fc47771146ec29f3bd07db55e073aacc71b6c1614182276e"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HRETRIEVAL00000000005",
+      "instance_id": "inst_01HRETRIEVAL00000000001",
+      "body_id": "body_01HRETRIEVAL00000000001",
+      "sequence": 4,
+      "previous_event_hash": "evsha256:37431d3d75184f09fc47771146ec29f3bd07db55e073aacc71b6c1614182276e",
+      "event_type": "recovery.continuity.verified",
+      "actor": "body",
+      "content_digest": "sha256:1515151515151515151515151515151515151515151515151515151515151515",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-15T12:00:04Z",
+      "provenance_digest": "sha256:7575757575757575757575757575757575757575757575757575757575757575",
+      "privacy": "private_local",
+      "event_hash": "evsha256:61c3f801f69117e36b5f2efc983abedbe0a98610b0213802150c94365668b28a"
+    }
+  ],
+  "accepted_records": [
+    {
+      "record_id": "rrsha256:21862533e38b37cf62ce1875e8137a40da651c82d0bffd7a7d3a78978c2199b3",
+      "event_id": "evt_01HRETRIEVAL00000000001",
+      "gate_decision_ref": "gate_01HRETRIEVAL00000000001",
+      "content_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "normalized_text": "Genesis observed the blue workshop door and registered the local environment.",
+      "accepted_at": "2026-07-15T12:00:10Z"
+    },
+    {
+      "record_id": "rrsha256:892428f6f2d77d74d0473fb99791966c3846242aa8eb5e8843aa97c46e663d56",
+      "event_id": "evt_01HRETRIEVAL00000000002",
+      "gate_decision_ref": "gate_01HRETRIEVAL00000000002",
+      "content_digest": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
+      "normalized_text": "The guardian authorized memory transfer from body alpha to body beta.",
+      "accepted_at": "2026-07-15T12:00:11Z"
+    },
+    {
+      "record_id": "rrsha256:2c42fb1f633952757e55997ce42061ee1b355427766198426f2a266f46ea83b3",
+      "event_id": "evt_01HRETRIEVAL00000000003",
+      "gate_decision_ref": "gate_01HRETRIEVAL00000000003",
+      "content_digest": "sha256:1313131313131313131313131313131313131313131313131313131313131313",
+      "normalized_text": "Project Aurora needs a portable offline memory index with deterministic recovery.",
+      "accepted_at": "2026-07-15T12:00:12Z"
+    },
+    {
+      "record_id": "rrsha256:24d6197e27a3323bb312d887fec166370183f4adabb8d58920cca154ce9be5ad",
+      "event_id": "evt_01HRETRIEVAL00000000004",
+      "gate_decision_ref": "gate_01HRETRIEVAL00000000004",
+      "content_digest": "sha256:1414141414141414141414141414141414141414141414141414141414141414",
+      "normalized_text": "The associative graph connected Aurora memory with the transfer decision.",
+      "accepted_at": "2026-07-15T12:00:13Z"
+    },
+    {
+      "record_id": "rrsha256:4ad57296bdef4dbe0ded5fd4479d1bfd177e5b414bd246a8fa397a949f35c127",
+      "event_id": "evt_01HRETRIEVAL00000000005",
+      "gate_decision_ref": "gate_01HRETRIEVAL00000000005",
+      "content_digest": "sha256:1515151515151515151515151515151515151515151515151515151515151515",
+      "normalized_text": "After recovery body gamma verified the Aurora index and preserved continuity.",
+      "accepted_at": "2026-07-15T12:00:14Z"
+    }
+  ],
+  "associative_projection": {
+    "nodes": [
+      {
+        "node_id": "node_aurora",
+        "source_event_refs": [
+          "evt_01HRETRIEVAL00000000003"
+        ]
+      },
+      {
+        "node_id": "node_relation",
+        "source_event_refs": [
+          "evt_01HRETRIEVAL00000000004"
+        ]
+      },
+      {
+        "node_id": "node_recovery",
+        "source_event_refs": [
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "source_node_id": "node_aurora",
+        "target_node_id": "node_relation"
+      },
+      {
+        "source_node_id": "node_relation",
+        "target_node_id": "node_recovery"
+      }
+    ]
+  },
+  "queries": [
+    {
+      "query_id": "query_aurora_memory",
+      "text": "Aurora portable memory",
+      "top_k": 3,
+      "as_of_sequence": 4,
+      "anchor_event_refs": []
+    },
+    {
+      "query_id": "query_guardian_transfer",
+      "text": "guardian transfer",
+      "top_k": 3,
+      "as_of_sequence": 2,
+      "anchor_event_refs": []
+    },
+    {
+      "query_id": "query_graph_neighbors",
+      "text": "",
+      "top_k": 3,
+      "as_of_sequence": 4,
+      "anchor_event_refs": [
+        "evt_01HRETRIEVAL00000000003"
+      ]
+    },
+    {
+      "query_id": "query_replay_before_future",
+      "text": "Aurora index",
+      "top_k": 5,
+      "as_of_sequence": 2,
+      "anchor_event_refs": []
+    }
+  ],
+  "projection": {
+    "schema_version": "genesis.memory.retrieval.projection.v0.1",
+    "hash_profile": "genesis.hash.fields.v0.1",
+    "projection_id": "rpsha256:8c2287aaaf8c3027ab0dac0f6f97e96d94fafdee4f8510f2f9e9d0efdf8ce00c",
+    "instance_id": "inst_01HRETRIEVAL00000000001",
+    "projection_profile": "genesis.memory.retrieval.algorithm.v0.1",
+    "coverage_status": "complete",
+    "source_first_sequence": 0,
+    "source_last_sequence": 4,
+    "source_event_count": 5,
+    "source_last_event_hash": "evsha256:61c3f801f69117e36b5f2efc983abedbe0a98610b0213802150c94365668b28a",
+    "record_count": 5,
+    "frames": [
+      {
+        "frame_id": "rfsha256:2513fe2f3596a56077b260b7cb6c5b2340f42c7230f112ed1fea9096a3c7ce0f",
+        "event_id": "evt_01HRETRIEVAL00000000001",
+        "sequence": 0,
+        "observed_at": "2026-07-15T12:00:00Z",
+        "content_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "content_type": "text/plain; charset=utf-8",
+        "token_count": 11,
+        "terms": [
+          {
+            "term": "and",
+            "frequency": 1
+          },
+          {
+            "term": "blue",
+            "frequency": 1
+          },
+          {
+            "term": "door",
+            "frequency": 1
+          },
+          {
+            "term": "environment",
+            "frequency": 1
+          },
+          {
+            "term": "genesis",
+            "frequency": 1
+          },
+          {
+            "term": "local",
+            "frequency": 1
+          },
+          {
+            "term": "observed",
+            "frequency": 1
+          },
+          {
+            "term": "registered",
+            "frequency": 1
+          },
+          {
+            "term": "the",
+            "frequency": 2
+          },
+          {
+            "term": "workshop",
+            "frequency": 1
+          }
+        ]
+      },
+      {
+        "frame_id": "rfsha256:b1e061d569b3da9d9b7cdbadf7b61416a68aeb4958a095ce54d41c6db7e21e92",
+        "event_id": "evt_01HRETRIEVAL00000000002",
+        "sequence": 1,
+        "observed_at": "2026-07-15T12:00:01Z",
+        "content_digest": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
+        "content_type": "text/plain; charset=utf-8",
+        "token_count": 11,
+        "terms": [
+          {
+            "term": "alpha",
+            "frequency": 1
+          },
+          {
+            "term": "authorized",
+            "frequency": 1
+          },
+          {
+            "term": "beta",
+            "frequency": 1
+          },
+          {
+            "term": "body",
+            "frequency": 2
+          },
+          {
+            "term": "from",
+            "frequency": 1
+          },
+          {
+            "term": "guardian",
+            "frequency": 1
+          },
+          {
+            "term": "memory",
+            "frequency": 1
+          },
+          {
+            "term": "the",
+            "frequency": 1
+          },
+          {
+            "term": "to",
+            "frequency": 1
+          },
+          {
+            "term": "transfer",
+            "frequency": 1
+          }
+        ]
+      },
+      {
+        "frame_id": "rfsha256:6b231a3dd7344b9268dfdc7f67fb022d1b138421872ebb43f904575da19e226d",
+        "event_id": "evt_01HRETRIEVAL00000000003",
+        "sequence": 2,
+        "observed_at": "2026-07-15T12:00:02Z",
+        "content_digest": "sha256:1313131313131313131313131313131313131313131313131313131313131313",
+        "content_type": "text/plain; charset=utf-8",
+        "token_count": 11,
+        "terms": [
+          {
+            "term": "a",
+            "frequency": 1
+          },
+          {
+            "term": "aurora",
+            "frequency": 1
+          },
+          {
+            "term": "deterministic",
+            "frequency": 1
+          },
+          {
+            "term": "index",
+            "frequency": 1
+          },
+          {
+            "term": "memory",
+            "frequency": 1
+          },
+          {
+            "term": "needs",
+            "frequency": 1
+          },
+          {
+            "term": "offline",
+            "frequency": 1
+          },
+          {
+            "term": "portable",
+            "frequency": 1
+          },
+          {
+            "term": "project",
+            "frequency": 1
+          },
+          {
+            "term": "recovery",
+            "frequency": 1
+          },
+          {
+            "term": "with",
+            "frequency": 1
+          }
+        ]
+      },
+      {
+        "frame_id": "rfsha256:fe8c676fa8ce43aceaedcd9e56dc1388bd57698f919b0c7f8748692ab1633492",
+        "event_id": "evt_01HRETRIEVAL00000000004",
+        "sequence": 3,
+        "observed_at": "2026-07-15T12:00:03Z",
+        "content_digest": "sha256:1414141414141414141414141414141414141414141414141414141414141414",
+        "content_type": "text/plain; charset=utf-8",
+        "token_count": 10,
+        "terms": [
+          {
+            "term": "associative",
+            "frequency": 1
+          },
+          {
+            "term": "aurora",
+            "frequency": 1
+          },
+          {
+            "term": "connected",
+            "frequency": 1
+          },
+          {
+            "term": "decision",
+            "frequency": 1
+          },
+          {
+            "term": "graph",
+            "frequency": 1
+          },
+          {
+            "term": "memory",
+            "frequency": 1
+          },
+          {
+            "term": "the",
+            "frequency": 2
+          },
+          {
+            "term": "transfer",
+            "frequency": 1
+          },
+          {
+            "term": "with",
+            "frequency": 1
+          }
+        ]
+      },
+      {
+        "frame_id": "rfsha256:b4af266e81bc3a8f20186ba06c22da6744b349590604b80ac86cca01b06d2d8a",
+        "event_id": "evt_01HRETRIEVAL00000000005",
+        "sequence": 4,
+        "observed_at": "2026-07-15T12:00:04Z",
+        "content_digest": "sha256:1515151515151515151515151515151515151515151515151515151515151515",
+        "content_type": "text/plain; charset=utf-8",
+        "token_count": 11,
+        "terms": [
+          {
+            "term": "after",
+            "frequency": 1
+          },
+          {
+            "term": "and",
+            "frequency": 1
+          },
+          {
+            "term": "aurora",
+            "frequency": 1
+          },
+          {
+            "term": "body",
+            "frequency": 1
+          },
+          {
+            "term": "continuity",
+            "frequency": 1
+          },
+          {
+            "term": "gamma",
+            "frequency": 1
+          },
+          {
+            "term": "index",
+            "frequency": 1
+          },
+          {
+            "term": "preserved",
+            "frequency": 1
+          },
+          {
+            "term": "recovery",
+            "frequency": 1
+          },
+          {
+            "term": "the",
+            "frequency": 1
+          },
+          {
+            "term": "verified",
+            "frequency": 1
+          }
+        ]
+      }
+    ],
+    "lexicon": [
+      {
+        "term": "a",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003"
+        ]
+      },
+      {
+        "term": "after",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "alpha",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000002"
+        ]
+      },
+      {
+        "term": "and",
+        "document_frequency": 2,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001",
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "associative",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000004"
+        ]
+      },
+      {
+        "term": "aurora",
+        "document_frequency": 3,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003",
+          "evt_01HRETRIEVAL00000000004",
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "authorized",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000002"
+        ]
+      },
+      {
+        "term": "beta",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000002"
+        ]
+      },
+      {
+        "term": "blue",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001"
+        ]
+      },
+      {
+        "term": "body",
+        "document_frequency": 2,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000002",
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "connected",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000004"
+        ]
+      },
+      {
+        "term": "continuity",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "decision",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000004"
+        ]
+      },
+      {
+        "term": "deterministic",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003"
+        ]
+      },
+      {
+        "term": "door",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001"
+        ]
+      },
+      {
+        "term": "environment",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001"
+        ]
+      },
+      {
+        "term": "from",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000002"
+        ]
+      },
+      {
+        "term": "gamma",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "genesis",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001"
+        ]
+      },
+      {
+        "term": "graph",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000004"
+        ]
+      },
+      {
+        "term": "guardian",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000002"
+        ]
+      },
+      {
+        "term": "index",
+        "document_frequency": 2,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003",
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "local",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001"
+        ]
+      },
+      {
+        "term": "memory",
+        "document_frequency": 3,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000002",
+          "evt_01HRETRIEVAL00000000003",
+          "evt_01HRETRIEVAL00000000004"
+        ]
+      },
+      {
+        "term": "needs",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003"
+        ]
+      },
+      {
+        "term": "observed",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001"
+        ]
+      },
+      {
+        "term": "offline",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003"
+        ]
+      },
+      {
+        "term": "portable",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003"
+        ]
+      },
+      {
+        "term": "preserved",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "project",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003"
+        ]
+      },
+      {
+        "term": "recovery",
+        "document_frequency": 2,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003",
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "registered",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001"
+        ]
+      },
+      {
+        "term": "the",
+        "document_frequency": 4,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001",
+          "evt_01HRETRIEVAL00000000002",
+          "evt_01HRETRIEVAL00000000004",
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "to",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000002"
+        ]
+      },
+      {
+        "term": "transfer",
+        "document_frequency": 2,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000002",
+          "evt_01HRETRIEVAL00000000004"
+        ]
+      },
+      {
+        "term": "verified",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "with",
+        "document_frequency": 2,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003",
+          "evt_01HRETRIEVAL00000000004"
+        ]
+      },
+      {
+        "term": "workshop",
+        "document_frequency": 1,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000001"
+        ]
+      }
+    ],
+    "checkpoints": [
+      {
+        "sequence": 0,
+        "frame_count": 1,
+        "frames_digest": "sha256:9ce2fad2f8ad821a4292cdf7edf1cfb1c90e87dd5158bd3e7fe771f8ab3a1ba8"
+      },
+      {
+        "sequence": 1,
+        "frame_count": 2,
+        "frames_digest": "sha256:5a2047a77502a030fc653899207b713e6ca3b4334f3839688ad4f47ca946cdac"
+      },
+      {
+        "sequence": 2,
+        "frame_count": 3,
+        "frames_digest": "sha256:d1135278031aba5160f367a01b9196fa65650e8f2349d23ed36b6a15cd98fc0f"
+      },
+      {
+        "sequence": 3,
+        "frame_count": 4,
+        "frames_digest": "sha256:3fc7821fb1d3f165687ddb8dd5990755dcc9ccfb1ca1fc7fd9edf03f388b3f9f"
+      },
+      {
+        "sequence": 4,
+        "frame_count": 5,
+        "frames_digest": "sha256:1f8906d43bf99f62c10cfe6bc7552b08fa20f62ef6329921212af763e70f0840"
+      }
+    ],
+    "query_results": [
+      {
+        "query_id": "query_aurora_memory",
+        "query_digest": "rqsha256:ff820caad5b37117276a72f42a70217224a6e9524c4c6e2845d4e8ebd90a9ae3",
+        "normalized_terms": [
+          "aurora",
+          "memory",
+          "portable"
+        ],
+        "as_of_sequence": 4,
+        "top_k": 3,
+        "candidate_count": 5,
+        "results": [
+          {
+            "rank": 1,
+            "event_id": "evt_01HRETRIEVAL00000000003",
+            "frame_id": "rfsha256:6b231a3dd7344b9268dfdc7f67fb022d1b138421872ebb43f904575da19e226d",
+            "sequence": 2,
+            "score": 2160000,
+            "lexical_score": 300000,
+            "graph_score": 0,
+            "temporal_score": 60000,
+            "matched_terms": [
+              "aurora",
+              "memory",
+              "portable"
+            ],
+            "reason_codes": [
+              "lexical_match"
+            ]
+          },
+          {
+            "rank": 2,
+            "event_id": "evt_01HRETRIEVAL00000000004",
+            "frame_id": "rfsha256:fe8c676fa8ce43aceaedcd9e56dc1388bd57698f919b0c7f8748692ab1633492",
+            "sequence": 3,
+            "score": 1130000,
+            "lexical_score": 150000,
+            "graph_score": 0,
+            "temporal_score": 80000,
+            "matched_terms": [
+              "aurora",
+              "memory"
+            ],
+            "reason_codes": [
+              "lexical_match"
+            ]
+          },
+          {
+            "rank": 3,
+            "event_id": "evt_01HRETRIEVAL00000000005",
+            "frame_id": "rfsha256:b4af266e81bc3a8f20186ba06c22da6744b349590604b80ac86cca01b06d2d8a",
+            "sequence": 4,
+            "score": 625000,
+            "lexical_score": 75000,
+            "graph_score": 0,
+            "temporal_score": 100000,
+            "matched_terms": [
+              "aurora"
+            ],
+            "reason_codes": [
+              "lexical_match"
+            ]
+          }
+        ],
+        "result_digest": "sha256:a4c72d6904f16ac51d8f5d2d59a8b65b0e592fc67fa326dddfe940836575a2dc"
+      },
+      {
+        "query_id": "query_guardian_transfer",
+        "query_digest": "rqsha256:9ccf39a05355ba8bae97b2bde73f7ea3ecdd664b5ac853287b7781022dab8fcf",
+        "normalized_terms": [
+          "guardian",
+          "transfer"
+        ],
+        "as_of_sequence": 2,
+        "top_k": 3,
+        "candidate_count": 3,
+        "results": [
+          {
+            "rank": 1,
+            "event_id": "evt_01HRETRIEVAL00000000002",
+            "frame_id": "rfsha256:b1e061d569b3da9d9b7cdbadf7b61416a68aeb4958a095ce54d41c6db7e21e92",
+            "sequence": 1,
+            "score": 1466666,
+            "lexical_score": 200000,
+            "graph_score": 0,
+            "temporal_score": 66666,
+            "matched_terms": [
+              "guardian",
+              "transfer"
+            ],
+            "reason_codes": [
+              "lexical_match"
+            ]
+          }
+        ],
+        "result_digest": "sha256:046b28b3d4344e2712ff4665c8b3b17ffacab087e1a528cf24ee343b7a10230f"
+      },
+      {
+        "query_id": "query_graph_neighbors",
+        "query_digest": "rqsha256:aac71762e3fc1f5c4afe11d3596ab70b4b6f620638c4002edc4da67a2eba6204",
+        "normalized_terms": [],
+        "as_of_sequence": 4,
+        "top_k": 3,
+        "candidate_count": 5,
+        "results": [
+          {
+            "rank": 1,
+            "event_id": "evt_01HRETRIEVAL00000000003",
+            "frame_id": "rfsha256:6b231a3dd7344b9268dfdc7f67fb022d1b138421872ebb43f904575da19e226d",
+            "sequence": 2,
+            "score": 660000,
+            "lexical_score": 0,
+            "graph_score": 300000,
+            "temporal_score": 60000,
+            "matched_terms": [],
+            "reason_codes": [
+              "graph_anchor"
+            ]
+          },
+          {
+            "rank": 2,
+            "event_id": "evt_01HRETRIEVAL00000000004",
+            "frame_id": "rfsha256:fe8c676fa8ce43aceaedcd9e56dc1388bd57698f919b0c7f8748692ab1633492",
+            "sequence": 3,
+            "score": 440000,
+            "lexical_score": 0,
+            "graph_score": 180000,
+            "temporal_score": 80000,
+            "matched_terms": [],
+            "reason_codes": [
+              "graph_neighbor"
+            ]
+          }
+        ],
+        "result_digest": "sha256:49e917906cf3cdfba792d709ad810d6bb0cff656fff5f6d74cd2cf4ac356147e"
+      },
+      {
+        "query_id": "query_replay_before_future",
+        "query_digest": "rqsha256:029c289056c6a590e414548d182d4b2ac4b3432df859f403562faeaefc72e816",
+        "normalized_terms": [
+          "aurora",
+          "index"
+        ],
+        "as_of_sequence": 2,
+        "top_k": 5,
+        "candidate_count": 3,
+        "results": [
+          {
+            "rank": 1,
+            "event_id": "evt_01HRETRIEVAL00000000003",
+            "frame_id": "rfsha256:6b231a3dd7344b9268dfdc7f67fb022d1b138421872ebb43f904575da19e226d",
+            "sequence": 2,
+            "score": 1500000,
+            "lexical_score": 200000,
+            "graph_score": 0,
+            "temporal_score": 100000,
+            "matched_terms": [
+              "aurora",
+              "index"
+            ],
+            "reason_codes": [
+              "lexical_match"
+            ]
+          }
+        ],
+        "result_digest": "sha256:70ba4f7d6eda80b86808ca3ac70b6b901aeb25113b8cc557860b9beb9ff3dd8b"
+      }
+    ],
+    "projection_digest": "sha256:6737752e07cd2ef180181e89d8d01a3148737449ea6801d00e3558af4f1f08a6"
+  },
+  "must_reject": [
+    {
+      "case_id": "retrieval-identity-authority-forbidden-001",
+      "mutation": {
+        "operation": "projection_add_field",
+        "field": "companion_name",
+        "value": "Altered"
+      },
+      "expected_error": "retrieval_contains_identity_authority"
+    },
+    {
+      "case_id": "retrieval-raw-output-forbidden-001",
+      "mutation": {
+        "operation": "frame_add_field",
+        "index": 0,
+        "field": "normalized_text",
+        "value": "plaintext"
+      },
+      "expected_error": "retrieval_contains_raw_or_platform_data"
+    },
+    {
+      "case_id": "retrieval-embedding-forbidden-001",
+      "mutation": {
+        "operation": "frame_add_field",
+        "index": 0,
+        "field": "embedding",
+        "value": [
+          0.1
+        ]
+      },
+      "expected_error": "retrieval_contains_raw_or_platform_data"
+    },
+    {
+      "case_id": "retrieval-vendor-profile-forbidden-001",
+      "mutation": {
+        "operation": "projection_set",
+        "field": "projection_profile",
+        "value": "memvid-2.0.140"
+      },
+      "expected_error": "retrieval_projection_profile_invalid"
+    },
+    {
+      "case_id": "retrieval-source-chain-broken-001",
+      "mutation": {
+        "operation": "source_event_set",
+        "index": 1,
+        "field": "previous_event_hash",
+        "value": "evsha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "recompute_event_hash": true
+      },
+      "expected_error": "source_memory_chain_broken"
+    },
+    {
+      "case_id": "retrieval-source-hash-corrupt-001",
+      "mutation": {
+        "operation": "source_event_set",
+        "index": 2,
+        "field": "event_hash",
+        "value": "evsha256:2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "expected_error": "source_memory_event_hash_mismatch"
+    },
+    {
+      "case_id": "retrieval-source-instance-changed-001",
+      "mutation": {
+        "operation": "source_event_set",
+        "index": 2,
+        "field": "instance_id",
+        "value": "inst_other",
+        "recompute_event_hash": true
+      },
+      "expected_error": "source_instance_id_mismatch"
+    },
+    {
+      "case_id": "retrieval-record-unknown-event-001",
+      "mutation": {
+        "operation": "record_set",
+        "index": 0,
+        "field": "event_id",
+        "value": "evt_unknown",
+        "recompute_record_id": true
+      },
+      "expected_error": "accepted_record_event_unknown"
+    },
+    {
+      "case_id": "retrieval-record-digest-mismatch-001",
+      "mutation": {
+        "operation": "record_set",
+        "index": 0,
+        "field": "content_digest",
+        "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "recompute_record_id": true
+      },
+      "expected_error": "accepted_record_content_digest_mismatch"
+    },
+    {
+      "case_id": "retrieval-record-id-corrupt-001",
+      "mutation": {
+        "operation": "record_set",
+        "index": 0,
+        "field": "record_id",
+        "value": "rrsha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "accepted_record_id_mismatch"
+    },
+    {
+      "case_id": "retrieval-record-duplicate-001",
+      "mutation": {
+        "operation": "record_duplicate",
+        "index": 0
+      },
+      "expected_error": "accepted_record_coverage_invalid"
+    },
+    {
+      "case_id": "retrieval-record-non-nfc-001",
+      "mutation": {
+        "operation": "record_set",
+        "index": 0,
+        "field": "normalized_text",
+        "value": "Café memory"
+      },
+      "expected_error": "retrieval_text_not_nfc"
+    },
+    {
+      "case_id": "retrieval-query-topk-invalid-001",
+      "mutation": {
+        "operation": "query_set",
+        "index": 0,
+        "field": "top_k",
+        "value": 0
+      },
+      "expected_error": "query_top_k_invalid"
+    },
+    {
+      "case_id": "retrieval-query-asof-invalid-001",
+      "mutation": {
+        "operation": "query_set",
+        "index": 0,
+        "field": "as_of_sequence",
+        "value": 99
+      },
+      "expected_error": "query_as_of_sequence_invalid"
+    },
+    {
+      "case_id": "retrieval-query-anchor-future-001",
+      "mutation": {
+        "operation": "query_set",
+        "index": 1,
+        "field": "anchor_event_refs",
+        "value": [
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      "expected_error": "query_anchor_event_unknown_or_future"
+    },
+    {
+      "case_id": "retrieval-frame-id-corrupt-001",
+      "mutation": {
+        "operation": "frame_set",
+        "index": 0,
+        "field": "frame_id",
+        "value": "rfsha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "retrieval_frames_mismatch"
+    },
+    {
+      "case_id": "retrieval-frame-frequency-changed-001",
+      "mutation": {
+        "operation": "frame_set",
+        "index": 0,
+        "field": "token_count",
+        "value": 999
+      },
+      "expected_error": "retrieval_frames_mismatch"
+    },
+    {
+      "case_id": "retrieval-lexicon-df-changed-001",
+      "mutation": {
+        "operation": "lexicon_set",
+        "index": 0,
+        "field": "document_frequency",
+        "value": 99
+      },
+      "expected_error": "retrieval_lexicon_mismatch"
+    },
+    {
+      "case_id": "retrieval-checkpoint-changed-001",
+      "mutation": {
+        "operation": "checkpoint_set",
+        "index": 0,
+        "field": "frames_digest",
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "retrieval_checkpoints_mismatch"
+    },
+    {
+      "case_id": "retrieval-query-ranking-changed-001",
+      "mutation": {
+        "operation": "query_result_set",
+        "query_index": 0,
+        "result_index": 0,
+        "field": "score",
+        "value": 1
+      },
+      "expected_error": "retrieval_query_results_mismatch"
+    },
+    {
+      "case_id": "retrieval-query-future-leak-001",
+      "mutation": {
+        "operation": "query_result_set",
+        "query_index": 3,
+        "result_index": 0,
+        "field": "sequence",
+        "value": 4
+      },
+      "expected_error": "retrieval_query_results_mismatch"
+    },
+    {
+      "case_id": "retrieval-projection-digest-corrupt-001",
+      "mutation": {
+        "operation": "projection_set",
+        "field": "projection_digest",
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "retrieval_projection_digest_mismatch"
+    }
+  ]
+}
