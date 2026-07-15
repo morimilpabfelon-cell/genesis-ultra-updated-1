@@ -11,7 +11,6 @@
 - [x] Suite completa verde para la búsqueda híbrida neutral en el [PR #17](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/17).
 - [x] Suite completa verde para metadata temporal verificable en el [PR #20](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/20).
 - [x] Suite completa verde para cápsulas portables verificables en el [PR #21](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/21).
-- [x] Suite completa verde para cápsulas portables en el [PR #21](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/21).
 - [x] Suite completa verde para extracción multimodal neutral en el [PR #22](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/22).
 - [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
