@@ -408,6 +408,34 @@
           "source_deactivation_required": true
         }
       }
+    },
+    {
+      "case_id": "instance-identity-without-digest",
+      "schema": "instance_identity.schema.json",
+      "artifact": {
+        "schema_version": "genesis.instance.identity.v0.1",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "seed_id": "seed_01HSCHEMA000000000000001",
+        "seed_root_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "companion_name": "Genesis Schema Test",
+        "guardian_id": "guardian_01HSCHEMA00000000001",
+        "born_at": "2026-07-14T00:00:00Z"
+      }
+    },
+    {
+      "case_id": "instance-identity-with-persistent-alias",
+      "schema": "instance_identity.schema.json",
+      "artifact": {
+        "schema_version": "genesis.instance.identity.v0.1",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "seed_id": "seed_01HSCHEMA000000000000001",
+        "seed_root_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "companion_name": "Genesis Schema Test",
+        "guardian_id": "guardian_01HSCHEMA00000000001",
+        "born_at": "2026-07-14T00:00:00Z",
+        "identity_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "display_alias": "Another Name"
+      }
     }
   ]
 }

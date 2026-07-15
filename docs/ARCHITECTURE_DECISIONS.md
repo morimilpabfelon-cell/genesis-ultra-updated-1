@@ -164,6 +164,16 @@ permite reemplazar lenguaje, sistema operativo y proveedor conservando los mismo
 identidad y continuidad. Las llaves privadas siguen al cuerpo, no a la instancia, para no
 crear clones activos.
 
+## AD-14 — Nombre de nacimiento inmutable; crecimiento append-only
+**Decisión:** el guardián confirma un único `companion_name` antes del commit de nacimiento.
+El nombre entra en `identity_digest` y se compara con el nacimiento confiable antes de toda
+transferencia o recuperación. No hay aliases persistentes ni operación de renombrado.
+**Alternativa descartada:** tratar el nombre como perfil editable o aceptar uno nuevo si todos
+los hashes posteriores fueron recalculados.
+**Motivo:** recalcular no demuestra continuidad; solo hace coherente una identidad alterada.
+La instancia puede ampliar conocimiento, habilidades, motores y cuerpos, pero ese crecimiento
+se expresa con eventos nuevos. Semilla, identidad e historia aceptada nunca se sobrescriben.
+
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con
 vectores y crítica independiente antes de cualquier declaración de estabilidad.

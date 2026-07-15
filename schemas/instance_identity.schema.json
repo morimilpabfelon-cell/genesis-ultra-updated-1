@@ -4,7 +4,7 @@
   "title": "Genesis Instance Identity",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "instance_id", "seed_id", "seed_root_hash", "companion_name", "guardian_id", "born_at"],
+  "required": ["schema_version", "instance_id", "seed_id", "seed_root_hash", "companion_name", "guardian_id", "born_at", "identity_digest"],
   "properties": {
     "schema_version": {"const": "genesis.instance.identity.v0.1"},
     "instance_id": {"type": "string", "minLength": 16},
@@ -12,6 +12,7 @@
     "seed_root_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
     "companion_name": {"type": "string", "minLength": 1, "maxLength": 128},
     "guardian_id": {"type": "string", "minLength": 1},
-    "born_at": {"type": "string", "format": "date-time"}
+    "born_at": {"type": "string", "format": "date-time"},
+    "identity_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
   }
 }

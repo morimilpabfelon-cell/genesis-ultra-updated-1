@@ -40,6 +40,12 @@ const commands = [
     ["tools/generate_draft_manifest.py", "--check"]
   ],
   ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
+  ["Validate immutable birth identity (Python)", python, ["tools/validate_instance_identity.py"]],
+  [
+    "Validate immutable birth identity independently (Node)",
+    process.execPath,
+    ["tools/validate_instance_identity.mjs"]
+  ],
   ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
   ["Validate neutral host contract (Python)", python, ["tools/validate_host_adapter.py"]],
   [

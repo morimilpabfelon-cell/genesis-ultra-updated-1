@@ -3,14 +3,16 @@
 Genesis Ultra está en fase de diseño. El orden recomendado de revisión es:
 
 1. [`docs/SOURCE_EXTRACTION_MAP.md`](./docs/SOURCE_EXTRACTION_MAP.md)
-2. [`spec/GENESIS_PROTOCOL_DRAFT.md`](./spec/GENESIS_PROTOCOL_DRAFT.md)
-3. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
-4. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
-5. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
-6. [`spec/DRAFT_INTEGRITY_MANIFEST.md`](./spec/DRAFT_INTEGRITY_MANIFEST.md)
-7. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
-8. [`schemas/`](./schemas)
-9. [`conformance/`](./conformance)
+2. [`docs/MORIMIL_SENSE_EXTRACTION_MAP.md`](./docs/MORIMIL_SENSE_EXTRACTION_MAP.md)
+3. [`spec/GENESIS_PROTOCOL_DRAFT.md`](./spec/GENESIS_PROTOCOL_DRAFT.md)
+4. [`spec/INSTANCE_IDENTITY_AND_GROWTH.md`](./spec/INSTANCE_IDENTITY_AND_GROWTH.md)
+5. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
+6. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
+7. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
+8. [`spec/DRAFT_INTEGRITY_MANIFEST.md`](./spec/DRAFT_INTEGRITY_MANIFEST.md)
+9. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
+10. [`schemas/`](./schemas)
+11. [`conformance/`](./conformance)
 
 ## Comprobar el borrador
 

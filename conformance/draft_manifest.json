@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 85,
+  "file_count": 90,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,18 +25,18 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 3742,
-      "digest": "sha256:eddf6bfbcdb4c6ab2eb6b5357f3fffe65e053b1b5f568bd9ac79f17f532547bc"
+      "size_bytes": 4147,
+      "digest": "sha256:08ad954c1bc4aa72b691efeb2833123aa206f9faf56c15b147b337e122a8aa05"
     },
     {
       "path": "START_HERE.md",
-      "size_bytes": 1581,
-      "digest": "sha256:760ac57b7fd5e15ebd4ce33ae11fa0a7bf609faf0f1a4f0b1728d39c202ddda7"
+      "size_bytes": 1751,
+      "digest": "sha256:d20394c7f8ce755bdaf3138457a90bb7576ea727d7a25a5ebef6c35c7d273dc1"
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 3475,
-      "digest": "sha256:cc02c8c355758bda8cb4721b9f09260475ebe9029d57020f84d9205dddce2b29"
+      "size_bytes": 3904,
+      "digest": "sha256:4614a79c1bb7106cf76d296b960694bcaf28c27800c964b99a0f9e5b9e73501f"
     },
     {
       "path": "conformance/behavior_cases.json",
@@ -64,24 +64,34 @@
       "digest": "sha256:d72221405167802e873bbc6ab186236450dfd688e1c724a3f4947c5073e91ff0"
     },
     {
+      "path": "conformance/instance_identity_vectors.json",
+      "size_bytes": 5134,
+      "digest": "sha256:9666e327a22ef3177cea484e8db9e5f959f2a2c6718d309c7b45c1e57ec864ec"
+    },
+    {
       "path": "conformance/invalid_cases.json",
       "size_bytes": 3253,
       "digest": "sha256:b68e86a2480d0961a0ad04404abd1ae423e735dec228bbcf4f7dab8bb2edf598"
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 3638,
-      "digest": "sha256:fc71c855c9c639a398fd75018f8ef0508c0e4e6c3433f619e48cd03ff7f4541c"
+      "size_bytes": 3863,
+      "digest": "sha256:987bc121bf5c04902015129fae4c65e9a61f4fd38f436fcde0dfbcabec32cd4d"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 20516,
-      "digest": "sha256:805027cfa91dc7aa01bf55f252feffd5e6ae602829f6d8b3395e2e910a862b35"
+      "size_bytes": 21784,
+      "digest": "sha256:316a905d6460e421a4110790f4aa5505fbc6969137cf6a87e9b44a51e353d018"
     },
     {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
-      "size_bytes": 12649,
-      "digest": "sha256:83ac38d3c5d991720d3fc50e38496568b926586659421ee79e6aec8c1b99f44d"
+      "size_bytes": 13414,
+      "digest": "sha256:dea3472cab202e914fe93260a133bbf98199a04115b7856f81d8d26a00fbfba6"
+    },
+    {
+      "path": "docs/MORIMIL_SENSE_EXTRACTION_MAP.md",
+      "size_bytes": 5632,
+      "digest": "sha256:eb87f1a4d5c02e6c00797d94f8b362d11ea7202939a31f7c0c231f6cae180695"
     },
     {
       "path": "docs/SOURCE_EXTRACTION_MAP.md",
@@ -90,8 +100,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 3838,
-      "digest": "sha256:645f6ce12c3f8886f66059773e8e22226f660053ae1a5cb51e5ad803d8a26792"
+      "size_bytes": 4156,
+      "digest": "sha256:dfaa668ca8d90154c827468ee9baa21652fde0692506c079c76789a8d5b511ef"
     },
     {
       "path": "package-lock.json",
@@ -100,13 +110,13 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 694,
-      "digest": "sha256:ba57e6029b73098dc62d99ffba0f2c49b26f6a11dac7e40a2eb7d5deb3be40ac"
+      "size_bytes": 764,
+      "digest": "sha256:40072addc0188ba3657b5c35a7d12bd8ecc897dc3adfc6e77505cd7e6d1b93c2"
     },
     {
       "path": "reference/README.md",
-      "size_bytes": 1154,
-      "digest": "sha256:b0044b64cffc683a9115395d1e9aa3144b3f3e97078e1e8e6783828a254644cb"
+      "size_bytes": 1230,
+      "digest": "sha256:1033ef83acddf6e5d9b010b1d1e589a0f196e421e7e127f00a9581ef3a192312"
     },
     {
       "path": "requirements.txt",
@@ -195,8 +205,8 @@
     },
     {
       "path": "schemas/instance_identity.schema.json",
-      "size_bytes": 797,
-      "digest": "sha256:63af100258fa9960c09b3f76c3d3c650e83a25ebea1a3bf9e5ecf99b40f5714d"
+      "size_bytes": 895,
+      "digest": "sha256:1ab739e7722c06560aeaa2fea285d488bbf51173372bd6d0bfaa835c0d969ff1"
     },
     {
       "path": "schemas/key_epoch.schema.json",
@@ -290,8 +300,8 @@
     },
     {
       "path": "spec/GENESIS_PROTOCOL_DRAFT.md",
-      "size_bytes": 1836,
-      "digest": "sha256:fd461bd0f76bfc38bdf8d71a6dac77cc19c73a926dcb616d7210ad2c34e272d9"
+      "size_bytes": 2156,
+      "digest": "sha256:787c0fa4bfd7f8e19959194cefffbaeed45d1d5f726f2cf144dd503d7d9a02c9"
     },
     {
       "path": "spec/GUARDIAN_AUTHORITY_AND_MOBILITY.md",
@@ -324,6 +334,11 @@
       "digest": "sha256:b0ddc4f1a9f07438e57340b22f011dc1389a4c2d51207777cad76b226d6dabdf"
     },
     {
+      "path": "spec/INSTANCE_IDENTITY_AND_GROWTH.md",
+      "size_bytes": 4366,
+      "digest": "sha256:cf64f843c0dde958a93e7785bf1612422fa0e2ae7ea9b392e8c495580346333e"
+    },
+    {
       "path": "spec/RECOVERY_TRUST_MODEL.md",
       "size_bytes": 4031,
       "digest": "sha256:cbbe2978be3d5c2ff60a95ed404e3b13e9053e851e7a67f1d79d6efb1aa201c1"
@@ -345,8 +360,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 3756,
-      "digest": "sha256:6763693c16e5f8487698773e912ca01360470657d00337e90a6b232b0735f150"
+      "size_bytes": 3993,
+      "digest": "sha256:a99ea522b603b724a2aef0b9ed717822cbc3ab42bc6194a13244c3045f6a297d"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -380,8 +395,8 @@
     },
     {
       "path": "tools/validate_artifacts.mjs",
-      "size_bytes": 46555,
-      "digest": "sha256:7dae764f01f6c9bc8203e6599bdd417069275390b30d4ba01542bbf230464a0a"
+      "size_bytes": 47313,
+      "digest": "sha256:cd4cb1b26cb821dce812bb9e236add894483b8ef30267f8eef37affd0bc3a9fd"
     },
     {
       "path": "tools/validate_authority.py",
@@ -414,6 +429,16 @@
       "digest": "sha256:e63702b5d80890ca81205e49c793b64b15f3c5f6f196d9e9881f4c2f2eb650be"
     },
     {
+      "path": "tools/validate_instance_identity.mjs",
+      "size_bytes": 5801,
+      "digest": "sha256:c8000f25166b55dbd30ee917af8e545ad3e5848976ab3603540ec1f776074f44"
+    },
+    {
+      "path": "tools/validate_instance_identity.py",
+      "size_bytes": 5793,
+      "digest": "sha256:c77110df2a364a7cf7c9765839be84c79b9e3ffd6b0f4b60755245fd23b336cc"
+    },
+    {
       "path": "tools/validate_protocol_vectors.mjs",
       "size_bytes": 17332,
       "digest": "sha256:e79ca8f260d6f05bd16c5361260fb09be0cf06f62a1f43c9ba12808f264734bb"
@@ -434,5 +459,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:df5e2c578c9702932d373479acc9987ab86fde9aec271875964203e7977bdac2"
+  "root_digest": "sha256:c6a125a6d1e58328a8894788f57b4929d82a28a3eb862e8c6aa170997d294feb"
 }

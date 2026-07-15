@@ -12,6 +12,8 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `golden_vectors.json`: resultados criptográficos que deben coincidir byte por byte.
 - `host_adapter_vectors.json`: anchor portable, declaraciones de capacidades por plataforma
   y rechazos contra dependencias de proveedor o bindings locales dentro del core.
+- `instance_identity_vectors.json`: nombre canónico, digest de identidad, continuidad
+  Android/Apple/Windows y cambios de identidad que deben rechazarse aunque se recalculen hashes.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
 - `schema_invalid_cases.json`: artefactos que los JSON Schema reales deben rechazar.
 - `continuity_vectors.json`: hashes compartidos de registro y transferencia.
@@ -40,6 +42,10 @@ fallar cerradas.
 Python y Node reproducen el mismo anchor portable frente a manifests declarativos de
 Android, Apple y Windows. Los fixtures prueban la frontera neutral, pero permanecen en
 `declaration_only` hasta que existan adaptadores reales con almacenamiento probado.
+
+Python y Node reproducen también la identidad de nacimiento exacta en esas tres plataformas.
+Cambiar nombre, semilla, instancia, guardián o fecha de nacimiento invalida la continuidad;
+un digest recalculado no convierte el cambio en válido.
 
 ## Requisitos para una implementación
 
