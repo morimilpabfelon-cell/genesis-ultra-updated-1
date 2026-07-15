@@ -52,6 +52,16 @@ const commands = [
     process.execPath,
     ["tools/validate_sense_observations.mjs"]
   ],
+  [
+    "Validate associative memory projection (Python)",
+    python,
+    ["tools/validate_associative_memory_projection.py"]
+  ],
+  [
+    "Validate associative memory projection independently (Node)",
+    process.execPath,
+    ["tools/validate_associative_memory_projection.mjs"]
+  ],
   ["Validate neutral sense adapters (Python)", python, ["tools/validate_sense_adapters.py"]],
   [
     "Validate neutral sense adapters independently (Node)",

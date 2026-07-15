@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:associative-memory-projection:v0.1",
+  "title": "Genesis Associative Memory Projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "projection_id",
+    "instance_id",
+    "projection_profile",
+    "coverage_status",
+    "source_first_sequence",
+    "source_last_sequence",
+    "source_event_count",
+    "source_last_event_hash",
+    "nodes",
+    "edges",
+    "projection_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "genesis.memory.associative.projection.v0.1"
+    },
+    "hash_profile": {
+      "const": "genesis.hash.fields.v0.1"
+    },
+    "projection_id": {
+      "$ref": "#/$defs/projection_id"
+    },
+    "instance_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "projection_profile": {
+      "const": "genesis.memory.associative.algorithm.v0.1"
+    },
+    "coverage_status": {
+      "type": "string",
+      "enum": ["complete", "partial"]
+    },
+    "source_first_sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "source_last_sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "source_event_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "source_last_event_hash": {
+      "$ref": "#/$defs/event_hash"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "maxItems": 200000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    },
+    "projection_digest": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^evsha256:[a-f0-9]{64}$"
+    },
+    "node_id": {
+      "type": "string",
+      "pattern": "^nsha256:[a-f0-9]{64}$"
+    },
+    "projection_id": {
+      "type": "string",
+      "pattern": "^psha256:[a-f0-9]{64}$"
+    },
+    "edge_id": {
+      "type": "string",
+      "pattern": "^esha256:[a-f0-9]{64}$"
+    },
+    "event_ref": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "node_kind",
+        "subject_digest",
+        "source_event_refs"
+      ],
+      "properties": {
+        "node_id": {
+          "$ref": "#/$defs/node_id"
+        },
+        "node_kind": {
+          "type": "string",
+          "enum": [
+            "memory_event",
+            "observation",
+            "entity",
+            "concept",
+            "decision",
+            "body",
+            "time_anchor"
+          ]
+        },
+        "subject_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_event_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1024,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/event_ref"
+          }
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edge_id",
+        "source_node_id",
+        "target_node_id",
+        "relation",
+        "derivation",
+        "confidence_basis_points",
+        "source_event_refs",
+        "confirmation_event_ref"
+      ],
+      "properties": {
+        "edge_id": {
+          "$ref": "#/$defs/edge_id"
+        },
+        "source_node_id": {
+          "$ref": "#/$defs/node_id"
+        },
+        "target_node_id": {
+          "$ref": "#/$defs/node_id"
+        },
+        "relation": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 128,
+          "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+        },
+        "derivation": {
+          "type": "string",
+          "enum": ["extracted", "inferred", "confirmed"]
+        },
+        "confidence_basis_points": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "source_event_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1024,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/event_ref"
+          }
+        },
+        "confirmation_event_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/event_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,492 @@
+{
+  "profile": "genesis.memory.associative.projection.conformance.v0.1",
+  "status": "draft",
+  "domains": {
+    "memory_event": "genesis.memory.event.v0.1",
+    "node": "genesis.memory.associative.node.v0.1",
+    "edge": "genesis.memory.associative.edge.v0.1",
+    "projection_id": "genesis.memory.associative.projection.id.v0.1",
+    "projection": "genesis.memory.associative.projection.v0.1"
+  },
+  "source_memory_events": [
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSENSE000000000000001",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "sequence": 0,
+      "previous_event_hash": "GENESIS",
+      "event_type": "sense.vision.observation",
+      "actor": "body",
+      "content_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "content_type": "application/vnd.genesis.vision-evidence+json",
+      "observed_at": "2026-07-15T00:00:00Z",
+      "provenance_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+      "privacy": "private_local",
+      "event_hash": "evsha256:4f9b12646ece05403172791b57aa511c5838ff3362d9530199bd7640c03d8d7e"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HASSOC000000000000001",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "sequence": 1,
+      "previous_event_hash": "evsha256:4f9b12646ece05403172791b57aa511c5838ff3362d9530199bd7640c03d8d7e",
+      "event_type": "knowledge.relation.proposed",
+      "actor": "instance",
+      "content_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "content_type": "application/vnd.genesis.associative-relation+json",
+      "observed_at": "2026-07-15T00:00:02Z",
+      "provenance_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "privacy": "private_local",
+      "event_hash": "evsha256:9c5c1bb99cd2239144822bf047b81be03c1e6a125f613aaf98ab6d7145fb19c7"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HASSOC000000000000002",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "sequence": 2,
+      "previous_event_hash": "evsha256:9c5c1bb99cd2239144822bf047b81be03c1e6a125f613aaf98ab6d7145fb19c7",
+      "event_type": "knowledge.relation.confirmed",
+      "actor": "guardian",
+      "content_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "content_type": "application/vnd.genesis.associative-relation+json",
+      "observed_at": "2026-07-15T00:00:03Z",
+      "provenance_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "privacy": "guardian_shared",
+      "event_hash": "evsha256:13e368eab96cb137499a18451cb49cc728f55ec64912f423b9b5ed5d5a5f638f"
+    }
+  ],
+  "projection": {
+    "schema_version": "genesis.memory.associative.projection.v0.1",
+    "hash_profile": "genesis.hash.fields.v0.1",
+    "projection_id": "psha256:43e1962281653544a84e3ce9a53cec5146fb92e4e21b57e412890b768f316ba2",
+    "instance_id": "inst_01HSENSE000000000000001",
+    "projection_profile": "genesis.memory.associative.algorithm.v0.1",
+    "coverage_status": "complete",
+    "source_first_sequence": 0,
+    "source_last_sequence": 2,
+    "source_event_count": 3,
+    "source_last_event_hash": "evsha256:13e368eab96cb137499a18451cb49cc728f55ec64912f423b9b5ed5d5a5f638f",
+    "nodes": [
+      {
+        "node_id": "nsha256:a8917edf89d6d52e81f3bd000bfd149c7128de99249b976700c80f31c4e0c2f2",
+        "node_kind": "concept",
+        "subject_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "source_event_refs": [
+          "evt_01HASSOC000000000000001"
+        ]
+      },
+      {
+        "node_id": "nsha256:acb3dd767199f146c98aad4393f8e17ad3e21b6fe2a5b6bd97caf82ea01723e2",
+        "node_kind": "observation",
+        "subject_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_event_refs": [
+          "evt_01HSENSE000000000000001"
+        ]
+      },
+      {
+        "node_id": "nsha256:b56432b7b8dc3aa05c0845f29db072cea1cd0090b587719c2326af17f00ec087",
+        "node_kind": "decision",
+        "subject_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "source_event_refs": [
+          "evt_01HASSOC000000000000002"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "esha256:3ca296dd0939d246d458c4f053c8b478d42a9a047f8cf64ed6f0d7e8ea4004b3",
+        "source_node_id": "nsha256:a8917edf89d6d52e81f3bd000bfd149c7128de99249b976700c80f31c4e0c2f2",
+        "target_node_id": "nsha256:b56432b7b8dc3aa05c0845f29db072cea1cd0090b587719c2326af17f00ec087",
+        "relation": "memory.next",
+        "derivation": "extracted",
+        "confidence_basis_points": 10000,
+        "source_event_refs": [
+          "evt_01HASSOC000000000000001",
+          "evt_01HASSOC000000000000002"
+        ],
+        "confirmation_event_ref": null
+      },
+      {
+        "edge_id": "esha256:4136d98e556d328395ba74baed61ebfeba7224dd686d6f9af2fef21683b38ea5",
+        "source_node_id": "nsha256:acb3dd767199f146c98aad4393f8e17ad3e21b6fe2a5b6bd97caf82ea01723e2",
+        "target_node_id": "nsha256:a8917edf89d6d52e81f3bd000bfd149c7128de99249b976700c80f31c4e0c2f2",
+        "relation": "memory.next",
+        "derivation": "extracted",
+        "confidence_basis_points": 10000,
+        "source_event_refs": [
+          "evt_01HASSOC000000000000001",
+          "evt_01HSENSE000000000000001"
+        ],
+        "confirmation_event_ref": null
+      },
+      {
+        "edge_id": "esha256:b836a12a6c0d377e20da7dcb70d48ebaf2b9f38049a267835951aabbb2442f40",
+        "source_node_id": "nsha256:acb3dd767199f146c98aad4393f8e17ad3e21b6fe2a5b6bd97caf82ea01723e2",
+        "target_node_id": "nsha256:b56432b7b8dc3aa05c0845f29db072cea1cd0090b587719c2326af17f00ec087",
+        "relation": "context.nearby",
+        "derivation": "inferred",
+        "confidence_basis_points": 5000,
+        "source_event_refs": [
+          "evt_01HASSOC000000000000002",
+          "evt_01HSENSE000000000000001"
+        ],
+        "confirmation_event_ref": null
+      },
+      {
+        "edge_id": "esha256:cd22086f15f3468078a98d094307392d3a708bb9ad3d47ae4e5f3be413402bf9",
+        "source_node_id": "nsha256:b56432b7b8dc3aa05c0845f29db072cea1cd0090b587719c2326af17f00ec087",
+        "target_node_id": "nsha256:a8917edf89d6d52e81f3bd000bfd149c7128de99249b976700c80f31c4e0c2f2",
+        "relation": "knowledge.confirms",
+        "derivation": "confirmed",
+        "confidence_basis_points": 10000,
+        "source_event_refs": [
+          "evt_01HASSOC000000000000001",
+          "evt_01HASSOC000000000000002"
+        ],
+        "confirmation_event_ref": "evt_01HASSOC000000000000002"
+      }
+    ],
+    "projection_digest": "sha256:a59da597c585a7c124bb881e7b5f93af9e62245402ea2e2d0d00a5141a97a577"
+  },
+  "must_reject": [
+    {
+      "case_id": "projection-identity-authority-forbidden-001",
+      "mutation": {
+        "operation": "projection_add_field",
+        "field": "companion_name",
+        "value": "Altered Name"
+      },
+      "expected_error": "projection_contains_identity_authority"
+    },
+    {
+      "case_id": "projection-raw-content-forbidden-001",
+      "mutation": {
+        "operation": "projection_add_field",
+        "field": "raw_content",
+        "value": "plaintext"
+      },
+      "expected_error": "projection_contains_raw_or_platform_data"
+    },
+    {
+      "case_id": "projection-vendor-profile-forbidden-001",
+      "mutation": {
+        "operation": "projection_set",
+        "field": "projection_profile",
+        "value": "graphifyy-0.9.16",
+        "recompute_projection_digest": true
+      },
+      "expected_error": "projection_profile_invalid"
+    },
+    {
+      "case_id": "source-memory-chain-broken-001",
+      "mutation": {
+        "operation": "source_event_set",
+        "index": 1,
+        "field": "previous_event_hash",
+        "value": "evsha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "recompute_source_event_hashes": [
+          1
+        ]
+      },
+      "expected_error": "source_memory_chain_broken"
+    },
+    {
+      "case_id": "source-memory-event-hash-corrupted-001",
+      "mutation": {
+        "operation": "source_event_set",
+        "index": 1,
+        "field": "event_hash",
+        "value": "evsha256:2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "expected_error": "source_memory_event_hash_mismatch"
+    },
+    {
+      "case_id": "source-instance-changed-001",
+      "mutation": {
+        "operation": "source_event_set",
+        "index": 1,
+        "field": "instance_id",
+        "value": "inst_01HASSOC000000000000099",
+        "recompute_source_event_hashes": [
+          1
+        ]
+      },
+      "expected_error": "source_instance_id_mismatch"
+    },
+    {
+      "case_id": "projection-instance-changed-001",
+      "mutation": {
+        "operation": "projection_set",
+        "field": "instance_id",
+        "value": "inst_01HASSOC000000000000099",
+        "recompute_projection_digest": true
+      },
+      "expected_error": "projection_instance_id_mismatch"
+    },
+    {
+      "case_id": "source-sequence-boundary-changed-001",
+      "mutation": {
+        "operation": "projection_set",
+        "field": "source_first_sequence",
+        "value": 1,
+        "recompute_projection_digest": true
+      },
+      "expected_error": "source_sequence_boundary_mismatch"
+    },
+    {
+      "case_id": "source-event-count-changed-001",
+      "mutation": {
+        "operation": "projection_set",
+        "field": "source_event_count",
+        "value": 4,
+        "recompute_projection_digest": true
+      },
+      "expected_error": "source_event_count_mismatch"
+    },
+    {
+      "case_id": "source-last-hash-changed-001",
+      "mutation": {
+        "operation": "projection_set",
+        "field": "source_last_event_hash",
+        "value": "evsha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "recompute_projection_digest": true
+      },
+      "expected_error": "source_last_event_hash_mismatch"
+    },
+    {
+      "case_id": "unknown-node-provenance-ref-001",
+      "mutation": {
+        "operation": "node_set",
+        "index": 0,
+        "field": "source_event_refs",
+        "value": [
+          "evt_01HUNKNOWN00000000000001"
+        ]
+      },
+      "expected_error": "unknown_source_event_ref"
+    },
+    {
+      "case_id": "unsorted-node-provenance-001",
+      "mutation": {
+        "operation": "node_set",
+        "index": 0,
+        "field": "source_event_refs",
+        "value": [
+          "evt_01HSENSE000000000000001",
+          "evt_01HASSOC000000000000002"
+        ]
+      },
+      "expected_error": "source_event_refs_not_sorted"
+    },
+    {
+      "case_id": "raw-node-label-forbidden-001",
+      "mutation": {
+        "operation": "node_add_field",
+        "index": 0,
+        "field": "label",
+        "value": "human readable"
+      },
+      "expected_error": "projection_contains_raw_or_platform_data"
+    },
+    {
+      "case_id": "nodes-not-canonical-order-001",
+      "mutation": {
+        "operation": "nodes_reverse"
+      },
+      "expected_error": "nodes_not_sorted"
+    },
+    {
+      "case_id": "duplicate-node-id-001",
+      "mutation": {
+        "operation": "node_duplicate",
+        "index": 0
+      },
+      "expected_error": "duplicate_node_id"
+    },
+    {
+      "case_id": "node-id-corrupted-001",
+      "mutation": {
+        "operation": "node_set",
+        "index": 0,
+        "field": "node_id",
+        "value": "nsha256:a8917edf89d6d52e81f3bd000bfd149c7128de99249b976700c80f31c4e0c2f0"
+      },
+      "expected_error": "node_id_mismatch"
+    },
+    {
+      "case_id": "edge-endpoint-missing-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 0,
+        "field": "source_node_id",
+        "value": "nsha256:9999999999999999999999999999999999999999999999999999999999999999",
+        "recompute_edge_ids": [
+          0
+        ],
+        "recompute_projection_digest": true
+      },
+      "expected_error": "edge_endpoint_missing"
+    },
+    {
+      "case_id": "self-association-forbidden-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 0,
+        "field": "target_node_id",
+        "value": "nsha256:a8917edf89d6d52e81f3bd000bfd149c7128de99249b976700c80f31c4e0c2f2",
+        "recompute_edge_ids": [
+          0
+        ],
+        "recompute_projection_digest": true
+      },
+      "expected_error": "self_association_forbidden"
+    },
+    {
+      "case_id": "edges-not-canonical-order-001",
+      "mutation": {
+        "operation": "edges_reverse"
+      },
+      "expected_error": "edges_not_sorted"
+    },
+    {
+      "case_id": "duplicate-edge-id-001",
+      "mutation": {
+        "operation": "edge_duplicate",
+        "index": 0
+      },
+      "expected_error": "duplicate_edge_id"
+    },
+    {
+      "case_id": "edge-id-corrupted-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 0,
+        "field": "edge_id",
+        "value": "esha256:3ca296dd0939d246d458c4f053c8b478d42a9a047f8cf64ed6f0d7e8ea4004b0"
+      },
+      "expected_error": "edge_id_mismatch"
+    },
+    {
+      "case_id": "inferred-cannot-claim-certainty-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 2,
+        "field": "confidence_basis_points",
+        "value": 10000,
+        "recompute_edge_ids": [
+          2
+        ],
+        "recompute_projection_digest": true
+      },
+      "expected_error": "inferred_confidence_invalid"
+    },
+    {
+      "case_id": "inferred-cannot-carry-confirmation-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 2,
+        "field": "confirmation_event_ref",
+        "value": "evt_01HASSOC000000000000002",
+        "recompute_edge_ids": [
+          2
+        ],
+        "recompute_projection_digest": true
+      },
+      "expected_error": "inferred_confirmation_forbidden"
+    },
+    {
+      "case_id": "confirmed-requires-event-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 3,
+        "field": "confirmation_event_ref",
+        "value": null,
+        "recompute_edge_ids": [
+          3
+        ],
+        "recompute_projection_digest": true
+      },
+      "expected_error": "confirmed_confirmation_required"
+    },
+    {
+      "case_id": "confirmed-event-must-support-relation-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 3,
+        "field": "confirmation_event_ref",
+        "value": "evt_01HASSOC000000000000001",
+        "recompute_edge_ids": [
+          3
+        ],
+        "recompute_projection_digest": true
+      },
+      "expected_error": "confirmation_event_invalid"
+    },
+    {
+      "case_id": "confirmation-must-be-provenance-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 3,
+        "field": "confirmation_event_ref",
+        "value": "evt_01HSENSE000000000000001",
+        "recompute_edge_ids": [
+          3
+        ],
+        "recompute_projection_digest": true
+      },
+      "expected_error": "confirmation_event_not_in_source_refs"
+    },
+    {
+      "case_id": "extracted-confidence-must-be-exact-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 0,
+        "field": "confidence_basis_points",
+        "value": 9000,
+        "recompute_edge_ids": [
+          0
+        ],
+        "recompute_projection_digest": true
+      },
+      "expected_error": "extracted_confidence_invalid"
+    },
+    {
+      "case_id": "unjustified-association-rejected-001",
+      "mutation": {
+        "operation": "edge_set",
+        "index": 0,
+        "field": "relation",
+        "value": "memory.altered",
+        "recompute_edge_ids": [
+          0
+        ],
+        "recompute_projection_digest": true
+      },
+      "expected_error": "projection_rebuild_mismatch"
+    },
+    {
+      "case_id": "projection-id-corrupted-001",
+      "mutation": {
+        "operation": "projection_set",
+        "field": "projection_id",
+        "value": "psha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "projection_id_mismatch"
+    },
+    {
+      "case_id": "projection-digest-corrupted-001",
+      "mutation": {
+        "operation": "projection_set",
+        "field": "projection_digest",
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "projection_digest_mismatch"
+    }
+  ]
+}
