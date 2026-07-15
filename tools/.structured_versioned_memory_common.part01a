@@ -1,0 +1,33 @@
+
+def compute_slot_digest(slot: dict) -> str:
+    fields = [
+        slot["slot_id"], slot["version_key"], slot["kind"], slot["entity"], slot["slot"],
+        slot["privacy"], slot["scope"], slot["status"], str(len(slot["current_items"])),
+    ]
+    for item in slot["current_items"]:
+        fields.extend([item["value"], item["value_digest"], item["assertion_ref"]])
+    fields.append(str(len(slot["history"])))
+    fields.extend(item["history_digest"] for item in slot["history"])
+    return hash_fields("genesis.memory.structured.slot.v0.1", fields, "slotsha256:")
+
+def compute_projection_id(instance_id: str, last_hash: str, assertion_count: int) -> str:
+    return hash_fields(
+        "genesis.memory.structured.projection.id.v0.1",
+        [instance_id, last_hash, str(assertion_count)],
+        "svpsha256:",
+    )
+
+def compute_projection_digest(projection: dict) -> str:
+    fields = [
+        projection["schema_version"], projection["hash_profile"], projection["projection_profile"],
+        projection["projection_id"], projection["instance_id"],
+        str(projection["source_first_sequence"]), str(projection["source_last_sequence"]),
+        str(projection["source_event_count"]), projection["source_last_event_hash"],
+        str(projection["assertion_count"]), str(projection["slot_count"]),
+        str(projection["active_slot_count"]), str(projection["retracted_slot_count"]),
+    ]
+    fields.extend(slot["slot_digest"] for slot in projection["slots"])
+    return hash_fields("genesis.memory.structured.projection.v0.1", fields, "svpsha256:")
+
+def utf8_key(value: str) -> bytes:
+    return value.encode("utf-8")
