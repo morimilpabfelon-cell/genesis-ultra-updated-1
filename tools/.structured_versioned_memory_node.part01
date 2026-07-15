@@ -1,0 +1,50 @@
+  for(const item of slot.history) fields.push(item.history_digest);
+  return hashFields('genesis.memory.structured.slot.v0.1',fields,'slotsha256:');
+}
+function computeProjectionId(instanceId,lastHash,count){ return hashFields('genesis.memory.structured.projection.id.v0.1',[instanceId,lastHash,String(count)],'svpsha256:'); }
+function computeProjectionDigest(p){
+  const fields=[p.schema_version,p.hash_profile,p.projection_profile,p.projection_id,p.instance_id,String(p.source_first_sequence),String(p.source_last_sequence),String(p.source_event_count),p.source_last_event_hash,String(p.assertion_count),String(p.slot_count),String(p.active_slot_count),String(p.retracted_slot_count),...p.slots.map(s=>s.slot_digest)];
+  return hashFields('genesis.memory.structured.projection.v0.1',fields,'svpsha256:');
+}
+function utf8Compare(a,b){ return Buffer.compare(Buffer.from(a,'utf8'),Buffer.from(b,'utf8')); }
+function validateEvents(events,instanceId){
+  if(!Array.isArray(events)||events.length===0) fail('source_events_required');
+  const byId=new Map(); let previous='GENESIS';
+  events.forEach((event,index)=>{
+    validateNfc(event); ensureNoForbidden(event);
+    if(!setEquals(event,EVENT_FIELDS)) fail('source_event_fields_invalid');
+    if(event.schema_version!=='genesis.memory.event.v0.1'||event.hash_profile!=='genesis.hash.fields.v0.1') fail('source_event_profile_invalid');
+    if(event.instance_id!==instanceId) fail('source_event_instance_mismatch');
+    if(!Number.isSafeInteger(event.sequence)||event.sequence!==index) fail('source_event_sequence_invalid');
+    if(event.previous_event_hash!==previous) fail('source_event_chain_invalid');
+    if(!PRIVACY.has(event.privacy)) fail('source_event_privacy_invalid');
+    if(!TS_RE.test(event.observed_at)) fail('source_event_timestamp_invalid');
+    if(!SHA_RE.test(event.content_digest)||!SHA_RE.test(event.provenance_digest)) fail('source_event_digest_invalid');
+    if(computeEventHash(event)!==event.event_hash) fail('source_event_hash_mismatch');
+    if(byId.has(event.event_id)) fail('source_event_id_duplicate');
+    byId.set(event.event_id,event); previous=event.event_hash;
+  });
+  return byId;
+}
+function validateAssertion(a,events,instanceId){
+  validateNfc(a); ensureNoForbidden(a);
+  if(!setEquals(a,ASSERTION_FIELDS)) fail('assertion_fields_invalid');
+  if(a.schema_version!=='genesis.memory.structured.assertion.v0.1'||a.hash_profile!=='genesis.hash.fields.v0.1') fail('assertion_profile_invalid');
+  if(a.instance_id!==instanceId) fail('assertion_instance_mismatch');
+  const event=events.get(a.source_event_ref); if(!event) fail('assertion_source_event_missing');
+  if(a.source_event_hash!==event.event_hash) fail('assertion_source_hash_mismatch');
+  if(a.source_content_digest!==event.content_digest) fail('assertion_source_content_digest_mismatch');
+  if(a.source_sequence!==event.sequence) fail('assertion_source_sequence_mismatch');
+  if(a.asserted_at!==event.observed_at) fail('assertion_timestamp_mismatch');
+  if(a.privacy!==event.privacy) fail('assertion_privacy_mismatch');
+  if(!KINDS.has(a.kind)) fail('assertion_kind_invalid');
+  if(!OPERATIONS.has(a.operation)) fail('assertion_operation_invalid');
+  if(!POLARITIES.has(a.polarity)) fail('assertion_polarity_invalid');
+  if(!PRIVACY.has(a.privacy)) fail('assertion_privacy_invalid');
+  if(!a.entity||!a.slot||!a.scope||!a.value) fail('assertion_text_required');
+  if(a.version_key!==`${a.entity}:${a.slot}`) fail('assertion_version_key_mismatch');
+  if(!Number.isSafeInteger(a.source_ordinal)||a.source_ordinal<0||a.source_ordinal>MAX_INT) fail('assertion_source_ordinal_invalid');
+  if(!Number.isSafeInteger(a.confidence_milli)||a.confidence_milli<0||a.confidence_milli>1000) fail('assertion_confidence_invalid');
+  if(!SHA_RE.test(a.extractor_digest)) fail('assertion_extractor_digest_invalid');
+  if(!TS_RE.test(a.asserted_at)) fail('assertion_timestamp_invalid');
+  for(const f of ['valid_from','valid_to']) if(a[f]!==null&&!TS_RE.test(a[f])) fail('assertion_validity_timestamp_invalid');
