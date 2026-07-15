@@ -20,6 +20,11 @@ Protocol    = reglas neutrales
 Conformance = pruebas compartidas entre implementaciones
 ```
 
+El guardián confirma el nombre canónico antes del nacimiento. Después del commit, el nombre
+forma parte de la identidad inmutable: no se renombra, no se sustituye por alias persistentes
+y no cambia al transferirse o recuperarse en otro cuerpo. El crecimiento añade memoria y
+capacidades verificables sin reescribir el origen.
+
 La regla de continuidad es:
 
 ```text
@@ -63,7 +68,8 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 28 JSON Schema, exige que
+La suite ejecuta los validadores Python y Node, compila los 28 JSON Schema, verifica en ambos
+lenguajes el nombre canónico y el digest de identidad, exige que
 los artefactos generados por la simulación A→B sean válidos y estén enlazados, verifica
 el permiso permanente, los dispositivos registrados y el ledger de autoridad, simula un
 backup cifrado comprometido seguido de pérdida y recuperación B→C, y ejecuta los vectores

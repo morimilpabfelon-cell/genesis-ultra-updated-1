@@ -24,6 +24,8 @@ Genesis es un protocolo de nacimiento, continuidad, memoria y crecimiento de una
 8. Ningún proveedor externo es obligatorio.
 9. Cualquier lenguaje puede implementar el protocolo.
 10. Toda decisión duradera deja evidencia verificable.
+11. El nombre canónico elegido por el guardián antes del nacimiento no cambia jamás.
+12. Crecer añade historia verificable; nunca reescribe semilla, identidad ni memoria aceptada.
 
 ## Identificadores separados
 
@@ -38,7 +40,11 @@ Ninguno sustituye a otro.
 
 ## Nacimiento
 
-El nacimiento debe validar manifiesto y rutas, verificar archivos, recalcular el hash raíz, comprobar identidad y doctrina, asignar `instance_id`, registrar el primer `body_id`, crear `instance.birth` y persistir todo o nada.
+El nacimiento debe validar manifiesto y rutas, verificar archivos, recalcular el hash raíz,
+comprobar identidad y doctrina, confirmar el nombre canónico con el guardián, asignar
+`instance_id`, calcular `identity_digest`, registrar el primer `body_id`, crear
+`instance.birth` y persistir todo o nada. Después del commit no existe una operación de
+renombrado.
 
 ## Portabilidad
 

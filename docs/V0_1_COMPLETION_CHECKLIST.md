@@ -14,6 +14,8 @@
 
 - [x] Canonicalización Python/Node con rechazo de texto no-NFC y rutas peligrosas.
 - [x] Vectores dorados de seed root y memory event.
+- [x] Nombre canónico de nacimiento y digest de identidad reproducidos por Python y Node,
+      con diez cambios de identidad rechazados aunque se recalculen hashes.
 - [x] Vector canónico de paquete de transferencia.
 - [x] Recibo vinculado mediante `accepted_package_digest` al paquete exacto aceptado.
 - [x] Vectores de registro, paquete, recibo y finalización encadenados.
@@ -49,6 +51,8 @@
       incluidos continuidad, autoridad, Ed25519, XChaCha20-Poly1305, Argon2id y rechazos.
 - [x] Contrato neutral core↔adaptador, anchor portable y doce rechazos anti-lock-in
       reproducidos por Python y Node para declaraciones Android, Apple y Windows.
+- [x] Mapa controlado de Morimil-app que separa sentidos de memoria, cognición, defensa,
+      crecimiento, homeostasis, movilidad y acción externa.
 
 ## Pendiente real
 

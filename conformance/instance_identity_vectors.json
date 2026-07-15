@@ -1,0 +1,150 @@
+{
+  "profile": "genesis.instance.identity.v0.1",
+  "status": "draft",
+  "domain": "genesis.instance.identity.v0.1",
+  "birth_identity": {
+    "schema_version": "genesis.instance.identity.v0.1",
+    "instance_id": "inst_01HNEUTRAL00000000000001",
+    "seed_id": "seed_01HNEUTRAL000000000000001",
+    "seed_root_hash": "sha256:0acaca2f62840715cfec8f7149bd5ab5fffd039fc8f0105bf5752ad25f385568",
+    "companion_name": "Genesis Test 01",
+    "guardian_id": "guardian_01HNEUTRAL000000000001",
+    "born_at": "2026-07-12T00:00:00Z",
+    "identity_digest": "sha256:c165d16d96946d183a51edfda182ef3dcdaa82961a0dcbe715002d4d491ddebf"
+  },
+  "continuity_cases": [
+    {
+      "case_id": "identity-on-android-001",
+      "platform_profile": "android-kotlin",
+      "identity": {
+        "schema_version": "genesis.instance.identity.v0.1",
+        "instance_id": "inst_01HNEUTRAL00000000000001",
+        "seed_id": "seed_01HNEUTRAL000000000000001",
+        "seed_root_hash": "sha256:0acaca2f62840715cfec8f7149bd5ab5fffd039fc8f0105bf5752ad25f385568",
+        "companion_name": "Genesis Test 01",
+        "guardian_id": "guardian_01HNEUTRAL000000000001",
+        "born_at": "2026-07-12T00:00:00Z",
+        "identity_digest": "sha256:c165d16d96946d183a51edfda182ef3dcdaa82961a0dcbe715002d4d491ddebf"
+      }
+    },
+    {
+      "case_id": "identity-on-apple-001",
+      "platform_profile": "apple-swift",
+      "identity": {
+        "schema_version": "genesis.instance.identity.v0.1",
+        "instance_id": "inst_01HNEUTRAL00000000000001",
+        "seed_id": "seed_01HNEUTRAL000000000000001",
+        "seed_root_hash": "sha256:0acaca2f62840715cfec8f7149bd5ab5fffd039fc8f0105bf5752ad25f385568",
+        "companion_name": "Genesis Test 01",
+        "guardian_id": "guardian_01HNEUTRAL000000000001",
+        "born_at": "2026-07-12T00:00:00Z",
+        "identity_digest": "sha256:c165d16d96946d183a51edfda182ef3dcdaa82961a0dcbe715002d4d491ddebf"
+      }
+    },
+    {
+      "case_id": "identity-on-windows-001",
+      "platform_profile": "windows-dotnet",
+      "identity": {
+        "schema_version": "genesis.instance.identity.v0.1",
+        "instance_id": "inst_01HNEUTRAL00000000000001",
+        "seed_id": "seed_01HNEUTRAL000000000000001",
+        "seed_root_hash": "sha256:0acaca2f62840715cfec8f7149bd5ab5fffd039fc8f0105bf5752ad25f385568",
+        "companion_name": "Genesis Test 01",
+        "guardian_id": "guardian_01HNEUTRAL000000000001",
+        "born_at": "2026-07-12T00:00:00Z",
+        "identity_digest": "sha256:c165d16d96946d183a51edfda182ef3dcdaa82961a0dcbe715002d4d491ddebf"
+      }
+    }
+  ],
+  "must_reject": [
+    {
+      "case_id": "canonical-name-changed-and-rehashed-001",
+      "mutation": {
+        "field": "companion_name",
+        "value": "Another Name",
+        "recompute_digest": true
+      },
+      "expected_error": "canonical_name_mismatch"
+    },
+    {
+      "case_id": "canonical-name-case-changed-001",
+      "mutation": {
+        "field": "companion_name",
+        "value": "genesis Test 01",
+        "recompute_digest": true
+      },
+      "expected_error": "canonical_name_mismatch"
+    },
+    {
+      "case_id": "canonical-name-non-nfc-001",
+      "mutation": {
+        "field": "companion_name",
+        "value": "Génesis Test 01",
+        "recompute_digest": true
+      },
+      "expected_error": "text_not_nfc"
+    },
+    {
+      "case_id": "instance-id-changed-001",
+      "mutation": {
+        "field": "instance_id",
+        "value": "inst_01HNEUTRAL00000000000002",
+        "recompute_digest": true
+      },
+      "expected_error": "instance_id_mismatch"
+    },
+    {
+      "case_id": "seed-id-changed-001",
+      "mutation": {
+        "field": "seed_id",
+        "value": "seed_01HNEUTRAL000000000000002",
+        "recompute_digest": true
+      },
+      "expected_error": "seed_id_mismatch"
+    },
+    {
+      "case_id": "seed-root-changed-001",
+      "mutation": {
+        "field": "seed_root_hash",
+        "value": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "recompute_digest": true
+      },
+      "expected_error": "seed_root_hash_mismatch"
+    },
+    {
+      "case_id": "guardian-id-changed-001",
+      "mutation": {
+        "field": "guardian_id",
+        "value": "guardian_01HNEUTRAL000000000002",
+        "recompute_digest": true
+      },
+      "expected_error": "guardian_id_mismatch"
+    },
+    {
+      "case_id": "birth-time-changed-001",
+      "mutation": {
+        "field": "born_at",
+        "value": "2026-07-12T00:00:01Z",
+        "recompute_digest": true
+      },
+      "expected_error": "birth_timestamp_mismatch"
+    },
+    {
+      "case_id": "identity-digest-corrupted-001",
+      "mutation": {
+        "field": "identity_digest",
+        "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "recompute_digest": false
+      },
+      "expected_error": "identity_digest_mismatch"
+    },
+    {
+      "case_id": "persistent-alias-added-001",
+      "mutation": {
+        "additional_field": "display_alias",
+        "value": "New Name"
+      },
+      "expected_error": "identity_additional_field"
+    }
+  ]
+}
