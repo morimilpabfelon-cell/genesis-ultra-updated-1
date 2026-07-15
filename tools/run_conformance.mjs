@@ -41,6 +41,11 @@ const commands = [
   ],
   ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
   ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
+  [
+    "Validate protocol vectors independently (Node)",
+    process.execPath,
+    ["tools/validate_protocol_vectors.mjs"]
+  ],
   ["Validate crypto vectors", python, ["tools/validate_crypto_vectors.py"]],
   ["Simulate transfer A -> B", python, ["tools/simulate_transfer.py", "--artifacts-output", GENERATED_ARTIFACTS]],
   [

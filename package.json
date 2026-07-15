@@ -8,11 +8,13 @@
     "validate": "node tools/run_conformance.mjs",
     "test": "node tools/run_conformance.mjs",
     "validate:node": "node tools/validate_workspace.mjs",
+    "validate:vectors": "node tools/validate_protocol_vectors.mjs",
     "validate:schemas": "node tools/validate_artifacts.mjs"
   },
   "devDependencies": {
     "ajv": "8.17.1",
-    "ajv-formats": "3.0.1"
+    "ajv-formats": "3.0.1",
+    "hash-wasm": "4.12.0"
   },
   "engines": {
     "node": ">=20"

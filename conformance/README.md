@@ -30,6 +30,11 @@ firmada; doce mutaciones del journal deben ser detectadas.
 Python regenera en memoria el manifiesto de integridad y Node lo recalcula de forma
 independiente. Ambos deben coincidir en cobertura, orden, tamaños, digests y hash raíz.
 
+Node reproduce además, sin llamar a Python, todos los vectores compartidos: hashes dorados,
+casos inválidos, continuidad, digests de autoridad y los algoritmos Ed25519,
+XChaCha20-Poly1305 y Argon2id. Las entradas criptográficas y de continuidad alteradas deben
+fallar cerradas.
+
 ## Requisitos para una implementación
 
 Cada implementación debe publicar:

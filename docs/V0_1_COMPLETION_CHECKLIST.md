@@ -45,11 +45,12 @@
       y Node, más doce journals alterados rechazados.
 - [x] Manifiesto neutral del borrador con tamaño y SHA-256 de todos los artefactos requeridos,
       autoexclusión explícita y hash raíz reproducido por Python y Node.
+- [x] Segunda implementación independiente en Node para todos los vectores compartidos,
+      incluidos continuidad, autoridad, Ed25519, XChaCha20-Poly1305, Argon2id y rechazos.
 
 ## Pendiente real
 
 - [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.
-- [ ] Segunda implementación independiente que reproduzca todos los vectores.
 - [ ] Revisión criptográfica y de seguridad externa.
 
 ## Prohibido declarar

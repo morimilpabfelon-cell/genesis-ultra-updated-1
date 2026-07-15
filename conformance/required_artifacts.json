@@ -82,6 +82,7 @@
     "tools/validate_backup_recovery.py",
     "tools/validate_continuity.py",
     "tools/validate_crypto_vectors.py",
+    "tools/validate_protocol_vectors.mjs",
     "tools/validate_transaction_journal.py",
     "tools/validate_workspace.mjs",
     "tools/validate_workspace.py"
