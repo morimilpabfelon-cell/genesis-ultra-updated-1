@@ -14,7 +14,7 @@
     "validate:identity": "node tools/validate_instance_identity.mjs",
     "validate:senses": "node tools/validate_sense_observations.mjs",
     "validate:sense-adapters": "node tools/validate_sense_adapters.mjs",
-    "validate:retrieval": "node tools/validate_memory_retrieval.mjs",
+    "validate:retrieval": "node tools/validate_memory_retrieval_vectors.mjs",
     "memory:build": "node tools/memory_retrieval.mjs build",
     "memory:query": "node tools/memory_retrieval.mjs query",
     "validate:vectors": "node tools/validate_protocol_vectors.mjs",
