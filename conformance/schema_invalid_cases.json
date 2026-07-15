@@ -347,6 +347,67 @@
         ],
         "root_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
       }
+    },
+    {
+      "case_id": "host-manifest-contains-instance-identity",
+      "schema": "host_capability_manifest.schema.json",
+      "artifact": {
+        "schema_version": "genesis.host.capability.manifest.v0.1",
+        "adapter_id": "fixture.invalid-identity",
+        "adapter_version": "0.1.0-draft",
+        "platform_profile": "test-platform",
+        "protocol_versions": ["genesis.protocol.v0.1"],
+        "verification_state": "declaration_only",
+        "capabilities": [
+          "genesis.host.atomic_commit.v0.1",
+          "genesis.host.body_key_storage.v0.1",
+          "genesis.host.durable_storage.v0.1",
+          "genesis.host.guardian_authorization.v0.1",
+          "genesis.host.restart_recovery.v0.1",
+          "genesis.host.secure_random.v0.1",
+          "genesis.host.transfer_export.v0.1",
+          "genesis.host.transfer_import.v0.1"
+        ],
+        "portability": {
+          "neutral_export": true,
+          "neutral_import": true,
+          "platform_account_required": false,
+          "private_body_keys_exported": false,
+          "engine_bound_to_identity": false,
+          "source_deactivation_required": true
+        },
+        "instance_id": "inst_01HSCHEMA000000000000001"
+      }
+    },
+    {
+      "case_id": "host-manifest-requires-platform-account",
+      "schema": "host_capability_manifest.schema.json",
+      "artifact": {
+        "schema_version": "genesis.host.capability.manifest.v0.1",
+        "adapter_id": "fixture.invalid-account",
+        "adapter_version": "0.1.0-draft",
+        "platform_profile": "test-platform",
+        "protocol_versions": ["genesis.protocol.v0.1"],
+        "verification_state": "declaration_only",
+        "capabilities": [
+          "genesis.host.atomic_commit.v0.1",
+          "genesis.host.body_key_storage.v0.1",
+          "genesis.host.durable_storage.v0.1",
+          "genesis.host.guardian_authorization.v0.1",
+          "genesis.host.restart_recovery.v0.1",
+          "genesis.host.secure_random.v0.1",
+          "genesis.host.transfer_export.v0.1",
+          "genesis.host.transfer_import.v0.1"
+        ],
+        "portability": {
+          "neutral_export": true,
+          "neutral_import": true,
+          "platform_account_required": true,
+          "private_body_keys_exported": false,
+          "engine_bound_to_identity": false,
+          "source_deactivation_required": true
+        }
+      }
     }
   ]
 }

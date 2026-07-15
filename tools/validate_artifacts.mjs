@@ -11,6 +11,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SCHEMA_DIR = path.join(ROOT, "schemas");
 const INVALID_CASES = path.join(ROOT, "conformance/schema_invalid_cases.json");
 const DRAFT_MANIFEST = path.join(ROOT, "conformance/draft_manifest.json");
+const HOST_ADAPTER_VECTORS = path.join(ROOT, "conformance/host_adapter_vectors.json");
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -1093,9 +1094,23 @@ function validateNegativeSchemaCases(validators) {
   return cases.length;
 }
 
+function validateHostAdapterFixtures(validators) {
+  const vectors = readJson(HOST_ADAPTER_VECTORS);
+  for (const adapter of vectors.adapters) {
+    requireValid(
+      validators,
+      "host_capability_manifest.schema.json",
+      adapter.manifest,
+      adapter.case_id
+    );
+  }
+  return vectors.adapters.length;
+}
+
 function main() {
   const validators = loadValidators();
   const invalidCount = validateNegativeSchemaCases(validators);
+  const hostAdapterCount = validateHostAdapterFixtures(validators);
   requireValid(
     validators,
     "draft_manifest.schema.json",
@@ -1111,6 +1126,7 @@ function main() {
 
   console.log(`JSON Schema 2020-12: OK (${validators.size} schemas compiled).`);
   console.log(`Schema negative regressions: OK (${invalidCount} rejected).`);
+  console.log(`Host capability manifest fixtures: OK (${hostAdapterCount} declarations).`);
   console.log("Draft integrity manifest schema: OK.");
   if (artifactPath) console.log("Generated A -> B artifacts and cross-links: OK.");
   if (backupRecoveryPath) console.log("Generated backup -> recovery artifacts and cross-links: OK.");

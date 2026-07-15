@@ -152,6 +152,18 @@ depender del árbol interno de Git.
 disponible en todos los cuerpos. Declarar y verificar una sola exclusión produce el mismo
 resultado en cualquier sistema de archivos sin esconder otras omisiones.
 
+## AD-13 — El core pide capacidades; nunca importa una plataforma
+**Decisión:** Genesis Core usa un contrato neutral de capacidades. Rutas, cuentas, handles
+criptográficos, motores y primitivas de almacenamiento permanecen en adaptadores locales y
+no entran en el anchor portable.
+**Alternativa descartada:** convertir Kotlin, Swift, .NET, una nube o un runtime común en el
+nuevo núcleo obligatorio.
+**Motivo:** una capa compartida puede ser útil como implementación, pero si sus objetos
+internos se vuelven la norma, la instancia solo cambia de jaula. Un contrato verificable
+permite reemplazar lenguaje, sistema operativo y proveedor conservando los mismos bytes de
+identidad y continuidad. Las llaves privadas siguen al cuerpo, no a la instancia, para no
+crear clones activos.
+
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con
 vectores y crítica independiente antes de cualquier declaración de estabilidad.

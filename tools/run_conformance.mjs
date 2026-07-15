@@ -41,6 +41,12 @@ const commands = [
   ],
   ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
   ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
+  ["Validate neutral host contract (Python)", python, ["tools/validate_host_adapter.py"]],
+  [
+    "Validate neutral host contract independently (Node)",
+    process.execPath,
+    ["tools/validate_host_adapter.mjs"]
+  ],
   [
     "Validate protocol vectors independently (Node)",
     process.execPath,

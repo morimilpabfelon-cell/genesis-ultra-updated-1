@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesis.local/schemas/host_capability_manifest.schema.json",
+  "title": "Genesis Host Capability Manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "adapter_id",
+    "adapter_version",
+    "platform_profile",
+    "protocol_versions",
+    "verification_state",
+    "capabilities",
+    "portability"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.host.capability.manifest.v0.1" },
+    "adapter_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "adapter_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "platform_profile": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "protocol_versions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^genesis\\.protocol\\.v[0-9]+\\.[0-9]+$"
+      }
+    },
+    "verification_state": {
+      "enum": ["declaration_only", "simulated", "storage_verified"]
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "genesis.host.atomic_commit.v0.1",
+          "genesis.host.body_key_storage.v0.1",
+          "genesis.host.durable_storage.v0.1",
+          "genesis.host.guardian_authorization.v0.1",
+          "genesis.host.restart_recovery.v0.1",
+          "genesis.host.secure_random.v0.1",
+          "genesis.host.transfer_export.v0.1",
+          "genesis.host.transfer_import.v0.1"
+        ]
+      }
+    },
+    "portability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "neutral_export",
+        "neutral_import",
+        "platform_account_required",
+        "private_body_keys_exported",
+        "engine_bound_to_identity",
+        "source_deactivation_required"
+      ],
+      "properties": {
+        "neutral_export": { "const": true },
+        "neutral_import": { "const": true },
+        "platform_account_required": { "const": false },
+        "private_body_keys_exported": { "const": false },
+        "engine_bound_to_identity": { "const": false },
+        "source_deactivation_required": { "const": true }
+      }
+    }
+  }
+}

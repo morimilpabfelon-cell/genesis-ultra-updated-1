@@ -8,6 +8,7 @@
     "validate": "node tools/run_conformance.mjs",
     "test": "node tools/run_conformance.mjs",
     "validate:node": "node tools/validate_workspace.mjs",
+    "validate:host": "node tools/validate_host_adapter.mjs",
     "validate:vectors": "node tools/validate_protocol_vectors.mjs",
     "validate:schemas": "node tools/validate_artifacts.mjs"
   },

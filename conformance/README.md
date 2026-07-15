@@ -10,6 +10,8 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 ## Archivos
 
 - `golden_vectors.json`: resultados criptográficos que deben coincidir byte por byte.
+- `host_adapter_vectors.json`: anchor portable, declaraciones de capacidades por plataforma
+  y rechazos contra dependencias de proveedor o bindings locales dentro del core.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
 - `schema_invalid_cases.json`: artefactos que los JSON Schema reales deben rechazar.
 - `continuity_vectors.json`: hashes compartidos de registro y transferencia.
@@ -34,6 +36,10 @@ Node reproduce además, sin llamar a Python, todos los vectores compartidos: has
 casos inválidos, continuidad, digests de autoridad y los algoritmos Ed25519,
 XChaCha20-Poly1305 y Argon2id. Las entradas criptográficas y de continuidad alteradas deben
 fallar cerradas.
+
+Python y Node reproducen el mismo anchor portable frente a manifests declarativos de
+Android, Apple y Windows. Los fixtures prueban la frontera neutral, pero permanecen en
+`declaration_only` hasta que existan adaptadores reales con almacenamiento probado.
 
 ## Requisitos para una implementación
 
