@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 107,
+  "file_count": 114,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,13 +25,13 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 4586,
-      "digest": "sha256:3e823f5ebbadb6b0f8392cfc5f1e19140e932b519a5f93c09234e7d95dd4cb9f"
+      "size_bytes": 5199,
+      "digest": "sha256:4e91e2e6d68626e01b86ddd69b77b1808dff190045c76b895799e5803bdeefcc"
     },
     {
       "path": "START_HERE.md",
-      "size_bytes": 2006,
-      "digest": "sha256:25d6a96354267a464e897bc07651fdf983c6f5c69d06fb3ebe488a72d364e740"
+      "size_bytes": 2370,
+      "digest": "sha256:986675edcb40ed8325355b79e98ab3c416cfd7c968067008e357924cf4d8845a"
     },
     {
       "path": "conformance/README.md",
@@ -80,8 +80,8 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 4682,
-      "digest": "sha256:2c383f33688db799c1a007f1620f5ec46433c1a82230524ff19f16408e024d27"
+      "size_bytes": 4893,
+      "digest": "sha256:656394f31d410019c3ba9d28ee14f2c033aed8e935336d45793d012d0e9dd372"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
@@ -119,14 +119,49 @@
       "digest": "sha256:fde813425486b64bd5499b0a8b791d535a65f963ae60d2e80d8a674f4a1bdf21"
     },
     {
+      "path": "observer/README.md",
+      "size_bytes": 2057,
+      "digest": "sha256:0a86bf156cff46db3aba28001f98de28b4f06cf274eade2a1aa7cdbe1d3e05db"
+    },
+    {
+      "path": "observer/core.mjs",
+      "size_bytes": 8406,
+      "digest": "sha256:9e38a38eb206bffe4ab96cb7d507adf639ac915f7c14534aeb12169160d09c47"
+    },
+    {
+      "path": "observer/public/app.js",
+      "size_bytes": 15394,
+      "digest": "sha256:761f73be0a93a5aeef0ff4c85a41a3fe472ec1f7a0fb63b699a4a23f09ba0a63"
+    },
+    {
+      "path": "observer/public/index.html",
+      "size_bytes": 4725,
+      "digest": "sha256:796dac08df0bffc93c9defe1e3b92e2f3547c9c56d0bf1f0ffd31fa7c6db05c2"
+    },
+    {
+      "path": "observer/public/styles.css",
+      "size_bytes": 7539,
+      "digest": "sha256:978c8b9a1de6387d7e64c8669433825e06102151c3b03cabb0c257d2e13ec0c8"
+    },
+    {
+      "path": "observer/server.mjs",
+      "size_bytes": 10511,
+      "digest": "sha256:a0fa23fbf3b61454bfe43f80003ed0166fbd11273f8c65f44b2b659d3b5cd966"
+    },
+    {
+      "path": "observer/test/core.test.mjs",
+      "size_bytes": 4450,
+      "digest": "sha256:23dd254da496958578d53b0f3662305298838b17a14aca852b05b81a62e08b23"
+    },
+    {
       "path": "package-lock.json",
       "size_bytes": 3412,
       "digest": "sha256:ee77277264726bc9052a8151934d67b95d16889296f9e5ebd50f3b9863acf781"
     },
     {
       "path": "package.json",
-      "size_bytes": 906,
-      "digest": "sha256:e10c54c75b01de12a0f0bf741cc0459d1443a4974c861c81402dda47bbf840cd"
+      "size_bytes": 1013,
+      "digest": "sha256:04daa4b304a8eb19beda4b23f8db7ed1227b8b58d2a1fbf99a669284a520a654"
     },
     {
       "path": "reference/README.md",
@@ -415,8 +450,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 4748,
-      "digest": "sha256:7be557fe4add9a4b84cec1b48ae954920f11653b84c3879886317b1133561878"
+      "size_bytes": 4866,
+      "digest": "sha256:b4bac26c53b766a786d3f4fdb84df311faa5e737398276b9e3109868b6407218"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -544,5 +579,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:ab56df6667bd6cbc7bc42cfa81dcf3300a5d8c95670aac70c59c054f391e792a"
+  "root_digest": "sha256:979437fa7c7fa3329fe50d6a8e97a273273b862a6f971944688008f705aca55b"
 }
