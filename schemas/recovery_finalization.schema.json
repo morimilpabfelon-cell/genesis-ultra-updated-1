@@ -39,7 +39,7 @@
     "destination_body_status": { "const": "active_writer" },
     "guardian_authorization_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "recovery_event_hash": { "type": "string", "pattern": "^evsha256:[a-f0-9]{64}$" },
-    "finalized_at": { "type": "string", "format": "date-time" },
+    "finalized_at": { "type": "string", "format": "date-time", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$" },
     "finalization_digest": { "$ref": "#/$defs/sha256" },
     "guardian_acknowledgement": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" },
     "destination_acknowledgement": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }

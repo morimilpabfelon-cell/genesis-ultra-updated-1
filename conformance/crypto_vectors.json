@@ -109,11 +109,22 @@
       "algorithm": "genesis.signature.ed25519.v0.1",
       "seed_hex": "1111111111111111111111111111111111111111111111111111111111111111",
       "public_key_hex": "d04ab232742bb4ab3a1368bd4615e4e6d0224ab71a016baf8520a332c9778737",
-      "message": "genesis ultra signature test v0.1",
-      "signed_bytes": "encode_field(domain) + encode_field(message)",
-      "signature_hex": "4fa557e33c2cd7a1b4a938120734f3c23e1682064b631b50ecd754651b31f44647abf2889acbf165a0c505ae692f402955bfe27cf6b4e0bcbe3fe186aa435e02",
+      "signed_bytes": "genesis.signature.envelope.bytes.v0.1",
+      "envelope": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HCRYPTO000000000000001",
+        "key_epoch_id": "epoch_01HCRYPTO00000000000001",
+        "signed_domain": "genesis.crypto.vector.signature.v0.1",
+        "signed_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "created_at": "2026-07-15T02:30:00Z",
+        "public_key_ref": "sha256:10ba682c8ad13513971e8b56881aab8bd702bb807796eca81932c735a94d6e6d",
+        "signature_value": "389deebe9b4ff2142a6fbb2cc28c4766b85db9eb58c2e1ba5673b3feb50e79d432317e68aca86648ff1ec011ff9c36552c590f67e9ef38911721d4f25edde500"
+      },
       "corruption": {
-        "flip_first_signature_byte_must_fail": true
+        "flip_first_signature_byte_must_fail": true,
+        "mutate_created_at_must_fail": true
       }
     },
     "xchacha20poly1305_ietf": {

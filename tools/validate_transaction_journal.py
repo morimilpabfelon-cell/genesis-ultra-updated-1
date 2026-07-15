@@ -3,7 +3,12 @@
 
 from __future__ import annotations
 
-from validate_workspace import hash_fields
+import hashlib
+
+from nacl.exceptions import BadSignatureError
+from nacl.signing import VerifyKey
+
+from validate_workspace import encode_field, hash_fields
 
 
 PHASES = {
@@ -27,6 +32,7 @@ PHASES = {
 }
 TERMINAL_PHASE = {"transfer": "completed", "recovery": "finalized"}
 SIGNATURE_DOMAIN = "genesis.transaction.journal.signature.v0.1"
+SIGNATURE_ENVELOPE_DOMAIN = "genesis.signature.envelope.bytes.v0.1"
 
 
 def optional_text(value: object) -> str:
@@ -56,7 +62,19 @@ def compute_journal_digest(entry: dict) -> str:
     )
 
 
-def validate_journal_chain(entries: list[dict]) -> str | None:
+def signature_envelope_bytes(envelope: dict) -> bytes:
+    fields = [
+        envelope["schema_version"], envelope["signature_profile"],
+        envelope["signer_type"], envelope["signer_id"], envelope["key_epoch_id"],
+        envelope["signed_domain"], envelope["signed_digest"], envelope["created_at"],
+        envelope["public_key_ref"],
+    ]
+    return encode_field(SIGNATURE_ENVELOPE_DOMAIN) + b"".join(
+        encode_field(field) for field in fields
+    )
+
+
+def validate_journal_chain(entries: list[dict], verify_key: VerifyKey) -> str | None:
     if not entries:
         return "journal_empty"
 
@@ -122,12 +140,25 @@ def validate_journal_chain(entries: list[dict]) -> str | None:
 
         signature = entry["signature"]
         if (
-            signature["signed_digest"] != entry["journal_digest"]
+            signature["schema_version"] != "genesis.signature.envelope.v0.1"
+            or signature["signature_profile"] != "genesis.signature.ed25519.v0.1"
+            or signature["signed_digest"] != entry["journal_digest"]
             or signature["signer_type"] != "body"
             or signature["signer_id"] != entry["coordinator_body_id"]
             or signature["signed_domain"] != SIGNATURE_DOMAIN
+            or signature["created_at"] != entry["updated_at"]
         ):
             return "journal_signature_unbound"
+        expected_key_ref = "sha256:" + hashlib.sha256(verify_key.encode()).hexdigest()
+        if signature["public_key_ref"] != expected_key_ref:
+            return "journal_signature_key_mismatch"
+        try:
+            signature_value = bytes.fromhex(signature["signature_value"])
+            if len(signature_value) != 64:
+                return "journal_signature_invalid"
+            verify_key.verify(signature_envelope_bytes(signature), signature_value)
+        except (BadSignatureError, KeyError, TypeError, ValueError):
+            return "journal_signature_invalid"
 
         status = entry["status"]
         if status == "pending":
@@ -160,12 +191,13 @@ def validate_journal_chain(entries: list[dict]) -> str | None:
 def evaluate_restart(
     entries: list[dict],
     *,
+    verify_key: VerifyKey,
     observed_state_digest: str,
     expected_previous_state_digest: str,
     expected_candidate_state_digest: str,
     trusted_finalization_digest: str,
 ) -> dict:
-    error = validate_journal_chain(entries)
+    error = validate_journal_chain(entries, verify_key)
     if error is not None:
         return {"error": error, "action": None, "authoritative_state_digest": None}
 

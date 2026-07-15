@@ -37,7 +37,7 @@
         "key_epoch_id": "epoch_01HSENSE000000000000001",
         "signed_domain": "genesis.sense.observation.signature.v0.1",
         "signed_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
-        "signature_value": "9e9864d61cc508fea27c4270fd8927eee9f880a4609d197cd424f45b76eea247e54107a100a697d24873693eae1ff9b085738f7372aafeb898c704b13b053b01",
+        "signature_value": "a7b77438507728c41a15e2da2016d803136c23c0e87071c431d11726e18f8940060ecd359c9f7b43fe65593a45d4a06f2c1ebcd325a77dd54584285b9a74b903",
         "created_at": "2026-07-15T00:00:00Z",
         "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
       }
@@ -65,7 +65,7 @@
         "key_epoch_id": "epoch_01HSENSE000000000000001",
         "signed_domain": "genesis.sense.observation.signature.v0.1",
         "signed_digest": "sha256:b02451b1d4cd69b57679038b7931d4ba95a1c139dbff1e2f5b9b2a7ff6735317",
-        "signature_value": "91ed172b8f3d865db9aa990b159bd23f5bcfbbe3e95cd07cd665132a277c8ad4f4431c42002951e29a13757bcbdb2bd4b0b4493282a742e9c62c820eb57ea803",
+        "signature_value": "b4dd7b4415d6eebb1e912401959ccd05ea24d2afca5e48a9ea63d531852c6e05d191c4065c26e9332bb3df709e74d0b4ad0883363ec99baf9cb9b6cb7f638504",
         "created_at": "2026-07-15T00:00:01Z",
         "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
       }
@@ -93,7 +93,7 @@
         "key_epoch_id": "epoch_01HSENSE000000000000001",
         "signed_domain": "genesis.sense.observation.signature.v0.1",
         "signed_digest": "sha256:3c4ff79fa3adaa1e5bc0298fc7639d257df34810c54276c0b28e846501f80cba",
-        "signature_value": "bbd9521edb2a112d48435b5ce53a3cee13bd96555e16228a51cbfefce34e786a103dc1480cf3beb9090c2cb7a7e9df79f6df81d6ce496e4541cca09e6203b904",
+        "signature_value": "e0115c6a5bfddeaa851b24643a2cf10304d027a84ef6898aa293e26aad082b426c8192e0687a277e891fcda9d93f12221e9208c35017213cfc5b8d70f671fa0b",
         "created_at": "2026-07-15T00:00:02Z",
         "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
       }
@@ -121,7 +121,7 @@
         "key_epoch_id": "epoch_01HSENSE000000000000001",
         "signed_domain": "genesis.sense.observation.signature.v0.1",
         "signed_digest": "sha256:13ff590d764ca3c6df47b97b8232efc6f177a109e43ea0e78b20609b51e51b80",
-        "signature_value": "e35f5e39de58e5ca5a1f0f99d46cff8c07187838a698a1af89c5273a7b38972e24aaa724cf59a6ee3b653a23677c56059d544c52cd8e39fdd4166c5cb073bf07",
+        "signature_value": "65e0407726ef3dbaa16fb4f0f717106cd7a71cc75f543613ef398ecc7cf72c70f8d253d161fa2876f094af44fb21a7d345538d16d58ce381d3ccb3ff5189b106",
         "created_at": "2026-07-15T00:00:03Z",
         "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
       }
@@ -149,7 +149,7 @@
         "key_epoch_id": "epoch_01HSENSE000000000000001",
         "signed_domain": "genesis.sense.observation.signature.v0.1",
         "signed_digest": "sha256:07f8f71ddaba7907911c5a0a811cbfbbd07d22b02737a36ae863151269a84311",
-        "signature_value": "ec87f097e5571d559273db7a5313887594ad328d623a5e74e7582a3a843f6036a82566b5ab1ccfa189cc70ca6f9f55f0682d585b60b6d16405f2b8ec74992c02",
+        "signature_value": "25033c8381e620f1cd3d5dd962e500c554e19e86fcd370e11928b72b2ef0045385a1c8f4be6cc863a18461d8a3ba992038e0d67346ce2cfdf443aa424f10d70c",
         "created_at": "2026-07-15T00:00:04Z",
         "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
       }
@@ -177,7 +177,7 @@
         "key_epoch_id": "epoch_01HSENSE000000000000001",
         "signed_domain": "genesis.sense.observation.signature.v0.1",
         "signed_digest": "sha256:1b5fbe87d2e3ad1f99b9a27bc6f41fa9a5cd9e8a63cfd2764351059b5322a173",
-        "signature_value": "5338876421158eb6bd2bfebe4fb27c9d35c69faf8be17a307a3c08f5a1d40bf6926b50bb028c96a6a6f72e0110599f52b92f10bdc5ce6b57836fb0824326c906",
+        "signature_value": "20ddb7d2aa4a369d58e79ea0c829fd77d2f2983fda78390de7e7b3b84328e6e92aefd52de0f2c1120efaa99ec3b297299134b401d5704dd31c5735475e8c720d",
         "created_at": "2026-07-15T00:00:05Z",
         "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
       }
@@ -207,7 +207,7 @@
         "key_epoch_id": "epoch_01HSENSE000000000000001",
         "signed_domain": "genesis.memory.gate.decision.signature.v0.1",
         "signed_digest": "sha256:cd26e25fefdf0b490fa5ae4f260c1826a5091d1f476f79856ba92fc7f7558a03",
-        "signature_value": "ad121eb5ff0575fd618bd91c3907ac4196cc7caa9d1a5501217e5a357271fc9ed12d84a34c6c79a36a7fd209eb56a239f18860b3cd617dbdaba626846a678f06",
+        "signature_value": "417c948b0c18e31ff81757345706db8c7ff63068b1a54998e8c36c3cadd2e051db6e6c0ec38058dbcb73275fa32d653ffa40e59e39af459edbf893086b370002",
         "created_at": "2026-07-15T00:00:01Z",
         "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
       }
@@ -371,6 +371,24 @@
       "expected_error": "observation_signature_invalid"
     },
     {
+      "case_id": "observation-signature-created-at-mutated-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "signature",
+            "created_at"
+          ],
+          "value": "2026-07-15T00:00:09Z"
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": false,
+      "expected_error": "observation_signature_invalid"
+    },
+    {
       "case_id": "gate-cross-instance-001",
       "target": "gate",
       "mutations": [
@@ -519,6 +537,23 @@
       "resign": false,
       "recompute_event_hash": true,
       "expected_error": "memory_observed_at_mismatch"
+    },
+    {
+      "case_id": "observation-unsafe-integer-001",
+      "target": "observation",
+      "observation_index": 0,
+      "mutations": [
+        {
+          "path": [
+            "observation_sequence"
+          ],
+          "value": 9007199254740992
+        }
+      ],
+      "recompute_digest": false,
+      "resign": false,
+      "recompute_event_hash": false,
+      "expected_error": "observation_sequence_invalid"
     }
   ]
 }

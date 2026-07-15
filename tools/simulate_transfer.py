@@ -50,6 +50,7 @@ DOMAIN_EVENT = "genesis.memory.event.v0.1"
 DOMAIN_CHECKPOINT = "genesis.checkpoint.v0.1"
 DOMAIN_POSSESSION = "genesis.body.possession.v0.1"
 SIGNATURE_PROFILE = "genesis.signature.ed25519.v0.1"
+SIGNATURE_ENVELOPE_DOMAIN = "genesis.signature.envelope.bytes.v0.1"
 
 INSTANCE_ID = "inst_01HSIMULATION0000000001"
 SEED_ROOT = "sha256:" + hashlib.sha256(b"genesis simulation seed manifest").hexdigest()
@@ -69,6 +70,23 @@ def digest(domain: str, fields: list[str]) -> str:
 
 def key_fingerprint(signing_key: SigningKey) -> str:
     return "sha256:" + hashlib.sha256(signing_key.verify_key.encode()).hexdigest()
+
+
+def signature_envelope_bytes(envelope: dict) -> bytes:
+    fields = [
+        envelope["schema_version"],
+        envelope["signature_profile"],
+        envelope["signer_type"],
+        envelope["signer_id"],
+        envelope["key_epoch_id"],
+        envelope["signed_domain"],
+        envelope["signed_digest"],
+        envelope["created_at"],
+        envelope["public_key_ref"],
+    ]
+    return encode_field(SIGNATURE_ENVELOPE_DOMAIN) + b"".join(
+        encode_field(field) for field in fields
+    )
 
 
 def event_hash(event: dict) -> str:
@@ -102,9 +120,7 @@ def make_signature_envelope(
     signed_domain: str,
     created_at: str,
 ) -> dict:
-    signed_bytes = encode_field(signed_domain) + encode_field(signed_digest)
-    signature = signing_key.sign(signed_bytes).signature
-    return {
+    envelope = {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": SIGNATURE_PROFILE,
         "signer_type": signer_type,
@@ -112,14 +128,17 @@ def make_signature_envelope(
         "key_epoch_id": key_epoch_id,
         "signed_domain": signed_domain,
         "signed_digest": signed_digest,
-        "signature_value": signature.hex(),
         "created_at": created_at,
         "public_key_ref": key_fingerprint(signing_key),
     }
+    envelope["signature_value"] = signing_key.sign(
+        signature_envelope_bytes(envelope)
+    ).signature.hex()
+    return envelope
 
 
 def verify_signature(envelope: dict, verify_key: VerifyKey) -> None:
-    signed_bytes = encode_field(envelope["signed_domain"]) + encode_field(envelope["signed_digest"])
+    signed_bytes = signature_envelope_bytes(envelope)
     signature = bytes.fromhex(envelope["signature_value"])
     verify_key.verify(signed_bytes, signature)
 

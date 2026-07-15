@@ -120,8 +120,12 @@ La firma cubre `journal_digest` con:
 genesis.transaction.journal.signature.v0.1
 ```
 
-El tiempo es evidencia informativa. El orden normativo proviene de `sequence` y
-`previous_journal_digest`.
+El validador debe resolver la clave pública del cuerpo coordinador, comprobar su huella,
+reconstruir la preimagen completa del sobre y verificar Ed25519. Comparar solamente
+`signed_digest`, `signer_id` y `signed_domain` no constituye validación de firma.
+
+El tiempo usa la forma UTC canónica y queda ligado por el sobre, pero no decide el orden.
+El orden normativo proviene de `sequence` y `previous_journal_digest`.
 
 ## 8. Adaptadores de plataforma
 

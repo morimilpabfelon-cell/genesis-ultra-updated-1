@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Reference validator for Genesis Ultra cryptographic digest vectors.
+"""Reference validator for Genesis Ultra cryptographic vectors.
 
-This tool validates only deterministic digest construction. It does not implement
-signatures, encryption, key storage, or a production security review.
+Validates deterministic digests, signature envelopes, backup encryption and KDF vectors.
+It does not provide production key storage or a production security review.
 """
 
 from __future__ import annotations
@@ -28,6 +28,18 @@ def encode_field(value: str) -> bytes:
 def digest(domain: str, fields: list[str]) -> str:
     preimage = encode_field(domain) + b"".join(encode_field(field) for field in fields)
     return "sha256:" + hashlib.sha256(preimage).hexdigest()
+
+
+def signature_envelope_bytes(envelope: dict) -> bytes:
+    fields = [
+        envelope["schema_version"], envelope["signature_profile"],
+        envelope["signer_type"], envelope["signer_id"], envelope["key_epoch_id"],
+        envelope["signed_domain"], envelope["signed_digest"], envelope["created_at"],
+        envelope["public_key_ref"],
+    ]
+    return encode_field("genesis.signature.envelope.bytes.v0.1") + b"".join(
+        encode_field(field) for field in fields
+    )
 
 
 def main() -> int:
@@ -78,21 +90,41 @@ def verify_algorithm_vectors(vectors: dict) -> int:
 
     failed = 0
     ed = algos["ed25519"]
-    domain_msg = encode_field(ed["algorithm"]) + encode_field(ed["message"])
+    envelope = ed["envelope"]
+    domain_msg = signature_envelope_bytes(envelope)
     sk = SigningKey(bytes.fromhex(ed["seed_hex"]))
     if sk.verify_key.encode().hex() != ed["public_key_hex"]:
         print("FAIL ed25519: clave publica no coincide"); failed += 1
+    expected_key_ref = "sha256:" + hashlib.sha256(sk.verify_key.encode()).hexdigest()
+    if envelope["public_key_ref"] != expected_key_ref:
+        print("FAIL ed25519: referencia de clave no coincide"); failed += 1
+    signature = bytes.fromhex(envelope["signature_value"])
+    if sk.sign(domain_msg).signature != signature:
+        print("FAIL ed25519: firma determinista no coincide"); failed += 1
     try:
-        VerifyKey(bytes.fromhex(ed["public_key_hex"])).verify(domain_msg, bytes.fromhex(ed["signature_hex"]))
+        VerifyKey(bytes.fromhex(ed["public_key_hex"])).verify(domain_msg, signature)
         print("OK ed25519 firma verifica")
     except BadSignatureError:
         print("FAIL ed25519: firma no verifica"); failed += 1
-    tampered = bytearray(bytes.fromhex(ed["signature_hex"])); tampered[0] ^= 1
+    tampered = bytearray(signature); tampered[0] ^= 1
+    if ed["corruption"].get("flip_first_signature_byte_must_fail") is not True:
+        print("FAIL ed25519: falta requisito de firma alterada"); failed += 1
     try:
         VerifyKey(bytes.fromhex(ed["public_key_hex"])).verify(domain_msg, bytes(tampered))
         print("FAIL ed25519: firma alterada ACEPTADA"); failed += 1
     except BadSignatureError:
         print("OK ed25519 corrupcion rechazada")
+    changed_envelope = dict(envelope)
+    changed_envelope["created_at"] = "2026-07-15T02:30:01Z"
+    if ed["corruption"].get("mutate_created_at_must_fail") is not True:
+        print("FAIL ed25519: falta requisito de metadato alterado"); failed += 1
+    try:
+        VerifyKey(bytes.fromhex(ed["public_key_hex"])).verify(
+            signature_envelope_bytes(changed_envelope), signature
+        )
+        print("FAIL ed25519: metadato alterado ACEPTADO"); failed += 1
+    except BadSignatureError:
+        print("OK ed25519 metadato de sobre protegido")
 
     xc = algos["xchacha20poly1305_ietf"]
     key = bytes.fromhex(xc["key_hex"]); nonce = bytes.fromhex(xc["nonce_hex"])

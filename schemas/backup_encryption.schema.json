@@ -32,8 +32,8 @@
       "additionalProperties": false,
       "required": ["opslimit", "memlimit", "key_length"],
       "properties": {
-        "opslimit": { "type": "integer", "minimum": 1 },
-        "memlimit": { "type": "integer", "minimum": 8192 },
+        "opslimit": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "memlimit": { "type": "integer", "minimum": 8192, "maximum": 9007199254740991 },
         "key_length": { "const": 32 }
       }
     },
@@ -42,7 +42,7 @@
     "associated_data_digest": { "$ref": "#/$defs/sha256" },
     "ciphertext_digest": { "$ref": "#/$defs/sha256" },
     "wrapped_key": { "type": ["string", "null"] },
-    "created_at": { "type": "string", "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$" },
     "encryption_digest": { "$ref": "#/$defs/sha256" }
   },
   "$defs": {

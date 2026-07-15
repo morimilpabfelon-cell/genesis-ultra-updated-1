@@ -15,7 +15,8 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `instance_identity_vectors.json`: nombre canónico, digest de identidad, continuidad
   Android/Apple/Windows y cambios de identidad que deben rechazarse aunque se recalculen hashes.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
-- `schema_invalid_cases.json`: artefactos que los JSON Schema reales deben rechazar.
+- `schema_invalid_cases.json`: cuarenta artefactos que los JSON Schema reales deben rechazar,
+  con al menos una regresión conectada por cada uno de los 32 schemas.
 - `sense_observation_vectors.json`: seis observaciones firmadas, una decisión de compuerta,
   su evento de memoria enlazado y mutaciones que intentan saltarse la frontera.
 - `sense_adapter_vectors.json`: adaptadores neutrales simulados de Vista, Propiocepción e
@@ -33,7 +34,8 @@ las mismas funciones de evaluación usadas por los flujos positivos.
 
 La simulación de journal corta la operación antes, durante y después del commit. Python y
 Node reproducen de forma independiente ocho decisiones de reinicio y verifican la cadena
-firmada; doce mutaciones del journal deben ser detectadas.
+firmada; trece mutaciones del journal —incluida una firma Ed25519 falsificada— deben ser
+detectadas.
 
 Python regenera en memoria el manifiesto de integridad y Node lo recalcula de forma
 independiente. Ambos deben coincidir en cobertura, orden, tamaños, digests y hash raíz.

@@ -110,14 +110,22 @@ def compute_memory_event_hash(event: dict) -> str:
     return hash_fields("genesis.memory.event.v0.1", fields, "evsha256:")
 
 
-def signature_bytes(domain: str, digest: str) -> bytes:
-    return encode_field(domain) + encode_field(digest)
+def signature_bytes(envelope: dict) -> bytes:
+    values = [
+        envelope["schema_version"], envelope["signature_profile"],
+        envelope["signer_type"], envelope["signer_id"], envelope["key_epoch_id"],
+        envelope["signed_domain"], envelope["signed_digest"], envelope["created_at"],
+        envelope["public_key_ref"],
+    ]
+    return encode_field("genesis.signature.envelope.bytes.v0.1") + b"".join(
+        encode_field(value) for value in values
+    )
 
 
 def sign_envelope(envelope: dict, digest: str, domain: str, signing_key: SigningKey) -> None:
     envelope["signed_domain"] = domain
     envelope["signed_digest"] = digest
-    envelope["signature_value"] = signing_key.sign(signature_bytes(domain, digest)).signature.hex()
+    envelope["signature_value"] = signing_key.sign(signature_bytes(envelope)).signature.hex()
 
 
 def validate_signature(
@@ -143,10 +151,10 @@ def validate_signature(
         raise ConformanceError(f"{prefix}_signature_key_mismatch")
     try:
         signature = bytes.fromhex(envelope["signature_value"])
-        VerifyKey(public_key).verify(signature_bytes(domain, digest), signature)
+        VerifyKey(public_key).verify(signature_bytes(envelope), signature)
     except (BadSignatureError, ValueError, KeyError):
         raise ConformanceError(f"{prefix}_signature_invalid") from None
-    expected = signing_key.sign(signature_bytes(domain, digest)).signature
+    expected = signing_key.sign(signature_bytes(envelope)).signature
     if signature != expected:
         raise ConformanceError(f"{prefix}_signature_invalid")
 
@@ -168,7 +176,10 @@ def validate_observation(observation: dict, vectors: dict, signing_key: SigningK
         raise ConformanceError("unsupported_sense_profile")
     if observation["source_kind"] not in SOURCE_KINDS:
         raise ConformanceError("unsupported_observation_source")
-    if not isinstance(observation["observation_sequence"], int) or observation["observation_sequence"] < 0:
+    if (
+        type(observation["observation_sequence"]) is not int
+        or not 0 <= observation["observation_sequence"] <= 9007199254740991
+    ):
         raise ConformanceError("observation_sequence_invalid")
     actual = compute_observation_digest(observation, vectors["domains"]["observation"])
     if actual != observation["observation_digest"]:

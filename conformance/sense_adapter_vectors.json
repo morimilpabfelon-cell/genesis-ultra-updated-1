@@ -107,7 +107,7 @@
           "key_epoch_id": "epoch_01HADAPTER00000000000001",
           "signed_domain": "genesis.sense.observation.signature.v0.1",
           "signed_digest": "sha256:f24a4dfdd4144307326b4e1568d512bc85862a28546f33bea209995c5e0dd02b",
-          "signature_value": "7c7ac24aa598945918d240b2ac60d667a2203149541892bd84ef8a8c33d44f39f8354addc5d364e6186500996508f65b8a8c1d9222c9b163c84d396060018b09",
+          "signature_value": "41ffe50bf2fee60c14285e482b6c768d7e6f64c4407b26607d578b4dc1dc38e8ad83b0463339d317fe157266bc283313bac67c0209a9c4dda7a3941d9cc65707",
           "created_at": "2026-07-15T01:00:00Z",
           "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
         }
@@ -180,7 +180,7 @@
           "key_epoch_id": "epoch_01HADAPTER00000000000001",
           "signed_domain": "genesis.sense.observation.signature.v0.1",
           "signed_digest": "sha256:3be8194faa3b1e3585cef547bd939cfe64829185044b594abca417416f3fc7fb",
-          "signature_value": "416b29cee9736386b387dc9fc52bbc24b9e7c34a84451db93a38270294dc30824d02c0ed55943a8251a0f5501247107d702aefec165fe954fa3a6696e096570a",
+          "signature_value": "d0f1f9bb261c115cd5a3ee1f6c572574860b887510f9571709ec86b0287593d9c4c7aa8847f3b4c0666466703f1f4d71f939254a9c79188f1e6ab167c13de30a",
           "created_at": "2026-07-15T01:00:01Z",
           "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
         }
@@ -253,7 +253,7 @@
           "key_epoch_id": "epoch_01HADAPTER00000000000001",
           "signed_domain": "genesis.sense.observation.signature.v0.1",
           "signed_digest": "sha256:a793686ea42726b258d80592150f34ca33bc1320c025656cd8af63cf5b04754a",
-          "signature_value": "54a9a54c7e2c40755dbd0e19b08fe78762506d991595878cb6a135ea15d80714400adb4d0611d3918869be26a632eac360f71108c0070e16aab1ad5b07c4a801",
+          "signature_value": "8676bedf638584286d88665d35438439455182fb0207b79cc5f8a3ce94acbf54a2de1b1430f1a995f83114f5354a405045b631dec1cfb1ab52733c59ecab6b02",
           "created_at": "2026-07-15T01:00:02Z",
           "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
         }
@@ -726,6 +726,22 @@
       "recompute_observation_digest": false,
       "resign": false,
       "expected_error": "capture_result_adapter_mismatch"
+    },
+    {
+      "case_id": "adapter-observation-unsafe-integer-001",
+      "target": "observation",
+      "mutations": [
+        {
+          "path": [
+            "observation_sequence"
+          ],
+          "value": 9007199254740992
+        }
+      ],
+      "recompute_result_digest": false,
+      "recompute_observation_digest": false,
+      "resign": false,
+      "expected_error": "observation_sequence_invalid"
     }
   ]
 }
