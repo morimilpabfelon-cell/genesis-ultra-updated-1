@@ -1,0 +1,58 @@
+name: Finalize Multimodal Pipeline
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  finalize-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          npm ci --ignore-scripts
+
+      - name: Generate final multimodal evidence
+        run: |
+          python tools/prepare_multimodal_pipeline.py
+          rm tools/prepare_multimodal_pipeline.py
+          rm .github/workflows/finalize-multimodal-pipeline.yml
+          python tools/generate_draft_manifest.py --write
+
+      - name: Commit final state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No finalization changes."
+          else
+            git commit -m "Finalize multimodal memory pipeline evidence"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+
+      - name: Run complete conformance suite
+        run: npm test
