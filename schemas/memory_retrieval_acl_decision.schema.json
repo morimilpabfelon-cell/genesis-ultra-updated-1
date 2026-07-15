@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesis.local/schemas/memory_retrieval_acl_decision.schema.json",
+  "title": "Genesis memory retrieval ACL decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","request_id","policy_id","instance_id","authority_epoch","purpose","as_of_sequence","effective_scopes","allowed_event_refs","denial_counts","decision_digest"],
+  "properties": {
+    "schema_version": {"const":"genesis.memory.retrieval_acl.decision.v0.1"},
+    "request_id": {"type":"string","minLength":1,"maxLength":128},
+    "policy_id": {"type":"string","minLength":1,"maxLength":128},
+    "instance_id": {"type":"string","minLength":16,"maxLength":128},
+    "authority_epoch": {"type":"integer","minimum":0,"maximum":9007199254740991},
+    "purpose": {"enum":["recall","reasoning_context","guardian_review","transfer_export","observability"]},
+    "as_of_sequence": {"type":"integer","minimum":0,"maximum":9007199254740991},
+    "effective_scopes": {"type":"array","uniqueItems":true,"maxItems":10000,"items":{"type":"string","minLength":1,"maxLength":128}},
+    "allowed_event_refs": {"type":"array","uniqueItems":true,"maxItems":1000000,"items":{"type":"string","minLength":16,"maxLength":128}},
+    "denial_counts": {
+      "type":"object",
+      "additionalProperties": false,
+      "properties": {
+        "future_event":{"type":"integer","minimum":1,"maximum":9007199254740991},
+        "quarantined":{"type":"integer","minimum":1,"maximum":9007199254740991},
+        "scope_not_allowed":{"type":"integer","minimum":1,"maximum":9007199254740991},
+        "privacy_not_allowed":{"type":"integer","minimum":1,"maximum":9007199254740991},
+        "body_mismatch":{"type":"integer","minimum":1,"maximum":9007199254740991},
+        "event_type_filtered":{"type":"integer","minimum":1,"maximum":9007199254740991}
+      }
+    },
+    "decision_digest": {"type":"string","pattern":"^aclsha256:[a-f0-9]{64}$"}
+  }
+}
