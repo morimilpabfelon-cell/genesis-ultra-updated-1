@@ -1,0 +1,91 @@
+
+append_once("README.md", "## Memoria estructurada y versionada", """
+## Memoria estructurada y versionada
+
+Validar que Python y Node reconstruyen el mismo estado:
+
+```powershell
+npm run validate:structured-memory
+```
+
+Construir y consultar la proyección:
+
+```powershell
+npm run memory:structured:build -- conformance/structured_versioned_memory_vectors.json structured-memory.json
+npm run memory:structured:query -- conformance/structured_versioned_memory_vectors.json q_city_current
+```
+
+La capa organiza hechos, preferencias, eventos, perfiles, relaciones y objetivos mediante cadenas
+`sets`→`updates`/`extends`→`retracts`. Nunca elimina eventos históricos ni adquiere autoridad. Las
+consultas requieren cobertura ACL completa de la cadena del slot; una versión oculta produce
+`redacted_chain`. El contrato está en
+[`spec/STRUCTURED_VERSIONED_MEMORY.md`](spec/STRUCTURED_VERSIONED_MEMORY.md).
+""")
+
+append_once("START_HERE.md", "## Probar memoria estructurada y versionada", """
+## Probar memoria estructurada y versionada
+
+```powershell
+npm run validate:structured-memory
+npm run memory:structured:query -- conformance/structured_versioned_memory_vectors.json q_theme_current
+```
+
+La proyección es reconstruible. `sets`, `updates`, `extends` y `retracts` cambian el estado de
+lectura sin borrar la cadena append-only. Una consulta externa debe aportar referencias de eventos
+autorizadas por ACL.
+""")
+
+append_once("conformance/README.md", "`structured_versioned_memory_vectors.json`", """
+- `structured_versioned_memory_vectors.json`: once aserciones sobre seis slots, tipos de memoria
+  estructurada, cadenas `sets`/`updates`/`extends`/`retracts`, ocho consultas históricas y ACL,
+  digests reproducibles y treinta y seis mutaciones que deben rechazarse.
+
+Python y Node reconstruyen la misma proyección estructurada. Las versiones forman cadenas lineales,
+las retractaciones conservan historia y una consulta con cobertura ACL incompleta devuelve
+`redacted_chain` sin valores ni conteos históricos.
+""")
+
+append_once("docs/MEMVID_MEMORY_EXTRACTION_MAP.md", "## Sexta extracción implementada: memoria estructurada y versionada", """
+## Sexta extracción implementada: memoria estructurada y versionada
+
+Génesis adapta la idea general de unidades semánticas versionadas mediante un contrato propio:
+
+- tipos `fact`, `preference`, `event`, `profile`, `relationship`, `goal` y `other`;
+- slots deterministas `entity:slot`;
+- operaciones `sets`, `updates`, `extends` y `retracts`;
+- procedencia hacia eventos append-only, perfil del extractor y confianza entera;
+- replay histórico y cobertura ACL completa antes de revelar un slot;
+- validación independiente Python/Node y proyección eliminable.
+
+No se copiaron Memory Cards, formatos, IDs, código o dependencias de Memvid. La extracción automática
+productiva, resolución de entidades y reconciliación de contradicciones permanecen como adaptadores
+separados.
+""")
+
+checklist = read("docs/V0_1_COMPLETION_CHECKLIST.md")
+checklist = checklist.replace("Compilación de los 39 JSON Schema", "Compilación de los 40 JSON Schema")
+checklist = checklist.replace("Cuarenta y siete regresiones", "Cuarenta y ocho regresiones")
+evidence = f"- [x] Suite completa verde para memoria estructurada y versionada en el [PR #{PR_NUMBER}](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/{PR_NUMBER}).\n"
+if evidence not in checklist:
+    anchor = "- [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.\n"
+    if anchor not in checklist:
+        raise SystemExit("checklist evidence insertion point not found")
+    checklist = checklist.replace(anchor, evidence + anchor)
+implemented = """
+- [x] Memoria estructurada y versionada con once aserciones, seis slots, ocho consultas,
+      operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
+      y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
+"""
+if "Memoria estructurada y versionada con once aserciones" not in checklist:
+    checklist = checklist.replace("\n## Pendiente real\n", "\n" + implemented.strip() + "\n\n## Pendiente real\n")
+write("docs/V0_1_COMPLETION_CHECKLIST.md", checklist)
+
+for path in ["README.md", "conformance/README.md"]:
+    text = read(path)
+    text = text.replace("39 JSON Schema", "40 JSON Schema")
+    text = text.replace("39 schemas", "40 schemas")
+    text = text.replace("47 regresiones", "48 regresiones")
+    text = text.replace("cuarenta y siete", "cuarenta y ocho")
+    write(path, text)
+
+print("Prepared structured versioned memory integration")
