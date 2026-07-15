@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 126,
+  "file_count": 131,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,18 +25,18 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 7280,
-      "digest": "sha256:a5933947251f1068abeea5018373bcc6469037fb77c403ddbb9bcb8d503daeec"
+      "size_bytes": 8394,
+      "digest": "sha256:f570211fe0904262f33f390a70589eede55888a1eeae16bbd86c48f420540c40"
     },
     {
       "path": "START_HERE.md",
-      "size_bytes": 3810,
-      "digest": "sha256:fccf66885eb338ddea4dd971693342d8d961cd72e0de934fa82c705a7fbe65fb"
+      "size_bytes": 4461,
+      "digest": "sha256:8d5b28a519256d6d9f42a679060191923f86922842e4f3f6271545efce869558"
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 7347,
-      "digest": "sha256:81a12b7d71732be5cace883f2a781873743c613d61f1c7bf8917accf5bcd6683"
+      "size_bytes": 8119,
+      "digest": "sha256:0c452982330f2cf9aab8fecd3c1a78766cf1e5a3281a118239335b0d340eda3c"
     },
     {
       "path": "conformance/associative_memory_projection_vectors.json",
@@ -69,6 +69,11 @@
       "digest": "sha256:d72221405167802e873bbc6ab186236450dfd688e1c724a3f4947c5073e91ff0"
     },
     {
+      "path": "conformance/hybrid_memory_retrieval_vectors.json",
+      "size_bytes": 26839,
+      "digest": "sha256:efd19814453e2783b4c5241a9e8e54a1d12e2a7872c2b2f72adf4d32a9997997"
+    },
+    {
       "path": "conformance/instance_identity_vectors.json",
       "size_bytes": 5134,
       "digest": "sha256:9666e327a22ef3177cea484e8db9e5f959f2a2c6718d309c7b45c1e57ec864ec"
@@ -90,13 +95,13 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 5443,
-      "digest": "sha256:4a9b2a85e4dcb03ed737677a4ebcd64ecc8e278bb97cedc641945e5a2119ca20"
+      "size_bytes": 5698,
+      "digest": "sha256:b9b4d83610654156a1a19cec5792389ec5049719f4821c0ad3e2862edd758149"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 76976,
-      "digest": "sha256:917593d94cdd54d32c77aaf2bccc877e5ceab3462b0886e409d62b4d8777b772"
+      "size_bytes": 79363,
+      "digest": "sha256:f18778468581051833a591371dc0a152b97cf1fc9e6d6c91528ec29d610dc423"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -115,8 +120,8 @@
     },
     {
       "path": "docs/MEMVID_MEMORY_EXTRACTION_MAP.md",
-      "size_bytes": 1938,
-      "digest": "sha256:7ef0fa7491b951fc7920d1a7a393217a99d4906844c862e1d61d28a1ba24fa86"
+      "size_bytes": 3434,
+      "digest": "sha256:249a2ead2ef3ca7cba3829b187e97f4b8b1a6fbabc57a96fb406347a82ae946e"
     },
     {
       "path": "docs/MORIMIL_SENSE_EXTRACTION_MAP.md",
@@ -165,8 +170,8 @@
     },
     {
       "path": "observer/system-map.json",
-      "size_bytes": 7289,
-      "digest": "sha256:61aa221b0f101e6f03e3d73699c72719244b9e50be4ee17d63290e8111bb7506"
+      "size_bytes": 8635,
+      "digest": "sha256:a1a83868852bd74c824506128fc936822c40b4934986324d093daa43bce2c855"
     },
     {
       "path": "observer/test/core.test.mjs",
@@ -180,8 +185,8 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 1532,
-      "digest": "sha256:0a275e67c722e89ee70babca8bbaafdaf66da88801f934aff94eb021bfbc269a"
+      "size_bytes": 1839,
+      "digest": "sha256:d44882ba10027aab3ead7a878ea66ce16f7ad789cbd0b04869fc3f2e0d1de7c7"
     },
     {
       "path": "reference/README.md",
@@ -277,6 +282,11 @@
       "path": "schemas/host_capability_manifest.schema.json",
       "size_bytes": 2434,
       "digest": "sha256:edee85aea57e37aee736001cf276562d86f63a2b11f12ccaef23b23563550c55"
+    },
+    {
+      "path": "schemas/hybrid_memory_retrieval_projection.schema.json",
+      "size_bytes": 6417,
+      "digest": "sha256:4449d1724e030d051e2e48898682f94d1749c82c17e39ad1a1f8dca2f8708317"
     },
     {
       "path": "schemas/instance_identity.schema.json",
@@ -454,6 +464,11 @@
       "digest": "sha256:edb95adcd574246e8c4e16a6eaac5a19189abc8769f8bc1898a3087f135491f2"
     },
     {
+      "path": "spec/NEUTRAL_HYBRID_MEMORY_RETRIEVAL.md",
+      "size_bytes": 5475,
+      "digest": "sha256:db24a758907693bbc7c1db76a7b5736aa291864b932ee8bbb758ed03b4b4c740"
+    },
+    {
       "path": "spec/RECOVERY_TRUST_MODEL.md",
       "size_bytes": 4031,
       "digest": "sha256:cbbe2978be3d5c2ff60a95ed404e3b13e9053e851e7a67f1d79d6efb1aa201c1"
@@ -484,6 +499,11 @@
       "digest": "sha256:32981569dd6254059f59688d834231e7a3a1d61a58486dcd8e1437784fae1cc5"
     },
     {
+      "path": "tools/hybrid_memory_retrieval.mjs",
+      "size_bytes": 29408,
+      "digest": "sha256:d5aeeeb73b804d831dfe74f09a06756ef18f7b0d9fa5341d484866d2ff5b2314"
+    },
+    {
       "path": "tools/memory_gate_retrieval_bridge.mjs",
       "size_bytes": 20613,
       "digest": "sha256:0ba6031600c45f1297d0bc24d9d0203b6ced7510c5d795308daec9d1bd31cb1a"
@@ -495,8 +515,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 5415,
-      "digest": "sha256:2b9ab6139acb61f05d47e5e746703c742f6a4160c2a8d80eb2e480cfadf89a67"
+      "size_bytes": 5702,
+      "digest": "sha256:cd93a366aa69811c699e5616b8512a019ea5d35188354a27b78af850ecad29f0"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -574,6 +594,11 @@
       "digest": "sha256:e63702b5d80890ca81205e49c793b64b15f3c5f6f196d9e9881f4c2f2eb650be"
     },
     {
+      "path": "tools/validate_hybrid_memory_retrieval.py",
+      "size_bytes": 25435,
+      "digest": "sha256:7e84e4c27d2306c504580fc536c2f9cdd613ea7b45834b49c4242932ab34834f"
+    },
+    {
       "path": "tools/validate_instance_identity.mjs",
       "size_bytes": 5801,
       "digest": "sha256:c8000f25166b55dbd30ee917af8e545ad3e5848976ab3603540ec1f776074f44"
@@ -639,5 +664,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:f4d68d42cb1bff5a7938aaf6ed1468478803e36d17fd88814ae1db5e6286a361"
+  "root_digest": "sha256:28657b647c9293efbb90f2dbd2ff20685a3233dc9c7f13972f2ee0e5b22c2de2"
 }

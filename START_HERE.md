@@ -11,14 +11,15 @@ Genesis Ultra está en fase de diseño. El orden recomendado de revisión es:
 7. [`spec/SENSE_ADAPTER_CONTRACT.md`](./spec/SENSE_ADAPTER_CONTRACT.md)
 8. [`spec/ASSOCIATIVE_MEMORY_PROJECTION.md`](./spec/ASSOCIATIVE_MEMORY_PROJECTION.md)
 9. [`spec/DETERMINISTIC_MEMORY_RETRIEVAL.md`](./spec/DETERMINISTIC_MEMORY_RETRIEVAL.md)
-10. [`spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md`](./spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md)
-11. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
-12. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
-13. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
-14. [`spec/DRAFT_INTEGRITY_MANIFEST.md`](./spec/DRAFT_INTEGRITY_MANIFEST.md)
-15. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
-16. [`schemas/`](./schemas)
-17. [`conformance/`](./conformance)
+10. [`spec/NEUTRAL_HYBRID_MEMORY_RETRIEVAL.md`](./spec/NEUTRAL_HYBRID_MEMORY_RETRIEVAL.md)
+11. [`spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md`](./spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md)
+12. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
+13. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
+14. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
+15. [`spec/DRAFT_INTEGRITY_MANIFEST.md`](./spec/DRAFT_INTEGRITY_MANIFEST.md)
+16. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
+17. [`schemas/`](./schemas)
+18. [`conformance/`](./conformance)
 
 ## Comprobar el borrador
 
@@ -55,6 +56,23 @@ npm run memory:query -- conformance/memory_retrieval_vectors.json "Aurora portab
 La búsqueda usa únicamente registros aceptados, devuelve eventos canónicos y permite replay
 mediante `--as-of N`. El índice es una proyección eliminable; la cadena append-only sigue siendo
 la memoria verdadera.
+
+## Probar la búsqueda híbrida neutral
+
+Validar los resultados híbridos y el fallback léxico en Python y Node:
+
+```powershell
+npm run validate:hybrid-retrieval
+```
+
+Probar una consulta semántica reproducible:
+
+```powershell
+npm run memory:hybrid:query -- conformance/hybrid_memory_retrieval_vectors.json "move to another device" --semantic-vector 0,1000,0,0 --top-k 3
+```
+
+Los vectores cuantizados del fixture prueban la frontera y el ranking; no constituyen un modelo
+semántico entrenado. Sin vector semántico, el mismo comando usa `lexical_fallback`.
 
 ## Probar la entrada desde la compuerta
 

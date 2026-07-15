@@ -1,0 +1,821 @@
+{
+  "profile": "genesis.memory.hybrid_retrieval.conformance.v0.1",
+  "status": "draft",
+  "domains": {
+    "semantic_profile": "genesis.memory.semantic.profile.v0.1",
+    "semantic_frame": "genesis.memory.semantic.frame.v0.1",
+    "semantic_query_text": "genesis.memory.semantic.query.text.v0.1",
+    "semantic_query": "genesis.memory.semantic.query.v0.1",
+    "hybrid_query": "genesis.memory.hybrid_retrieval.query.v0.1",
+    "hybrid_result": "genesis.memory.hybrid_retrieval.query.result.v0.1",
+    "hybrid_projection_id": "genesis.memory.hybrid_retrieval.projection.id.v0.1",
+    "hybrid_projection": "genesis.memory.hybrid_retrieval.projection.v0.1"
+  },
+  "source_memory_events": [
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HHYBRID000000000001",
+      "instance_id": "inst_01HHYBRID000000000001",
+      "body_id": "body_01HHYBRID000000000001",
+      "sequence": 0,
+      "previous_event_hash": "GENESIS",
+      "event_type": "sense.vision.observation",
+      "actor": "body",
+      "content_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-15T13:00:00Z",
+      "provenance_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "privacy": "private_local",
+      "event_hash": "evsha256:eb3f242ecb16fd94ec98ff06b650efc3181820aea9d7f5575c441c68c7dd1d67"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HHYBRID000000000002",
+      "instance_id": "inst_01HHYBRID000000000001",
+      "body_id": "body_01HHYBRID000000000001",
+      "sequence": 1,
+      "previous_event_hash": "evsha256:eb3f242ecb16fd94ec98ff06b650efc3181820aea9d7f5575c441c68c7dd1d67",
+      "event_type": "guardian.transfer.authorized",
+      "actor": "guardian",
+      "content_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-15T13:00:01Z",
+      "provenance_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+      "privacy": "private_local",
+      "event_hash": "evsha256:a420fe0edf5d2472159c5d93207a1c543482940d73c022ecca782ed9a59b9962"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HHYBRID000000000003",
+      "instance_id": "inst_01HHYBRID000000000001",
+      "body_id": "body_01HHYBRID000000000001",
+      "sequence": 2,
+      "previous_event_hash": "evsha256:a420fe0edf5d2472159c5d93207a1c543482940d73c022ecca782ed9a59b9962",
+      "event_type": "knowledge.requirement.recorded",
+      "actor": "instance",
+      "content_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-15T13:00:02Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "private_local",
+      "event_hash": "evsha256:dfd8df687fd78b0cfdf97c642e3dea87a65ac282d86fb9aa208ba002ba30ea14"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HHYBRID000000000004",
+      "instance_id": "inst_01HHYBRID000000000001",
+      "body_id": "body_01HHYBRID000000000001",
+      "sequence": 3,
+      "previous_event_hash": "evsha256:dfd8df687fd78b0cfdf97c642e3dea87a65ac282d86fb9aa208ba002ba30ea14",
+      "event_type": "recovery.continuity.verified",
+      "actor": "body",
+      "content_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "content_type": "text/plain; charset=utf-8",
+      "observed_at": "2026-07-15T13:00:03Z",
+      "provenance_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "privacy": "private_local",
+      "event_hash": "evsha256:ee167a25ca56899731d73d3ea2a9d9f55d1647bbe0f400a781020e1600cf8539"
+    }
+  ],
+  "accepted_records": [
+    {
+      "record_id": "rrsha256:6b72a51b61c157b0fd9d1c00577fe39f6b83f9e224b72b50419ae0eb1f17d1f1",
+      "event_id": "evt_01HHYBRID000000000001",
+      "gate_decision_ref": "gate_01HHYBRID000000000001",
+      "content_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "normalized_text": "Genesis observed the blue workshop door.",
+      "accepted_at": "2026-07-15T13:00:10Z"
+    },
+    {
+      "record_id": "rrsha256:bdaf8e67df6d9ee703fa3798a09d7555c848eb709d42ed4a1d09c6a99746440b",
+      "event_id": "evt_01HHYBRID000000000002",
+      "gate_decision_ref": "gate_01HHYBRID000000000002",
+      "content_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "normalized_text": "The guardian authorized transfer from body alpha to body beta.",
+      "accepted_at": "2026-07-15T13:00:11Z"
+    },
+    {
+      "record_id": "rrsha256:7ddb0c0341cd7df00d5e1693bd90de9802149ea851d57dfc5915316c9c6376de",
+      "event_id": "evt_01HHYBRID000000000003",
+      "gate_decision_ref": "gate_01HHYBRID000000000003",
+      "content_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "normalized_text": "Project Aurora needs a portable offline memory index.",
+      "accepted_at": "2026-07-15T13:00:12Z"
+    },
+    {
+      "record_id": "rrsha256:d278399da32b5f8a767834b0d41cd3a025b4562b6b5472d624f775439419c747",
+      "event_id": "evt_01HHYBRID000000000004",
+      "gate_decision_ref": "gate_01HHYBRID000000000004",
+      "content_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "normalized_text": "After recovery body gamma verified continuity.",
+      "accepted_at": "2026-07-15T13:00:13Z"
+    }
+  ],
+  "associative_projection": {
+    "nodes": [
+      {
+        "node_id": "node_transfer",
+        "source_event_refs": [
+          "evt_01HHYBRID000000000002"
+        ]
+      },
+      {
+        "node_id": "node_memory",
+        "source_event_refs": [
+          "evt_01HHYBRID000000000003"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "source_node_id": "node_transfer",
+        "target_node_id": "node_memory"
+      }
+    ]
+  },
+  "queries": [
+    {
+      "query_id": "query_semantic_mobility",
+      "text": "move to another device",
+      "top_k": 3,
+      "as_of_sequence": 3,
+      "anchor_event_refs": []
+    },
+    {
+      "query_id": "query_hybrid_memory",
+      "text": "portable memory",
+      "top_k": 3,
+      "as_of_sequence": 3,
+      "anchor_event_refs": []
+    },
+    {
+      "query_id": "query_lexical_fallback",
+      "text": "workshop",
+      "top_k": 3,
+      "as_of_sequence": 3,
+      "anchor_event_refs": []
+    },
+    {
+      "query_id": "query_no_future_semantic",
+      "text": "restore after failure",
+      "top_k": 3,
+      "as_of_sequence": 2,
+      "anchor_event_refs": []
+    },
+    {
+      "query_id": "query_graph_anchor",
+      "text": "",
+      "top_k": 3,
+      "as_of_sequence": 3,
+      "anchor_event_refs": [
+        "evt_01HHYBRID000000000002"
+      ]
+    }
+  ],
+  "semantic_profile": {
+    "schema_version": "genesis.memory.semantic.profile.v0.1",
+    "hash_profile": "genesis.hash.fields.v0.1",
+    "adapter_profile": "genesis.memory.semantic.simplex_u16.v0.1",
+    "model_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "dimensions": 4,
+    "vector_scale": 1000,
+    "similarity_profile": "genesis.memory.semantic.dot_product.v0.1",
+    "profile_digest": "sha256:e5a3adb9f1b7cbe80327747a1fb2ea071e5a2ee08f54d158759171c2b17abc61"
+  },
+  "semantic_frames": [
+    {
+      "event_id": "evt_01HHYBRID000000000001",
+      "content_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "vector": [
+        1000,
+        0,
+        0,
+        0
+      ],
+      "vector_digest": "sfsha256:296cd5179e3090eeb7bb817edb3a45ade4aa61d8a3b27b62c1b4f1fbf9ab27b0"
+    },
+    {
+      "event_id": "evt_01HHYBRID000000000002",
+      "content_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "vector": [
+        0,
+        1000,
+        0,
+        0
+      ],
+      "vector_digest": "sfsha256:aea2b6d85f5cbb89fdf0e60ee9a26d17603f1c8999db5ab2d3c9393451925d02"
+    },
+    {
+      "event_id": "evt_01HHYBRID000000000003",
+      "content_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "vector": [
+        0,
+        0,
+        1000,
+        0
+      ],
+      "vector_digest": "sfsha256:d3c61d2f615036a1b448e3706957abd91ba45d9cba208df3456b4420f0c73526"
+    },
+    {
+      "event_id": "evt_01HHYBRID000000000004",
+      "content_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "vector": [
+        0,
+        0,
+        0,
+        1000
+      ],
+      "vector_digest": "sfsha256:efbe5ef8499b107b73e666372ba89dcac8a7c29a4d87b013c9955d93844d30da"
+    }
+  ],
+  "semantic_queries": [
+    {
+      "query_id": "query_semantic_mobility",
+      "query_text_digest": "sha256:fd88cd71da25ef48adcd7992baddcd5d487befee94fdbe3c33c44a3d72e85e0d",
+      "vector": [
+        0,
+        1000,
+        0,
+        0
+      ],
+      "vector_digest": "sqsha256:d237054c7bc8741fa6781c9b7675cff9f5d9fdef891ce569f59dba74a43b7386"
+    },
+    {
+      "query_id": "query_hybrid_memory",
+      "query_text_digest": "sha256:e4042656f6f7c6a130cb1193df570ea6ab02e523ec9503bba36104c343ab9d0a",
+      "vector": [
+        0,
+        0,
+        1000,
+        0
+      ],
+      "vector_digest": "sqsha256:c4c6ab1d5ba15d84bfe8a3e44eb569e7f150c05e446aec5132e53d955db8172b"
+    },
+    {
+      "query_id": "query_no_future_semantic",
+      "query_text_digest": "sha256:f51d49cafa926930d6b0b40e3c2d9f7e424f663d8ae467006d417200d509f08e",
+      "vector": [
+        0,
+        0,
+        0,
+        1000
+      ],
+      "vector_digest": "sqsha256:30ec5bd5b34f4afe07e0ec020ba0dad3f11560fe6663ed4f322edac14c5d0a77"
+    }
+  ],
+  "projection": {
+    "schema_version": "genesis.memory.hybrid_retrieval.projection.v0.1",
+    "hash_profile": "genesis.hash.fields.v0.1",
+    "projection_id": "hrpsha256:3e4e25f10605c952d5abc13fd435a360931af551f5e846b45f090ee0affb9b86",
+    "instance_id": "inst_01HHYBRID000000000001",
+    "projection_profile": "genesis.memory.hybrid_retrieval.algorithm.v0.1",
+    "base_projection_digest": "sha256:7e54e20037f7943018bb397b51e8fea8fee423451f2248e7f30f31888baa5383",
+    "semantic_profile_digest": "sha256:e5a3adb9f1b7cbe80327747a1fb2ea071e5a2ee08f54d158759171c2b17abc61",
+    "semantic_coverage_status": "complete",
+    "source_event_count": 4,
+    "source_last_sequence": 3,
+    "semantic_frame_count": 4,
+    "semantic_frames": [
+      {
+        "event_id": "evt_01HHYBRID000000000001",
+        "vector_digest": "sfsha256:296cd5179e3090eeb7bb817edb3a45ade4aa61d8a3b27b62c1b4f1fbf9ab27b0"
+      },
+      {
+        "event_id": "evt_01HHYBRID000000000002",
+        "vector_digest": "sfsha256:aea2b6d85f5cbb89fdf0e60ee9a26d17603f1c8999db5ab2d3c9393451925d02"
+      },
+      {
+        "event_id": "evt_01HHYBRID000000000003",
+        "vector_digest": "sfsha256:d3c61d2f615036a1b448e3706957abd91ba45d9cba208df3456b4420f0c73526"
+      },
+      {
+        "event_id": "evt_01HHYBRID000000000004",
+        "vector_digest": "sfsha256:efbe5ef8499b107b73e666372ba89dcac8a7c29a4d87b013c9955d93844d30da"
+      }
+    ],
+    "query_results": [
+      {
+        "query_id": "query_semantic_mobility",
+        "base_query_digest": "rqsha256:9d3a1a403666ccd15be976d1955bae0432d912d78534e67ee593d3122d445f79",
+        "semantic_query_digest": "sqsha256:d237054c7bc8741fa6781c9b7675cff9f5d9fdef891ce569f59dba74a43b7386",
+        "hybrid_query_digest": "hqsha256:e062ac5d82182f470d44d6b4d6dc605c9d2f1fe4f57c820cd7bd42be1853da93",
+        "mode": "hybrid",
+        "normalized_terms": [
+          "another",
+          "device",
+          "move",
+          "to"
+        ],
+        "as_of_sequence": 3,
+        "top_k": 3,
+        "candidate_count": 4,
+        "results": [
+          {
+            "rank": 1,
+            "event_id": "evt_01HHYBRID000000000002",
+            "frame_id": "rfsha256:660e83cd151d2a711aabec38fafc8ac1df792589b37f22917909b766793b1752",
+            "sequence": 1,
+            "score": 1525000,
+            "lexical_score": 125000,
+            "semantic_score": 100000,
+            "graph_score": 0,
+            "temporal_score": 50000,
+            "matched_terms": [
+              "to"
+            ],
+            "reason_codes": [
+              "lexical_match",
+              "semantic_match"
+            ]
+          }
+        ],
+        "result_digest": "sha256:aa1a5cf0c292e7c172651b90a396f3af7f7372990c46749e15c9baf1554eba46"
+      },
+      {
+        "query_id": "query_hybrid_memory",
+        "base_query_digest": "rqsha256:21832e42ce095379b6f41467762473d14f62444513659acb2fba372b25db539f",
+        "semantic_query_digest": "sqsha256:c4c6ab1d5ba15d84bfe8a3e44eb569e7f150c05e446aec5132e53d955db8172b",
+        "hybrid_query_digest": "hqsha256:0ee935c9d5e67cd72859cdb219e91db1e6f0508aef4d2837277ccee8eb7799cc",
+        "mode": "hybrid",
+        "normalized_terms": [
+          "memory",
+          "portable"
+        ],
+        "as_of_sequence": 3,
+        "top_k": 3,
+        "candidate_count": 4,
+        "results": [
+          {
+            "rank": 1,
+            "event_id": "evt_01HHYBRID000000000003",
+            "frame_id": "rfsha256:8d31014c85a716a42882eb4c73901dfabd19292b0f77c09cb18bdb1397c978d5",
+            "sequence": 2,
+            "score": 2425000,
+            "lexical_score": 250000,
+            "semantic_score": 100000,
+            "graph_score": 0,
+            "temporal_score": 75000,
+            "matched_terms": [
+              "memory",
+              "portable"
+            ],
+            "reason_codes": [
+              "lexical_match",
+              "semantic_match"
+            ]
+          }
+        ],
+        "result_digest": "sha256:893b129243217cafd8f2575c0c1c194f775bd92192170be76cb081540ee89dd8"
+      },
+      {
+        "query_id": "query_lexical_fallback",
+        "base_query_digest": "rqsha256:c3106f4c8e8752e3d697569687ef11685927bf53cb7ed49364cc194ac50f7239",
+        "semantic_query_digest": null,
+        "hybrid_query_digest": "hqsha256:0fb09b62d1a4b73a199e894d8d11f6d02da964d31cf17741eee5cce73d5f6f91",
+        "mode": "lexical_fallback",
+        "normalized_terms": [
+          "workshop"
+        ],
+        "as_of_sequence": 3,
+        "top_k": 3,
+        "candidate_count": 4,
+        "results": [
+          {
+            "rank": 1,
+            "event_id": "evt_01HHYBRID000000000001",
+            "frame_id": "rfsha256:7c3010733dd72e96b2a9625954e29867bf837c99d7f9b70ba7edc375d465f503",
+            "sequence": 0,
+            "score": 900000,
+            "lexical_score": 125000,
+            "semantic_score": 0,
+            "graph_score": 0,
+            "temporal_score": 25000,
+            "matched_terms": [
+              "workshop"
+            ],
+            "reason_codes": [
+              "lexical_match"
+            ]
+          }
+        ],
+        "result_digest": "sha256:e54aa8a9424631f1585144807c10d0b049c8cd516e8ec3b0e175fce6d5b7b27a"
+      },
+      {
+        "query_id": "query_no_future_semantic",
+        "base_query_digest": "rqsha256:2ef6cd3dd3ef08d9ca9d1f28514a10f6e7fce48bbc65ea33143431cc2e8306ae",
+        "semantic_query_digest": "sqsha256:30ec5bd5b34f4afe07e0ec020ba0dad3f11560fe6663ed4f322edac14c5d0a77",
+        "hybrid_query_digest": "hqsha256:d5d9b93cefef3a1f70a72c3de17685f7c7be9b76e6476111e65b01a377e76c00",
+        "mode": "hybrid",
+        "normalized_terms": [
+          "after",
+          "failure",
+          "restore"
+        ],
+        "as_of_sequence": 2,
+        "top_k": 3,
+        "candidate_count": 3,
+        "results": [],
+        "result_digest": "sha256:12575bd2fc697ef8de18ca34ff9a73b1bbe7aa3cf3307d6e682818ddb4c11677"
+      },
+      {
+        "query_id": "query_graph_anchor",
+        "base_query_digest": "rqsha256:f800f81ba9daceb69ec1df79e7c5e1b662b83d8528e0365dee07921df7bdc7cd",
+        "semantic_query_digest": null,
+        "hybrid_query_digest": "hqsha256:a5bfc9e7bbfed5dc9efe2afe730396fd8f823bfd7bd08f7d326c6bbd52f4b04c",
+        "mode": "lexical_fallback",
+        "normalized_terms": [],
+        "as_of_sequence": 3,
+        "top_k": 3,
+        "candidate_count": 4,
+        "results": [
+          {
+            "rank": 1,
+            "event_id": "evt_01HHYBRID000000000002",
+            "frame_id": "rfsha256:660e83cd151d2a711aabec38fafc8ac1df792589b37f22917909b766793b1752",
+            "sequence": 1,
+            "score": 650000,
+            "lexical_score": 0,
+            "semantic_score": 0,
+            "graph_score": 300000,
+            "temporal_score": 50000,
+            "matched_terms": [],
+            "reason_codes": [
+              "graph_anchor"
+            ]
+          },
+          {
+            "rank": 2,
+            "event_id": "evt_01HHYBRID000000000003",
+            "frame_id": "rfsha256:8d31014c85a716a42882eb4c73901dfabd19292b0f77c09cb18bdb1397c978d5",
+            "sequence": 2,
+            "score": 435000,
+            "lexical_score": 0,
+            "semantic_score": 0,
+            "graph_score": 180000,
+            "temporal_score": 75000,
+            "matched_terms": [],
+            "reason_codes": [
+              "graph_neighbor"
+            ]
+          }
+        ],
+        "result_digest": "sha256:a7f3d545bac9cd6930c47afbbf97cfde5a6b53064e30bdb9f6f73a2aeec41acc"
+      }
+    ],
+    "projection_digest": "sha256:6ecf57c774bb0f71735b4e2d27d1c3ada7cb5cef15e1aeb300936235b3084b4a"
+  },
+  "expected": {
+    "projection_digest": "sha256:6ecf57c774bb0f71735b4e2d27d1c3ada7cb5cef15e1aeb300936235b3084b4a",
+    "fallback_projection_digest": "sha256:a1f34ac08919f5dbfb281599a572e09b46f3da52c0b83175332b68e4b2462fcb",
+    "query_result_digests": {
+      "query_semantic_mobility": "sha256:aa1a5cf0c292e7c172651b90a396f3af7f7372990c46749e15c9baf1554eba46",
+      "query_hybrid_memory": "sha256:893b129243217cafd8f2575c0c1c194f775bd92192170be76cb081540ee89dd8",
+      "query_lexical_fallback": "sha256:e54aa8a9424631f1585144807c10d0b049c8cd516e8ec3b0e175fce6d5b7b27a",
+      "query_no_future_semantic": "sha256:12575bd2fc697ef8de18ca34ff9a73b1bbe7aa3cf3307d6e682818ddb4c11677",
+      "query_graph_anchor": "sha256:a7f3d545bac9cd6930c47afbbf97cfde5a6b53064e30bdb9f6f73a2aeec41acc"
+    }
+  },
+  "must_reject": [
+    {
+      "case_id": "hybrid-projection-identity-forbidden",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "projection",
+          "companion_name"
+        ],
+        "value": "Changed"
+      },
+      "expected_error": "hybrid_contains_identity_authority"
+    },
+    {
+      "case_id": "hybrid-projection-embedding-forbidden",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "projection",
+          "embedding"
+        ],
+        "value": [
+          0.1
+        ]
+      },
+      "expected_error": "hybrid_contains_raw_or_platform_data"
+    },
+    {
+      "case_id": "hybrid-profile-vendor-forbidden",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_profile",
+          "vendor"
+        ],
+        "value": "memvid"
+      },
+      "expected_error": "hybrid_contains_raw_or_platform_data"
+    },
+    {
+      "case_id": "hybrid-adapter-profile-vendor-lock",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_profile",
+          "adapter_profile"
+        ],
+        "value": "memvid.hnsw.v2"
+      },
+      "expected_error": "semantic_adapter_profile_invalid"
+    },
+    {
+      "case_id": "hybrid-profile-digest-corrupt",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_profile",
+          "profile_digest"
+        ],
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "semantic_profile_digest_mismatch"
+    },
+    {
+      "case_id": "hybrid-profile-dimensions-invalid",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_profile",
+          "dimensions"
+        ],
+        "value": 0
+      },
+      "expected_error": "semantic_dimensions_invalid"
+    },
+    {
+      "case_id": "hybrid-frame-content-mismatch",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_frames",
+          0,
+          "content_digest"
+        ],
+        "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      "expected_error": "semantic_frame_content_digest_mismatch"
+    },
+    {
+      "case_id": "hybrid-frame-vector-dimensions",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_frames",
+          0,
+          "vector"
+        ],
+        "value": [
+          1000,
+          0,
+          0
+        ]
+      },
+      "expected_error": "semantic_vector_dimensions_invalid"
+    },
+    {
+      "case_id": "hybrid-frame-vector-negative",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_frames",
+          0,
+          "vector"
+        ],
+        "value": [
+          1001,
+          -1,
+          0,
+          0
+        ]
+      },
+      "expected_error": "semantic_vector_component_invalid"
+    },
+    {
+      "case_id": "hybrid-frame-vector-scale",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_frames",
+          0,
+          "vector"
+        ],
+        "value": [
+          999,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected_error": "semantic_vector_scale_mismatch"
+    },
+    {
+      "case_id": "hybrid-frame-digest-corrupt",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_frames",
+          0,
+          "vector_digest"
+        ],
+        "value": "sfsha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "semantic_frame_digest_mismatch"
+    },
+    {
+      "case_id": "hybrid-frame-duplicate",
+      "mutation": {
+        "operation": "duplicate",
+        "path": [
+          "semantic_frames",
+          0
+        ],
+        "target": [
+          "semantic_frames"
+        ]
+      },
+      "expected_error": "semantic_frame_duplicate"
+    },
+    {
+      "case_id": "hybrid-frame-missing",
+      "mutation": {
+        "operation": "delete",
+        "path": [
+          "semantic_frames",
+          3
+        ]
+      },
+      "expected_error": "semantic_frame_coverage_invalid"
+    },
+    {
+      "case_id": "hybrid-frame-unknown-event",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_frames",
+          0,
+          "event_id"
+        ],
+        "value": "evt_unknown_semantic"
+      },
+      "expected_error": "semantic_frame_event_unknown"
+    },
+    {
+      "case_id": "hybrid-query-unknown",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_queries",
+          0,
+          "query_id"
+        ],
+        "value": "query_unknown"
+      },
+      "expected_error": "semantic_query_unknown"
+    },
+    {
+      "case_id": "hybrid-query-text-digest",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_queries",
+          0,
+          "query_text_digest"
+        ],
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "semantic_query_text_digest_mismatch"
+    },
+    {
+      "case_id": "hybrid-query-vector-digest",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_queries",
+          0,
+          "vector_digest"
+        ],
+        "value": "sqsha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "semantic_query_digest_mismatch"
+    },
+    {
+      "case_id": "hybrid-query-duplicate",
+      "mutation": {
+        "operation": "duplicate",
+        "path": [
+          "semantic_queries",
+          0
+        ],
+        "target": [
+          "semantic_queries"
+        ]
+      },
+      "expected_error": "semantic_query_duplicate"
+    },
+    {
+      "case_id": "hybrid-disabled-data-forbidden",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "semantic_profile"
+        ],
+        "value": null
+      },
+      "expected_error": "semantic_disabled_data_forbidden"
+    },
+    {
+      "case_id": "hybrid-source-chain-broken",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "source_memory_events",
+          1,
+          "previous_event_hash"
+        ],
+        "value": "evsha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "recompute_event_hash_index": 1
+      },
+      "expected_error": "source_memory_chain_broken"
+    },
+    {
+      "case_id": "hybrid-result-semantic-score-changed",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "projection",
+          "query_results",
+          0,
+          "results",
+          0,
+          "semantic_score"
+        ],
+        "value": 1
+      },
+      "expected_error": "hybrid_query_results_mismatch"
+    },
+    {
+      "case_id": "hybrid-result-future-leak",
+      "mutation": {
+        "operation": "append",
+        "path": [
+          "projection",
+          "query_results",
+          3,
+          "results"
+        ],
+        "value": {
+          "rank": 1,
+          "event_id": "evt_01HHYBRID000000000004",
+          "frame_id": "rfsha256:be932ecadb3dcccf134f7533a58b743b7f858d283b554a1dcdfd978e4daec208",
+          "sequence": 3,
+          "score": 600000,
+          "lexical_score": 0,
+          "semantic_score": 100000,
+          "graph_score": 0,
+          "temporal_score": 100000,
+          "matched_terms": [],
+          "reason_codes": [
+            "semantic_match"
+          ]
+        }
+      },
+      "expected_error": "hybrid_query_results_mismatch"
+    },
+    {
+      "case_id": "hybrid-projection-profile-vendor",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "projection",
+          "projection_profile"
+        ],
+        "value": "memvid.hybrid.v2"
+      },
+      "expected_error": "hybrid_projection_profile_invalid"
+    },
+    {
+      "case_id": "hybrid-projection-digest-corrupt",
+      "mutation": {
+        "operation": "set",
+        "path": [
+          "projection",
+          "projection_digest"
+        ],
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "hybrid_projection_digest_mismatch"
+    }
+  ]
+}
