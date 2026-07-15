@@ -21,7 +21,7 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `instance_identity_vectors.json`: nombre canónico, digest de identidad, continuidad
   Android/Apple/Windows y cambios de identidad que deben rechazarse aunque se recalculen hashes.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
-- `schema_invalid_cases.json`: cuarenta y un artefactos que los JSON Schema reales deben
+- `schema_invalid_cases.json`: cuarenta y dos artefactos que los JSON Schema reales deben
   rechazar, con regresiones conectadas a los contratos existentes. Los 34 schemas se compilan
   con JSON Schema 2020-12 y formatos activos.
 - `sense_observation_vectors.json`: seis observaciones firmadas, una decisión de compuerta,
