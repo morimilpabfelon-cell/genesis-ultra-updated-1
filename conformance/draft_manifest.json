@@ -335,8 +335,8 @@
     },
     {
       "path": "schemas/portable_memory_capsule.schema.json",
-      "size_bytes": 5041,
-      "digest": "sha256:3178720661370afe5fec22e422bf1ceee63d4529538f54500cc4adbe97e15e2b"
+      "size_bytes": 5156,
+      "digest": "sha256:bbf5fece9a02bbb7bcd81a5d96093e2ef99ffd8a75331e954202fa917319632c"
     },
     {
       "path": "schemas/recovery_authorization.schema.json",
@@ -779,5 +779,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:e6d66c92c9f41bc25831c7c44162ca12ef395ddffbc34f595f654a6fb8141da7"
+  "root_digest": "sha256:4739b301b2615c05dd70515be4f5bd373e3d6767b444d0974f10de362c774c91"
 }
