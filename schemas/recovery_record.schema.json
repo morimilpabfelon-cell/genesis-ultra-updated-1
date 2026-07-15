@@ -9,21 +9,29 @@
     "recovery_id",
     "instance_id",
     "source_backup_id",
+    "source_backup_commit_digest",
     "new_body_id",
     "previous_body_id",
     "restored_checkpoint_hash",
     "restored_last_event_hash",
     "restored_last_sequence",
+    "last_known_sequence",
     "continuity_status",
+    "continuity_gap_ref",
     "guardian_authorization_ref",
+    "previous_body_revocation_ref",
+    "destination_registration_ref",
+    "destination_possession_ref",
     "performed_at",
-    "recovery_digest"
+    "recovery_digest",
+    "signature"
   ],
   "properties": {
     "schema_version": { "const": "genesis.recovery.record.v0.1" },
     "recovery_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "source_backup_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "source_backup_commit_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "new_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "previous_body_id": { "type": ["string", "null"], "maxLength": 128 },
     "restored_checkpoint_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
@@ -34,25 +42,46 @@
       ]
     },
     "restored_last_sequence": { "type": "integer", "minimum": 0 },
+    "last_known_sequence": { "type": "integer", "minimum": 0 },
     "continuity_status": {
       "type": "string",
       "enum": ["complete", "known_gap", "fork_risk"]
     },
     "continuity_gap_ref": { "type": ["string", "null"], "maxLength": 256 },
     "guardian_authorization_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "previous_body_revocation_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "destination_registration_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "destination_possession_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
     "performed_at": { "type": "string", "format": "date-time" },
     "recovery_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
-    "signature": { "type": ["object", "null"] }
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
   },
   "allOf": [
     {
       "if": {
-        "properties": { "continuity_status": { "const": "known_gap" } },
+        "properties": { "continuity_status": { "enum": ["known_gap", "fork_risk"] } },
         "required": ["continuity_status"]
       },
       "then": {
         "required": ["continuity_gap_ref"],
         "properties": { "continuity_gap_ref": { "type": "string", "minLength": 1 } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "continuity_status": { "const": "complete" } },
+        "required": ["continuity_status"]
+      },
+      "then": {
+        "properties": { "continuity_gap_ref": { "type": "null" } }
+      }
+    },
+    {
+      "properties": {
+        "signature": {
+          "type": "object",
+          "properties": { "signer_type": { "const": "body" } }
+        }
       }
     }
   ]

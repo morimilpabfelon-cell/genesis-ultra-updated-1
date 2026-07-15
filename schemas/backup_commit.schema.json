@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:backup-commit:v0.1",
+  "title": "Genesis Backup Commit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "backup_id",
+    "instance_id",
+    "created_by_body_id",
+    "manifest_digest",
+    "encryption_digest",
+    "ciphertext_digest",
+    "checkpoint_hash",
+    "last_event_hash",
+    "last_sequence",
+    "state",
+    "committed_at",
+    "commit_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.backup.commit.v0.1" },
+    "backup_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "created_by_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "manifest_digest": { "$ref": "#/$defs/sha256" },
+    "encryption_digest": { "$ref": "#/$defs/sha256" },
+    "ciphertext_digest": { "$ref": "#/$defs/sha256" },
+    "checkpoint_hash": { "$ref": "#/$defs/sha256" },
+    "last_event_hash": { "type": "string", "pattern": "^evsha256:[a-f0-9]{64}$" },
+    "last_sequence": { "type": "integer", "minimum": 0 },
+    "state": { "const": "committed" },
+    "committed_at": { "type": "string", "format": "date-time" },
+    "commit_digest": { "$ref": "#/$defs/sha256" },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "signature": {
+          "type": "object",
+          "properties": { "signer_type": { "const": "body" } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}

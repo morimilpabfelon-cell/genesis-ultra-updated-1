@@ -16,8 +16,14 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `crypto_vectors.json`: digests y algoritmos criptográficos de borrador.
 
 La simulación A→B también genera y valida registros de dispositivos, autorización de
-movilidad y eventos del ledger de autoridad. Las simulaciones negativas llaman la misma
-función de evaluación usada por el flujo positivo.
+movilidad y eventos del ledger de autoridad. A partir de su resultado, la simulación
+backup→pérdida→recovery crea un backup cifrado con commit firmado, registra un destino C,
+declara una brecha y finaliza con un único escritor. Las dos simulaciones negativas llaman
+las mismas funciones de evaluación usadas por los flujos positivos.
+
+La simulación de journal corta la operación antes, durante y después del commit. Python y
+Node reproducen de forma independiente ocho decisiones de reinicio y verifican la cadena
+firmada; doce mutaciones del journal deben ser detectadas.
 
 ## Requisitos para una implementación
 

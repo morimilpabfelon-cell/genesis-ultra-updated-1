@@ -149,6 +149,182 @@
           "created_at": "2026-07-14T00:00:00Z"
         }
       }
+    },
+    {
+      "case_id": "backup-commit-left-in-prepared-state",
+      "schema": "backup_commit.schema.json",
+      "artifact": {
+        "schema_version": "genesis.backup.commit.v0.1",
+        "backup_id": "backup_01HSCHEMA000000000001",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "created_by_body_id": "body_01HSCHEMA000000000000001",
+        "manifest_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encryption_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "ciphertext_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "checkpoint_hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "last_event_hash": "evsha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "last_sequence": 3,
+        "state": "prepared",
+        "committed_at": "2026-07-14T00:00:00Z",
+        "commit_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HSCHEMA000000000000001",
+          "key_epoch_id": "epoch_01HSCHEMA0000000000001",
+          "signed_domain": "genesis.backup.commit.signature.v0.1",
+          "signed_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "signature_value": "abababababababababababababababababababababababababababababababab",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      }
+    },
+    {
+      "case_id": "recovery-known-gap-without-reference",
+      "schema": "recovery_record.schema.json",
+      "artifact": {
+        "schema_version": "genesis.recovery.record.v0.1",
+        "recovery_id": "recovery_01HSCHEMA0000000001",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "source_backup_id": "backup_01HSCHEMA000000000001",
+        "source_backup_commit_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "new_body_id": "body_01HSCHEMA000000000000002",
+        "previous_body_id": "body_01HSCHEMA000000000000001",
+        "restored_checkpoint_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "restored_last_event_hash": "evsha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "restored_last_sequence": 3,
+        "last_known_sequence": 4,
+        "continuity_status": "known_gap",
+        "continuity_gap_ref": null,
+        "guardian_authorization_ref": "rauth_01HSCHEMA000000000001",
+        "previous_body_revocation_ref": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "destination_registration_ref": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "destination_possession_ref": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "performed_at": "2026-07-14T00:00:00Z",
+        "recovery_digest": "sha256:abababababababababababababababababababababababababababababababab",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HSCHEMA000000000000002",
+          "key_epoch_id": "epoch_01HSCHEMA0000000000002",
+          "signed_domain": "genesis.recovery.record.signature.v0.1",
+          "signed_digest": "sha256:abababababababababababababababababababababababababababababababab",
+          "signature_value": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      }
+    },
+    {
+      "case_id": "recovery-finalization-destination-signed-by-guardian",
+      "schema": "recovery_finalization.schema.json",
+      "artifact": {
+        "schema_version": "genesis.recovery.finalization.v0.1",
+        "recovery_id": "recovery_01HSCHEMA0000000001",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "backup_commit_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "recovery_record_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "continuity_gap_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "previous_body_revocation_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "destination_registration_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "destination_possession_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "final_body_registry_digest": "sha256:abababababababababababababababababababababababababababababababab",
+        "previous_body_status": "lost",
+        "destination_body_status": "active_writer",
+        "guardian_authorization_ref": "rauth_01HSCHEMA000000000001",
+        "recovery_event_hash": "evsha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+        "finalized_at": "2026-07-14T00:00:00Z",
+        "finalization_digest": "sha256:efefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+        "guardian_acknowledgement": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "guardian",
+          "signer_id": "guardian_01HSCHEMA00000000001",
+          "key_epoch_id": "guardian_epoch_01HSCHEMA000001",
+          "signed_domain": "genesis.recovery.finalization.signature.v0.1",
+          "signed_digest": "sha256:efefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+          "signature_value": "1212121212121212121212121212121212121212121212121212121212121212",
+          "created_at": "2026-07-14T00:00:00Z"
+        },
+        "destination_acknowledgement": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "guardian",
+          "signer_id": "guardian_01HSCHEMA00000000001",
+          "key_epoch_id": "guardian_epoch_01HSCHEMA000001",
+          "signed_domain": "genesis.recovery.finalization.signature.v0.1",
+          "signed_digest": "sha256:efefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+          "signature_value": "3434343434343434343434343434343434343434343434343434343434343434",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      }
+    },
+    {
+      "case_id": "committed-journal-without-marker",
+      "schema": "transaction_journal.schema.json",
+      "artifact": {
+        "schema_version": "genesis.transaction.journal.v0.1",
+        "journal_id": "journal_01HSCHEMA0000000001",
+        "sequence": 5,
+        "previous_journal_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "operation_kind": "recovery",
+        "operation_id": "recovery_01HSCHEMA0000000001",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "coordinator_body_id": "body_01HSCHEMA000000000000002",
+        "phase": "finalized",
+        "status": "committed",
+        "previous_state_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "candidate_state_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "finalization_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "commit_marker_digest": null,
+        "updated_at": "2026-07-14T00:00:00Z",
+        "journal_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HSCHEMA000000000000002",
+          "key_epoch_id": "epoch_01HSCHEMA0000000000002",
+          "signed_domain": "genesis.transaction.journal.signature.v0.1",
+          "signed_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "signature_value": "abababababababababababababababababababababababababababababababab",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      }
+    },
+    {
+      "case_id": "recovery-journal-with-transfer-phase",
+      "schema": "transaction_journal.schema.json",
+      "artifact": {
+        "schema_version": "genesis.transaction.journal.v0.1",
+        "journal_id": "journal_01HSCHEMA0000000002",
+        "sequence": 0,
+        "previous_journal_digest": "GENESIS",
+        "operation_kind": "recovery",
+        "operation_id": "recovery_01HSCHEMA0000000002",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "coordinator_body_id": "body_01HSCHEMA000000000000002",
+        "phase": "exported",
+        "status": "pending",
+        "previous_state_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "candidate_state_digest": null,
+        "finalization_digest": null,
+        "commit_marker_digest": null,
+        "updated_at": "2026-07-14T00:00:00Z",
+        "journal_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HSCHEMA000000000000002",
+          "key_epoch_id": "epoch_01HSCHEMA0000000000002",
+          "signed_domain": "genesis.transaction.journal.signature.v0.1",
+          "signed_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "signature_value": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      }
     }
   ]
 }

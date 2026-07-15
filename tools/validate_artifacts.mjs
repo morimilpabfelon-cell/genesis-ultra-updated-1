@@ -104,6 +104,197 @@ function computeAuthorizationUseDigest(authorizationId, transferId, sourceBodyId
   ]);
 }
 
+function boolText(value) {
+  return value ? "true" : "false";
+}
+
+function sha256Bytes(value) {
+  return `sha256:${crypto.createHash("sha256").update(value).digest("hex")}`;
+}
+
+function computeBackupManifestDigest(manifest) {
+  const contents = [...manifest.contents].sort((left, right) =>
+    Buffer.compare(Buffer.from(left.path, "utf8"), Buffer.from(right.path, "utf8"))
+  );
+  return hashFields("genesis.backup.manifest.v0.1", [
+    manifest.schema_version,
+    manifest.backup_id,
+    manifest.instance_id,
+    manifest.seed_root_hash,
+    manifest.checkpoint_hash,
+    manifest.last_event_hash,
+    String(manifest.last_sequence),
+    manifest.body_registry_digest,
+    manifest.created_at,
+    manifest.created_by_body_id,
+    manifest.encryption_profile,
+    optionalText(manifest.key_recovery_profile),
+    String(contents.length),
+    ...contents.flatMap((item) => [item.kind, item.path, item.digest, boolText(item.encrypted)])
+  ]);
+}
+
+function computeBackupEncryptionDigest(encryption) {
+  const parameters = encryption.kdf_parameters;
+  return hashFields("genesis.backup.encryption.v0.1", [
+    encryption.schema_version,
+    encryption.backup_id,
+    encryption.instance_id,
+    encryption.manifest_digest,
+    encryption.encryption_profile,
+    encryption.kdf_profile,
+    String(parameters.opslimit),
+    String(parameters.memlimit),
+    String(parameters.key_length),
+    encryption.salt,
+    encryption.nonce,
+    encryption.associated_data_digest,
+    encryption.ciphertext_digest,
+    optionalText(encryption.wrapped_key),
+    encryption.created_at
+  ]);
+}
+
+function computeBackupCommitDigest(commit) {
+  return hashFields("genesis.backup.commit.v0.1", [
+    commit.schema_version,
+    commit.backup_id,
+    commit.instance_id,
+    commit.created_by_body_id,
+    commit.manifest_digest,
+    commit.encryption_digest,
+    commit.ciphertext_digest,
+    commit.checkpoint_hash,
+    commit.last_event_hash,
+    String(commit.last_sequence),
+    commit.state,
+    commit.committed_at
+  ]);
+}
+
+function computeTransactionJournalDigest(entry) {
+  return hashFields("genesis.transaction.journal.v0.1", [
+    entry.schema_version,
+    entry.journal_id,
+    String(entry.sequence),
+    entry.previous_journal_digest,
+    entry.operation_kind,
+    entry.operation_id,
+    entry.instance_id,
+    entry.coordinator_body_id,
+    entry.phase,
+    entry.status,
+    entry.previous_state_digest,
+    optionalText(entry.candidate_state_digest),
+    optionalText(entry.finalization_digest),
+    optionalText(entry.commit_marker_digest),
+    entry.updated_at
+  ]);
+}
+
+function computeRecoveryAuthorizationDigest(authorization) {
+  return hashFields("genesis.recovery.authorization.v0.1", [
+    authorization.schema_version,
+    authorization.authorization_id,
+    authorization.recovery_id,
+    authorization.guardian_id,
+    authorization.guardian_key_epoch_id,
+    authorization.instance_id,
+    String(authorization.authority_epoch),
+    authorization.source_backup_id,
+    authorization.source_backup_commit_digest,
+    authorization.previous_body_id,
+    authorization.new_body_id,
+    authorization.reason,
+    authorization.issued_at,
+    authorization.not_before,
+    authorization.expires_at
+  ]);
+}
+
+function computeContinuityGapDigest(gap) {
+  return hashFields("genesis.continuity.gap.v0.1", [
+    gap.schema_version,
+    gap.gap_id,
+    gap.instance_id,
+    gap.detected_at,
+    String(gap.first_missing_sequence),
+    String(gap.last_missing_sequence),
+    gap.reason,
+    gap.last_trusted_event_hash,
+    gap.recovery_event_ref,
+    optionalText(gap.notes_digest)
+  ]);
+}
+
+function computeBodyRevocationDigest(revocation) {
+  return hashFields("genesis.body.revocation.v0.1", [
+    revocation.schema_version,
+    revocation.instance_id,
+    revocation.body_id,
+    revocation.revoked_at,
+    revocation.reason,
+    revocation.last_trusted_event_hash,
+    revocation.guardian_authorization_ref
+  ]);
+}
+
+function computeBodyPossessionDigest(proof) {
+  return hashFields("genesis.body.possession.v0.1", [
+    proof.schema_version,
+    proof.proof_id,
+    proof.instance_id,
+    proof.body_id,
+    proof.challenge_nonce,
+    proof.issued_at,
+    proof.expires_at,
+    proof.public_key_fingerprint
+  ]);
+}
+
+function computeRecoveryRecordDigest(record) {
+  return hashFields("genesis.recovery.record.v0.1", [
+    record.schema_version,
+    record.recovery_id,
+    record.instance_id,
+    record.source_backup_id,
+    record.source_backup_commit_digest,
+    record.new_body_id,
+    optionalText(record.previous_body_id),
+    record.restored_checkpoint_hash,
+    record.restored_last_event_hash,
+    String(record.restored_last_sequence),
+    String(record.last_known_sequence),
+    record.continuity_status,
+    optionalText(record.continuity_gap_ref),
+    record.guardian_authorization_ref,
+    record.previous_body_revocation_ref,
+    record.destination_registration_ref,
+    record.destination_possession_ref,
+    record.performed_at
+  ]);
+}
+
+function computeRecoveryFinalizationDigest(finalization) {
+  return hashFields("genesis.recovery.finalization.v0.1", [
+    finalization.schema_version,
+    finalization.recovery_id,
+    finalization.instance_id,
+    finalization.backup_commit_digest,
+    finalization.recovery_record_digest,
+    optionalText(finalization.continuity_gap_digest),
+    finalization.previous_body_revocation_digest,
+    finalization.destination_registration_digest,
+    finalization.destination_possession_digest,
+    finalization.final_body_registry_digest,
+    finalization.previous_body_status,
+    finalization.destination_body_status,
+    finalization.guardian_authorization_ref,
+    finalization.recovery_event_hash,
+    finalization.finalized_at
+  ]);
+}
+
 function loadValidators() {
   const ajv = new Ajv2020({ allErrors: true, strict: true });
   addFormats(ajv);
@@ -403,6 +594,494 @@ function validateGeneratedArtifacts(validators, artifactPath) {
   }
 }
 
+function validateBackupRecoveryArtifacts(validators, artifactPath) {
+  const generated = readJson(artifactPath);
+  const requiredTopLevel = [
+    "backup_checkpoint",
+    "backup_manifest",
+    "backup_encryption",
+    "backup_ciphertext_hex",
+    "backup_commit",
+    "recovery_authorization",
+    "destination_registration",
+    "destination_possession",
+    "destination_possession_signature",
+    "continuity_gap",
+    "previous_body_revocation",
+    "recovery_record",
+    "recovery_event",
+    "body_registry_after",
+    "recovery_finalization"
+  ];
+  for (const field of requiredTopLevel) {
+    if (!(field in generated)) throw new Error(`missing_backup_recovery_artifact:${field}`);
+  }
+
+  const checkpoint = generated.backup_checkpoint;
+  const manifest = generated.backup_manifest;
+  const encryption = generated.backup_encryption;
+  const commit = generated.backup_commit;
+  const authorization = generated.recovery_authorization;
+  const registration = generated.destination_registration;
+  const possession = generated.destination_possession;
+  const gap = generated.continuity_gap;
+  const revocation = generated.previous_body_revocation;
+  const record = generated.recovery_record;
+  const recoveryEvent = generated.recovery_event;
+  const registry = generated.body_registry_after;
+  const finalization = generated.recovery_finalization;
+
+  const instanceId = manifest.instance_id;
+  const instanceArtifacts = [
+    checkpoint,
+    encryption,
+    commit,
+    authorization,
+    registration,
+    possession,
+    gap,
+    revocation,
+    record,
+    recoveryEvent,
+    registry,
+    finalization
+  ];
+  if (instanceArtifacts.some((artifact) => artifact.instance_id !== instanceId)) {
+    throw new Error("recovery_instance_id_mismatch");
+  }
+  if (
+    encryption.backup_id !== manifest.backup_id
+    || commit.backup_id !== manifest.backup_id
+    || commit.created_by_body_id !== manifest.created_by_body_id
+  ) {
+    throw new Error("backup_identity_links_invalid");
+  }
+
+  requireValid(validators, "checkpoint.schema.json", checkpoint, "backup_checkpoint");
+  requireValid(validators, "signature_envelope.schema.json", checkpoint.signature, "backup_checkpoint.signature");
+  requireValid(validators, "backup_manifest.schema.json", manifest, "backup_manifest");
+  requireValid(validators, "backup_encryption.schema.json", encryption, "backup_encryption");
+  requireValid(validators, "backup_commit.schema.json", commit, "backup_commit");
+  requireValid(validators, "signature_envelope.schema.json", commit.signature, "backup_commit.signature");
+  requireValid(validators, "recovery_authorization.schema.json", authorization, "recovery_authorization");
+  requireValid(
+    validators,
+    "signature_envelope.schema.json",
+    authorization.signature,
+    "recovery_authorization.signature"
+  );
+  requireValid(
+    validators,
+    "guardian_device_registration.schema.json",
+    registration,
+    "destination_registration"
+  );
+  requireValid(
+    validators,
+    "signature_envelope.schema.json",
+    registration.signature,
+    "destination_registration.signature"
+  );
+  requireValid(validators, "body_possession_proof.schema.json", possession, "destination_possession");
+  requireValid(
+    validators,
+    "signature_envelope.schema.json",
+    generated.destination_possession_signature,
+    "destination_possession_signature"
+  );
+  requireValid(validators, "continuity_gap.schema.json", gap, "continuity_gap");
+  requireValid(validators, "body_revocation.schema.json", revocation, "previous_body_revocation");
+  requireValid(validators, "recovery_record.schema.json", record, "recovery_record");
+  requireValid(validators, "signature_envelope.schema.json", record.signature, "recovery_record.signature");
+  requireValid(validators, "memory_event.schema.json", recoveryEvent, "recovery_event");
+  requireValid(validators, "signature_envelope.schema.json", recoveryEvent.signature, "recovery_event.signature");
+  requireValid(validators, "body_registry.schema.json", registry, "body_registry_after");
+  requireValid(validators, "recovery_finalization.schema.json", finalization, "recovery_finalization");
+  requireValid(
+    validators,
+    "signature_envelope.schema.json",
+    finalization.guardian_acknowledgement,
+    "recovery_finalization.guardian_acknowledgement"
+  );
+  requireValid(
+    validators,
+    "signature_envelope.schema.json",
+    finalization.destination_acknowledgement,
+    "recovery_finalization.destination_acknowledgement"
+  );
+
+  if (manifest.package_digest !== computeBackupManifestDigest(manifest)) {
+    throw new Error("backup_manifest_digest_mismatch");
+  }
+  if (encryption.encryption_digest !== computeBackupEncryptionDigest(encryption)) {
+    throw new Error("backup_encryption_digest_mismatch");
+  }
+  if (encryption.manifest_digest !== manifest.package_digest) {
+    throw new Error("backup_encryption_manifest_mismatch");
+  }
+  if (!/^[a-f0-9]+$/.test(generated.backup_ciphertext_hex) || generated.backup_ciphertext_hex.length % 2 !== 0) {
+    throw new Error("backup_ciphertext_encoding_invalid");
+  }
+  const ciphertext = Buffer.from(generated.backup_ciphertext_hex, "hex");
+  if (sha256Bytes(ciphertext) !== encryption.ciphertext_digest) {
+    throw new Error("backup_ciphertext_digest_mismatch");
+  }
+  const aad = Buffer.concat([frame("genesis.backup.aad.v0.1"), frame(manifest.package_digest)]);
+  if (sha256Bytes(aad) !== encryption.associated_data_digest) {
+    throw new Error("backup_associated_data_digest_mismatch");
+  }
+  if (commit.commit_digest !== computeBackupCommitDigest(commit) || commit.state !== "committed") {
+    throw new Error("backup_commit_invalid");
+  }
+  if (
+    commit.manifest_digest !== manifest.package_digest
+    || commit.encryption_digest !== encryption.encryption_digest
+    || commit.ciphertext_digest !== encryption.ciphertext_digest
+    || commit.checkpoint_hash !== checkpoint.checkpoint_hash
+    || commit.checkpoint_hash !== manifest.checkpoint_hash
+    || commit.last_event_hash !== manifest.last_event_hash
+    || commit.last_sequence !== manifest.last_sequence
+  ) {
+    throw new Error("backup_commit_links_invalid");
+  }
+  if (
+    checkpoint.checkpoint_hash !== manifest.checkpoint_hash
+    || checkpoint.last_event_hash !== manifest.last_event_hash
+    || checkpoint.sequence !== manifest.last_sequence
+    || checkpoint.seed_root_hash !== manifest.seed_root_hash
+    || checkpoint.body_registry_digest !== manifest.body_registry_digest
+    || checkpoint.created_by_body_id !== manifest.created_by_body_id
+  ) {
+    throw new Error("backup_checkpoint_links_invalid");
+  }
+  if (
+    commit.signature.signed_digest !== commit.commit_digest
+    || commit.signature.signer_id !== commit.created_by_body_id
+    || commit.signature.signed_domain !== "genesis.backup.commit.signature.v0.1"
+  ) {
+    throw new Error("backup_commit_signature_unbound");
+  }
+
+  if (authorization.authorization_digest !== computeRecoveryAuthorizationDigest(authorization)) {
+    throw new Error("recovery_authorization_digest_mismatch");
+  }
+  const issuedAt = Date.parse(authorization.issued_at);
+  const notBefore = Date.parse(authorization.not_before);
+  const expiresAt = Date.parse(authorization.expires_at);
+  if (!(issuedAt <= notBefore && notBefore < expiresAt)) {
+    throw new Error("recovery_authorization_time_window_invalid");
+  }
+  if (
+    authorization.signature.signed_digest !== authorization.authorization_digest
+    || authorization.signature.signer_id !== authorization.guardian_id
+    || authorization.signature.key_epoch_id !== authorization.guardian_key_epoch_id
+    || authorization.signature.signed_domain !== "genesis.recovery.authorization.signature.v0.1"
+  ) {
+    throw new Error("recovery_authorization_signature_unbound");
+  }
+  if (
+    authorization.source_backup_id !== commit.backup_id
+    || authorization.source_backup_commit_digest !== commit.commit_digest
+    || authorization.recovery_id !== record.recovery_id
+    || authorization.previous_body_id !== record.previous_body_id
+    || authorization.new_body_id !== record.new_body_id
+  ) {
+    throw new Error("recovery_authorization_scope_mismatch");
+  }
+
+  if (registration.registration_digest !== computeDeviceRegistrationDigest(registration)) {
+    throw new Error("recovery_destination_registration_invalid");
+  }
+  if (
+    registration.signature.signed_digest !== registration.registration_digest
+    || registration.signature.signer_id !== registration.guardian_id
+  ) {
+    throw new Error("recovery_destination_registration_signature_unbound");
+  }
+  if (possession.proof_digest !== computeBodyPossessionDigest(possession)) {
+    throw new Error("recovery_destination_possession_invalid");
+  }
+  if (
+    generated.destination_possession_signature.signed_digest !== possession.proof_digest
+    || generated.destination_possession_signature.signer_id !== possession.body_id
+  ) {
+    throw new Error("recovery_destination_possession_signature_unbound");
+  }
+  if (
+    registration.body_id !== record.new_body_id
+    || possession.body_id !== record.new_body_id
+    || registration.public_key_fingerprint !== possession.public_key_fingerprint
+  ) {
+    throw new Error("recovery_destination_identity_mismatch");
+  }
+  if (
+    registration.guardian_id !== authorization.guardian_id
+    || registration.guardian_key_epoch_id !== authorization.guardian_key_epoch_id
+    || registration.authority_epoch !== authorization.authority_epoch
+  ) {
+    throw new Error("recovery_guardian_scope_mismatch");
+  }
+
+  if (gap.gap_digest !== computeContinuityGapDigest(gap)) {
+    throw new Error("continuity_gap_digest_mismatch");
+  }
+  if (revocation.revocation_digest !== computeBodyRevocationDigest(revocation)) {
+    throw new Error("previous_body_revocation_digest_mismatch");
+  }
+  if (
+    revocation.body_id !== record.previous_body_id
+    || revocation.guardian_authorization_ref !== authorization.authorization_id
+  ) {
+    throw new Error("previous_body_not_revoked");
+  }
+  if (record.recovery_digest !== computeRecoveryRecordDigest(record)) {
+    throw new Error("recovery_record_digest_mismatch");
+  }
+  if (
+    record.signature.signed_digest !== record.recovery_digest
+    || record.signature.signer_id !== record.new_body_id
+    || record.signature.signed_domain !== "genesis.recovery.record.signature.v0.1"
+  ) {
+    throw new Error("recovery_record_signature_unbound");
+  }
+  if (
+    record.source_backup_id !== manifest.backup_id
+    || record.source_backup_commit_digest !== commit.commit_digest
+    || record.restored_checkpoint_hash !== manifest.checkpoint_hash
+    || record.restored_last_event_hash !== manifest.last_event_hash
+    || record.restored_last_sequence !== manifest.last_sequence
+    || record.guardian_authorization_ref !== authorization.authorization_id
+  ) {
+    throw new Error("recovery_record_links_invalid");
+  }
+  if (record.last_known_sequence <= record.restored_last_sequence || record.continuity_status !== "known_gap") {
+    throw new Error("generated_recovery_missing_expected_gap");
+  }
+  if (
+    gap.first_missing_sequence !== record.restored_last_sequence + 1
+    || gap.last_missing_sequence !== record.last_known_sequence
+    || gap.last_trusted_event_hash !== record.restored_last_event_hash
+    || record.continuity_gap_ref !== gap.gap_id
+  ) {
+    throw new Error("continuity_gap_range_invalid");
+  }
+
+  if (finalization.finalization_digest !== computeRecoveryFinalizationDigest(finalization)) {
+    throw new Error("recovery_finalization_digest_mismatch");
+  }
+  if (
+    finalization.backup_commit_digest !== commit.commit_digest
+    || finalization.recovery_record_digest !== record.recovery_digest
+    || finalization.continuity_gap_digest !== gap.gap_digest
+    || finalization.previous_body_revocation_digest !== revocation.revocation_digest
+    || finalization.destination_registration_digest !== registration.registration_digest
+    || finalization.destination_possession_digest !== possession.proof_digest
+    || finalization.final_body_registry_digest !== registry.registry_digest
+    || finalization.guardian_authorization_ref !== authorization.authorization_id
+    || finalization.recovery_event_hash !== recoveryEvent.event_hash
+  ) {
+    throw new Error("recovery_finalization_links_invalid");
+  }
+  if (
+    finalization.guardian_acknowledgement.signed_digest !== finalization.finalization_digest
+    || finalization.guardian_acknowledgement.signer_id !== authorization.guardian_id
+    || finalization.destination_acknowledgement.signed_digest !== finalization.finalization_digest
+    || finalization.destination_acknowledgement.signer_id !== record.new_body_id
+  ) {
+    throw new Error("recovery_finalization_signatures_unbound");
+  }
+  const activeWriters = registry.bodies.filter((body) => body.status === "active_writer");
+  const previousBody = registry.bodies.find((body) => body.body_id === record.previous_body_id);
+  if (activeWriters.length !== 1 || activeWriters[0].body_id !== record.new_body_id) {
+    throw new Error("recovery_final_registry_authority_invalid");
+  }
+  if (!previousBody || !["lost", "revoked"].includes(previousBody.status)) {
+    throw new Error("recovery_previous_body_still_authoritative");
+  }
+  if (previousBody.status !== finalization.previous_body_status) {
+    throw new Error("recovery_finalization_status_mismatch");
+  }
+  if (
+    recoveryEvent.body_id !== record.new_body_id
+    || recoveryEvent.sequence !== record.last_known_sequence + 1
+    || recoveryEvent.previous_event_hash !== record.restored_last_event_hash
+  ) {
+    throw new Error("recovery_event_continuity_invalid");
+  }
+}
+
+const JOURNAL_PHASES = {
+  transfer: ["prepared", "frozen", "exported", "verified", "accepted", "finalizing", "completed"],
+  recovery: ["discovered", "verified", "authorized", "restored", "finalizing", "finalized"]
+};
+const JOURNAL_TERMINAL_PHASE = { transfer: "completed", recovery: "finalized" };
+
+function validateTransactionJournalChain(entries) {
+  if (entries.length === 0) return "journal_empty";
+  const first = entries[0];
+  const identity = [
+    first.journal_id,
+    first.operation_kind,
+    first.operation_id,
+    first.instance_id,
+    first.coordinator_body_id
+  ].join("\u0000");
+  const phases = JOURNAL_PHASES[first.operation_kind];
+  if (!phases) return "journal_operation_kind_invalid";
+
+  let expectedPrevious = "GENESIS";
+  let previousPhaseIndex = -1;
+  const previousStateDigest = first.previous_state_digest;
+  let candidateStateDigest = null;
+  let finalizationDigest = null;
+  let terminalSeen = false;
+
+  for (const [index, entry] of entries.entries()) {
+    if (entry.journal_digest !== computeTransactionJournalDigest(entry)) return "journal_digest_mismatch";
+    if (entry.sequence !== index) return "journal_sequence_invalid";
+    if (entry.previous_journal_digest !== expectedPrevious) return "journal_chain_broken";
+    if (terminalSeen) return "journal_entry_after_terminal";
+    const entryIdentity = [
+      entry.journal_id,
+      entry.operation_kind,
+      entry.operation_id,
+      entry.instance_id,
+      entry.coordinator_body_id
+    ].join("\u0000");
+    if (entryIdentity !== identity) return "journal_identity_changed";
+    if (entry.previous_state_digest !== previousStateDigest) return "journal_previous_state_changed";
+
+    const phaseIndex = phases.indexOf(entry.phase);
+    if (phaseIndex < 0) return "journal_phase_invalid";
+    if (phaseIndex < previousPhaseIndex) return "journal_phase_regression";
+    previousPhaseIndex = phaseIndex;
+
+    if (entry.candidate_state_digest !== null) {
+      if (candidateStateDigest === null) candidateStateDigest = entry.candidate_state_digest;
+      else if (entry.candidate_state_digest !== candidateStateDigest) return "journal_candidate_state_changed";
+    }
+    if (entry.finalization_digest !== null) {
+      if (finalizationDigest === null) finalizationDigest = entry.finalization_digest;
+      else if (entry.finalization_digest !== finalizationDigest) return "journal_finalization_changed";
+    }
+
+    const signature = entry.signature;
+    if (
+      signature.signed_digest !== entry.journal_digest
+      || signature.signer_type !== "body"
+      || signature.signer_id !== entry.coordinator_body_id
+      || signature.signed_domain !== "genesis.transaction.journal.signature.v0.1"
+    ) {
+      return "journal_signature_unbound";
+    }
+
+    if (entry.status === "pending") {
+      if (entry.commit_marker_digest !== null) return "journal_pending_has_commit_marker";
+      if (entry.phase === JOURNAL_TERMINAL_PHASE[entry.operation_kind]) {
+        return "journal_terminal_phase_not_committed";
+      }
+    } else if (entry.status === "committed") {
+      if (entry.phase !== JOURNAL_TERMINAL_PHASE[entry.operation_kind]) return "journal_commit_phase_invalid";
+      if (
+        entry.candidate_state_digest === null
+        || entry.finalization_digest === null
+        || entry.commit_marker_digest !== entry.finalization_digest
+      ) {
+        return "journal_commit_marker_mismatch";
+      }
+      terminalSeen = true;
+    } else if (entry.status === "aborted") {
+      if (entry.commit_marker_digest !== null) return "journal_aborted_has_commit_marker";
+      terminalSeen = true;
+    } else {
+      return "journal_status_invalid";
+    }
+
+    expectedPrevious = entry.journal_digest;
+  }
+  return null;
+}
+
+function evaluateJournalRestart(entries, observed, previous, candidate, finalization) {
+  const error = validateTransactionJournalChain(entries);
+  if (error) throw new Error(error);
+  const latest = entries.at(-1);
+  if (latest.previous_state_digest !== previous) throw new Error("journal_previous_state_untrusted");
+
+  const candidates = new Set(
+    entries.map((entry) => entry.candidate_state_digest).filter((value) => value !== null)
+  );
+  if (candidates.size > 0 && (candidates.size !== 1 || !candidates.has(candidate))) {
+    throw new Error("journal_candidate_state_untrusted");
+  }
+  const finalizations = new Set(
+    entries.map((entry) => entry.finalization_digest).filter((value) => value !== null)
+  );
+  if (finalizations.size > 0 && (finalizations.size !== 1 || !finalizations.has(finalization))) {
+    throw new Error("journal_finalization_untrusted");
+  }
+  if (![previous, candidate].includes(observed)) throw new Error("journal_observed_state_unknown");
+
+  if (latest.status === "committed") {
+    if (latest.commit_marker_digest !== finalization) throw new Error("journal_commit_untrusted");
+    return observed === candidate ? "accept_committed_authority" : "replay_committed_authority";
+  }
+  return observed === previous ? "retain_previous_authority" : "rollback_uncommitted_authority";
+}
+
+function validateTransactionCrashArtifacts(validators, artifactPath) {
+  const generated = readJson(artifactPath);
+  const entries = generated.journal_entries;
+  if (!Array.isArray(entries)) throw new Error("crash_journal_entries_missing");
+  for (const [index, entry] of entries.entries()) {
+    requireValid(validators, "transaction_journal.schema.json", entry, `journal_entries[${index}]`);
+    requireValid(validators, "signature_envelope.schema.json", entry.signature, `journal_entries[${index}].signature`);
+  }
+
+  const chainError = validateTransactionJournalChain(entries);
+  if (chainError) throw new Error(chainError);
+  const first = entries[0];
+  const latest = entries.at(-1);
+  if (
+    first.instance_id !== generated.instance_id
+    || first.operation_id !== generated.operation_id
+    || first.previous_state_digest !== generated.previous_registry_digest
+  ) {
+    throw new Error("crash_journal_bundle_identity_mismatch");
+  }
+  if (
+    latest.status !== "committed"
+    || latest.candidate_state_digest !== generated.candidate_registry_digest
+    || latest.finalization_digest !== generated.trusted_finalization_digest
+    || latest.commit_marker_digest !== generated.trusted_finalization_digest
+  ) {
+    throw new Error("crash_journal_terminal_commit_invalid");
+  }
+
+  for (const testCase of generated.restart_cases) {
+    const action = evaluateJournalRestart(
+      entries.slice(0, testCase.latest_sequence + 1),
+      testCase.observed_state_digest,
+      generated.previous_registry_digest,
+      generated.candidate_registry_digest,
+      generated.trusted_finalization_digest
+    );
+    if (action !== testCase.expected_action || action !== testCase.actual_action || !testCase.passed) {
+      throw new Error(`crash_restart_case_mismatch:${testCase.case_id}`);
+    }
+  }
+  if (
+    generated.restart_cases.length !== 8
+    || generated.negative_cases.length !== 12
+    || generated.negative_cases.some((testCase) => !testCase.detected)
+    || !generated.single_writer_before
+    || !generated.single_writer_after
+    || !generated.all_passed
+  ) {
+    throw new Error("crash_simulation_summary_invalid");
+  }
+}
+
 function validateNegativeSchemaCases(validators) {
   const cases = readJson(INVALID_CASES).cases;
   for (const testCase of cases) {
@@ -417,11 +1096,17 @@ function main() {
   const validators = loadValidators();
   const invalidCount = validateNegativeSchemaCases(validators);
   const artifactPath = process.argv[2];
+  const backupRecoveryPath = process.argv[3];
+  const transactionCrashPath = process.argv[4];
   if (artifactPath) validateGeneratedArtifacts(validators, path.resolve(artifactPath));
+  if (backupRecoveryPath) validateBackupRecoveryArtifacts(validators, path.resolve(backupRecoveryPath));
+  if (transactionCrashPath) validateTransactionCrashArtifacts(validators, path.resolve(transactionCrashPath));
 
   console.log(`JSON Schema 2020-12: OK (${validators.size} schemas compiled).`);
   console.log(`Schema negative regressions: OK (${invalidCount} rejected).`);
   if (artifactPath) console.log("Generated A -> B artifacts and cross-links: OK.");
+  if (backupRecoveryPath) console.log("Generated backup -> recovery artifacts and cross-links: OK.");
+  if (transactionCrashPath) console.log("Generated transaction journal and crash recovery decisions: OK.");
 }
 
 try {

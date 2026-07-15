@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:transaction-journal:v0.1",
+  "title": "Genesis Transaction Journal Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "journal_id",
+    "sequence",
+    "previous_journal_digest",
+    "operation_kind",
+    "operation_id",
+    "instance_id",
+    "coordinator_body_id",
+    "phase",
+    "status",
+    "previous_state_digest",
+    "candidate_state_digest",
+    "finalization_digest",
+    "commit_marker_digest",
+    "updated_at",
+    "journal_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.transaction.journal.v0.1" },
+    "journal_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "previous_journal_digest": {
+      "oneOf": [
+        { "const": "GENESIS" },
+        { "$ref": "#/$defs/sha256" }
+      ]
+    },
+    "operation_kind": { "type": "string", "enum": ["transfer", "recovery"] },
+    "operation_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "coordinator_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "prepared",
+        "frozen",
+        "exported",
+        "verified",
+        "accepted",
+        "discovered",
+        "authorized",
+        "restored",
+        "finalizing",
+        "completed",
+        "finalized"
+      ]
+    },
+    "status": { "type": "string", "enum": ["pending", "committed", "aborted"] },
+    "previous_state_digest": { "$ref": "#/$defs/sha256" },
+    "candidate_state_digest": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/sha256" }
+      ]
+    },
+    "finalization_digest": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/sha256" }
+      ]
+    },
+    "commit_marker_digest": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/sha256" }
+      ]
+    },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "journal_digest": { "$ref": "#/$defs/sha256" },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "operation_kind": { "const": "transfer" } },
+        "required": ["operation_kind"]
+      },
+      "then": {
+        "properties": {
+          "phase": {
+            "enum": [
+              "prepared",
+              "frozen",
+              "exported",
+              "verified",
+              "accepted",
+              "finalizing",
+              "completed"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "operation_kind": { "const": "recovery" } },
+        "required": ["operation_kind"]
+      },
+      "then": {
+        "properties": {
+          "phase": {
+            "enum": ["discovered", "verified", "authorized", "restored", "finalizing", "finalized"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "committed" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "candidate_state_digest": { "$ref": "#/$defs/sha256" },
+          "finalization_digest": { "$ref": "#/$defs/sha256" },
+          "commit_marker_digest": { "$ref": "#/$defs/sha256" }
+        }
+      },
+      "else": {
+        "properties": { "commit_marker_digest": { "type": "null" } }
+      }
+    },
+    {
+      "properties": {
+        "signature": {
+          "type": "object",
+          "properties": { "signer_type": { "const": "body" } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}

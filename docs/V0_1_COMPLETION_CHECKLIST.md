@@ -19,7 +19,7 @@
 - [ ] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [ ] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [ ] Lista compartida de artefactos requeridos.
-- [ ] Compilación de los 22 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [ ] Compilación de los 26 JSON Schema con JSON Schema 2020-12 y formatos activos.
 - [ ] Casos de regresión que demuestran el rechazo de artefactos inválidos por los schemas reales.
 - [ ] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -32,12 +32,22 @@
       revocaciones y épocas.
 - [ ] Misma evaluación de autoridad usada por la simulación positiva y por los rechazos
       de permiso ausente, expirado, agotado, revocado, de época antigua o destino desconocido.
+- [ ] Backup XChaCha20-Poly1305 con Argon2id, AAD enlazado al manifiesto y commit firmado.
+- [ ] Recuperación B→C autorizada para un commit y destino exactos, con registro y prueba
+      de posesión del cuerpo nuevo.
+- [ ] Brecha de memoria declarada, cuerpo anterior marcado `lost`, primer evento posterior
+      a la brecha y finalización firmada con un único `active_writer`.
+- [ ] Catorce rechazos de backup/recovery evaluados por la misma lógica del flujo positivo.
+- [ ] Journal transaccional firmado, encadenado y neutral con estado anterior, candidato y
+      marcador vinculado a la finalización.
+- [ ] Ocho reinicios simulados antes, durante y después del commit, reproducidos por Python
+      y Node, más doce journals alterados rechazados.
 
 Marcar estos elementos únicamente después de una ejecución verde reproducible.
 
 ## Pendiente real
 
-- [ ] Backup, transfer y recovery como flujos transaccionales completos.
+- [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.
 - [ ] Segunda implementación independiente que reproduzca todos los vectores.
 - [ ] Manifiesto del borrador con hashes de todos los archivos.
 - [ ] Revisión criptográfica y de seguridad externa.

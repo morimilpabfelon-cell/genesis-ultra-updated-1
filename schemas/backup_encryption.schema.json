@@ -8,26 +8,47 @@
     "schema_version",
     "backup_id",
     "instance_id",
+    "manifest_digest",
     "encryption_profile",
     "kdf_profile",
+    "kdf_parameters",
     "salt",
     "nonce",
     "associated_data_digest",
     "ciphertext_digest",
-    "created_at"
+    "wrapped_key",
+    "created_at",
+    "encryption_digest"
   ],
   "properties": {
     "schema_version": { "const": "genesis.backup.encryption.v0.1" },
     "backup_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
-    "encryption_profile": { "type": "string", "minLength": 1, "maxLength": 128 },
-    "kdf_profile": { "type": "string", "minLength": 1, "maxLength": 128 },
-    "kdf_parameters": { "type": "object" },
-    "salt": { "type": "string", "minLength": 16 },
-    "nonce": { "type": "string", "minLength": 16 },
-    "associated_data_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
-    "ciphertext_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "manifest_digest": { "$ref": "#/$defs/sha256" },
+    "encryption_profile": { "const": "genesis.backup.xchacha20poly1305.v0.1" },
+    "kdf_profile": { "const": "genesis.kdf.argon2id.v0.1" },
+    "kdf_parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opslimit", "memlimit", "key_length"],
+      "properties": {
+        "opslimit": { "type": "integer", "minimum": 1 },
+        "memlimit": { "type": "integer", "minimum": 8192 },
+        "key_length": { "const": 32 }
+      }
+    },
+    "salt": { "type": "string", "pattern": "^[a-f0-9]{32}$" },
+    "nonce": { "type": "string", "pattern": "^[a-f0-9]{48}$" },
+    "associated_data_digest": { "$ref": "#/$defs/sha256" },
+    "ciphertext_digest": { "$ref": "#/$defs/sha256" },
     "wrapped_key": { "type": ["string", "null"] },
-    "created_at": { "type": "string", "format": "date-time" }
+    "created_at": { "type": "string", "format": "date-time" },
+    "encryption_digest": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
   }
 }

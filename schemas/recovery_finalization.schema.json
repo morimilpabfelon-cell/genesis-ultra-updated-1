@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:recovery-finalization:v0.1",
+  "title": "Genesis Recovery Finalization",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "recovery_id",
+    "instance_id",
+    "backup_commit_digest",
+    "recovery_record_digest",
+    "continuity_gap_digest",
+    "previous_body_revocation_digest",
+    "destination_registration_digest",
+    "destination_possession_digest",
+    "final_body_registry_digest",
+    "previous_body_status",
+    "destination_body_status",
+    "guardian_authorization_ref",
+    "recovery_event_hash",
+    "finalized_at",
+    "finalization_digest",
+    "guardian_acknowledgement",
+    "destination_acknowledgement"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.recovery.finalization.v0.1" },
+    "recovery_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "backup_commit_digest": { "$ref": "#/$defs/sha256" },
+    "recovery_record_digest": { "$ref": "#/$defs/sha256" },
+    "continuity_gap_digest": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" },
+    "previous_body_revocation_digest": { "$ref": "#/$defs/sha256" },
+    "destination_registration_digest": { "$ref": "#/$defs/sha256" },
+    "destination_possession_digest": { "$ref": "#/$defs/sha256" },
+    "final_body_registry_digest": { "$ref": "#/$defs/sha256" },
+    "previous_body_status": { "type": "string", "enum": ["lost", "revoked"] },
+    "destination_body_status": { "const": "active_writer" },
+    "guardian_authorization_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "recovery_event_hash": { "type": "string", "pattern": "^evsha256:[a-f0-9]{64}$" },
+    "finalized_at": { "type": "string", "format": "date-time" },
+    "finalization_digest": { "$ref": "#/$defs/sha256" },
+    "guardian_acknowledgement": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" },
+    "destination_acknowledgement": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "guardian_acknowledgement": {
+          "type": "object",
+          "properties": { "signer_type": { "const": "guardian" } }
+        },
+        "destination_acknowledgement": {
+          "type": "object",
+          "properties": { "signer_type": { "const": "body" } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}
