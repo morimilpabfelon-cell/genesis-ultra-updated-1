@@ -26,6 +26,7 @@ Genesis es un protocolo de nacimiento, continuidad, memoria y crecimiento de una
 10. Toda decisión duradera deja evidencia verificable.
 11. El nombre canónico elegido por el guardián antes del nacimiento no cambia jamás.
 12. Crecer añade historia verificable; nunca reescribe semilla, identidad ni memoria aceptada.
+13. Un sentido solo observa; una compuerta verificable decide antes de escribir memoria.
 
 ## Identificadores separados
 

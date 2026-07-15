@@ -436,6 +436,101 @@
         "identity_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "display_alias": "Another Name"
       }
+    },
+    {
+      "case_id": "sense-observation-cannot-write-memory",
+      "schema": "sense_observation.schema.json",
+      "artifact": {
+        "schema_version": "genesis.sense.observation.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "observation_id": "obs_01HSENSE000000000000001",
+        "instance_id": "inst_01HSENSE000000000000001",
+        "body_id": "body_01HSENSE000000000000001",
+        "observation_sequence": 0,
+        "sense": "vision",
+        "source_kind": "network_evidence",
+        "captured_at": "2026-07-15T00:00:00Z",
+        "payload_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "payload_media_type": "application/vnd.genesis.vision-evidence+json",
+        "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "privacy": "private_local",
+        "observation_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HSENSE000000000000001",
+          "key_epoch_id": "epoch_01HSENSE000000000000001",
+          "signed_domain": "genesis.sense.observation.signature.v0.1",
+          "signed_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+          "signature_value": "9e9864d61cc508fea27c4270fd8927eee9f880a4609d197cd424f45b76eea247e54107a100a697d24873693eae1ff9b085738f7372aafeb898c704b13b053b01",
+          "created_at": "2026-07-15T00:00:00Z",
+          "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+        },
+        "memory_event_ref": "evt_01HSENSE000000000000001"
+      }
+    },
+    {
+      "case_id": "memory-gate-accepted-requires-event-ref",
+      "schema": "memory_gate_decision.schema.json",
+      "artifact": {
+        "schema_version": "genesis.memory.gate.decision.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "decision_id": "gate_01HSENSE000000000000001",
+        "observation_id": "obs_01HSENSE000000000000001",
+        "observation_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+        "instance_id": "inst_01HSENSE000000000000001",
+        "body_id": "body_01HSENSE000000000000001",
+        "decision": "accepted",
+        "reason_code": "policy.accepted.provenance_verified",
+        "policy_profile": "genesis.memory.gate.policy.v0.1",
+        "decided_at": "2026-07-15T00:00:01Z",
+        "memory_event_ref": null,
+        "decision_digest": "sha256:cd26e25fefdf0b490fa5ae4f260c1826a5091d1f476f79856ba92fc7f7558a03",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HSENSE000000000000001",
+          "key_epoch_id": "epoch_01HSENSE000000000000001",
+          "signed_domain": "genesis.memory.gate.decision.signature.v0.1",
+          "signed_digest": "sha256:cd26e25fefdf0b490fa5ae4f260c1826a5091d1f476f79856ba92fc7f7558a03",
+          "signature_value": "ad121eb5ff0575fd618bd91c3907ac4196cc7caa9d1a5501217e5a357271fc9ed12d84a34c6c79a36a7fd209eb56a239f18860b3cd617dbdaba626846a678f06",
+          "created_at": "2026-07-15T00:00:01Z",
+          "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+        }
+      }
+    },
+    {
+      "case_id": "memory-gate-rejected-forbids-event-ref",
+      "schema": "memory_gate_decision.schema.json",
+      "artifact": {
+        "schema_version": "genesis.memory.gate.decision.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "decision_id": "gate_01HSENSE000000000000001",
+        "observation_id": "obs_01HSENSE000000000000001",
+        "observation_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+        "instance_id": "inst_01HSENSE000000000000001",
+        "body_id": "body_01HSENSE000000000000001",
+        "decision": "rejected",
+        "reason_code": "policy.rejected.untrusted",
+        "policy_profile": "genesis.memory.gate.policy.v0.1",
+        "decided_at": "2026-07-15T00:00:01Z",
+        "memory_event_ref": "evt_01HSENSE000000000000001",
+        "decision_digest": "sha256:cd26e25fefdf0b490fa5ae4f260c1826a5091d1f476f79856ba92fc7f7558a03",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HSENSE000000000000001",
+          "key_epoch_id": "epoch_01HSENSE000000000000001",
+          "signed_domain": "genesis.memory.gate.decision.signature.v0.1",
+          "signed_digest": "sha256:cd26e25fefdf0b490fa5ae4f260c1826a5091d1f476f79856ba92fc7f7558a03",
+          "signature_value": "ad121eb5ff0575fd618bd91c3907ac4196cc7caa9d1a5501217e5a357271fc9ed12d84a34c6c79a36a7fd209eb56a239f18860b3cd617dbdaba626846a678f06",
+          "created_at": "2026-07-15T00:00:01Z",
+          "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+        }
+      }
     }
   ]
 }

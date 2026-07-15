@@ -10,6 +10,7 @@
     "validate:node": "node tools/validate_workspace.mjs",
     "validate:host": "node tools/validate_host_adapter.mjs",
     "validate:identity": "node tools/validate_instance_identity.mjs",
+    "validate:senses": "node tools/validate_sense_observations.mjs",
     "validate:vectors": "node tools/validate_protocol_vectors.mjs",
     "validate:schemas": "node tools/validate_artifacts.mjs"
   },
