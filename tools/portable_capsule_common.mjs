@@ -6,7 +6,7 @@ export const PRIVACY = new Set(["private_local","guardian_shared","export_approv
 export const RECIPIENTS = new Set(["body","guardian_archive","offline_backup"]);
 export const PARTS = new Set(["canonical_events","continuity_anchors","acl_receipt","retrieval_projection","temporal_projection"]);
 export const REQUIRED_PARTS = new Set(["canonical_events","continuity_anchors","acl_receipt"]);
-export const AUTHORITY = new Set(["active_writer","write_memory","authority_grant","guardian_key","seed_root_hash"]);
+export const AUTHORITY = new Set(["active_writer","write_memory","authority_grant","guardian_key","seed_root_hash","private_key","secret","password","token"]);
 export class CapsuleError extends Error {}
 
 export const cmp = (a,b) => Buffer.compare(Buffer.from(a,"utf8"),Buffer.from(b,"utf8"));
