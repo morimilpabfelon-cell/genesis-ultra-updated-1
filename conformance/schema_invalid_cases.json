@@ -1921,6 +1921,48 @@
         "decision_digest": "aclsha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "write_memory": true
       }
+    },
+    {
+      "case_id": "temporal-memory-projection-rejects-unexpected-field",
+      "schema": "temporal_memory_projection.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.memory.temporal.projection.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "projection_id": "tpsha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "instance_id": "inst_01HTEMPORAL000000000001",
+        "extraction_profile": "genesis.memory.temporal.explicit_adapter.v0.1",
+        "source_event_count": 1,
+        "source_last_sequence": 0,
+        "annotation_count": 1,
+        "annotations": [
+          {
+            "event_id": "evt_01HTEMPORAL000000000001",
+            "annotation_digest": "tmsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mention_kind": "none",
+            "mentioned_start": null,
+            "mentioned_end": null,
+            "relation": "none",
+            "related_event_ref": null
+          }
+        ],
+        "query_results": [
+          {
+            "query_id": "query_temporal_schema",
+            "access_decision_ref": "acl_temporal_schema",
+            "query_type": "captured_between",
+            "as_of_sequence": 0,
+            "candidate_count": 1,
+            "matched_event_refs": [],
+            "denial_counts": {
+              "no_temporal_match": 1
+            },
+            "result_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        ],
+        "projection_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "unexpected_core_field": true
+      }
     }
   ]
 }

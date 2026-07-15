@@ -147,6 +147,25 @@
       ]
     },
     {
+      "id": "temporal_memory",
+      "name": "Metadata temporal",
+      "layer": "perception",
+      "maturity": "verified",
+      "description": "Proyección reconstruible que separa captura, almacenamiento, tiempo mencionado y relaciones bajo ACL.",
+      "keywords": [
+        "temporal_memory",
+        "temporal_metadata",
+        "mentioned_start",
+        "mentioned_end"
+      ],
+      "required_evidence": [
+        "spec",
+        "schema",
+        "conformance",
+        "implementation"
+      ]
+    },
+    {
       "id": "authority",
       "name": "Guardián y autoridad",
       "layer": "continuity",
@@ -330,6 +349,7 @@
     "memory_chain",
     "associative_memory",
     "memory_retrieval",
+    "temporal_memory",
     "reasoning",
     "action"
   ]
