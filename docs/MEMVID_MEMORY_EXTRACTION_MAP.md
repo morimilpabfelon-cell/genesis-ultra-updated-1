@@ -84,3 +84,18 @@ Genesis adapta la idea de extracción documental, visual y de audio como una fro
 
 No se copiaron extractores, modelos, formatos o código de Memvid. Los adaptadores productivos de
 PDF/DOCX/XLSX, OCR, visión y voz siguen pendientes de evaluación separada.
+
+## Sexta extracción implementada: memoria estructurada y versionada
+
+Génesis adapta la idea general de unidades semánticas versionadas mediante un contrato propio:
+
+- tipos `fact`, `preference`, `event`, `profile`, `relationship`, `goal` y `other`;
+- slots deterministas `entity:slot`;
+- operaciones `sets`, `updates`, `extends` y `retracts`;
+- procedencia hacia eventos append-only, perfil del extractor y confianza entera;
+- replay histórico y cobertura ACL completa antes de revelar un slot;
+- validación independiente Python/Node y proyección eliminable.
+
+No se copiaron Memory Cards, formatos, IDs, código o dependencias de Memvid. La extracción automática
+productiva, resolución de entidades y reconciliación de contradicciones permanecen como adaptadores
+separados.

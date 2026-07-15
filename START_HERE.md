@@ -154,3 +154,14 @@ npm run memory:multimodal:sync -- conformance/multimodal_memory_pipeline_vectors
 
 La proyección contiene únicamente texto derivado que pasó observación firmada, compuerta y commit
 append-only. Los archivos binarios y las rutas locales permanecen fuera del core.
+
+## Probar memoria estructurada y versionada
+
+```powershell
+npm run validate:structured-memory
+npm run memory:structured:query -- conformance/structured_versioned_memory_vectors.json q_theme_current
+```
+
+La proyección es reconstruible. `sets`, `updates`, `extends` y `retracts` cambian el estado de
+lectura sin borrar la cadena append-only. Una consulta externa debe aportar referencias de eventos
+autorizadas por ACL.

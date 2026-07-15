@@ -1,0 +1,1560 @@
+{
+  "profile": "genesis.memory.structured_versioned.v0.1",
+  "instance_id": "inst_01HSTRUCTURED00000000001",
+  "source_events": [
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000000",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 0,
+      "previous_event_hash": "GENESIS",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:00394346dd31a88dcd4bb1dfb3d0f108100fcfd3f151a802526fb306abd29c17",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:00Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "private_local",
+      "event_hash": "evsha256:5d3582b72774e0a3d3cb34b1bd0d923ee33d0770dd686a05ad409a06dde1bae8"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000001",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 1,
+      "previous_event_hash": "evsha256:5d3582b72774e0a3d3cb34b1bd0d923ee33d0770dd686a05ad409a06dde1bae8",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:b25772e290389c1722c938a2903a2d1223ef33f98022d7a0f0a5424d86c9c935",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:01Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "private_local",
+      "event_hash": "evsha256:6cfde82ed01a5e787709961417dcd6652d927b2d19af9fc8f58d6b3bed429d93"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000002",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 2,
+      "previous_event_hash": "evsha256:6cfde82ed01a5e787709961417dcd6652d927b2d19af9fc8f58d6b3bed429d93",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:91af1548754c478de5ecaf870a2ad7a1694e0cf6722eebf55f6574dd82f06f2e",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:02Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "private_local",
+      "event_hash": "evsha256:4b747c52def1a055ee71ab754a20fc2c05c06659c9d9b55415c95e9fa86db1cb"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000003",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 3,
+      "previous_event_hash": "evsha256:4b747c52def1a055ee71ab754a20fc2c05c06659c9d9b55415c95e9fa86db1cb",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:dbdd7dbe649b929f7579522beac5340b2a003bcf43ee7be11481099aa39b9541",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:03Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "private_local",
+      "event_hash": "evsha256:ccbf73cd3d626d4c5ede85498dc8324529a0f0796dbafc9943cdaa066a82bbce"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000004",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 4,
+      "previous_event_hash": "evsha256:ccbf73cd3d626d4c5ede85498dc8324529a0f0796dbafc9943cdaa066a82bbce",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:deeb86e0db30e29a26b8da63862afd8b8a6b2190d80092a8755e18e337460136",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:04Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "guardian_shared",
+      "event_hash": "evsha256:4c4d10854e6ecf5ca7f530088276265d7d54d85129be9679f12b3804e2f43007"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000005",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 5,
+      "previous_event_hash": "evsha256:4c4d10854e6ecf5ca7f530088276265d7d54d85129be9679f12b3804e2f43007",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:6b89089d0be7b1926ffe238eebaf742e1cf9762ad691dceafc40a1736e020e6e",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:05Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "guardian_shared",
+      "event_hash": "evsha256:04aed201bea9d555c3fb79aff7d6325491cc19b70cf1934d7df947abd02ffd17"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000006",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 6,
+      "previous_event_hash": "evsha256:04aed201bea9d555c3fb79aff7d6325491cc19b70cf1934d7df947abd02ffd17",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:249981f87214195e6906ea86d5d2f444d0d16d102bd1b8ee1152b95350766a6d",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:06Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "guardian_shared",
+      "event_hash": "evsha256:dded263b1940f7fe2137825249261315739be86268220e8f8dc24f9c5be86ffd"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000007",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 7,
+      "previous_event_hash": "evsha256:dded263b1940f7fe2137825249261315739be86268220e8f8dc24f9c5be86ffd",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:d7c85696ea592fca907700edd157e652c34bf918dc6c923dc68bbee692840008",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:07Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "private_local",
+      "event_hash": "evsha256:e6c376ae81eeccdb36ae60dbb7d63bd20b0d492ded9f5009a4d76f6690f86b25"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000008",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 8,
+      "previous_event_hash": "evsha256:e6c376ae81eeccdb36ae60dbb7d63bd20b0d492ded9f5009a4d76f6690f86b25",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:5fe92a8c0c3ee5fe8453436577bab5886943757ffc0171d416b81adcd6983f4f",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:08Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "private_local",
+      "event_hash": "evsha256:e3b2dc6ccbeef8b2f529002095bc3393493f6c06eedd488d2ab4a98855ea16fb"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000009",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 9,
+      "previous_event_hash": "evsha256:e3b2dc6ccbeef8b2f529002095bc3393493f6c06eedd488d2ab4a98855ea16fb",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:86faaa5174f0f653a9fbfdc129f8c560710ee59d3a22c8c5925c4fb20541b336",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:09Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "private_local",
+      "event_hash": "evsha256:0ad00580b96fd865d69301684e9c41bf86efbbb8869c460418e181ea1853ec1c"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSTRUCTURED00000000000010",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "body_id": "body_01HSTRUCTURED00000000001",
+      "sequence": 10,
+      "previous_event_hash": "evsha256:0ad00580b96fd865d69301684e9c41bf86efbbb8869c460418e181ea1853ec1c",
+      "event_type": "memory.structured.source",
+      "actor": "body",
+      "content_digest": "sha256:d09c868e5c3547c9b5af6ca26d7d8f133896523d3815f12498da907f56602a5c",
+      "content_type": "text/plain",
+      "observed_at": "2026-07-15T10:00:10Z",
+      "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "privacy": "guardian_shared",
+      "event_hash": "evsha256:28f8690fe5d8e4f7f66903dd23ac41645f153270a566d686ea360d77dc8c82eb"
+    }
+  ],
+  "assertions": [
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_profile_name_0001",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000000",
+      "source_event_hash": "evsha256:5d3582b72774e0a3d3cb34b1bd0d923ee33d0770dd686a05ad409a06dde1bae8",
+      "source_content_digest": "sha256:00394346dd31a88dcd4bb1dfb3d0f108100fcfd3f151a802526fb306abd29c17",
+      "source_sequence": 0,
+      "source_ordinal": 0,
+      "kind": "profile",
+      "entity": "user",
+      "slot": "display_name",
+      "version_key": "user:display_name",
+      "operation": "sets",
+      "previous_assertion_ref": null,
+      "value": "Mori",
+      "polarity": "neutral",
+      "valid_from": null,
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:00Z",
+      "privacy": "private_local",
+      "scope": "personal.profile",
+      "assertion_digest": "svasha256:9e349426060ae7f7ddf3d046ffebf46b629de0ee7619c5b68c82e14d7d8c7e4a"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_theme_0001",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000001",
+      "source_event_hash": "evsha256:6cfde82ed01a5e787709961417dcd6652d927b2d19af9fc8f58d6b3bed429d93",
+      "source_content_digest": "sha256:b25772e290389c1722c938a2903a2d1223ef33f98022d7a0f0a5424d86c9c935",
+      "source_sequence": 1,
+      "source_ordinal": 0,
+      "kind": "preference",
+      "entity": "user",
+      "slot": "theme",
+      "version_key": "user:theme",
+      "operation": "sets",
+      "previous_assertion_ref": null,
+      "value": "dark",
+      "polarity": "positive",
+      "valid_from": null,
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:01Z",
+      "privacy": "private_local",
+      "scope": "personal.preferences",
+      "assertion_digest": "svasha256:a3fe13a202353cac3e9bb32d6e85ac62d38434e1a62dd5b67603318871daacef"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_theme_0002",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000002",
+      "source_event_hash": "evsha256:4b747c52def1a055ee71ab754a20fc2c05c06659c9d9b55415c95e9fa86db1cb",
+      "source_content_digest": "sha256:91af1548754c478de5ecaf870a2ad7a1694e0cf6722eebf55f6574dd82f06f2e",
+      "source_sequence": 2,
+      "source_ordinal": 0,
+      "kind": "preference",
+      "entity": "user",
+      "slot": "theme",
+      "version_key": "user:theme",
+      "operation": "updates",
+      "previous_assertion_ref": "ast_theme_0001",
+      "value": "light",
+      "polarity": "positive",
+      "valid_from": null,
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:02Z",
+      "privacy": "private_local",
+      "scope": "personal.preferences",
+      "assertion_digest": "svasha256:cb406690c07784639d88c266afd50f36daf23a4d2b09c03681895ffc342c193a"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_goal_rust_0001",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000003",
+      "source_event_hash": "evsha256:ccbf73cd3d626d4c5ede85498dc8324529a0f0796dbafc9943cdaa066a82bbce",
+      "source_content_digest": "sha256:dbdd7dbe649b929f7579522beac5340b2a003bcf43ee7be11481099aa39b9541",
+      "source_sequence": 3,
+      "source_ordinal": 0,
+      "kind": "goal",
+      "entity": "user",
+      "slot": "learning_goal",
+      "version_key": "user:learning_goal",
+      "operation": "sets",
+      "previous_assertion_ref": null,
+      "value": "learn Rust",
+      "polarity": "positive",
+      "valid_from": null,
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:03Z",
+      "privacy": "private_local",
+      "scope": "personal.goals",
+      "assertion_digest": "svasha256:cfddfed132bae304b22137ad97c239954ba18d14cd0c5edb601a177b2f77fe96"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_members_0001",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000004",
+      "source_event_hash": "evsha256:4c4d10854e6ecf5ca7f530088276265d7d54d85129be9679f12b3804e2f43007",
+      "source_content_digest": "sha256:deeb86e0db30e29a26b8da63862afd8b8a6b2190d80092a8755e18e337460136",
+      "source_sequence": 4,
+      "source_ordinal": 0,
+      "kind": "relationship",
+      "entity": "project.aurora",
+      "slot": "members",
+      "version_key": "project.aurora:members",
+      "operation": "sets",
+      "previous_assertion_ref": null,
+      "value": "Mori",
+      "polarity": "neutral",
+      "valid_from": null,
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:04Z",
+      "privacy": "guardian_shared",
+      "scope": "project.aurora",
+      "assertion_digest": "svasha256:2aaf513242556501ff0c6d30380928c59f1a7cecc7e695d31a4aa46e25de825e"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_members_0002",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000005",
+      "source_event_hash": "evsha256:04aed201bea9d555c3fb79aff7d6325491cc19b70cf1934d7df947abd02ffd17",
+      "source_content_digest": "sha256:6b89089d0be7b1926ffe238eebaf742e1cf9762ad691dceafc40a1736e020e6e",
+      "source_sequence": 5,
+      "source_ordinal": 0,
+      "kind": "relationship",
+      "entity": "project.aurora",
+      "slot": "members",
+      "version_key": "project.aurora:members",
+      "operation": "extends",
+      "previous_assertion_ref": "ast_members_0001",
+      "value": "Lina",
+      "polarity": "neutral",
+      "valid_from": null,
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:05Z",
+      "privacy": "guardian_shared",
+      "scope": "project.aurora",
+      "assertion_digest": "svasha256:1078c52dff1754fa955e4a34910d5adcf85ab6fdbc87ea7b0f114bf3ac9581c0"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_members_0003",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000006",
+      "source_event_hash": "evsha256:dded263b1940f7fe2137825249261315739be86268220e8f8dc24f9c5be86ffd",
+      "source_content_digest": "sha256:249981f87214195e6906ea86d5d2f444d0d16d102bd1b8ee1152b95350766a6d",
+      "source_sequence": 6,
+      "source_ordinal": 0,
+      "kind": "relationship",
+      "entity": "project.aurora",
+      "slot": "members",
+      "version_key": "project.aurora:members",
+      "operation": "retracts",
+      "previous_assertion_ref": "ast_members_0002",
+      "value": "Lina",
+      "polarity": "neutral",
+      "valid_from": null,
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:06Z",
+      "privacy": "guardian_shared",
+      "scope": "project.aurora",
+      "assertion_digest": "svasha256:cf1498ddc7df9ee3efeb25bf1025ea74ea4262434359b03d1cc703c73a19aabe"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_city_0001",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000007",
+      "source_event_hash": "evsha256:e6c376ae81eeccdb36ae60dbb7d63bd20b0d492ded9f5009a4d76f6690f86b25",
+      "source_content_digest": "sha256:d7c85696ea592fca907700edd157e652c34bf918dc6c923dc68bbee692840008",
+      "source_sequence": 7,
+      "source_ordinal": 0,
+      "kind": "fact",
+      "entity": "user",
+      "slot": "home_city",
+      "version_key": "user:home_city",
+      "operation": "sets",
+      "previous_assertion_ref": null,
+      "value": "Lima",
+      "polarity": "neutral",
+      "valid_from": "2026-01-01T00:00:00Z",
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:07Z",
+      "privacy": "private_local",
+      "scope": "personal.profile",
+      "assertion_digest": "svasha256:a988f951107ef2e1289955e01a341a1f9aa3e44bfad7dc528a12074884483faf"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_city_0002",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000008",
+      "source_event_hash": "evsha256:e3b2dc6ccbeef8b2f529002095bc3393493f6c06eedd488d2ab4a98855ea16fb",
+      "source_content_digest": "sha256:5fe92a8c0c3ee5fe8453436577bab5886943757ffc0171d416b81adcd6983f4f",
+      "source_sequence": 8,
+      "source_ordinal": 0,
+      "kind": "fact",
+      "entity": "user",
+      "slot": "home_city",
+      "version_key": "user:home_city",
+      "operation": "retracts",
+      "previous_assertion_ref": "ast_city_0001",
+      "value": "Lima",
+      "polarity": "neutral",
+      "valid_from": null,
+      "valid_to": "2026-07-15T10:00:08Z",
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:08Z",
+      "privacy": "private_local",
+      "scope": "personal.profile",
+      "assertion_digest": "svasha256:383ce32cd0a3ef3fa52542e3ee68c6c5e2cc70de7adeac8f19b920cea8d11b22"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_city_0003",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000009",
+      "source_event_hash": "evsha256:0ad00580b96fd865d69301684e9c41bf86efbbb8869c460418e181ea1853ec1c",
+      "source_content_digest": "sha256:86faaa5174f0f653a9fbfdc129f8c560710ee59d3a22c8c5925c4fb20541b336",
+      "source_sequence": 9,
+      "source_ordinal": 0,
+      "kind": "fact",
+      "entity": "user",
+      "slot": "home_city",
+      "version_key": "user:home_city",
+      "operation": "sets",
+      "previous_assertion_ref": "ast_city_0002",
+      "value": "Cusco",
+      "polarity": "neutral",
+      "valid_from": "2026-07-15T10:00:09Z",
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:09Z",
+      "privacy": "private_local",
+      "scope": "personal.profile",
+      "assertion_digest": "svasha256:3eb3fd15e76cad52cf4a925a9a41c2105dfed355c6bcbd8be18b319dc77daf53"
+    },
+    {
+      "schema_version": "genesis.memory.structured.assertion.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "assertion_id": "ast_migration_0001",
+      "instance_id": "inst_01HSTRUCTURED00000000001",
+      "source_event_ref": "evt_01HSTRUCTURED00000000000010",
+      "source_event_hash": "evsha256:28f8690fe5d8e4f7f66903dd23ac41645f153270a566d686ea360d77dc8c82eb",
+      "source_content_digest": "sha256:d09c868e5c3547c9b5af6ca26d7d8f133896523d3815f12498da907f56602a5c",
+      "source_sequence": 10,
+      "source_ordinal": 0,
+      "kind": "event",
+      "entity": "instance",
+      "slot": "mobility_event",
+      "version_key": "instance:mobility_event",
+      "operation": "sets",
+      "previous_assertion_ref": null,
+      "value": "body migration completed",
+      "polarity": "neutral",
+      "valid_from": "2026-07-15T10:00:10Z",
+      "valid_to": null,
+      "extractor_profile": "genesis.memory.structured.fixture-extractor.v0.1",
+      "extractor_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "confidence_milli": 1000,
+      "asserted_at": "2026-07-15T10:00:10Z",
+      "privacy": "guardian_shared",
+      "scope": "system.mobility",
+      "assertion_digest": "svasha256:31869fbdf405ede50203d6cc447a1a52611c59b969079dd18907603df11f1894"
+    }
+  ],
+  "queries": [
+    {
+      "query_id": "q_theme_before_update",
+      "version_key": "user:theme",
+      "as_of_sequence": 1,
+      "allowed_event_refs": [
+        "evt_01HSTRUCTURED00000000000000",
+        "evt_01HSTRUCTURED00000000000001"
+      ],
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "query_id": "q_theme_current",
+      "version_key": "user:theme",
+      "as_of_sequence": 10,
+      "allowed_event_refs": [
+        "evt_01HSTRUCTURED00000000000000",
+        "evt_01HSTRUCTURED00000000000001",
+        "evt_01HSTRUCTURED00000000000002",
+        "evt_01HSTRUCTURED00000000000003",
+        "evt_01HSTRUCTURED00000000000004",
+        "evt_01HSTRUCTURED00000000000005",
+        "evt_01HSTRUCTURED00000000000006",
+        "evt_01HSTRUCTURED00000000000007",
+        "evt_01HSTRUCTURED00000000000008",
+        "evt_01HSTRUCTURED00000000000009",
+        "evt_01HSTRUCTURED00000000000010"
+      ],
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "query_id": "q_members_extended",
+      "version_key": "project.aurora:members",
+      "as_of_sequence": 5,
+      "allowed_event_refs": [
+        "evt_01HSTRUCTURED00000000000000",
+        "evt_01HSTRUCTURED00000000000001",
+        "evt_01HSTRUCTURED00000000000002",
+        "evt_01HSTRUCTURED00000000000003",
+        "evt_01HSTRUCTURED00000000000004",
+        "evt_01HSTRUCTURED00000000000005",
+        "evt_01HSTRUCTURED00000000000006",
+        "evt_01HSTRUCTURED00000000000007",
+        "evt_01HSTRUCTURED00000000000008",
+        "evt_01HSTRUCTURED00000000000009",
+        "evt_01HSTRUCTURED00000000000010"
+      ],
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "query_id": "q_members_after_retract",
+      "version_key": "project.aurora:members",
+      "as_of_sequence": 6,
+      "allowed_event_refs": [
+        "evt_01HSTRUCTURED00000000000000",
+        "evt_01HSTRUCTURED00000000000001",
+        "evt_01HSTRUCTURED00000000000002",
+        "evt_01HSTRUCTURED00000000000003",
+        "evt_01HSTRUCTURED00000000000004",
+        "evt_01HSTRUCTURED00000000000005",
+        "evt_01HSTRUCTURED00000000000006",
+        "evt_01HSTRUCTURED00000000000007",
+        "evt_01HSTRUCTURED00000000000008",
+        "evt_01HSTRUCTURED00000000000009",
+        "evt_01HSTRUCTURED00000000000010"
+      ],
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "query_id": "q_city_retracted",
+      "version_key": "user:home_city",
+      "as_of_sequence": 8,
+      "allowed_event_refs": [
+        "evt_01HSTRUCTURED00000000000000",
+        "evt_01HSTRUCTURED00000000000001",
+        "evt_01HSTRUCTURED00000000000002",
+        "evt_01HSTRUCTURED00000000000003",
+        "evt_01HSTRUCTURED00000000000004",
+        "evt_01HSTRUCTURED00000000000005",
+        "evt_01HSTRUCTURED00000000000006",
+        "evt_01HSTRUCTURED00000000000007",
+        "evt_01HSTRUCTURED00000000000008",
+        "evt_01HSTRUCTURED00000000000009",
+        "evt_01HSTRUCTURED00000000000010"
+      ],
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "query_id": "q_city_current",
+      "version_key": "user:home_city",
+      "as_of_sequence": 10,
+      "allowed_event_refs": [
+        "evt_01HSTRUCTURED00000000000000",
+        "evt_01HSTRUCTURED00000000000001",
+        "evt_01HSTRUCTURED00000000000002",
+        "evt_01HSTRUCTURED00000000000003",
+        "evt_01HSTRUCTURED00000000000004",
+        "evt_01HSTRUCTURED00000000000005",
+        "evt_01HSTRUCTURED00000000000006",
+        "evt_01HSTRUCTURED00000000000007",
+        "evt_01HSTRUCTURED00000000000008",
+        "evt_01HSTRUCTURED00000000000009",
+        "evt_01HSTRUCTURED00000000000010"
+      ],
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "query_id": "q_city_redacted_chain",
+      "version_key": "user:home_city",
+      "as_of_sequence": 10,
+      "allowed_event_refs": [
+        "evt_01HSTRUCTURED00000000000000",
+        "evt_01HSTRUCTURED00000000000001",
+        "evt_01HSTRUCTURED00000000000002",
+        "evt_01HSTRUCTURED00000000000003",
+        "evt_01HSTRUCTURED00000000000004",
+        "evt_01HSTRUCTURED00000000000005",
+        "evt_01HSTRUCTURED00000000000006",
+        "evt_01HSTRUCTURED00000000000007",
+        "evt_01HSTRUCTURED00000000000009",
+        "evt_01HSTRUCTURED00000000000010"
+      ],
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "query_id": "q_unknown_slot",
+      "version_key": "user:favorite_food",
+      "as_of_sequence": 10,
+      "allowed_event_refs": [
+        "evt_01HSTRUCTURED00000000000000",
+        "evt_01HSTRUCTURED00000000000001",
+        "evt_01HSTRUCTURED00000000000002",
+        "evt_01HSTRUCTURED00000000000003",
+        "evt_01HSTRUCTURED00000000000004",
+        "evt_01HSTRUCTURED00000000000005",
+        "evt_01HSTRUCTURED00000000000006",
+        "evt_01HSTRUCTURED00000000000007",
+        "evt_01HSTRUCTURED00000000000008",
+        "evt_01HSTRUCTURED00000000000009",
+        "evt_01HSTRUCTURED00000000000010"
+      ],
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "expected_projection": {
+    "schema_version": "genesis.memory.structured_versioned.projection.v0.1",
+    "hash_profile": "genesis.hash.fields.v0.1",
+    "projection_profile": "genesis.memory.structured_versioned.algorithm.v0.1",
+    "projection_id": "svpsha256:fa1b72e16230b00e283ec5017b01e0abffba0d218ec7de26c7e6269b08cfb728",
+    "instance_id": "inst_01HSTRUCTURED00000000001",
+    "source_first_sequence": 0,
+    "source_last_sequence": 10,
+    "source_event_count": 11,
+    "source_last_event_hash": "evsha256:28f8690fe5d8e4f7f66903dd23ac41645f153270a566d686ea360d77dc8c82eb",
+    "assertion_count": 11,
+    "slot_count": 6,
+    "active_slot_count": 6,
+    "retracted_slot_count": 0,
+    "slots": [
+      {
+        "slot_id": "slotsha256:1f934c689f17d6b5a66d35666fa6be1413c470aad251e23c5f3993c8b3cc3be6",
+        "version_key": "instance:mobility_event",
+        "kind": "event",
+        "entity": "instance",
+        "slot": "mobility_event",
+        "privacy": "guardian_shared",
+        "scope": "system.mobility",
+        "status": "active",
+        "current_items": [
+          {
+            "value": "body migration completed",
+            "value_digest": "sha256:5fadced7fd89763c4b1211cdd62333cc22d0a8d8633d91f6b2216659f5ec1cda",
+            "assertion_ref": "ast_migration_0001"
+          }
+        ],
+        "history": [
+          {
+            "assertion_id": "ast_migration_0001",
+            "assertion_digest": "svasha256:31869fbdf405ede50203d6cc447a1a52611c59b969079dd18907603df11f1894",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000010",
+            "source_event_hash": "evsha256:28f8690fe5d8e4f7f66903dd23ac41645f153270a566d686ea360d77dc8c82eb",
+            "source_sequence": 10,
+            "source_ordinal": 0,
+            "operation": "sets",
+            "value": "body migration completed",
+            "value_digest": "sha256:5fadced7fd89763c4b1211cdd62333cc22d0a8d8633d91f6b2216659f5ec1cda",
+            "polarity": "neutral",
+            "valid_from": "2026-07-15T10:00:10Z",
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:4cecac285531a5dbb153ab40b9db6b9bc661f1c85d9bb8263785d43537753f57"
+          }
+        ],
+        "slot_digest": "slotsha256:70157f7f5a8c34fd55f5429277508d8fe7de503a428f3c72b1d4195c57bd4015"
+      },
+      {
+        "slot_id": "slotsha256:d6b2b77f3d4e9a7621097cf890760db4ee18867651705a2e727e3d622fdd59eb",
+        "version_key": "project.aurora:members",
+        "kind": "relationship",
+        "entity": "project.aurora",
+        "slot": "members",
+        "privacy": "guardian_shared",
+        "scope": "project.aurora",
+        "status": "active",
+        "current_items": [
+          {
+            "value": "Mori",
+            "value_digest": "sha256:f556a14903538af690091c039f6b80b34279f2ae80a19eadae508959ad815819",
+            "assertion_ref": "ast_members_0001"
+          }
+        ],
+        "history": [
+          {
+            "assertion_id": "ast_members_0001",
+            "assertion_digest": "svasha256:2aaf513242556501ff0c6d30380928c59f1a7cecc7e695d31a4aa46e25de825e",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000004",
+            "source_event_hash": "evsha256:4c4d10854e6ecf5ca7f530088276265d7d54d85129be9679f12b3804e2f43007",
+            "source_sequence": 4,
+            "source_ordinal": 0,
+            "operation": "sets",
+            "value": "Mori",
+            "value_digest": "sha256:f556a14903538af690091c039f6b80b34279f2ae80a19eadae508959ad815819",
+            "polarity": "neutral",
+            "valid_from": null,
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:dbd9d8cd85747ce2f3a9d44ee138eb1e3706e8d2e6e26dc4095b87933490b788"
+          },
+          {
+            "assertion_id": "ast_members_0002",
+            "assertion_digest": "svasha256:1078c52dff1754fa955e4a34910d5adcf85ab6fdbc87ea7b0f114bf3ac9581c0",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000005",
+            "source_event_hash": "evsha256:04aed201bea9d555c3fb79aff7d6325491cc19b70cf1934d7df947abd02ffd17",
+            "source_sequence": 5,
+            "source_ordinal": 0,
+            "operation": "extends",
+            "value": "Lina",
+            "value_digest": "sha256:b805b99eb381071973397fb0fff06a3510c871ecc174098a27362cb52b1a5a6b",
+            "polarity": "neutral",
+            "valid_from": null,
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:4ca59c84ec0b341d7a714e05dc1addb0ae6617f03495d71342658d609b15ebd1"
+          },
+          {
+            "assertion_id": "ast_members_0003",
+            "assertion_digest": "svasha256:cf1498ddc7df9ee3efeb25bf1025ea74ea4262434359b03d1cc703c73a19aabe",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000006",
+            "source_event_hash": "evsha256:dded263b1940f7fe2137825249261315739be86268220e8f8dc24f9c5be86ffd",
+            "source_sequence": 6,
+            "source_ordinal": 0,
+            "operation": "retracts",
+            "value": "Lina",
+            "value_digest": "sha256:b805b99eb381071973397fb0fff06a3510c871ecc174098a27362cb52b1a5a6b",
+            "polarity": "neutral",
+            "valid_from": null,
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:91a51251806489a85d84b2a1d83a5570a5fc8ea1136243960d88f415bbeaadd9"
+          }
+        ],
+        "slot_digest": "slotsha256:e1b6e4feb4848ba2d0ba082600506c0ae6b99d3cd11bc3de5f3005ac9398f2c2"
+      },
+      {
+        "slot_id": "slotsha256:229734e5a7869632b299d3aafc79d40a668c3efad8661f7e086021c7597674d7",
+        "version_key": "user:display_name",
+        "kind": "profile",
+        "entity": "user",
+        "slot": "display_name",
+        "privacy": "private_local",
+        "scope": "personal.profile",
+        "status": "active",
+        "current_items": [
+          {
+            "value": "Mori",
+            "value_digest": "sha256:f556a14903538af690091c039f6b80b34279f2ae80a19eadae508959ad815819",
+            "assertion_ref": "ast_profile_name_0001"
+          }
+        ],
+        "history": [
+          {
+            "assertion_id": "ast_profile_name_0001",
+            "assertion_digest": "svasha256:9e349426060ae7f7ddf3d046ffebf46b629de0ee7619c5b68c82e14d7d8c7e4a",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000000",
+            "source_event_hash": "evsha256:5d3582b72774e0a3d3cb34b1bd0d923ee33d0770dd686a05ad409a06dde1bae8",
+            "source_sequence": 0,
+            "source_ordinal": 0,
+            "operation": "sets",
+            "value": "Mori",
+            "value_digest": "sha256:f556a14903538af690091c039f6b80b34279f2ae80a19eadae508959ad815819",
+            "polarity": "neutral",
+            "valid_from": null,
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:eeff51d0fda1443526ebf328ef75d02554ba72464089f782466570c284205a87"
+          }
+        ],
+        "slot_digest": "slotsha256:be6a9c028e3afd9b9e0d92c07bd04834c335f31dd92c1020ad0ba26279cac12c"
+      },
+      {
+        "slot_id": "slotsha256:d0cb43258d9b8433505847de429bfd7393fc5871e83736b2d1556bd928240078",
+        "version_key": "user:home_city",
+        "kind": "fact",
+        "entity": "user",
+        "slot": "home_city",
+        "privacy": "private_local",
+        "scope": "personal.profile",
+        "status": "active",
+        "current_items": [
+          {
+            "value": "Cusco",
+            "value_digest": "sha256:03e9cddce95a162c1df10d64aaa171ce27d944edbead5ee01cf14d25e8300f44",
+            "assertion_ref": "ast_city_0003"
+          }
+        ],
+        "history": [
+          {
+            "assertion_id": "ast_city_0001",
+            "assertion_digest": "svasha256:a988f951107ef2e1289955e01a341a1f9aa3e44bfad7dc528a12074884483faf",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000007",
+            "source_event_hash": "evsha256:e6c376ae81eeccdb36ae60dbb7d63bd20b0d492ded9f5009a4d76f6690f86b25",
+            "source_sequence": 7,
+            "source_ordinal": 0,
+            "operation": "sets",
+            "value": "Lima",
+            "value_digest": "sha256:aaf2d054d5f750cbf297a4ecd8c58f861a34a48ff7159ce6cd08f986f6a0c0eb",
+            "polarity": "neutral",
+            "valid_from": "2026-01-01T00:00:00Z",
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:5c39d9936961874eda5afc2a5463ce2687b4fbcef5e335252ed9c948451695a2"
+          },
+          {
+            "assertion_id": "ast_city_0002",
+            "assertion_digest": "svasha256:383ce32cd0a3ef3fa52542e3ee68c6c5e2cc70de7adeac8f19b920cea8d11b22",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000008",
+            "source_event_hash": "evsha256:e3b2dc6ccbeef8b2f529002095bc3393493f6c06eedd488d2ab4a98855ea16fb",
+            "source_sequence": 8,
+            "source_ordinal": 0,
+            "operation": "retracts",
+            "value": "Lima",
+            "value_digest": "sha256:aaf2d054d5f750cbf297a4ecd8c58f861a34a48ff7159ce6cd08f986f6a0c0eb",
+            "polarity": "neutral",
+            "valid_from": null,
+            "valid_to": "2026-07-15T10:00:08Z",
+            "status_after": "retracted",
+            "history_digest": "svhsha256:b95b6128a0f968e804111429ceb15e16209ba7691ba25ffde9a704c37ffe0161"
+          },
+          {
+            "assertion_id": "ast_city_0003",
+            "assertion_digest": "svasha256:3eb3fd15e76cad52cf4a925a9a41c2105dfed355c6bcbd8be18b319dc77daf53",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000009",
+            "source_event_hash": "evsha256:0ad00580b96fd865d69301684e9c41bf86efbbb8869c460418e181ea1853ec1c",
+            "source_sequence": 9,
+            "source_ordinal": 0,
+            "operation": "sets",
+            "value": "Cusco",
+            "value_digest": "sha256:03e9cddce95a162c1df10d64aaa171ce27d944edbead5ee01cf14d25e8300f44",
+            "polarity": "neutral",
+            "valid_from": "2026-07-15T10:00:09Z",
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:1a4680585ea97e84670ef280ddad610a8d7113378c1c03531a88e73902dead56"
+          }
+        ],
+        "slot_digest": "slotsha256:04dde0e95bf824ebf8548d0132e13a4015c8b5ab913b00e2d4320b6c9ee326ac"
+      },
+      {
+        "slot_id": "slotsha256:35c8e556296eef043c5cfbd843bedbf5cd0d089b7c00d010b989999922d87a34",
+        "version_key": "user:learning_goal",
+        "kind": "goal",
+        "entity": "user",
+        "slot": "learning_goal",
+        "privacy": "private_local",
+        "scope": "personal.goals",
+        "status": "active",
+        "current_items": [
+          {
+            "value": "learn Rust",
+            "value_digest": "sha256:ed61fc2e40e55fa50faa69433f3552eb2b988ece68f4ce5919cb05662ceeced3",
+            "assertion_ref": "ast_goal_rust_0001"
+          }
+        ],
+        "history": [
+          {
+            "assertion_id": "ast_goal_rust_0001",
+            "assertion_digest": "svasha256:cfddfed132bae304b22137ad97c239954ba18d14cd0c5edb601a177b2f77fe96",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000003",
+            "source_event_hash": "evsha256:ccbf73cd3d626d4c5ede85498dc8324529a0f0796dbafc9943cdaa066a82bbce",
+            "source_sequence": 3,
+            "source_ordinal": 0,
+            "operation": "sets",
+            "value": "learn Rust",
+            "value_digest": "sha256:ed61fc2e40e55fa50faa69433f3552eb2b988ece68f4ce5919cb05662ceeced3",
+            "polarity": "positive",
+            "valid_from": null,
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:f236268b0bb27d3639148847a077575cfa36745a38d5261f34512cd98c6645de"
+          }
+        ],
+        "slot_digest": "slotsha256:ca0039fd5fa0fea166c6a7c65981be73acc4eba0d2ce596a138c29b34ba9eb4e"
+      },
+      {
+        "slot_id": "slotsha256:a5e29c66e84977c2064a57a1d8241b40f8708184c2028aaa90a5552f0d622505",
+        "version_key": "user:theme",
+        "kind": "preference",
+        "entity": "user",
+        "slot": "theme",
+        "privacy": "private_local",
+        "scope": "personal.preferences",
+        "status": "active",
+        "current_items": [
+          {
+            "value": "light",
+            "value_digest": "sha256:99a7026172d42714d0293e5598ec1c8e8260d7d0c4b8582ad002c1883494e216",
+            "assertion_ref": "ast_theme_0002"
+          }
+        ],
+        "history": [
+          {
+            "assertion_id": "ast_theme_0001",
+            "assertion_digest": "svasha256:a3fe13a202353cac3e9bb32d6e85ac62d38434e1a62dd5b67603318871daacef",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000001",
+            "source_event_hash": "evsha256:6cfde82ed01a5e787709961417dcd6652d927b2d19af9fc8f58d6b3bed429d93",
+            "source_sequence": 1,
+            "source_ordinal": 0,
+            "operation": "sets",
+            "value": "dark",
+            "value_digest": "sha256:e6bb5689beec52c4672bd4df92c3613d128d30cdc2b704f76953fe43d89c4ae8",
+            "polarity": "positive",
+            "valid_from": null,
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:62bce8eb2cccfb179a825f41b99caffc6a562c3c476f3fff9f3c4e518f0c6f27"
+          },
+          {
+            "assertion_id": "ast_theme_0002",
+            "assertion_digest": "svasha256:cb406690c07784639d88c266afd50f36daf23a4d2b09c03681895ffc342c193a",
+            "source_event_ref": "evt_01HSTRUCTURED00000000000002",
+            "source_event_hash": "evsha256:4b747c52def1a055ee71ab754a20fc2c05c06659c9d9b55415c95e9fa86db1cb",
+            "source_sequence": 2,
+            "source_ordinal": 0,
+            "operation": "updates",
+            "value": "light",
+            "value_digest": "sha256:99a7026172d42714d0293e5598ec1c8e8260d7d0c4b8582ad002c1883494e216",
+            "polarity": "positive",
+            "valid_from": null,
+            "valid_to": null,
+            "status_after": "active",
+            "history_digest": "svhsha256:64dec150a6685ce472b087f1754797cc86a11ef43158a922f2e4dff92f44aeb8"
+          }
+        ],
+        "slot_digest": "slotsha256:0c45ba42f91a058dabf4cb738eeb91985a10ebc337d98ea60ace9731f7da7d4d"
+      }
+    ],
+    "projection_digest": "svpsha256:4772b47468d9a1d38bcba52a4b62d38cf20f0a9da3bc1024ebf296c8441397f6"
+  },
+  "expected_query_results": [
+    {
+      "query_id": "q_theme_before_update",
+      "version_key": "user:theme",
+      "as_of_sequence": 1,
+      "access_status": "allowed",
+      "slot_status": "active",
+      "current_values": [
+        "dark"
+      ],
+      "current_assertion_refs": [
+        "ast_theme_0001"
+      ],
+      "history_count": 1,
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "result_digest": "svqsha256:e2b24886744daa19dbc99ac8fd04ee50bc9ba9aa07a287d321d67b31fbcf19b4"
+    },
+    {
+      "query_id": "q_theme_current",
+      "version_key": "user:theme",
+      "as_of_sequence": 10,
+      "access_status": "allowed",
+      "slot_status": "active",
+      "current_values": [
+        "light"
+      ],
+      "current_assertion_refs": [
+        "ast_theme_0002"
+      ],
+      "history_count": 2,
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "result_digest": "svqsha256:ceb1428d058293e33e0b809be73bf5f729d57a7a3df62e91acbfd869c19904fa"
+    },
+    {
+      "query_id": "q_members_extended",
+      "version_key": "project.aurora:members",
+      "as_of_sequence": 5,
+      "access_status": "allowed",
+      "slot_status": "active",
+      "current_values": [
+        "Lina",
+        "Mori"
+      ],
+      "current_assertion_refs": [
+        "ast_members_0002",
+        "ast_members_0001"
+      ],
+      "history_count": 2,
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "result_digest": "svqsha256:c7147b7b7cdaaaa3939f4db747b0ca4ea77906c3297f741d9d72930b7c207287"
+    },
+    {
+      "query_id": "q_members_after_retract",
+      "version_key": "project.aurora:members",
+      "as_of_sequence": 6,
+      "access_status": "allowed",
+      "slot_status": "active",
+      "current_values": [
+        "Mori"
+      ],
+      "current_assertion_refs": [
+        "ast_members_0001"
+      ],
+      "history_count": 3,
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "result_digest": "svqsha256:7f828b1c6f971e55a37759cf32700fab1b96fcd4e9e176ce604f3b844bd4dc33"
+    },
+    {
+      "query_id": "q_city_retracted",
+      "version_key": "user:home_city",
+      "as_of_sequence": 8,
+      "access_status": "allowed",
+      "slot_status": "retracted",
+      "current_values": [],
+      "current_assertion_refs": [],
+      "history_count": 2,
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "result_digest": "svqsha256:bca37515835d09ee9a767a85c120e56927bda4ff844448b19138db60bda2a2c3"
+    },
+    {
+      "query_id": "q_city_current",
+      "version_key": "user:home_city",
+      "as_of_sequence": 10,
+      "access_status": "allowed",
+      "slot_status": "active",
+      "current_values": [
+        "Cusco"
+      ],
+      "current_assertion_refs": [
+        "ast_city_0003"
+      ],
+      "history_count": 3,
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "result_digest": "svqsha256:915bf5bf5209bc2377435b2c497a84b66a02e9f3d499d784fd1cd553c43bbeda"
+    },
+    {
+      "query_id": "q_city_redacted_chain",
+      "version_key": "user:home_city",
+      "as_of_sequence": 10,
+      "access_status": "redacted_chain",
+      "slot_status": null,
+      "current_values": [],
+      "current_assertion_refs": [],
+      "history_count": 0,
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "result_digest": "svqsha256:959ed58519164bf0b1b9c4f5f8571bbd38e1174d0fa883233e353c2a01319e03"
+    },
+    {
+      "query_id": "q_unknown_slot",
+      "version_key": "user:favorite_food",
+      "as_of_sequence": 10,
+      "access_status": "not_found",
+      "slot_status": null,
+      "current_values": [],
+      "current_assertion_refs": [],
+      "history_count": 0,
+      "acl_decision_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "result_digest": "svqsha256:3735bb61cab6545278ba31bf365e3ec987b7d1312426e2c1d56575fb9c1ee039"
+    }
+  ],
+  "negative_cases": [
+    {
+      "case_id": "reject-event-hash",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "source_events",
+          0,
+          "event_hash"
+        ],
+        "value": "evsha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "source_event_hash_mismatch"
+    },
+    {
+      "case_id": "reject-event-chain",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "source_events",
+          1,
+          "previous_event_hash"
+        ],
+        "value": "GENESIS"
+      },
+      "expected_error": "source_event_chain_invalid"
+    },
+    {
+      "case_id": "reject-event-sequence",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "source_events",
+          2,
+          "sequence"
+        ],
+        "value": 9
+      },
+      "expected_error": "source_event_sequence_invalid"
+    },
+    {
+      "case_id": "reject-event-instance",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "source_events",
+          0,
+          "instance_id"
+        ],
+        "value": "inst_wrong_0000000000000001"
+      },
+      "expected_error": "source_event_instance_mismatch"
+    },
+    {
+      "case_id": "reject-quarantined-source",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "source_events",
+          0,
+          "privacy"
+        ],
+        "value": "quarantined"
+      },
+      "expected_error": "source_event_privacy_invalid"
+    },
+    {
+      "case_id": "reject-forbidden-field",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "guardian_id"
+        ],
+        "value": "guardian_unexpected"
+      },
+      "expected_error": "forbidden_authority_or_platform_field"
+    },
+    {
+      "case_id": "reject-assertion-fields",
+      "mutation": {
+        "action": "delete",
+        "path": [
+          "assertions",
+          0,
+          "scope"
+        ]
+      },
+      "expected_error": "assertion_fields_invalid"
+    },
+    {
+      "case_id": "reject-assertion-instance",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "instance_id"
+        ],
+        "value": "inst_wrong_0000000000000001"
+      },
+      "expected_error": "assertion_instance_mismatch"
+    },
+    {
+      "case_id": "reject-source-missing",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "source_event_ref"
+        ],
+        "value": "evt_missing_000000000000001"
+      },
+      "expected_error": "assertion_source_event_missing"
+    },
+    {
+      "case_id": "reject-source-hash",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "source_event_hash"
+        ],
+        "value": "evsha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "assertion_source_hash_mismatch"
+    },
+    {
+      "case_id": "reject-source-content",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "source_content_digest"
+        ],
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "assertion_source_content_digest_mismatch"
+    },
+    {
+      "case_id": "reject-source-sequence",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "source_sequence"
+        ],
+        "value": 3
+      },
+      "expected_error": "assertion_order_invalid"
+    },
+    {
+      "case_id": "reject-asserted-at",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "asserted_at"
+        ],
+        "value": "2026-07-15T10:00:01Z"
+      },
+      "expected_error": "assertion_timestamp_mismatch"
+    },
+    {
+      "case_id": "reject-privacy",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "privacy"
+        ],
+        "value": "guardian_shared"
+      },
+      "expected_error": "assertion_privacy_mismatch"
+    },
+    {
+      "case_id": "reject-kind",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "kind"
+        ],
+        "value": "identity"
+      },
+      "expected_error": "assertion_kind_invalid"
+    },
+    {
+      "case_id": "reject-operation",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "operation"
+        ],
+        "value": "deletes"
+      },
+      "expected_error": "assertion_operation_invalid"
+    },
+    {
+      "case_id": "reject-polarity",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "polarity"
+        ],
+        "value": "mixed"
+      },
+      "expected_error": "assertion_polarity_invalid"
+    },
+    {
+      "case_id": "reject-empty-value",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "value"
+        ],
+        "value": ""
+      },
+      "expected_error": "assertion_text_required"
+    },
+    {
+      "case_id": "reject-version-key",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "version_key"
+        ],
+        "value": "wrong:key"
+      },
+      "expected_error": "assertion_version_key_mismatch"
+    },
+    {
+      "case_id": "reject-confidence",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "confidence_milli"
+        ],
+        "value": 1001
+      },
+      "expected_error": "assertion_confidence_invalid"
+    },
+    {
+      "case_id": "reject-extractor-digest",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "extractor_digest"
+        ],
+        "value": "bad"
+      },
+      "expected_error": "assertion_extractor_digest_invalid"
+    },
+    {
+      "case_id": "reject-validity-time",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          7,
+          "valid_from"
+        ],
+        "value": "yesterday"
+      },
+      "expected_error": "assertion_validity_timestamp_invalid"
+    },
+    {
+      "case_id": "reject-validity-interval",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          7,
+          "valid_to"
+        ],
+        "value": "2025-01-01T00:00:00Z"
+      },
+      "expected_error": "assertion_validity_interval_invalid"
+    },
+    {
+      "case_id": "reject-assertion-digest",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "assertion_digest"
+        ],
+        "value": "svasha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "assertion_digest_mismatch"
+    },
+    {
+      "case_id": "reject-duplicate-id",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          1,
+          "assertion_id"
+        ],
+        "value": "ast_profile_name_0001"
+      },
+      "expected_error": "assertion_id_duplicate",
+      "recompute_assertion_digests": true
+    },
+    {
+      "case_id": "reject-duplicate-position",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          1,
+          "source_sequence"
+        ],
+        "value": 0
+      },
+      "expected_error": "assertion_source_sequence_mismatch"
+    },
+    {
+      "case_id": "reject-order",
+      "mutation": {
+        "action": "swap",
+        "path": [
+          "assertions"
+        ],
+        "indices": [
+          0,
+          1
+        ]
+      },
+      "expected_error": "assertion_order_invalid"
+    },
+    {
+      "case_id": "reject-first-update",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "operation"
+        ],
+        "value": "updates"
+      },
+      "expected_error": "slot_first_operation_must_set",
+      "recompute_assertion_digests": true
+    },
+    {
+      "case_id": "reject-previous-link",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          2,
+          "previous_assertion_ref"
+        ],
+        "value": "ast_profile_name_0001"
+      },
+      "expected_error": "slot_previous_assertion_mismatch",
+      "recompute_assertion_digests": true
+    },
+    {
+      "case_id": "reject-set-active",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          2,
+          "operation"
+        ],
+        "value": "sets"
+      },
+      "expected_error": "slot_set_while_active",
+      "recompute_assertion_digests": true
+    },
+    {
+      "case_id": "reject-extend-duplicate",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          5,
+          "value"
+        ],
+        "value": "Mori"
+      },
+      "expected_error": "slot_extend_duplicate_value",
+      "recompute_assertion_digests": true
+    },
+    {
+      "case_id": "reject-retract-missing",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          6,
+          "value"
+        ],
+        "value": "Unknown"
+      },
+      "expected_error": "slot_retract_value_missing",
+      "recompute_assertion_digests": true
+    },
+    {
+      "case_id": "reject-update-after-retract",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          9,
+          "operation"
+        ],
+        "value": "updates"
+      },
+      "expected_error": "slot_operation_requires_active",
+      "recompute_assertion_digests": true
+    },
+    {
+      "case_id": "reject-kind-drift",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          2,
+          "kind"
+        ],
+        "value": "fact"
+      },
+      "expected_error": "slot_kind_drift",
+      "recompute_assertion_digests": true
+    },
+    {
+      "case_id": "reject-scope-drift",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          2,
+          "scope"
+        ],
+        "value": "other.scope"
+      },
+      "expected_error": "slot_scope_drift",
+      "recompute_assertion_digests": true
+    },
+    {
+      "case_id": "reject-non-nfc",
+      "mutation": {
+        "action": "set",
+        "path": [
+          "assertions",
+          0,
+          "value"
+        ],
+        "value": "Café"
+      },
+      "expected_error": "text_not_nfc"
+    }
+  ]
+}

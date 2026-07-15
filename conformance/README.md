@@ -158,3 +158,11 @@ Python y Node validan además la extracción multimodal neutral para documento, 
 Coinciden en tres registros aceptados, firmas Ed25519, locators por página/región/tiempo, cadena
 append-only y digest final. Cuarenta y tres mutaciones prueban límites de formato, privacidad,
 proveedor, integridad, firma, compuerta y continuidad.
+
+- `structured_versioned_memory_vectors.json`: once aserciones sobre seis slots, tipos de memoria
+  estructurada, cadenas `sets`/`updates`/`extends`/`retracts`, ocho consultas históricas y ACL,
+  digests reproducibles y treinta y seis mutaciones que deben rechazarse.
+
+Python y Node reconstruyen la misma proyección estructurada. Las versiones forman cadenas lineales,
+las retractaciones conservan historia y una consulta con cobertura ACL incompleta devuelve
+`redacted_chain` sin valores ni conteos históricos.
