@@ -35,8 +35,8 @@
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 6487,
-      "digest": "sha256:a325f786e3d4910d6d8d1211c403b6e78acb4c6b62e88dd96c1a66aadb278e1d"
+      "size_bytes": 6488,
+      "digest": "sha256:000fd2b3dd7edd62a41ae931a7de93b4124051b3282b1ee33e542932163535c7"
     },
     {
       "path": "conformance/associative_memory_projection_vectors.json",
@@ -90,8 +90,8 @@
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 54035,
-      "digest": "sha256:bd966bec87233689b179b0c26828437fb33943da59003d88ab19093565e14fc5"
+      "size_bytes": 76976,
+      "digest": "sha256:917593d94cdd54d32c77aaf2bccc877e5ceab3462b0886e409d62b4d8777b772"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -629,5 +629,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:19028ff1f52d2d8fc8684494f876b6d722bb1c424009d53485cdf4023b48eb18"
+  "root_digest": "sha256:6c4ab930991916c9525cb1c63bfc02a65d48c916e964a604bf3f4e1e2f8abb22"
 }
