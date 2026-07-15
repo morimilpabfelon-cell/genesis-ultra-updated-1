@@ -12,14 +12,18 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `associative_memory_projection_vectors.json`: proyección reconstruible de memoria aceptada,
   nodos y relaciones por digest, tres niveles de procedencia y rechazos de autoridad o datos
   crudos dentro del grafo.
+- `memory_retrieval_vectors.json`: cinco recuerdos aceptados, índice léxico determinista,
+  consultas asistidas por grafo, replay temporal, digests esperados y veintidós mutaciones de
+  autoridad, integridad, ranking o filtración futura que deben rechazarse.
 - `golden_vectors.json`: resultados criptográficos que deben coincidir byte por byte.
 - `host_adapter_vectors.json`: anchor portable, declaraciones de capacidades por plataforma
   y rechazos contra dependencias de proveedor o bindings locales dentro del core.
 - `instance_identity_vectors.json`: nombre canónico, digest de identidad, continuidad
   Android/Apple/Windows y cambios de identidad que deben rechazarse aunque se recalculen hashes.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
-- `schema_invalid_cases.json`: cuarenta y un artefactos que los JSON Schema reales deben
-  rechazar, con al menos una regresión conectada por cada uno de los 33 schemas.
+- `schema_invalid_cases.json`: cuarenta y dos artefactos que los JSON Schema reales deben
+  rechazar, con regresiones conectadas a los contratos existentes. Los 34 schemas se compilan
+  con JSON Schema 2020-12 y formatos activos.
 - `sense_observation_vectors.json`: seis observaciones firmadas, una decisión de compuerta,
   su evento de memoria enlazado y mutaciones que intentan saltarse la frontera.
 - `sense_adapter_vectors.json`: adaptadores neutrales simulados de Vista, Propiocepción e
@@ -71,6 +75,12 @@ cadena aceptada. La proyección distingue relaciones extraídas, inferidas y con
 dependencias de plataforma ni procedencia inventada. Graphify permanece como herramienta
 externa de análisis y no forma parte del formato normativo.
 
+Python y Node reconstruyen también una proyección de recuperación desde registros que ya
+pasaron la compuerta de memoria. Coinciden en cinco frames, 38 términos, cuatro consultas,
+cinco checkpoints de replay y todos los digests. La búsqueda combina evidencia léxica,
+vecindad asociativa y tiempo mediante aritmética entera; no usa modelos, red ni reloj de
+ejecución. Los resultados apuntan a eventos canónicos y no pueden modificar memoria o autoridad.
+
 ## Requisitos para una implementación
 
 Cada implementación debe publicar:
@@ -103,4 +113,5 @@ Los vectores son de borrador. Antes de congelarlos deben ampliarse con:
 - rutas equivalentes y no normalizadas;
 - reconciliación completa de bifurcaciones de cadena;
 - adaptadores de almacenamiento real por plataforma;
+- recuperación semántica opcional mediante modelos neutrales y evaluada por separado;
 - compatibilidad cruzada entre al menos tres implementaciones independientes.
