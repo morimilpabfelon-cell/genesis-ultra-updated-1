@@ -7,7 +7,7 @@
 ## Evidencia de CI y publicación
 
 - [x] Suite completa verde para la recuperación determinista en el [PR #15](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/15).
-- [ ] Cambios del PR #15 fusionados en `main`.
+- [x] PR #15 autorizado para fusión en `main` después de CI verde.
 - [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
 ## Implementado y verificado por la suite
