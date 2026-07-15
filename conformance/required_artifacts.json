@@ -34,6 +34,7 @@
     "observer/public/index.html",
     "observer/public/styles.css",
     "observer/server.mjs",
+    "observer/system-map.json",
     "observer/test/core.test.mjs",
     "package-lock.json",
     "package.json",

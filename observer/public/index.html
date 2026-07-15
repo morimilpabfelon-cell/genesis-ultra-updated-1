@@ -3,95 +3,173 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Genesis Live Observatory</title>
-  <meta name="description" content="Observador local, verificable y de solo lectura para Genesis Ultra.">
+  <title>Genesis Complete Observatory</title>
+  <meta name="description" content="Mapa completo, dinámico y de solo lectura para Genesis Ultra.">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <header class="topbar">
     <div>
       <p class="eyebrow">GENESIS ULTRA · v0.1-draft</p>
-      <h1>Live Observatory</h1>
-      <p class="subtitle">Estado local, memoria asociativa y actividad de GitHub sin autoridad de escritura.</p>
+      <h1>Complete Observatory</h1>
+      <p class="subtitle">Arquitectura, madurez verificable, runtime, memoria y desarrollo en una sola vista local.</p>
     </div>
     <div class="connection-stack" aria-label="Estado de conexiones">
       <span id="liveBadge" class="badge pending">Conectando</span>
       <span id="sourceBadge" class="badge neutral">Fuente desconocida</span>
       <span id="githubBadge" class="badge neutral">GitHub</span>
+      <span id="worktreeBadge" class="badge neutral">Git local</span>
     </div>
   </header>
 
   <main>
-    <section id="truthNotice" class="truth-notice">
-      <strong>Frontera de verdad:</strong> la cadena append-only es memoria. El grafo es una proyección reconstruible. Este panel solo observa.
+    <section class="truth-notice">
+      <strong>Lectura correcta:</strong> el porcentaje resume evidencia de ingeniería, no consciencia.
+      La cadena append-only es memoria; la proyección es reconstruible; este panel no escribe.
     </section>
 
-    <section class="metrics" aria-label="Resumen de Genesis">
-      <article class="metric"><span>Eventos</span><strong id="eventCount">—</strong><small id="latestEvent">Sin datos</small></article>
-      <article class="metric"><span>Nodos</span><strong id="nodeCount">—</strong><small id="nodeKinds">—</small></article>
-      <article class="metric"><span>Relaciones</span><strong id="edgeCount">—</strong><small id="derivations">—</small></article>
-      <article class="metric"><span>Cadena</span><strong id="chainStatus">—</strong><small id="chainRange">—</small></article>
+    <section class="metrics" aria-label="Resumen completo de Genesis">
+      <article class="metric"><span>Componentes</span><strong id="componentCount">—</strong><small id="componentLayers">—</small></article>
+      <article class="metric"><span>Madurez</span><strong id="maturityScore">—</strong><small>Evidencia, no consciencia</small></article>
+      <article class="metric"><span>Verificados</span><strong id="verifiedCount">—</strong><small id="verifiedSummary">—</small></article>
+      <article class="metric"><span>Simulados</span><strong id="simulatedCount">—</strong><small id="pendingSummary">—</small></article>
+      <article class="metric"><span>Memoria</span><strong id="eventCount">—</strong><small id="chainSummary">—</small></article>
+      <article class="metric"><span>Cerebro</span><strong id="nodeCount">—</strong><small id="edgeSummary">—</small></article>
       <article class="metric"><span>CI GitHub</span><strong id="ciStatus">—</strong><small id="ciRun">—</small></article>
       <article class="metric"><span>Actualización</span><strong id="lastUpdate">—</strong><small id="repositoryName">—</small></article>
     </section>
 
-    <section class="workspace">
-      <article class="panel brain-panel">
-        <header class="panel-header">
-          <div>
-            <p class="eyebrow">PROYECCIÓN ASOCIATIVA</p>
-            <h2>Cerebro observable</h2>
-          </div>
-          <div class="graph-tools">
-            <label>
-              <span class="sr-only">Buscar nodo</span>
-              <input id="nodeSearch" type="search" placeholder="Buscar tipo, ID o relación">
-            </label>
-            <button id="resetGraph" type="button">Recentrar</button>
-          </div>
-        </header>
-        <div id="graphEmpty" class="empty-state">Esperando una proyección asociativa.</div>
-        <svg id="brainGraph" role="img" aria-label="Grafo asociativo de Genesis" tabindex="0">
-          <defs>
-            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z"></path>
-            </marker>
-          </defs>
-          <g id="viewport"><g id="edgesLayer"></g><g id="nodesLayer"></g></g>
-        </svg>
-        <footer class="legend">
-          <span><i class="dot observation"></i>Observación</span>
-          <span><i class="dot concept"></i>Concepto</span>
-          <span><i class="dot decision"></i>Decisión</span>
-          <span><i class="line extracted"></i>Extraída</span>
-          <span><i class="line inferred"></i>Inferida</span>
-          <span><i class="line confirmed"></i>Confirmada</span>
-        </footer>
+    <nav class="view-tabs" aria-label="Vistas del observatorio">
+      <button class="view-tab active" data-view="systemView" type="button">Sistema completo</button>
+      <button class="view-tab" data-view="brainView" type="button">Cerebro</button>
+      <button class="view-tab" data-view="memoryView" type="button">Memoria y runtime</button>
+      <button class="view-tab" data-view="developmentView" type="button">Desarrollo</button>
+    </nav>
+
+    <section id="systemView" class="view active">
+      <div class="workspace">
+        <article class="panel">
+          <header class="panel-header">
+            <div><p class="eyebrow">MAPA DEL ORGANISMO</p><h2>Arquitectura completa</h2></div>
+            <div class="graph-tools">
+              <label><span class="sr-only">Filtrar componentes</span><input id="componentSearch" type="search" placeholder="Buscar órgano, estado o archivo"></label>
+              <select id="maturityFilter" aria-label="Filtrar por madurez">
+                <option value="">Todos los estados</option>
+                <option value="verified">Verificado</option>
+                <option value="simulated">Simulado</option>
+                <option value="partial">Parcial</option>
+                <option value="pending">Pendiente</option>
+                <option value="live_tool">Herramienta viva</option>
+              </select>
+            </div>
+          </header>
+          <div id="componentLayersGrid" class="component-layers"><p class="empty-state">Esperando mapa del proyecto.</p></div>
+        </article>
+
+        <aside class="panel detail-panel">
+          <header class="panel-header"><div><p class="eyebrow">ÓRGANO SELECCIONADO</p><h2>Estado y evidencia</h2></div></header>
+          <div id="componentDetail" class="detail-content"><p>Selecciona un componente para ver archivos, evidencia, runtime y cambios.</p></div>
+        </aside>
+      </div>
+
+      <article class="panel flow-panel">
+        <header class="panel-header"><div><p class="eyebrow">FLUJO PRINCIPAL</p><h2>Del nacimiento a la acción</h2></div></header>
+        <div id="systemFlow" class="system-flow"><p class="empty-state">Esperando arquitectura.</p></div>
       </article>
 
-      <aside class="panel detail-panel">
-        <header class="panel-header"><div><p class="eyebrow">INSPECCIÓN</p><h2>Detalle verificable</h2></div></header>
-        <div id="detailContent" class="detail-content"><p>Selecciona un nodo o una relación.</p></div>
-      </aside>
+      <section class="lower-grid three">
+        <article class="panel">
+          <header class="panel-header"><div><p class="eyebrow">PROGRESO</p><h2>Evidencia verificable</h2></div></header>
+          <div id="progressContent" class="summary-content"><p class="empty-state">Sin datos.</p></div>
+        </article>
+        <article class="panel">
+          <header class="panel-header"><div><p class="eyebrow">RUNTIME</p><h2>Subsistemas conectados</h2></div></header>
+          <div id="runtimeComponents" class="summary-content"><p class="empty-state">Runtime todavía no conectado.</p></div>
+        </article>
+        <article class="panel">
+          <header class="panel-header"><div><p class="eyebrow">CAMBIO ACTUAL</p><h2>Impacto por componente</h2></div></header>
+          <div id="currentImpact" class="summary-content"><p class="empty-state">Sin cambios locales.</p></div>
+        </article>
+      </section>
     </section>
 
-    <section class="lower-grid">
-      <article class="panel">
-        <header class="panel-header"><div><p class="eyebrow">MEMORIA</p><h2>Cadena append-only</h2></div></header>
-        <ol id="memoryTimeline" class="timeline"><li class="empty-state">Sin eventos.</li></ol>
-      </article>
+    <section id="brainView" class="view">
+      <section class="workspace">
+        <article class="panel brain-panel">
+          <header class="panel-header">
+            <div><p class="eyebrow">PROYECCIÓN ASOCIATIVA</p><h2>Cerebro observable</h2></div>
+            <div class="graph-tools">
+              <label><span class="sr-only">Buscar nodo</span><input id="nodeSearch" type="search" placeholder="Buscar tipo, ID o relación"></label>
+              <button id="resetGraph" type="button">Recentrar</button>
+            </div>
+          </header>
+          <div id="graphEmpty" class="empty-state">Esperando una proyección asociativa.</div>
+          <svg id="brainGraph" role="img" aria-label="Grafo asociativo de Genesis" tabindex="0">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z"></path>
+              </marker>
+            </defs>
+            <g id="viewport"><g id="edgesLayer"></g><g id="nodesLayer"></g></g>
+          </svg>
+          <footer class="legend">
+            <span><i class="dot observation"></i>Observación</span>
+            <span><i class="dot concept"></i>Concepto</span>
+            <span><i class="dot decision"></i>Decisión</span>
+            <span><i class="line extracted"></i>Extraída</span>
+            <span><i class="line inferred"></i>Inferida</span>
+            <span><i class="line confirmed"></i>Confirmada</span>
+          </footer>
+        </article>
+        <aside class="panel detail-panel">
+          <header class="panel-header"><div><p class="eyebrow">INSPECCIÓN</p><h2>Detalle verificable</h2></div></header>
+          <div id="detailContent" class="detail-content"><p>Selecciona un nodo o una relación.</p></div>
+        </aside>
+      </section>
+    </section>
 
-      <article class="panel">
-        <header class="panel-header"><div><p class="eyebrow">DESARROLLO</p><h2>Actividad de GitHub</h2></div></header>
-        <div id="githubError" class="inline-warning" hidden></div>
-        <ul id="githubActivity" class="activity"><li class="empty-state">Esperando GitHub.</li></ul>
-      </article>
+    <section id="memoryView" class="view">
+      <section class="lower-grid">
+        <article class="panel">
+          <header class="panel-header"><div><p class="eyebrow">MEMORIA VERDADERA</p><h2>Cadena append-only</h2></div></header>
+          <ol id="memoryTimeline" class="timeline"><li class="empty-state">Sin eventos.</li></ol>
+        </article>
+        <article class="panel">
+          <header class="panel-header"><div><p class="eyebrow">ESTADO LOCAL</p><h2>Identidad, cuerpo y fuente</h2></div></header>
+          <div id="runtimeDetail" class="detail-content"><p>Esperando estado local.</p></div>
+        </article>
+      </section>
+    </section>
+
+    <section id="developmentView" class="view">
+      <section class="lower-grid">
+        <article class="panel">
+          <header class="panel-header"><div><p class="eyebrow">GIT LOCAL</p><h2>Checkout observado</h2></div></header>
+          <div id="localRepository" class="detail-content"><p>Esperando Git.</p></div>
+        </article>
+        <article class="panel">
+          <header class="panel-header"><div><p class="eyebrow">INVENTARIO</p><h2>Artefactos comprobados</h2></div></header>
+          <div id="artifactInventory" class="summary-content"><p>Esperando manifiesto.</p></div>
+        </article>
+      </section>
+      <section class="lower-grid">
+        <article class="panel">
+          <header class="panel-header"><div><p class="eyebrow">DESARROLLO REMOTO</p><h2>Actividad de GitHub</h2></div></header>
+          <div id="githubError" class="inline-warning" hidden></div>
+          <ul id="githubActivity" class="activity"><li class="empty-state">Esperando GitHub.</li></ul>
+        </article>
+        <article class="panel">
+          <header class="panel-header"><div><p class="eyebrow">IMPACTO REMOTO</p><h2>Último commit y PR</h2></div></header>
+          <div id="remoteImpact" class="summary-content"><p class="empty-state">Esperando archivos modificados.</p></div>
+        </article>
+      </section>
     </section>
   </main>
 
   <footer class="footer">
     <span id="instanceId">Instancia: —</span>
     <span id="projectionId">Proyección: —</span>
+    <span id="localCommit">Commit: —</span>
     <span>127.0.0.1 · solo lectura</span>
   </footer>
   <script type="module" src="/app.js"></script>

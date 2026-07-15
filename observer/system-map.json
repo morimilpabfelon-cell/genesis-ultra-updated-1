@@ -1,0 +1,156 @@
+{
+  "schema_version": "genesis.observer.system-map.v0.1",
+  "status_legend": {
+    "verified": "Regla, contrato, vectores y validación reproducible.",
+    "simulated": "Flujo implementado y probado con datos o cuerpos simulados.",
+    "partial": "Contrato comprobado; integración física o runtime todavía pendiente.",
+    "pending": "Capacidad prevista pero todavía no implementada.",
+    "live_tool": "Herramienta operativa en vivo, externa al protocolo normativo."
+  },
+  "layers": [
+    {"id": "foundation", "name": "Fundamentos"},
+    {"id": "perception", "name": "Percepción y memoria"},
+    {"id": "continuity", "name": "Continuidad y autoridad"},
+    {"id": "cognition", "name": "Cognición y acción"},
+    {"id": "platform", "name": "Cuerpos y plataforma"},
+    {"id": "verification", "name": "Verificación y observabilidad"}
+  ],
+  "components": [
+    {
+      "id": "identity",
+      "name": "Identidad y nacimiento",
+      "layer": "foundation",
+      "maturity": "verified",
+      "description": "Semilla, nombre canónico, digest de identidad e instancia independiente del cuerpo.",
+      "keywords": ["seed", "instance_identity", "birth_identity", "identity_and_growth"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "memory_chain",
+      "name": "Memoria append-only",
+      "layer": "foundation",
+      "maturity": "verified",
+      "description": "Cadena histórica autoritativa, hashes de eventos y continuidad verificable.",
+      "keywords": ["memory_event", "golden_vectors", "hash_profile", "continuity_hashes"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "senses",
+      "name": "Sentidos",
+      "layer": "perception",
+      "maturity": "simulated",
+      "description": "Capturas y observaciones firmadas de sentidos neutrales con fallos cerrados.",
+      "keywords": ["sense_adapter", "sense_observation", "morimil_sense"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "memory_gate",
+      "name": "Compuerta de memoria",
+      "layer": "perception",
+      "maturity": "verified",
+      "description": "Decide qué observaciones pueden convertirse en eventos aceptados.",
+      "keywords": ["memory_gate", "observation_and_memory_gate"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "associative_memory",
+      "name": "Memoria asociativa",
+      "layer": "perception",
+      "maturity": "verified",
+      "description": "Proyección reconstruible con relaciones extraídas, inferidas y confirmadas.",
+      "keywords": ["associative_memory"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "authority",
+      "name": "Guardián y autoridad",
+      "layer": "continuity",
+      "maturity": "verified",
+      "description": "Autorizaciones, ledger append-only, épocas, revocaciones y escritor activo.",
+      "keywords": ["guardian_author", "authority", "body_registry", "body_record", "body_revocation"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "transfer",
+      "name": "Transferencia entre cuerpos",
+      "layer": "continuity",
+      "maturity": "simulated",
+      "description": "Movimiento A→B con paquete, recibo, finalización y continuidad de instancia.",
+      "keywords": ["transfer_", "transfer_state", "continuity_and_migration"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "recovery",
+      "name": "Backup y recuperación",
+      "layer": "continuity",
+      "maturity": "simulated",
+      "description": "Backup cifrado, recuperación B→C, brechas declaradas y cuerpo perdido.",
+      "keywords": ["backup", "recovery"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "journal",
+      "name": "Journal transaccional",
+      "layer": "continuity",
+      "maturity": "simulated",
+      "description": "Recuperación determinista ante cierres antes, durante y después del commit.",
+      "keywords": ["transaction_journal", "transaction_crash"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "reasoning",
+      "name": "Motor de razonamiento",
+      "layer": "cognition",
+      "maturity": "pending",
+      "description": "Motor intercambiable para consulta contextual, planificación y reflexión.",
+      "keywords": ["reasoning", "cognition"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "action",
+      "name": "Acción externa",
+      "layer": "cognition",
+      "maturity": "pending",
+      "description": "Intenciones y acciones autorizadas sin conceder autoridad al motor.",
+      "keywords": ["external_action", "action_intent"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "host_adapters",
+      "name": "Adaptadores de cuerpo",
+      "layer": "platform",
+      "maturity": "partial",
+      "description": "Frontera neutral core↔plataforma para Windows, Android, Apple y hardware futuro.",
+      "keywords": ["host_adapter", "host_capability"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
+      "id": "cryptography",
+      "name": "Criptografía",
+      "layer": "platform",
+      "maturity": "verified",
+      "description": "Ed25519, XChaCha20-Poly1305, Argon2id y perfiles de hashing portables.",
+      "keywords": ["crypto", "cryptographic", "hashing_profile", "continuity_hashes"],
+      "required_evidence": ["spec", "conformance", "implementation"]
+    },
+    {
+      "id": "conformance",
+      "name": "Conformidad cruzada",
+      "layer": "verification",
+      "maturity": "verified",
+      "description": "Schemas, vectores negativos, Python/Node, manifiesto y GitHub Actions.",
+      "keywords": ["conformance", "schema", "validate_workspace", "run_conformance", ".github/workflows"],
+      "required_evidence": ["schema", "conformance", "implementation", "workflow"]
+    },
+    {
+      "id": "observatory",
+      "name": "Observatorio",
+      "layer": "verification",
+      "maturity": "live_tool",
+      "description": "Panel local de solo lectura para arquitectura, runtime, memoria y desarrollo.",
+      "keywords": ["observer/"],
+      "required_evidence": ["documentation", "implementation", "test"]
+    }
+  ],
+  "flow": ["identity", "senses", "memory_gate", "memory_chain", "associative_memory", "reasoning", "action"]
+}
