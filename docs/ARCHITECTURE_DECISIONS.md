@@ -194,6 +194,17 @@ adaptador fabrique observaciones firmadas, eventos de memoria o acciones.
 pueden fallar. Mantener identidad y firma fuera del adaptador reduce autoridad, evita
 dependencias obligatorias y permite cambiar de implementación sin alterar continuidad.
 
+## AD-17 — El grafo recuerda relaciones; la cadena conserva la historia
+**Decisión:** las asociaciones se materializan en una proyección determinista y eliminable
+derivada únicamente de eventos aceptados. Cada nodo y relación conserva procedencia por
+referencias; una inferencia permanece distinta de una relación extraída o confirmada.
+**Alternativa descartada:** convertir Graphify, una base de grafos, embeddings o el estado
+interno de un proveedor en la memoria autoritativa de la instancia.
+**Motivo:** un índice acelera recuperación y razonamiento, pero puede corromperse, cambiar de
+motor o no existir en un cuerpo nuevo. Si la proyección se puede borrar y reconstruir desde
+la cadena append-only, la memoria viva gana conexiones sin quedar encerrada en una tecnología
+ni permitir que una deducción reescriba la historia.
+
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con
 vectores y crítica independiente antes de cualquier declaración de estabilidad.

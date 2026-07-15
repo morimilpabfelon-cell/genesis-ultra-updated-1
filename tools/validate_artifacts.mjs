@@ -24,6 +24,10 @@ const SENSE_ADAPTER_VECTORS = path.join(
   ROOT,
   "conformance/sense_adapter_vectors.json"
 );
+const ASSOCIATIVE_MEMORY_PROJECTION_VECTORS = path.join(
+  ROOT,
+  "conformance/associative_memory_projection_vectors.json"
+);
 const MAX_PORTABLE_INTEGER = Number.MAX_SAFE_INTEGER;
 const CANONICAL_TIMESTAMP_PATTERN =
   "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$";
@@ -1385,6 +1389,13 @@ function main() {
   const identityPlatformCount = validateInstanceIdentityFixture(validators);
   const senseObservationCount = validateSenseObservationFixtures(validators);
   const senseAdapterCounts = validateSenseAdapterFixtures(validators);
+  const associativeVectors = readJson(ASSOCIATIVE_MEMORY_PROJECTION_VECTORS);
+  requireValid(
+    validators,
+    "associative_memory_projection.schema.json",
+    associativeVectors.projection,
+    "conformance/associative_memory_projection_vectors.json"
+  );
   requireValid(
     validators,
     "draft_manifest.schema.json",
@@ -1413,6 +1424,7 @@ function main() {
     `Neutral sense adapter fixtures: OK (${senseAdapterCounts.adapterCount} adapters, ` +
     `${senseAdapterCounts.failClosedCount} fail-closed results).`
   );
+  console.log("Associative memory projection schema fixture: OK.");
   console.log("Draft integrity manifest schema: OK.");
   if (artifactPath) console.log("Generated A -> B artifacts and cross-links: OK.");
   if (backupRecoveryPath) console.log("Generated backup -> recovery artifacts and cross-links: OK.");

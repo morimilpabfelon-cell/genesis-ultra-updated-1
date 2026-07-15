@@ -9,14 +9,17 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 
 ## Archivos
 
+- `associative_memory_projection_vectors.json`: proyección reconstruible de memoria aceptada,
+  nodos y relaciones por digest, tres niveles de procedencia y rechazos de autoridad o datos
+  crudos dentro del grafo.
 - `golden_vectors.json`: resultados criptográficos que deben coincidir byte por byte.
 - `host_adapter_vectors.json`: anchor portable, declaraciones de capacidades por plataforma
   y rechazos contra dependencias de proveedor o bindings locales dentro del core.
 - `instance_identity_vectors.json`: nombre canónico, digest de identidad, continuidad
   Android/Apple/Windows y cambios de identidad que deben rechazarse aunque se recalculen hashes.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
-- `schema_invalid_cases.json`: cuarenta artefactos que los JSON Schema reales deben rechazar,
-  con al menos una regresión conectada por cada uno de los 32 schemas.
+- `schema_invalid_cases.json`: cuarenta y un artefactos que los JSON Schema reales deben
+  rechazar, con al menos una regresión conectada por cada uno de los 33 schemas.
 - `sense_observation_vectors.json`: seis observaciones firmadas, una decisión de compuerta,
   su evento de memoria enlazado y mutaciones que intentan saltarse la frontera.
 - `sense_adapter_vectors.json`: adaptadores neutrales simulados de Vista, Propiocepción e
@@ -61,6 +64,12 @@ Python y Node reproducen además el mismo contrato de adaptador para Vista, Prop
 Interocepción. Solo una captura válida puede producir una observación firmada; permiso
 denegado, fuente no disponible o fallo no producen observación. Estos fixtures permanecen
 en `simulated` y no afirman acceso físico a sensores.
+
+Python y Node reconstruyen de forma independiente la misma proyección asociativa desde una
+cadena aceptada. La proyección distingue relaciones extraídas, inferidas y confirmadas;
+30 mutaciones prueban que no puede introducir identidad, autoridad, contenido crudo,
+dependencias de plataforma ni procedencia inventada. Graphify permanece como herramienta
+externa de análisis y no forma parte del formato normativo.
 
 ## Requisitos para una implementación
 

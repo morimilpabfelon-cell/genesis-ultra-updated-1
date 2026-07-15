@@ -45,6 +45,8 @@ Una instancia puede pasar de un teléfono a una computadora, otro teléfono, un 
 - aprobación verificable del guardián;
 - sentidos neutrales que producen observaciones firmadas sin acceso directo a memoria;
 - adaptadores sustituibles de Vista, Propiocepción e Interocepción con fallos cerrados;
+- proyección asociativa reconstruible que conecta memoria aceptada sin reemplazarla ni
+  convertir inferencias en hechos;
 - especificación y vectores independientes del lenguaje.
 
 ## Estructura
@@ -70,9 +72,10 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 32 JSON Schema, verifica en ambos
+La suite ejecuta los validadores Python y Node, compila los 33 JSON Schema, verifica en ambos
 lenguajes el nombre canónico, el digest de identidad, los adaptadores neutrales de los tres
-primeros sentidos y la compuerta firmada antes de memoria, y exige que
+primeros sentidos, la compuerta firmada antes de memoria y la proyección asociativa
+reconstruible, y exige que
 los artefactos generados por la simulación A→B sean válidos y estén enlazados, verifica
 el permiso permanente, los dispositivos registrados y el ledger de autoridad, simula un
 backup cifrado comprometido seguido de pérdida y recuperación B→C, y ejecuta los vectores

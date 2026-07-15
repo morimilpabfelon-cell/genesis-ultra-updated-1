@@ -2,6 +2,36 @@
   "purpose": "Regresiones que deben ser rechazadas por los JSON Schema reales, no por predicados auxiliares.",
   "cases": [
     {
+      "case_id": "associative-memory-projection-rejects-unexpected-field",
+      "schema": "associative_memory_projection.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.memory.associative.projection.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "projection_id": "psha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "instance_id": "inst_01HSCHEMA00000000000001",
+        "projection_profile": "genesis.memory.associative.algorithm.v0.1",
+        "coverage_status": "complete",
+        "source_first_sequence": 0,
+        "source_last_sequence": 0,
+        "source_event_count": 1,
+        "source_last_event_hash": "evsha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "nodes": [
+          {
+            "node_id": "nsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "node_kind": "memory_event",
+            "subject_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "source_event_refs": [
+              "evt_01HSCHEMA00000000000001"
+            ]
+          }
+        ],
+        "edges": [],
+        "projection_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "unexpected_core_field": true
+      }
+    },
+    {
       "case_id": "memory-event-invalid-actor",
       "schema": "memory_event.schema.json",
       "artifact": {

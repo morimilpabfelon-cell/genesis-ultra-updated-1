@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 102,
+  "file_count": 107,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,18 +25,23 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 4422,
-      "digest": "sha256:8481f497922ed832069ee244fedfcb64dd9d8e031ea9d164430f566bf180036e"
+      "size_bytes": 4586,
+      "digest": "sha256:3e823f5ebbadb6b0f8392cfc5f1e19140e932b519a5f93c09234e7d95dd4cb9f"
     },
     {
       "path": "START_HERE.md",
-      "size_bytes": 1919,
-      "digest": "sha256:6eab5b2d5072c6b0593912e2d4ecd836d723352b219b9eb6a58b70ac650508e1"
+      "size_bytes": 2006,
+      "digest": "sha256:25d6a96354267a464e897bc07651fdf983c6f5c69d06fb3ebe488a72d364e740"
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 4977,
-      "digest": "sha256:73826c218fb8c1a6ae92baf73faf8a3cf0e0655080a89cd17baf61bfb15753d0"
+      "size_bytes": 5615,
+      "digest": "sha256:be7bd36b15b817e3f567f42bf329d5aaa65201bc494a02e799fa189e856801da"
+    },
+    {
+      "path": "conformance/associative_memory_projection_vectors.json",
+      "size_bytes": 16906,
+      "digest": "sha256:c691a7c475c38b05fc07110123760d35eaa65a910f4dfea1d8e635cf2ba3c828"
     },
     {
       "path": "conformance/behavior_cases.json",
@@ -75,13 +80,13 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 4407,
-      "digest": "sha256:f8ff9cc297fad757b1dff5d0ee091c9212e11acef3dbd8eb2b897589427363b6"
+      "size_bytes": 4682,
+      "digest": "sha256:2c383f33688db799c1a007f1620f5ec46433c1a82230524ff19f16408e024d27"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 52638,
-      "digest": "sha256:2fb689bbf74b1a20e5f733ab974e731a18ae4af00990bfc972bf23fe34168994"
+      "size_bytes": 54035,
+      "digest": "sha256:bd966bec87233689b179b0c26828437fb33943da59003d88ab19093565e14fc5"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -95,8 +100,8 @@
     },
     {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
-      "size_bytes": 14933,
-      "digest": "sha256:8634bd653f18c14080a16f24e1204e3e6a24ab6e85ab5ccf8a155e9fff703a54"
+      "size_bytes": 15776,
+      "digest": "sha256:34b5eeaeec8348535b76c150af6842cf5018da57c3ee404f041856db37f6de02"
     },
     {
       "path": "docs/MORIMIL_SENSE_EXTRACTION_MAP.md",
@@ -110,8 +115,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 4501,
-      "digest": "sha256:85b04fe8f80a3bde008d2de86860cb7f6c64b7583cbbdf3462fa211edcd5eaaa"
+      "size_bytes": 4768,
+      "digest": "sha256:fde813425486b64bd5499b0a8b791d535a65f963ae60d2e80d8a674f4a1bdf21"
     },
     {
       "path": "package-lock.json",
@@ -132,6 +137,11 @@
       "path": "requirements.txt",
       "size_bytes": 88,
       "digest": "sha256:73ac4c14929e4287d20eb2e13fa03db63616efac9f5842a00375173992082f6e"
+    },
+    {
+      "path": "schemas/associative_memory_projection.schema.json",
+      "size_bytes": 4759,
+      "digest": "sha256:ca7c9674246d6fdb8e7dcae837d7fd5c3539c915ab6fa355e25e098d2d31a68c"
     },
     {
       "path": "schemas/backup_commit.schema.json",
@@ -294,6 +304,11 @@
       "digest": "sha256:8c96b068c8ddbf79f30d6bdba1f18a912253afed14669202c3ba9a41c759e8f7"
     },
     {
+      "path": "spec/ASSOCIATIVE_MEMORY_PROJECTION.md",
+      "size_bytes": 7168,
+      "digest": "sha256:4bee752aff838819b8416254e47b07c2f0e1d53871fcf1305ba7a9a25f9c9e5f"
+    },
+    {
       "path": "spec/BACKUP_AND_RECOVERY_TRANSACTIONS.md",
       "size_bytes": 9516,
       "digest": "sha256:1294770956afa315273ec398d2d9adb99afdf45f2c2e133906181ff8204d0167"
@@ -400,8 +415,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 4461,
-      "digest": "sha256:55ea6cd6104ac92705194a60e3f7f03447035237785d279c6479f6d54e3b3143"
+      "size_bytes": 4748,
+      "digest": "sha256:7be557fe4add9a4b84cec1b48ae954920f11653b84c3879886317b1133561878"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -435,8 +450,18 @@
     },
     {
       "path": "tools/validate_artifacts.mjs",
-      "size_bytes": 56050,
-      "digest": "sha256:6006a5b365e2fe8adc52e0b972c001f7c6bae7ea8215b473d193dcb5fbba8851"
+      "size_bytes": 56505,
+      "digest": "sha256:060f5af984a9a60416b2c3b05168ab1bd28a80ddf56ab8e0afd7974e8614a9e0"
+    },
+    {
+      "path": "tools/validate_associative_memory_projection.mjs",
+      "size_bytes": 21439,
+      "digest": "sha256:e8a32e2d81b47557ccebd6b7dbbcbf33893c8ec305a635dc1c6073af7f02a3ed"
+    },
+    {
+      "path": "tools/validate_associative_memory_projection.py",
+      "size_bytes": 22979,
+      "digest": "sha256:982d94b08706b2cc08547605092017ed3c705ef45134e8c2e390d8dfea07573a"
     },
     {
       "path": "tools/validate_authority.py",
@@ -519,5 +544,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:b5bede58b94d3d65b96414c8908d9ef449767faeff6599f0378de073463f8e70"
+  "root_digest": "sha256:ab56df6667bd6cbc7bc42cfa81dcf3300a5d8c95670aac70c59c054f391e792a"
 }
