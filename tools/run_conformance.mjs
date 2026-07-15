@@ -67,6 +67,16 @@ const commands = [
     process.execPath,
     ["tools/validate_associative_memory_projection.mjs"]
   ],
+  [
+    "Validate deterministic memory retrieval (Python)",
+    python,
+    ["tools/validate_memory_retrieval.py"]
+  ],
+  [
+    "Validate deterministic memory retrieval independently (Node)",
+    process.execPath,
+    ["tools/validate_memory_retrieval.mjs"]
+  ],
   ["Validate neutral sense adapters (Python)", python, ["tools/validate_sense_adapters.py"]],
   [
     "Validate neutral sense adapters independently (Node)",
