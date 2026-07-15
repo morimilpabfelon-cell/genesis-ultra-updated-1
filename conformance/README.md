@@ -15,6 +15,9 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `memory_retrieval_vectors.json`: cinco recuerdos aceptados, índice léxico determinista,
   consultas asistidas por grafo, replay temporal, digests esperados y veintidós mutaciones de
   autoridad, integridad, ranking o filtración futura que deben rechazarse.
+- `memory_gate_retrieval_bridge_vectors.json`: observación y compuerta firmadas, evento ya
+  comprometido, vista textual ligada por digest, recibo de derivación y diecinueve ataques que
+  intentan introducir firmas inválidas, cobertura incompleta, datos alterados o contenido futuro.
 - `golden_vectors.json`: resultados criptográficos que deben coincidir byte por byte.
 - `host_adapter_vectors.json`: anchor portable, declaraciones de capacidades por plataforma
   y rechazos contra dependencias de proveedor o bindings locales dentro del core.
@@ -81,6 +84,12 @@ cinco checkpoints de replay y todos los digests. La búsqueda combina evidencia 
 vecindad asociativa y tiempo mediante aritmética entera; no usa modelos, red ni reloj de
 ejecución. Los resultados apuntan a eventos canónicos y no pueden modificar memoria o autoridad.
 
+Python y Node validan además el puente operacional entre la compuerta y recuperación. Solo una
+decisión `accepted` firmada y enlazada a un evento append-only válido puede producir un registro.
+La vista textual debe coincidir con el contenido comprometido y estar ligada por digest. El
+recibo final compromete observaciones, decisiones, eventos, vistas, registros y proyección. La
+sincronización sustituye atómicamente el snapshot reconstruible y deja intacta la cadena.
+
 ## Requisitos para una implementación
 
 Cada implementación debe publicar:
@@ -114,4 +123,5 @@ Los vectores son de borrador. Antes de congelarlos deben ampliarse con:
 - reconciliación completa de bifurcaciones de cadena;
 - adaptadores de almacenamiento real por plataforma;
 - recuperación semántica opcional mediante modelos neutrales y evaluada por separado;
+- invocación persistente del puente desde runtimes físicos después del commit append-only;
 - compatibilidad cruzada entre al menos tres implementaciones independientes.
