@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 154,
+  "file_count": 159,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,18 +25,18 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 10714,
-      "digest": "sha256:b7fb20780a6d703eb328180cbdee4037efc997f79db0c6602914d8b0caca3e4b"
+      "size_bytes": 11447,
+      "digest": "sha256:21fe903b507a7405c69d5858c8ecf8992506f704f083306b35b25631c94f536a"
     },
     {
       "path": "START_HERE.md",
-      "size_bytes": 5357,
-      "digest": "sha256:c7d50299a59c9b745b8980bd55cbbea018e712a5342e4813be68ded527167288"
+      "size_bytes": 5733,
+      "digest": "sha256:1c9834a193d465ab7a2b5891172950d0bb6699af5e3b260d9197b52d6e371495"
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 9568,
-      "digest": "sha256:4107032f2a480bb0a777525280c0e72faada3b55762eab5750ffb01d8c0f2d62"
+      "size_bytes": 9915,
+      "digest": "sha256:23ef0a07b7cbdbd18805ff7d50b1bc59d13a02af240cb7907fc7be0398e595b1"
     },
     {
       "path": "conformance/associative_memory_projection_vectors.json",
@@ -99,19 +99,24 @@
       "digest": "sha256:5a70ea9ec9c964920c7b5f35e096ece4e6f084c55af4bf6dcd442fba73f84629"
     },
     {
+      "path": "conformance/multimodal_memory_pipeline_vectors.json",
+      "size_bytes": 36302,
+      "digest": "sha256:3d928c31fb6b289fd6ed74d87be96578fa9fd165edaf7b92c750cae44edf01c9"
+    },
+    {
       "path": "conformance/portable_memory_capsule_vectors.json",
       "size_bytes": 15537,
       "digest": "sha256:b6eb040dd79ea15adf52d67e1a6be79f7abcd55524f1ed896101bcfa2547f1ad"
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 6751,
-      "digest": "sha256:1ea8723fde10ef5495ff1a218577281afad2d2cac3b83f6f9096ee28b8b37fe2"
+      "size_bytes": 7008,
+      "digest": "sha256:016d7669fc09912fc7cdb8063180173fcfb094edb9d51d3b57c555f039b3141a"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 96446,
-      "digest": "sha256:cd758515fef59170078dfc12a2445a83202788004c9d09ec50c44b518c3a3ee1"
+      "size_bytes": 102337,
+      "digest": "sha256:7aaef836e90626dd381f98c42e2b43a6d21c24697d97e3b20fe57054dbbbd90d"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -135,8 +140,8 @@
     },
     {
       "path": "docs/MEMVID_MEMORY_EXTRACTION_MAP.md",
-      "size_bytes": 4754,
-      "digest": "sha256:cdd3f122fe00d39af8e8e1bc8fa993e85aa4bce9f82165faa7eb3f47c0e52337"
+      "size_bytes": 5605,
+      "digest": "sha256:43f21e72b5bb854ee628f78ddf5da914fb7808fbace4c23f1463b7a1efa384a2"
     },
     {
       "path": "docs/MORIMIL_SENSE_EXTRACTION_MAP.md",
@@ -150,8 +155,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 6804,
-      "digest": "sha256:305d01fdbd92485067ec4157e7610582e5ce41cedd16694b2d94c320927cab9b"
+      "size_bytes": 7175,
+      "digest": "sha256:ac33c94b9d20efa74d4b93cd485f1d4df79d6f613bdcffde34e9211b78249cd3"
     },
     {
       "path": "observer/README.md",
@@ -185,8 +190,8 @@
     },
     {
       "path": "observer/system-map.json",
-      "size_bytes": 9734,
-      "digest": "sha256:2c1d32383f9dd3fa46cea8c710b8382fbb4b2338df3ab05ee15474b053108c2f"
+      "size_bytes": 10285,
+      "digest": "sha256:2f4d9ef3da72b78e7a6c557771067e7e5bbd9de984e10c2f1fcbc34a72353237"
     },
     {
       "path": "observer/test/core.test.mjs",
@@ -200,8 +205,8 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 2699,
-      "digest": "sha256:6ff7ac8dc4428e9d5c52a3be97d7e1e985d357d964de9ded27b0cb64d56a3690"
+      "size_bytes": 3028,
+      "digest": "sha256:45f72409496f9d8dea20b8228e8d676962d0073ee8bbdff3839d6c1be96cb4c8"
     },
     {
       "path": "reference/README.md",
@@ -332,6 +337,11 @@
       "path": "schemas/memory_retrieval_projection.schema.json",
       "size_bytes": 7239,
       "digest": "sha256:383151543433d6b4f3e5c4337fa23a135c9d9f20a8d97e952c8a3547e7dbf3c3"
+    },
+    {
+      "path": "schemas/multimodal_memory_projection.schema.json",
+      "size_bytes": 4299,
+      "digest": "sha256:8602804cba93dbaa490c0e5bf99718389f171c8557327c54542ec76179115555"
     },
     {
       "path": "schemas/portable_memory_capsule.schema.json",
@@ -499,6 +509,11 @@
       "digest": "sha256:48a22af646406dfc65dc4a922746238bbcf97d30a13c000b7f246c414832a4d5"
     },
     {
+      "path": "spec/MULTIMODAL_EXTRACTION_PIPELINE.md",
+      "size_bytes": 6405,
+      "digest": "sha256:640f2240674a1bb5f0157cba67402e104c7c1085bdc90ecf536c09707f0df034"
+    },
+    {
       "path": "spec/NEUTRAL_HYBRID_MEMORY_RETRIEVAL.md",
       "size_bytes": 5475,
       "digest": "sha256:db24a758907693bbc7c1db76a7b5736aa291864b932ee8bbb758ed03b4b4c740"
@@ -564,6 +579,11 @@
       "digest": "sha256:8c4efab6ac5ca2d1b98821aaef3531b58d51cfd194e8ca4758db9c66947ec947"
     },
     {
+      "path": "tools/multimodal_memory_pipeline.mjs",
+      "size_bytes": 24220,
+      "digest": "sha256:e91b2ac3be593d2bf6c5df17dcb54025c1d63c5171b1036d4c71163d5e88649e"
+    },
+    {
       "path": "tools/portable_capsule_builder.py",
       "size_bytes": 6548,
       "digest": "sha256:79eaee47ee7c09986d872bb0ab9a1dffc5e48ea11262a6019765d13acf83b203"
@@ -610,8 +630,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 5976,
-      "digest": "sha256:4f4888a2338c76e6b97c337078bfc2f7271cf4b3e2b7f0465eb536e689615622"
+      "size_bytes": 6222,
+      "digest": "sha256:d39fe0fcb4b13c13b0a8e278e2668ce44243e47f8dd03af2192df2932673e023"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -729,6 +749,11 @@
       "digest": "sha256:922de24dbc42c3cec68c721aaa9c8ef17a29a9db9f4ebb54808649754a9ca95d"
     },
     {
+      "path": "tools/validate_multimodal_memory_pipeline.py",
+      "size_bytes": 17178,
+      "digest": "sha256:da14aabc0f4e2083a29c142246deec94652c9ca8b9ecd71c74e05bd2a2e9440e"
+    },
+    {
       "path": "tools/validate_portable_memory_capsule.py",
       "size_bytes": 4985,
       "digest": "sha256:caa1dd73717b3aac1a227f0a328e6b1289d4df51198b9f205e631cf5267769b0"
@@ -779,5 +804,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:e92b0e7d0eb941f2a65482f188e17a4e1de456da80edf79c3d3ab33d97871c66"
+  "root_digest": "sha256:b7bfd881b6c7dde4cc96f929f4ec0ff7e88082691ec43a30a6794f4e5ae53dd6"
 }

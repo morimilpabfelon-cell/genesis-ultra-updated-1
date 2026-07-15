@@ -1,0 +1,990 @@
+{
+  "profile": "genesis.multimodal.memory.pipeline.v0.1",
+  "status": "draft",
+  "domains": {
+    "observation": "genesis.sense.observation.v0.1",
+    "observation_signature": "genesis.sense.observation.signature.v0.1",
+    "gate_decision": "genesis.memory.gate.decision.v0.1",
+    "gate_signature": "genesis.memory.gate.decision.signature.v0.1"
+  },
+  "test_signing_key": {
+    "warning": "TEST ONLY - never use this seed outside conformance fixtures",
+    "seed_hex": "7777777777777777777777777777777777777777777777777777777777777777",
+    "public_key_hex": "c853ad0f0cd2b619aea92ceec4fd56a24d6499d584ce79257e45cfd8139b60a7",
+    "public_key_fingerprint": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+  },
+  "adapter_profiles": [
+    {
+      "adapter_id": "adapter.document.explicit",
+      "adapter_version": "0.1.0",
+      "modality": "document",
+      "output_kind": "document_text",
+      "execution_mode": "local",
+      "model_digest": null,
+      "profile_digest": "sha256:0bc13d9c5211c18a394da14922acac20785b39a797e9706b4f781a5c526725a9"
+    },
+    {
+      "adapter_id": "adapter.image.local-model",
+      "adapter_version": "0.1.0",
+      "modality": "image",
+      "output_kind": "image_description",
+      "execution_mode": "local",
+      "model_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "profile_digest": "sha256:5f24fcb82b7dcc565ea2713cef8f6a60962148ff9d0c8d5df64ccc1648558cf3"
+    },
+    {
+      "adapter_id": "adapter.audio.local-model",
+      "adapter_version": "0.1.0",
+      "modality": "audio",
+      "output_kind": "audio_transcript",
+      "execution_mode": "local",
+      "model_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "profile_digest": "sha256:a70e7997ea003d80b40a21161f5c7df65ef97e6521f8deb1cf82d79faf4468d9"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "src_document_00000000000001",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "modality": "document",
+      "sense": "vision",
+      "source_kind": "user_input",
+      "captured_at": "2026-07-15T12:00:00Z",
+      "media_type": "application/pdf",
+      "byte_length": 48211,
+      "privacy": "private_local",
+      "source_digest": "sha256:b9e0cd5b0a771709dbe0753f29209f399de4fcde91831187642d96f222d5bc8a"
+    },
+    {
+      "source_id": "src_image_000000000000001",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "modality": "image",
+      "sense": "vision",
+      "source_kind": "user_input",
+      "captured_at": "2026-07-15T12:00:01Z",
+      "media_type": "image/png",
+      "byte_length": 190234,
+      "privacy": "guardian_shared",
+      "source_digest": "sha256:55dfdfd6fc9e8c93f289a9267e365a633c9b8e5d952aff075dd4cd3d29367b65"
+    },
+    {
+      "source_id": "src_audio_000000000000001",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "modality": "audio",
+      "sense": "hearing",
+      "source_kind": "local_sensor",
+      "captured_at": "2026-07-15T12:00:02Z",
+      "media_type": "audio/opus",
+      "byte_length": 84102,
+      "privacy": "private_local",
+      "source_digest": "sha256:1c24974edf43050d621551f3150e65e43a5601952b2528bb849bebe06a058e6f"
+    }
+  ],
+  "extractions": [
+    {
+      "extraction_id": "ext_document_00000000000001",
+      "source_id": "src_document_00000000000001",
+      "adapter_id": "adapter.document.explicit",
+      "adapter_version": "0.1.0",
+      "status": "extracted",
+      "output_kind": "document_text",
+      "segments": [
+        {
+          "segment_id": "seg_doc_0001",
+          "ordinal": 0,
+          "text": "Genesis memory export requires guardian authorization.",
+          "confidence": 1000,
+          "locator": {
+            "kind": "page",
+            "page": 1
+          },
+          "segment_digest": "sha256:ef0f69e024ea353d241f17cea7d538c70f8272918bb684e534b8ab1dc7a1993f"
+        },
+        {
+          "segment_id": "seg_doc_0002",
+          "ordinal": 1,
+          "text": "Portable capsules preserve continuity without granting authority.",
+          "confidence": 1000,
+          "locator": {
+            "kind": "page",
+            "page": 2
+          },
+          "segment_digest": "sha256:41164a308e9943ea51e9f3d18cc7777a753ac265f9fb33b0e5d1d35e3ddefcbc"
+        }
+      ],
+      "aggregate_text": "Genesis memory export requires guardian authorization.\nPortable capsules preserve continuity without granting authority.",
+      "aggregate_digest": "sha256:05b8a5a34723d062d3680e8e39e88fe4b8d5f95416ffd388482167fdf865f905",
+      "extraction_digest": "sha256:6e5f0600f391e9c6bcc210dda60c32b10cf6fb47969c24394c1e258f518746fb"
+    },
+    {
+      "extraction_id": "ext_image_000000000000001",
+      "source_id": "src_image_000000000000001",
+      "adapter_id": "adapter.image.local-model",
+      "adapter_version": "0.1.0",
+      "status": "extracted",
+      "output_kind": "image_description",
+      "segments": [
+        {
+          "segment_id": "seg_img_0001",
+          "ordinal": 0,
+          "text": "A diagram shows an append-only memory chain connected to a portable capsule.",
+          "confidence": 870,
+          "locator": {
+            "kind": "region",
+            "x": 60,
+            "y": 80,
+            "width": 860,
+            "height": 700,
+            "unit": "permille"
+          },
+          "segment_digest": "sha256:8eebef286d07853386cf537a2f777b25923c6de6e860ad1bc9d943015d0a61ea"
+        }
+      ],
+      "aggregate_text": "A diagram shows an append-only memory chain connected to a portable capsule.",
+      "aggregate_digest": "sha256:79f9a7eb44082a6b8e5da9364ef4ad888a2fcfe75630de2c73127ac980e28003",
+      "extraction_digest": "sha256:5c65fc7084c2f257943d3993e7b323102e0bafc80e8e81c2fd91577ff03221d2"
+    },
+    {
+      "extraction_id": "ext_audio_000000000000001",
+      "source_id": "src_audio_000000000000001",
+      "adapter_id": "adapter.audio.local-model",
+      "adapter_version": "0.1.0",
+      "status": "extracted",
+      "output_kind": "audio_transcript",
+      "segments": [
+        {
+          "segment_id": "seg_aud_0001",
+          "ordinal": 0,
+          "text": "The guardian approved the offline memory backup.",
+          "confidence": 930,
+          "locator": {
+            "kind": "time_range",
+            "start_ms": 0,
+            "end_ms": 2400
+          },
+          "segment_digest": "sha256:5a4549bb6789e8a671c1d03aca904c2866c1ffeb43c5773c407e9673411a073a"
+        },
+        {
+          "segment_id": "seg_aud_0002",
+          "ordinal": 1,
+          "text": "The active writer remains unchanged.",
+          "confidence": 910,
+          "locator": {
+            "kind": "time_range",
+            "start_ms": 2500,
+            "end_ms": 4300
+          },
+          "segment_digest": "sha256:e62cb59eaa3d5b8722e0b1319e70c51cb55941f939f8c5b1e7927872278e2202"
+        }
+      ],
+      "aggregate_text": "The guardian approved the offline memory backup.\nThe active writer remains unchanged.",
+      "aggregate_digest": "sha256:2ca9bb5fbe3fd5ed25722f71eda7a1fa19b2c5f323c916543b5bb2bdfc45c380",
+      "extraction_digest": "sha256:4840a866908f2d372d0bb4526c9e891139649df208285791d8a3a1124f5b4a9c"
+    }
+  ],
+  "observations": [
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_multimodal_00_00000001",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "observation_sequence": 0,
+      "sense": "vision",
+      "source_kind": "user_input",
+      "captured_at": "2026-07-15T12:00:00Z",
+      "payload_digest": "sha256:05b8a5a34723d062d3680e8e39e88fe4b8d5f95416ffd388482167fdf865f905",
+      "payload_media_type": "application/vnd.genesis.multimodal-accepted-text+json",
+      "evidence_digest": "sha256:6e5f0600f391e9c6bcc210dda60c32b10cf6fb47969c24394c1e258f518746fb",
+      "privacy": "private_local",
+      "observation_digest": "sha256:7545d9277b475add24c7b44ee523a4b4c07acdb821e1456d3761aeaee413335e",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HMULTIMODAL000000001",
+        "key_epoch_id": "epoch_01HMULTIMODAL000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:7545d9277b475add24c7b44ee523a4b4c07acdb821e1456d3761aeaee413335e",
+        "signature_value": "649f519a696125245bf88bc17a506f4166d02ff5edd48fc1111d8af5ada33a428fd5ddee00a23d3217cd1a11cab302916b1507a9eec9d6a466c73fbf22b07e0b",
+        "created_at": "2026-07-15T12:00:00Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_multimodal_01_00000001",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "observation_sequence": 1,
+      "sense": "vision",
+      "source_kind": "user_input",
+      "captured_at": "2026-07-15T12:00:01Z",
+      "payload_digest": "sha256:79f9a7eb44082a6b8e5da9364ef4ad888a2fcfe75630de2c73127ac980e28003",
+      "payload_media_type": "application/vnd.genesis.multimodal-accepted-text+json",
+      "evidence_digest": "sha256:5c65fc7084c2f257943d3993e7b323102e0bafc80e8e81c2fd91577ff03221d2",
+      "privacy": "guardian_shared",
+      "observation_digest": "sha256:23db5f1cc57d593a4b47e5040638e8f7fcce76c0514d33a49cd5095044926684",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HMULTIMODAL000000001",
+        "key_epoch_id": "epoch_01HMULTIMODAL000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:23db5f1cc57d593a4b47e5040638e8f7fcce76c0514d33a49cd5095044926684",
+        "signature_value": "633707c6098309ddc734ff950cf94d1500a50803b6f8bf7adc78926628b900364552603a55dcf0de905951a3f68ba57cd681ce515a0c31d09065a3421de0550a",
+        "created_at": "2026-07-15T12:00:01Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_multimodal_02_00000001",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "observation_sequence": 2,
+      "sense": "hearing",
+      "source_kind": "local_sensor",
+      "captured_at": "2026-07-15T12:00:02Z",
+      "payload_digest": "sha256:2ca9bb5fbe3fd5ed25722f71eda7a1fa19b2c5f323c916543b5bb2bdfc45c380",
+      "payload_media_type": "application/vnd.genesis.multimodal-accepted-text+json",
+      "evidence_digest": "sha256:4840a866908f2d372d0bb4526c9e891139649df208285791d8a3a1124f5b4a9c",
+      "privacy": "private_local",
+      "observation_digest": "sha256:e3c936bbdc061787a1ad2011faafba0e52813dee7bb4efdb15936464c0e9ef44",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HMULTIMODAL000000001",
+        "key_epoch_id": "epoch_01HMULTIMODAL000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:e3c936bbdc061787a1ad2011faafba0e52813dee7bb4efdb15936464c0e9ef44",
+        "signature_value": "ed3ac46ae506d7ab51db313980bfb42ddb51d7b2594fd26d8904ca34d5f79e99dad2d262e596f501927803a14179689f85fd12ed3e7d85315257bc8734b4e001",
+        "created_at": "2026-07-15T12:00:02Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    }
+  ],
+  "gate_decisions": [
+    {
+      "schema_version": "genesis.memory.gate.decision.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "decision_id": "gate_multimodal_00_000001",
+      "observation_id": "obs_multimodal_00_00000001",
+      "observation_digest": "sha256:7545d9277b475add24c7b44ee523a4b4c07acdb821e1456d3761aeaee413335e",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "decision": "accepted",
+      "reason_code": "multimodal.accepted",
+      "policy_profile": "genesis.memory.gate.multimodal.v0.1",
+      "decided_at": "2026-07-15T12:00:03Z",
+      "memory_event_ref": "evt_multimodal_00_00000001",
+      "decision_digest": "sha256:859291343a1dc2071e9bf7a7de2e40c9961b7eba4af5e8176c45e51d7ef11f5e",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HMULTIMODAL000000001",
+        "key_epoch_id": "epoch_01HMULTIMODAL000000001",
+        "signed_domain": "genesis.memory.gate.decision.signature.v0.1",
+        "signed_digest": "sha256:859291343a1dc2071e9bf7a7de2e40c9961b7eba4af5e8176c45e51d7ef11f5e",
+        "signature_value": "dfc5f53e1802caa1074d5c49b74b5bf15594b462b902cd66e2b29f2fcdfcd483ea165884ec387297927777d21c21c143455eeb04bd37c730bb13ab086ef24d00",
+        "created_at": "2026-07-15T12:00:03Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.memory.gate.decision.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "decision_id": "gate_multimodal_01_000001",
+      "observation_id": "obs_multimodal_01_00000001",
+      "observation_digest": "sha256:23db5f1cc57d593a4b47e5040638e8f7fcce76c0514d33a49cd5095044926684",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "decision": "accepted",
+      "reason_code": "multimodal.accepted",
+      "policy_profile": "genesis.memory.gate.multimodal.v0.1",
+      "decided_at": "2026-07-15T12:00:04Z",
+      "memory_event_ref": "evt_multimodal_01_00000001",
+      "decision_digest": "sha256:1d13842e7e3d040380ff572c1c2ce077fd112445d4a067468e7df970e7bb588d",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HMULTIMODAL000000001",
+        "key_epoch_id": "epoch_01HMULTIMODAL000000001",
+        "signed_domain": "genesis.memory.gate.decision.signature.v0.1",
+        "signed_digest": "sha256:1d13842e7e3d040380ff572c1c2ce077fd112445d4a067468e7df970e7bb588d",
+        "signature_value": "f8b21691e1e2ac801524379d7b83ef0e3e5ebb3a4d626a301bfbdd9c81be3fb1e764fb51cdea0b6848dbfa36eaa9cf558bae6add0cc9e5e6cfa2ef53f42d200d",
+        "created_at": "2026-07-15T12:00:04Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.memory.gate.decision.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "decision_id": "gate_multimodal_02_000001",
+      "observation_id": "obs_multimodal_02_00000001",
+      "observation_digest": "sha256:e3c936bbdc061787a1ad2011faafba0e52813dee7bb4efdb15936464c0e9ef44",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "decision": "accepted",
+      "reason_code": "multimodal.accepted",
+      "policy_profile": "genesis.memory.gate.multimodal.v0.1",
+      "decided_at": "2026-07-15T12:00:05Z",
+      "memory_event_ref": "evt_multimodal_02_00000001",
+      "decision_digest": "sha256:bdbdc6e2f3b80b0718b60a0596838fe2bbd3ef1fc0e91d40fcca952633ecceb8",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HMULTIMODAL000000001",
+        "key_epoch_id": "epoch_01HMULTIMODAL000000001",
+        "signed_domain": "genesis.memory.gate.decision.signature.v0.1",
+        "signed_digest": "sha256:bdbdc6e2f3b80b0718b60a0596838fe2bbd3ef1fc0e91d40fcca952633ecceb8",
+        "signature_value": "0300b36d035bf29fbeab45af092ceec29a93210267a36f8ace69d02326f9a916ebae8dd278e7a704e31f1396e1782777752e9a73c538f1815cf71b64a890bc0e",
+        "created_at": "2026-07-15T12:00:05Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    }
+  ],
+  "memory_events": [
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_multimodal_00_00000001",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "sequence": 0,
+      "previous_event_hash": "GENESIS",
+      "event_type": "sense.vision.observation",
+      "actor": "body",
+      "content_digest": "sha256:05b8a5a34723d062d3680e8e39e88fe4b8d5f95416ffd388482167fdf865f905",
+      "content_type": "application/vnd.genesis.multimodal-accepted-text+json",
+      "observed_at": "2026-07-15T12:00:00Z",
+      "provenance_digest": "sha256:7545d9277b475add24c7b44ee523a4b4c07acdb821e1456d3761aeaee413335e",
+      "privacy": "private_local",
+      "event_hash": "evsha256:532b019a02779d76f9fb3fed5d14d8741425cc7045018be74c41b571b89219ad"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_multimodal_01_00000001",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "sequence": 1,
+      "previous_event_hash": "evsha256:532b019a02779d76f9fb3fed5d14d8741425cc7045018be74c41b571b89219ad",
+      "event_type": "sense.vision.observation",
+      "actor": "body",
+      "content_digest": "sha256:79f9a7eb44082a6b8e5da9364ef4ad888a2fcfe75630de2c73127ac980e28003",
+      "content_type": "application/vnd.genesis.multimodal-accepted-text+json",
+      "observed_at": "2026-07-15T12:00:01Z",
+      "provenance_digest": "sha256:23db5f1cc57d593a4b47e5040638e8f7fcce76c0514d33a49cd5095044926684",
+      "privacy": "guardian_shared",
+      "event_hash": "evsha256:8b3891497a4459943950f9ddeb00f642622ade29f58cd1a9b784766152f27c67"
+    },
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_multimodal_02_00000001",
+      "instance_id": "inst_01HMULTIMODAL000000001",
+      "body_id": "body_01HMULTIMODAL000000001",
+      "sequence": 2,
+      "previous_event_hash": "evsha256:8b3891497a4459943950f9ddeb00f642622ade29f58cd1a9b784766152f27c67",
+      "event_type": "sense.hearing.observation",
+      "actor": "body",
+      "content_digest": "sha256:2ca9bb5fbe3fd5ed25722f71eda7a1fa19b2c5f323c916543b5bb2bdfc45c380",
+      "content_type": "application/vnd.genesis.multimodal-accepted-text+json",
+      "observed_at": "2026-07-15T12:00:02Z",
+      "provenance_digest": "sha256:e3c936bbdc061787a1ad2011faafba0e52813dee7bb4efdb15936464c0e9ef44",
+      "privacy": "private_local",
+      "event_hash": "evsha256:0ea06d652275ee42e343e91e79096d3ff68d9321a2aaa695675b4d6b4a54cfe1"
+    }
+  ],
+  "expected_projection": {
+    "schema_version": "genesis.multimodal.memory.projection.v0.1",
+    "profile": "genesis.multimodal.memory.pipeline.v0.1",
+    "instance_id": "inst_01HMULTIMODAL000000001",
+    "record_count": 3,
+    "records": [
+      {
+        "source_id": "src_document_00000000000001",
+        "source_digest": "sha256:b9e0cd5b0a771709dbe0753f29209f399de4fcde91831187642d96f222d5bc8a",
+        "modality": "document",
+        "sense": "vision",
+        "media_type": "application/pdf",
+        "extraction_id": "ext_document_00000000000001",
+        "extraction_digest": "sha256:6e5f0600f391e9c6bcc210dda60c32b10cf6fb47969c24394c1e258f518746fb",
+        "adapter_id": "adapter.document.explicit",
+        "adapter_version": "0.1.0",
+        "adapter_profile_digest": "sha256:0bc13d9c5211c18a394da14922acac20785b39a797e9706b4f781a5c526725a9",
+        "model_digest": null,
+        "accepted_text": "Genesis memory export requires guardian authorization.\nPortable capsules preserve continuity without granting authority.",
+        "accepted_text_digest": "sha256:05b8a5a34723d062d3680e8e39e88fe4b8d5f95416ffd388482167fdf865f905",
+        "segment_count": 2,
+        "observation_id": "obs_multimodal_00_00000001",
+        "observation_digest": "sha256:7545d9277b475add24c7b44ee523a4b4c07acdb821e1456d3761aeaee413335e",
+        "gate_decision_id": "gate_multimodal_00_000001",
+        "gate_decision_digest": "sha256:859291343a1dc2071e9bf7a7de2e40c9961b7eba4af5e8176c45e51d7ef11f5e",
+        "memory_event_id": "evt_multimodal_00_00000001",
+        "memory_event_hash": "evsha256:532b019a02779d76f9fb3fed5d14d8741425cc7045018be74c41b571b89219ad",
+        "event_sequence": 0,
+        "privacy": "private_local",
+        "captured_at": "2026-07-15T12:00:00Z",
+        "record_digest": "mmsha256:d9b1fc713ef4820d1223911ffa39526a7f3507bdef4e6baf2e1820980590eb97"
+      },
+      {
+        "source_id": "src_image_000000000000001",
+        "source_digest": "sha256:55dfdfd6fc9e8c93f289a9267e365a633c9b8e5d952aff075dd4cd3d29367b65",
+        "modality": "image",
+        "sense": "vision",
+        "media_type": "image/png",
+        "extraction_id": "ext_image_000000000000001",
+        "extraction_digest": "sha256:5c65fc7084c2f257943d3993e7b323102e0bafc80e8e81c2fd91577ff03221d2",
+        "adapter_id": "adapter.image.local-model",
+        "adapter_version": "0.1.0",
+        "adapter_profile_digest": "sha256:5f24fcb82b7dcc565ea2713cef8f6a60962148ff9d0c8d5df64ccc1648558cf3",
+        "model_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "accepted_text": "A diagram shows an append-only memory chain connected to a portable capsule.",
+        "accepted_text_digest": "sha256:79f9a7eb44082a6b8e5da9364ef4ad888a2fcfe75630de2c73127ac980e28003",
+        "segment_count": 1,
+        "observation_id": "obs_multimodal_01_00000001",
+        "observation_digest": "sha256:23db5f1cc57d593a4b47e5040638e8f7fcce76c0514d33a49cd5095044926684",
+        "gate_decision_id": "gate_multimodal_01_000001",
+        "gate_decision_digest": "sha256:1d13842e7e3d040380ff572c1c2ce077fd112445d4a067468e7df970e7bb588d",
+        "memory_event_id": "evt_multimodal_01_00000001",
+        "memory_event_hash": "evsha256:8b3891497a4459943950f9ddeb00f642622ade29f58cd1a9b784766152f27c67",
+        "event_sequence": 1,
+        "privacy": "guardian_shared",
+        "captured_at": "2026-07-15T12:00:01Z",
+        "record_digest": "mmsha256:b2e77dc7a82a50c8e1963f5576d362a9ce164fb9ecfea5a215036ee469abaf8e"
+      },
+      {
+        "source_id": "src_audio_000000000000001",
+        "source_digest": "sha256:1c24974edf43050d621551f3150e65e43a5601952b2528bb849bebe06a058e6f",
+        "modality": "audio",
+        "sense": "hearing",
+        "media_type": "audio/opus",
+        "extraction_id": "ext_audio_000000000000001",
+        "extraction_digest": "sha256:4840a866908f2d372d0bb4526c9e891139649df208285791d8a3a1124f5b4a9c",
+        "adapter_id": "adapter.audio.local-model",
+        "adapter_version": "0.1.0",
+        "adapter_profile_digest": "sha256:a70e7997ea003d80b40a21161f5c7df65ef97e6521f8deb1cf82d79faf4468d9",
+        "model_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "accepted_text": "The guardian approved the offline memory backup.\nThe active writer remains unchanged.",
+        "accepted_text_digest": "sha256:2ca9bb5fbe3fd5ed25722f71eda7a1fa19b2c5f323c916543b5bb2bdfc45c380",
+        "segment_count": 2,
+        "observation_id": "obs_multimodal_02_00000001",
+        "observation_digest": "sha256:e3c936bbdc061787a1ad2011faafba0e52813dee7bb4efdb15936464c0e9ef44",
+        "gate_decision_id": "gate_multimodal_02_000001",
+        "gate_decision_digest": "sha256:bdbdc6e2f3b80b0718b60a0596838fe2bbd3ef1fc0e91d40fcca952633ecceb8",
+        "memory_event_id": "evt_multimodal_02_00000001",
+        "memory_event_hash": "evsha256:0ea06d652275ee42e343e91e79096d3ff68d9321a2aaa695675b4d6b4a54cfe1",
+        "event_sequence": 2,
+        "privacy": "private_local",
+        "captured_at": "2026-07-15T12:00:02Z",
+        "record_digest": "mmsha256:c7e85e776887739a513c3b556c83a0bd74699d22ba502a0ff95009fb0e682b62"
+      }
+    ],
+    "projection_digest": "mmsha256:82f039f9bebed8a7b36c59b978752e2142a174ff97b5b08772092e623db88781"
+  },
+  "boundary_mutations": [
+    {
+      "id": "source_sense_mismatch",
+      "operation": "set",
+      "path": [
+        "sources",
+        0,
+        "sense"
+      ],
+      "value": "hearing",
+      "expected_error": "source_sense_mismatch"
+    },
+    {
+      "id": "source_media_mismatch",
+      "operation": "set",
+      "path": [
+        "sources",
+        0,
+        "media_type"
+      ],
+      "value": "image/png",
+      "expected_error": "source_media_type_mismatch"
+    },
+    {
+      "id": "source_empty_bytes",
+      "operation": "set",
+      "path": [
+        "sources",
+        0,
+        "byte_length"
+      ],
+      "value": 0,
+      "expected_error": "source_byte_length_invalid"
+    },
+    {
+      "id": "source_oversized",
+      "operation": "set",
+      "path": [
+        "sources",
+        0,
+        "byte_length"
+      ],
+      "value": 104857601,
+      "expected_error": "source_byte_length_invalid"
+    },
+    {
+      "id": "source_quarantined",
+      "operation": "set",
+      "path": [
+        "sources",
+        0,
+        "privacy"
+      ],
+      "value": "quarantined",
+      "expected_error": "source_quarantined"
+    },
+    {
+      "id": "source_digest_changed",
+      "operation": "set",
+      "path": [
+        "sources",
+        0,
+        "source_digest"
+      ],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "source_digest_mismatch"
+    },
+    {
+      "id": "source_direct_write",
+      "operation": "set",
+      "path": [
+        "sources",
+        0,
+        "write_memory"
+      ],
+      "value": true,
+      "expected_error": "multimodal_authority_field_forbidden"
+    },
+    {
+      "id": "source_absolute_path",
+      "operation": "set",
+      "path": [
+        "sources",
+        0,
+        "absolute_path"
+      ],
+      "value": "/tmp/input.pdf",
+      "expected_error": "multimodal_authority_field_forbidden"
+    },
+    {
+      "id": "adapter_provider_lock",
+      "operation": "set",
+      "path": [
+        "adapter_profiles",
+        0,
+        "provider"
+      ],
+      "value": "vendor",
+      "expected_error": "multimodal_authority_field_forbidden"
+    },
+    {
+      "id": "adapter_nonlocal",
+      "operation": "set",
+      "path": [
+        "adapter_profiles",
+        0,
+        "execution_mode"
+      ],
+      "value": "cloud",
+      "expected_error": "adapter_execution_mode_invalid"
+    },
+    {
+      "id": "adapter_bad_output",
+      "operation": "set",
+      "path": [
+        "adapter_profiles",
+        0,
+        "output_kind"
+      ],
+      "value": "audio_transcript",
+      "expected_error": "adapter_output_kind_mismatch"
+    },
+    {
+      "id": "adapter_bad_model",
+      "operation": "set",
+      "path": [
+        "adapter_profiles",
+        1,
+        "model_digest"
+      ],
+      "value": "bad",
+      "expected_error": "adapter_model_digest_invalid"
+    },
+    {
+      "id": "adapter_digest_changed",
+      "operation": "set",
+      "path": [
+        "adapter_profiles",
+        0,
+        "profile_digest"
+      ],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "adapter_profile_digest_mismatch"
+    },
+    {
+      "id": "extraction_wrong_source",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "source_id"
+      ],
+      "value": "src_missing_0000000000000",
+      "expected_error": "extraction_missing"
+    },
+    {
+      "id": "extraction_failed",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "status"
+      ],
+      "value": "failed",
+      "expected_error": "extraction_not_accepted"
+    },
+    {
+      "id": "extraction_bad_output",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "output_kind"
+      ],
+      "value": "image_description",
+      "expected_error": "extraction_output_kind_mismatch"
+    },
+    {
+      "id": "segments_empty",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "segments"
+      ],
+      "value": [],
+      "expected_error": "extraction_segments_invalid"
+    },
+    {
+      "id": "segment_ordinal_gap",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "segments",
+        1,
+        "ordinal"
+      ],
+      "value": 3,
+      "expected_error": "segment_ordinal_invalid"
+    },
+    {
+      "id": "segment_duplicate_id",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "segments",
+        1,
+        "segment_id"
+      ],
+      "value": "seg_doc_0001",
+      "expected_error": "segment_id_duplicate"
+    },
+    {
+      "id": "segment_non_nfc",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "segments",
+        0,
+        "text"
+      ],
+      "value": "Café",
+      "expected_error": "text_not_nfc"
+    },
+    {
+      "id": "segment_confidence_high",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "segments",
+        0,
+        "confidence"
+      ],
+      "value": 1001,
+      "expected_error": "segment_confidence_invalid"
+    },
+    {
+      "id": "segment_digest_changed",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "segments",
+        0,
+        "segment_digest"
+      ],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "segment_digest_mismatch"
+    },
+    {
+      "id": "document_locator_wrong",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "segments",
+        0,
+        "locator"
+      ],
+      "value": {
+        "kind": "time_range",
+        "start_ms": 0,
+        "end_ms": 10
+      },
+      "expected_error": "document_locator_invalid"
+    },
+    {
+      "id": "image_bounds_invalid",
+      "operation": "set",
+      "path": [
+        "extractions",
+        1,
+        "segments",
+        0,
+        "locator",
+        "width"
+      ],
+      "value": 1000,
+      "expected_error": "image_locator_invalid"
+    },
+    {
+      "id": "audio_range_invalid",
+      "operation": "set",
+      "path": [
+        "extractions",
+        2,
+        "segments",
+        0,
+        "locator",
+        "end_ms"
+      ],
+      "value": 0,
+      "expected_error": "audio_locator_invalid"
+    },
+    {
+      "id": "aggregate_text_changed",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "aggregate_text"
+      ],
+      "value": "altered",
+      "expected_error": "extraction_aggregate_text_mismatch"
+    },
+    {
+      "id": "aggregate_digest_changed",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "aggregate_digest"
+      ],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "extraction_aggregate_digest_mismatch"
+    },
+    {
+      "id": "extraction_digest_changed",
+      "operation": "set",
+      "path": [
+        "extractions",
+        0,
+        "extraction_digest"
+      ],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "extraction_digest_mismatch"
+    },
+    {
+      "id": "observation_payload_changed",
+      "operation": "set",
+      "path": [
+        "observations",
+        0,
+        "payload_digest"
+      ],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "observation_payload_digest_mismatch"
+    },
+    {
+      "id": "observation_evidence_changed",
+      "operation": "set",
+      "path": [
+        "observations",
+        0,
+        "evidence_digest"
+      ],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "observation_coverage_invalid"
+    },
+    {
+      "id": "observation_signature_changed",
+      "operation": "set",
+      "path": [
+        "observations",
+        0,
+        "signature",
+        "signature_value"
+      ],
+      "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "signature_invalid"
+    },
+    {
+      "id": "gate_rejected",
+      "operation": "set",
+      "path": [
+        "gate_decisions",
+        0,
+        "decision"
+      ],
+      "value": "rejected",
+      "expected_error": "gate_not_accepted"
+    },
+    {
+      "id": "gate_wrong_event",
+      "operation": "set",
+      "path": [
+        "gate_decisions",
+        0,
+        "memory_event_ref"
+      ],
+      "value": "evt_multimodal_01_00000001",
+      "expected_error": "gate_digest_mismatch"
+    },
+    {
+      "id": "gate_signature_changed",
+      "operation": "set",
+      "path": [
+        "gate_decisions",
+        0,
+        "signature",
+        "signature_value"
+      ],
+      "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "signature_invalid"
+    },
+    {
+      "id": "event_content_changed",
+      "operation": "set",
+      "path": [
+        "memory_events",
+        0,
+        "content_digest"
+      ],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "memory_event_hash_mismatch"
+    },
+    {
+      "id": "event_provenance_changed",
+      "operation": "set",
+      "path": [
+        "memory_events",
+        0,
+        "provenance_digest"
+      ],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "memory_event_hash_mismatch"
+    },
+    {
+      "id": "event_chain_broken",
+      "operation": "set",
+      "path": [
+        "memory_events",
+        1,
+        "previous_event_hash"
+      ],
+      "value": "GENESIS",
+      "expected_error": "memory_chain_invalid"
+    },
+    {
+      "id": "event_hash_changed",
+      "operation": "set",
+      "path": [
+        "memory_events",
+        0,
+        "event_hash"
+      ],
+      "value": "evsha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "memory_event_hash_mismatch"
+    },
+    {
+      "id": "observation_removed",
+      "operation": "remove",
+      "path": [
+        "observations",
+        0
+      ],
+      "expected_error": "observation_coverage_invalid"
+    },
+    {
+      "id": "gate_removed",
+      "operation": "remove",
+      "path": [
+        "gate_decisions",
+        0
+      ],
+      "expected_error": "gate_missing"
+    },
+    {
+      "id": "event_removed",
+      "operation": "remove",
+      "path": [
+        "memory_events",
+        0
+      ],
+      "expected_error": "memory_sequence_invalid"
+    },
+    {
+      "id": "expected_record_digest_tampered",
+      "operation": "set",
+      "path": [
+        "expected_projection",
+        "records",
+        0,
+        "record_digest"
+      ],
+      "value": "mmsha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "expected_projection_mismatch"
+    },
+    {
+      "id": "expected_projection_digest_tampered",
+      "operation": "set",
+      "path": [
+        "expected_projection",
+        "projection_digest"
+      ],
+      "value": "mmsha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "expected_projection_mismatch"
+    }
+  ]
+}

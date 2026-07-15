@@ -18,7 +18,7 @@ This document records which publicly described Memvid concepts were evaluated an
 | Encrypted capsules | Deferred | Genesis cryptographic profile remains authoritative |
 | ACL and scoped search | Deferred to the next extraction phase | Authority and privacy must be evaluated before ranking |
 | Temporal metadata extraction | Deferred to the next extraction phase | Mentioned dates remain derived evidence with provenance |
-| Multimodal extraction | Deferred | Sense adapters and memory gate remain the ingestion boundary |
+| Multimodal extraction | Neutral document/image/audio pipeline behind signed senses and memory gate | Fixture proves the boundary; production extractors remain replaceable |
 
 ## Implemented files
 
@@ -70,3 +70,17 @@ La portabilidad de archivo único de Memvid se adaptó como un formato propio y 
 
 No se importaron el formato, codecs, índices o código de Memvid. Compresión, cifrado de destinatario
 y contenedor binario permanecen diferidos para perfiles separados.
+
+## Quinta extracción implementada: multimodal
+
+Genesis adapta la idea de extracción documental, visual y de audio como una frontera neutral:
+
+- documento e imagen se presentan como evidencia de visión; audio como evidencia de oído;
+- texto, caption o transcripción se segmentan con locators y confianza entera;
+- el adaptador es local, reemplazable y ligado por digest de perfil/modelo;
+- la observación y la decisión de compuerta están firmadas;
+- solo el evento append-only aceptado entra a la proyección reconstruible;
+- rutas, cuentas, proveedores y bytes crudos quedan fuera del core.
+
+No se copiaron extractores, modelos, formatos o código de Memvid. Los adaptadores productivos de
+PDF/DOCX/XLSX, OCR, visión y voz siguen pendientes de evaluación separada.

@@ -47,6 +47,8 @@ const commands = [
   ["Validate temporal memory metadata independently (Node)", process.execPath, ["tools/temporal_memory_metadata.mjs", "validate"]],
   ["Validate portable memory capsules (Python)", python, ["tools/validate_portable_memory_capsule.py"]],
   ["Validate portable memory capsules independently (Node)", process.execPath, ["tools/portable_memory_capsule.mjs", "validate"]],
+  ["Validate multimodal memory pipeline (Python)", python, ["tools/validate_multimodal_memory_pipeline.py"]],
+  ["Validate multimodal memory pipeline independently (Node)", process.execPath, ["tools/multimodal_memory_pipeline.mjs", "validate"]],
   ["Validate memory-gate retrieval bridge (Python)", python, ["tools/validate_memory_gate_retrieval_bridge.py"]],
   ["Validate memory-gate retrieval bridge independently (Node)", process.execPath, ["tools/memory_gate_retrieval_bridge.mjs", "validate"]],
   ["Validate neutral sense adapters (Python)", python, ["tools/validate_sense_adapters.py"]],

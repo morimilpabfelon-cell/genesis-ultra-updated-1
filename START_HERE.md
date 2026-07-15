@@ -144,3 +144,13 @@ Para considerarla conforme debe existir:
 La lista única de funciones comprobadas, evidencia y trabajo pendiente vive en
 [`docs/V0_1_COMPLETION_CHECKLIST.md`](./docs/V0_1_COMPLETION_CHECKLIST.md). No se mantiene
 otra lista de estado aquí para evitar contradicciones.
+
+## Probar extracción multimodal
+
+```powershell
+npm run validate:multimodal
+npm run memory:multimodal:sync -- conformance/multimodal_memory_pipeline_vectors.json runtime/multimodal.json
+```
+
+La proyección contiene únicamente texto derivado que pasó observación firmada, compuerta y commit
+append-only. Los archivos binarios y las rutas locales permanecen fuera del core.

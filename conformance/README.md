@@ -153,3 +153,8 @@ Los vectores son de borrador. Antes de congelarlos deben ampliarse con:
 - adaptadores semánticos reales con modelos neutrales, digests versionados y evaluación de calidad;
 - invocación persistente del puente desde runtimes físicos después del commit append-only;
 - compatibilidad cruzada entre al menos tres implementaciones independientes.
+
+Python y Node validan además la extracción multimodal neutral para documento, imagen y audio.
+Coinciden en tres registros aceptados, firmas Ed25519, locators por página/región/tiempo, cadena
+append-only y digest final. Cuarenta y tres mutaciones prueban límites de formato, privacidad,
+proveedor, integridad, firma, compuerta y continuidad.
