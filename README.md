@@ -280,3 +280,24 @@ Solo una observación firmada y una decisión `accepted` de la compuerta pueden 
 a un evento append-only. El fixture prueba el contrato; no afirma OCR, visión o transcripción de
 calidad productiva. El contrato está en
 [`spec/MULTIMODAL_EXTRACTION_PIPELINE.md`](spec/MULTIMODAL_EXTRACTION_PIPELINE.md).
+
+## Memoria estructurada y versionada
+
+Validar que Python y Node reconstruyen el mismo estado:
+
+```powershell
+npm run validate:structured-memory
+```
+
+Construir y consultar la proyección:
+
+```powershell
+npm run memory:structured:build -- conformance/structured_versioned_memory_vectors.json structured-memory.json
+npm run memory:structured:query -- conformance/structured_versioned_memory_vectors.json q_city_current
+```
+
+La capa organiza hechos, preferencias, eventos, perfiles, relaciones y objetivos mediante cadenas
+`sets`→`updates`/`extends`→`retracts`. Nunca elimina eventos históricos ni adquiere autoridad. Las
+consultas requieren cobertura ACL completa de la cadena del slot; una versión oculta produce
+`redacted_chain`. El contrato está en
+[`spec/STRUCTURED_VERSIONED_MEMORY.md`](spec/STRUCTURED_VERSIONED_MEMORY.md).

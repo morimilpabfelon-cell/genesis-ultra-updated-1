@@ -41,7 +41,12 @@
     "validate:multimodal": "node tools/multimodal_memory_pipeline.mjs validate",
     "memory:multimodal:build": "node tools/multimodal_memory_pipeline.mjs build",
     "memory:multimodal:sync": "node tools/multimodal_memory_pipeline.mjs sync",
-    "memory:multimodal:inspect": "node tools/multimodal_memory_pipeline.mjs inspect"
+    "memory:multimodal:inspect": "node tools/multimodal_memory_pipeline.mjs inspect",
+    "validate:structured-memory": "node tools/structured_versioned_memory.mjs validate",
+    "memory:structured:build": "node tools/structured_versioned_memory.mjs build",
+    "memory:structured:sync": "node tools/structured_versioned_memory.mjs sync",
+    "memory:structured:query": "node tools/structured_versioned_memory.mjs query",
+    "memory:structured:inspect": "node tools/structured_versioned_memory.mjs inspect"
   },
   "devDependencies": {
     "ajv": "8.17.1",

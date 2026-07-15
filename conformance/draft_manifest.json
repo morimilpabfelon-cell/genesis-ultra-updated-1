@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 159,
+  "file_count": 165,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,18 +25,18 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 11447,
-      "digest": "sha256:21fe903b507a7405c69d5858c8ecf8992506f704f083306b35b25631c94f536a"
+      "size_bytes": 12282,
+      "digest": "sha256:3c42d1f8bc97e83b00052066b80045f3c2affcaf16b4f9a3409ea82a0dee3af6"
     },
     {
       "path": "START_HERE.md",
-      "size_bytes": 5733,
-      "digest": "sha256:1c9834a193d465ab7a2b5891172950d0bb6699af5e3b260d9197b52d6e371495"
+      "size_bytes": 6153,
+      "digest": "sha256:1bdd279184eadc44d2a98e70573a3698edc9887a6d02ca042a71b749350ddde8"
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 9915,
-      "digest": "sha256:23ef0a07b7cbdbd18805ff7d50b1bc59d13a02af240cb7907fc7be0398e595b1"
+      "size_bytes": 10430,
+      "digest": "sha256:138096a878f1eca7f17215889d9436eee7f854117a3a7ac934ffdf569f5aecc5"
     },
     {
       "path": "conformance/associative_memory_projection_vectors.json",
@@ -110,13 +110,13 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 7008,
-      "digest": "sha256:016d7669fc09912fc7cdb8063180173fcfb094edb9d51d3b57c555f039b3141a"
+      "size_bytes": 7326,
+      "digest": "sha256:1297eec9d33aa1bce62d986c8b1adc9760c453229aca88bd3ad7138c86cb448d"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 102337,
-      "digest": "sha256:7aaef836e90626dd381f98c42e2b43a6d21c24697d97e3b20fe57054dbbbd90d"
+      "size_bytes": 118311,
+      "digest": "sha256:da977b514fe7c1f95fcf5664e236b25d784a5dbfde0b7d2a55c1416cbb5d4ed7"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -127,6 +127,11 @@
       "path": "conformance/sense_observation_vectors.json",
       "size_bytes": 21259,
       "digest": "sha256:a670db68f4a48513f4449fa545370fa9065f22456565711bb306b11cbcdcf850"
+    },
+    {
+      "path": "conformance/structured_versioned_memory_vectors.json",
+      "size_bytes": 58869,
+      "digest": "sha256:2458977e8cb5de3c82e815fc4b7a86147d27c93b7e87f6c1300dd60aefd4de3c"
     },
     {
       "path": "conformance/temporal_memory_metadata_vectors.json",
@@ -140,8 +145,8 @@
     },
     {
       "path": "docs/MEMVID_MEMORY_EXTRACTION_MAP.md",
-      "size_bytes": 5605,
-      "digest": "sha256:43f21e72b5bb854ee628f78ddf5da914fb7808fbace4c23f1463b7a1efa384a2"
+      "size_bytes": 6390,
+      "digest": "sha256:eb5f3e341d96cbc605c55695e71f08b14412da8a379d6fbf0d6f89465cb638f3"
     },
     {
       "path": "docs/MORIMIL_SENSE_EXTRACTION_MAP.md",
@@ -155,8 +160,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 7175,
-      "digest": "sha256:ac33c94b9d20efa74d4b93cd485f1d4df79d6f613bdcffde34e9211b78249cd3"
+      "size_bytes": 7623,
+      "digest": "sha256:5f7a6209a9a0894a4d495dde8a12108c72b3210868f3e9691d91f1648f06d914"
     },
     {
       "path": "observer/README.md",
@@ -190,8 +195,8 @@
     },
     {
       "path": "observer/system-map.json",
-      "size_bytes": 10285,
-      "digest": "sha256:2f4d9ef3da72b78e7a6c557771067e7e5bbd9de984e10c2f1fcbc34a72353237"
+      "size_bytes": 10865,
+      "digest": "sha256:27ab1fb680549e33bd82d42be82aeec475160756909d90fba0d70f36ae752f20"
     },
     {
       "path": "observer/test/core.test.mjs",
@@ -205,8 +210,8 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 3028,
-      "digest": "sha256:45f72409496f9d8dea20b8228e8d676962d0073ee8bbdff3839d6c1be96cb4c8"
+      "size_bytes": 3451,
+      "digest": "sha256:b06b652673c9741a5ea73b5844a8584ee3b4973ba86638a3f2a522041930561a"
     },
     {
       "path": "reference/README.md",
@@ -389,6 +394,11 @@
       "digest": "sha256:cc3d73f4157aa7d6d0c9d94c13becaf4d3fc1f23b481cc6f0781fc9b5680cec0"
     },
     {
+      "path": "schemas/structured_versioned_memory_projection.schema.json",
+      "size_bytes": 5943,
+      "digest": "sha256:f17ce0fc45297adfea552505c25c2e498b87adb43ec7df07ecb2b1d079aa3355"
+    },
+    {
       "path": "schemas/temporal_memory_projection.schema.json",
       "size_bytes": 3551,
       "digest": "sha256:28e0432950670956eb797f6560eb12258552a094bdd945846355e54ba7cb74ff"
@@ -539,6 +549,11 @@
       "digest": "sha256:a53bdf169e3a2e2d5131cf818e2cc6552dfdd797703fa3a3182c7da56e155b79"
     },
     {
+      "path": "spec/STRUCTURED_VERSIONED_MEMORY.md",
+      "size_bytes": 5825,
+      "digest": "sha256:8c16156bf767120542d80ddfb0ab37102c0e37a7c34efdb067e49f7a572c7789"
+    },
+    {
       "path": "spec/TEMPORAL_MEMORY_METADATA.md",
       "size_bytes": 5635,
       "digest": "sha256:638218c6394b5add3881afddd33bbea5eed2922d078535700494618711ad9164"
@@ -630,8 +645,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 6222,
-      "digest": "sha256:d39fe0fcb4b13c13b0a8e278e2668ce44243e47f8dd03af2192df2932673e023"
+      "size_bytes": 6472,
+      "digest": "sha256:65178bbc431608664eba0c57312123f8be12fcc8432c7670bd418411159df2f4"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -657,6 +672,16 @@
       "path": "tools/simulate_transfer.py",
       "size_bytes": 28670,
       "digest": "sha256:70781d055ce7c6d50a7769d0f72a12f698d7a409792eec0ddabb33f0b522eeb1"
+    },
+    {
+      "path": "tools/structured_versioned_memory.mjs",
+      "size_bytes": 21826,
+      "digest": "sha256:520c91f48c4a2d3fe9515703b184a2b58bf633178d9421aa9df4194715d3c058"
+    },
+    {
+      "path": "tools/structured_versioned_memory_common.py",
+      "size_bytes": 23340,
+      "digest": "sha256:13735662ce7b29d6193ac8b48d86cbce91b795689f3be752e296b2ef173152d0"
     },
     {
       "path": "tools/temporal_memory_metadata.mjs",
@@ -784,6 +809,11 @@
       "digest": "sha256:65f7b73563e4de44c09ba1b3f9bba7c7bab5ceca9c08a18d433d66d1a177d31e"
     },
     {
+      "path": "tools/validate_structured_versioned_memory.py",
+      "size_bytes": 2999,
+      "digest": "sha256:72157ec5f0e6f0f28e3dcb7dd99660ea3ac8693fbd3e81b3e0ecb46beeff26e9"
+    },
+    {
       "path": "tools/validate_temporal_memory_metadata.py",
       "size_bytes": 26234,
       "digest": "sha256:5040cd1941e808600eaa87a0946f2451cac81d2ed3e4c054696fc8e30f06e3b4"
@@ -804,5 +834,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:b7bfd881b6c7dde4cc96f929f4ec0ff7e88082691ec43a30a6794f4e5ae53dd6"
+  "root_digest": "sha256:d05fc66a8bb76ad4d5291639264ff9b83c912b3ea281afa262a24b0132cf9b48"
 }

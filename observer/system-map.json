@@ -125,6 +125,25 @@
       ]
     },
     {
+      "id": "structured_memory",
+      "name": "Memoria estructurada y versionada",
+      "layer": "perception",
+      "maturity": "verified",
+      "description": "Hechos, preferencias, eventos, perfiles, relaciones y objetivos versionados sin borrar la cadena histórica.",
+      "keywords": [
+        "structured_versioned_memory",
+        "structured_memory",
+        "memory_assertion",
+        "version_key"
+      ],
+      "required_evidence": [
+        "spec",
+        "schema",
+        "conformance",
+        "implementation"
+      ]
+    },
+    {
       "id": "memory_retrieval",
       "name": "Recuperación de memoria",
       "layer": "perception",
@@ -386,6 +405,7 @@
     "memory_gate",
     "memory_chain",
     "associative_memory",
+    "structured_memory",
     "memory_retrieval",
     "portable_capsules",
     "temporal_memory",

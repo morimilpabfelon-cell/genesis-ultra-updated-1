@@ -12,6 +12,7 @@
 - [x] Suite completa verde para metadata temporal verificable en el [PR #20](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/20).
 - [x] Suite completa verde para cápsulas portables verificables en el [PR #21](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/21).
 - [x] Suite completa verde para extracción multimodal neutral en el [PR #22](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/22).
+- [x] Suite completa verde para memoria estructurada y versionada en el [PR #23](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/23).
 - [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
 ## Implementado y verificado por la suite
@@ -26,8 +27,8 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 39 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [x] Cuarenta y siete regresiones que demuestran el rechazo de artefactos inválidos por los
+- [x] Compilación de los 40 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Cuarenta y ocho regresiones que demuestran el rechazo de artefactos inválidos por los
       schemas reales, con cobertura obligatoria para cada schema.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -85,6 +86,10 @@
 
 - [x] Extracción multimodal neutral con documento, imagen y audio; tres registros aceptados,
       firmas de observación/compuerta, locators verificables y cuarenta y tres cruces rechazados.
+
+- [x] Memoria estructurada y versionada con once aserciones, seis slots, ocho consultas,
+      operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
+      y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
 ## Pendiente real
 
