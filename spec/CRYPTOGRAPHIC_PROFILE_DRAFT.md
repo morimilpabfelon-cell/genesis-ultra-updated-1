@@ -60,6 +60,11 @@ genesis.kdf.argon2id.v0.1
 
 Los parámetros concretos deben quedar dentro del manifiesto de cifrado. No se fijan todavía como definitivos porque deben revisarse según el dispositivo y el nivel de memoria disponible.
 
+El registro `backup_encryption` compromete perfil, parámetros KDF, salt, nonce, digest del
+AAD, digest del ciphertext y clave envuelta opcional. El `backup_commit` firmado compromete
+ese registro, el manifiesto y el checkpoint. Poseer o descifrar el backup no concede
+autoridad de escritura.
+
 ## 4. Autorización del guardián
 
 Una autorización debe vincular como mínimo:
@@ -139,6 +144,18 @@ La pérdida de una clave no debe destruir automáticamente la instancia. La recu
 - revocación del cuerpo perdido.
 
 No se permite reconstruir silenciosamente una clave antigua ni presentar una clave nueva como si hubiera firmado eventos pasados.
+
+La recuperación de una instancia usa una autorización temporal distinta de la recuperación
+de claves del guardián. Sus digests y firmas emplean los dominios versionados:
+
+```text
+genesis.recovery.authorization.v0.1
+genesis.recovery.authorization.signature.v0.1
+genesis.recovery.record.v0.1
+genesis.recovery.record.signature.v0.1
+genesis.recovery.finalization.v0.1
+genesis.recovery.finalization.signature.v0.1
+```
 
 ## 8. Firmas fuera de preimagen
 

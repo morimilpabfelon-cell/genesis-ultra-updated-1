@@ -50,6 +50,10 @@ El cambio de escritor se registra como una operación transaccional:
 
 Nunca deben quedar dos cuerpos activos como resultado normal.
 
+Durante la escritura pueden coexistir una generación anterior y otra candidata del registro,
+pero solo la generación seleccionada por un journal comprometido es autoritativa. La copia
+candidata no concede por sí misma permiso de escritura.
+
 ## 5. Pérdida del cuerpo
 
 Marcar un cuerpo como `lost` no destruye la instancia. La recuperación debe crear un cuerpo nuevo, declarar el último evento recuperado y registrar cualquier brecha conocida.

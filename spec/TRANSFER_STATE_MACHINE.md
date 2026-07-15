@@ -76,6 +76,10 @@ Una transferencia puede volver a `idle` únicamente antes de que el destino sea 
 
 Después de activar el destino, un fallo no puede resolverse reactivando silenciosamente el origen. Debe ejecutarse una transferencia inversa o una recuperación gobernada.
 
+Cada cambio de autoridad debe persistirse según
+`TRANSACTION_JOURNAL_AND_CRASH_RECOVERY.md`; la existencia de un registro candidato sin
+marcador de commit no activa al destino.
+
 ## 5. Pérdida durante la transferencia
 
 - Si se pierde el destino antes de `accepted`, el origen puede abortar.

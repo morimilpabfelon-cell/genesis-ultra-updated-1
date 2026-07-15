@@ -16,6 +16,7 @@ sin control: significa reconstruir continuidad verificable y declarar cualquier 
 6. Una copia de backup no adquiere autoridad por existir.
 7. El guardián debe aprobar la recuperación.
 8. Todo resultado deja un registro verificable en la cadena.
+9. Solo una finalización válida puede mover la autoridad al cuerpo nuevo.
 
 ## 3. Evidencia mínima
 
@@ -28,6 +29,7 @@ Una recuperación debe verificar, como mínimo:
 - registro de cuerpos disponible;
 - autorización del guardián;
 - integridad del paquete de backup;
+- commit firmado que vincule manifiesto, cifrado, ciphertext y checkpoint;
 - estado conocido del cuerpo anterior.
 
 ## 4. Estados de continuidad
@@ -57,6 +59,11 @@ El cuerpo nuevo solo puede convertirse en `active_writer` después de:
 4. aplicar la autorización del guardián;
 5. revocar, marcar como perdido o suspender el cuerpo anterior;
 6. crear el primer evento posterior a la recuperación.
+7. firmar con el guardián y el destino una finalización que vincule toda la evidencia.
+
+La autorización del guardián se limita al `recovery_id`, commit, cuerpo anterior, cuerpo
+nuevo e intervalo exactos. Restaurar archivos deja al destino como candidato; no lo vuelve
+escritor hasta que la transacción finaliza.
 
 ## 6. Prevención de clones
 
@@ -71,6 +78,7 @@ Se debe rechazar o poner en cuarentena:
 - dos descendientes del mismo hash previo;
 - un paquete de recuperación para otra instancia;
 - una autorización expirada, revocada o agotada.
+- un backup sin commit, con ciphertext alterado o separado de su manifiesto.
 
 ## 7. Operación sin red
 

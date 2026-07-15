@@ -7,9 +7,19 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED_ARTIFACTS = path.join(os.tmpdir(), `genesis-ultra-transfer-${process.pid}.json`);
+const BACKUP_RECOVERY_ARTIFACTS = path.join(
+  os.tmpdir(),
+  `genesis-ultra-backup-recovery-${process.pid}.json`
+);
+const TRANSACTION_CRASH_ARTIFACTS = path.join(
+  os.tmpdir(),
+  `genesis-ultra-transaction-crash-${process.pid}.json`
+);
 
 process.on("exit", () => {
   fs.rmSync(GENERATED_ARTIFACTS, { force: true });
+  fs.rmSync(BACKUP_RECOVERY_ARTIFACTS, { force: true });
+  fs.rmSync(TRANSACTION_CRASH_ARTIFACTS, { force: true });
 });
 
 function resolvePython() {
@@ -28,8 +38,46 @@ const commands = [
   ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
   ["Validate crypto vectors", python, ["tools/validate_crypto_vectors.py"]],
   ["Simulate transfer A -> B", python, ["tools/simulate_transfer.py", "--artifacts-output", GENERATED_ARTIFACTS]],
-  ["Validate generated artifacts", process.execPath, ["tools/validate_artifacts.mjs", GENERATED_ARTIFACTS]],
-  ["Simulate negative cases", python, ["tools/simulate_negatives.py"]]
+  [
+    "Simulate committed backup and authorized recovery B -> C",
+    python,
+    [
+      "tools/simulate_backup_recovery.py",
+      "--source-artifacts",
+      GENERATED_ARTIFACTS,
+      "--artifacts-output",
+      BACKUP_RECOVERY_ARTIFACTS
+    ]
+  ],
+  [
+    "Simulate transaction journal crash recovery",
+    python,
+    [
+      "tools/simulate_transaction_crashes.py",
+      "--transfer-artifacts",
+      GENERATED_ARTIFACTS,
+      "--recovery-artifacts",
+      BACKUP_RECOVERY_ARTIFACTS,
+      "--artifacts-output",
+      TRANSACTION_CRASH_ARTIFACTS
+    ]
+  ],
+  [
+    "Validate generated artifacts",
+    process.execPath,
+    [
+      "tools/validate_artifacts.mjs",
+      GENERATED_ARTIFACTS,
+      BACKUP_RECOVERY_ARTIFACTS,
+      TRANSACTION_CRASH_ARTIFACTS
+    ]
+  ],
+  ["Simulate transfer and authority negative cases", python, ["tools/simulate_negatives.py"]],
+  [
+    "Simulate backup and recovery negative cases",
+    python,
+    ["tools/simulate_backup_recovery_negatives.py", "--artifacts", BACKUP_RECOVERY_ARTIFACTS]
+  ]
 ];
 
 for (const [label, command, args] of commands) {

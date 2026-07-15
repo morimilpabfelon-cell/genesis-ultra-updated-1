@@ -121,6 +121,27 @@ dos cuerpos observen estados diferentes. Los eventos encadenados conservan el or
 hacen detectables las alteraciones y permiten auditar cada traslado sin convertir el
 permiso permanente en acceso irrestricto a dispositivos desconocidos.
 
+## AD-10 — Backup comprometido y recuperación finalizada como transacciones
+**Decisión:** un backup solo es restaurable si un commit firmado vincula manifiesto,
+cifrado, ciphertext y checkpoint. Restaurar no concede escritura: una finalización firmada
+por guardián y destino mueve la autoridad después de registrar el destino, probar su clave,
+declarar brechas y retirar al cuerpo anterior.
+**Alternativa descartada:** considerar válida cualquier copia descifrable y activar el
+destino al terminar de copiar archivos.
+**Motivo:** una escritura interrumpida puede mezclar generaciones del estado, y una copia
+válida puede multiplicarse. Commit y finalización crean límites verificables: o la operación
+queda completa, o no cambia la autoridad. El registro final conserva un solo escritor.
+
+## AD-11 — Journal encadenado y dos generaciones para sobrevivir interrupciones
+**Decisión:** un cambio de autoridad conserva el registro anterior y escribe el candidato
+en una generación separada. Un journal firmado enlaza cada fase y un marcador igual al
+digest de finalización decide cuál generación es autoritativa al reiniciar.
+**Alternativa descartada:** sobrescribir el registro activo y decidir después por fecha,
+nombre de archivo o existencia de la copia nueva.
+**Motivo:** un cierre puede ocurrir entre cualquier par de escrituras. Mantener dos slots
+permite revertir un candidato sin commit o reproducir uno ya comprometido. La existencia
+física de ambas generaciones no concede autoridad a ambas; el journal selecciona una sola.
+
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con
 vectores y crítica independiente antes de cualquier declaración de estabilidad.

@@ -44,15 +44,18 @@ El cuerpo A registra `transfer.completed` y pasa a `read_only` o `revoked`.
 
 ## Recuperación de emergencia
 
-1. Cargar el último backup verificable.
-2. Verificar checkpoint y semilla.
-3. Obtener aprobación del guardián.
-4. Emitir un nuevo `body_id`.
-5. Registrar `recovery.restored`.
+1. Cargar un backup con `backup_commit` firmado y estado `committed`.
+2. Verificar ciphertext, manifiesto, cifrado, checkpoint, semilla e identidad.
+3. Registrar el nuevo `body_id` y comprobar posesión de su clave.
+4. Obtener una autorización del guardián para el recovery, commit y destino exactos.
+5. Restaurar sin conceder todavía autoridad de escritura.
 6. Declarar `complete`, `known_gap` o `fork_risk`.
-7. Revocar el cuerpo perdido cuando sea posible.
+7. Marcar el cuerpo anterior como `lost` o `revoked`.
+8. Registrar `recovery.restored` y firmar la finalización con guardián y destino.
+9. Cambiar el registro a un único `active_writer` como parte de la finalización atómica.
 
 Una recuperación con eventos ausentes sigue perteneciendo a la misma instancia, pero debe declarar la discontinuidad.
+El procedimiento normativo completo está en `BACKUP_AND_RECOVERY_TRANSACTIONS.md`.
 
 ## Prevención de clones activos
 

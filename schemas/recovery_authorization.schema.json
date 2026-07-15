@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:recovery-authorization:v0.1",
+  "title": "Genesis Recovery Authorization",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "authorization_id",
+    "recovery_id",
+    "guardian_id",
+    "guardian_key_epoch_id",
+    "instance_id",
+    "authority_epoch",
+    "source_backup_id",
+    "source_backup_commit_digest",
+    "previous_body_id",
+    "new_body_id",
+    "reason",
+    "issued_at",
+    "not_before",
+    "expires_at",
+    "authorization_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.recovery.authorization.v0.1" },
+    "authorization_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "recovery_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "guardian_key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "authority_epoch": { "type": "integer", "minimum": 0 },
+    "source_backup_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "source_backup_commit_digest": { "$ref": "#/$defs/sha256" },
+    "previous_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "new_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "reason": { "type": "string", "enum": ["lost", "destroyed", "damaged", "compromised", "inaccessible"] },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "not_before": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "authorization_digest": { "$ref": "#/$defs/sha256" },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "signature": {
+          "type": "object",
+          "properties": { "signer_type": { "const": "guardian" } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}
