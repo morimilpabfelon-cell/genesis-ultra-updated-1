@@ -70,12 +70,12 @@ const commands = [
   [
     "Validate deterministic memory retrieval (Python)",
     python,
-    ["tools/validate_memory_retrieval.py"]
+    ["tools/validate_memory_retrieval_vectors.py"]
   ],
   [
     "Validate deterministic memory retrieval independently (Node)",
     process.execPath,
-    ["tools/validate_memory_retrieval.mjs"]
+    ["tools/validate_memory_retrieval_vectors.mjs"]
   ],
   ["Validate neutral sense adapters (Python)", python, ["tools/validate_sense_adapters.py"]],
   [
