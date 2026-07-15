@@ -37,7 +37,11 @@
     "memory:capsule:verify": "node tools/portable_memory_capsule.mjs verify",
     "memory:capsule:inspect": "node tools/portable_memory_capsule.mjs inspect",
     "validate:vectors": "node tools/validate_protocol_vectors.mjs",
-    "validate:schemas": "node tools/validate_artifacts.mjs"
+    "validate:schemas": "node tools/validate_artifacts.mjs",
+    "validate:multimodal": "node tools/multimodal_memory_pipeline.mjs validate",
+    "memory:multimodal:build": "node tools/multimodal_memory_pipeline.mjs build",
+    "memory:multimodal:sync": "node tools/multimodal_memory_pipeline.mjs sync",
+    "memory:multimodal:inspect": "node tools/multimodal_memory_pipeline.mjs inspect"
   },
   "devDependencies": {
     "ajv": "8.17.1",

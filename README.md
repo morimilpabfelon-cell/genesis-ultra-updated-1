@@ -264,3 +264,19 @@ Las implementaciones deben superar los mismos vectores de conformidad y permitir
 La frontera obligatoria entre core y plataforma está definida en
 [`spec/HOST_ADAPTER_CONTRACT.md`](spec/HOST_ADAPTER_CONTRACT.md): el core conserva estado
 portable y cada cuerpo aporta capacidades reemplazables, nunca una cuenta o runtime obligatorio.
+
+## Extracción multimodal neutral
+
+Validar documentos, imágenes y audio detrás de sentidos y compuerta:
+
+```powershell
+npm run validate:multimodal
+npm run memory:multimodal:build -- conformance/multimodal_memory_pipeline_vectors.json multimodal.json
+npm run memory:multimodal:inspect -- multimodal.json
+```
+
+Los adaptadores producen evidencia derivada con locators, confianza, modelo opcional y digests.
+Solo una observación firmada y una decisión `accepted` de la compuerta pueden enlazar esa evidencia
+a un evento append-only. El fixture prueba el contrato; no afirma OCR, visión o transcripción de
+calidad productiva. El contrato está en
+[`spec/MULTIMODAL_EXTRACTION_PIPELINE.md`](spec/MULTIMODAL_EXTRACTION_PIPELINE.md).

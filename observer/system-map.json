@@ -358,11 +358,31 @@
         "implementation",
         "test"
       ]
+    },
+    {
+      "id": "multimodal_extraction",
+      "name": "Extracción multimodal",
+      "layer": "perception",
+      "maturity": "simulated",
+      "description": "Documento, imagen y audio producen evidencia derivada antes de observación firmada y compuerta.",
+      "keywords": [
+        "multimodal",
+        "document_text",
+        "image_description",
+        "audio_transcript"
+      ],
+      "required_evidence": [
+        "spec",
+        "schema",
+        "conformance",
+        "implementation"
+      ]
     }
   ],
   "flow": [
     "identity",
     "senses",
+    "multimodal_extraction",
     "memory_gate",
     "memory_chain",
     "associative_memory",
