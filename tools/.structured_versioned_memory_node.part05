@@ -1,0 +1,44 @@
+function main(){
+  const [command,...args]=process.argv.slice(2);
+  try{
+    if(command==='validate'){
+      const file=args[0]??defaultVectors();
+      const summary=validateVectors(load(file));
+      console.log(`OK structured versioned memory (${summary.assertion_count} assertions, ${summary.slot_count} slots, ${summary.query_count} queries)`);
+      console.log(`OK projection digest ${summary.projection_digest}`);
+      console.log(`OK structured memory boundary rejection cases (${summary.negative_count})`);
+      return;
+    }
+    if(command==='build'||command==='sync'){
+      if(args.length!==2){ usage(); process.exitCode=2; return; }
+      const vectors=load(args[0]);
+      const projection=buildProjection(baseDocument(vectors));
+      if(command==='build') fs.writeFileSync(args[1],JSON.stringify(projection,null,2)+'\n',{encoding:'utf8',flag:'wx'});
+      else atomicWrite(args[1],projection);
+      console.log(`${command==='build'?'built':'synced'} ${projection.projection_digest}`);
+      return;
+    }
+    if(command==='query'){
+      if(args.length!==2){ usage(); process.exitCode=2; return; }
+      const vectors=load(args[0]);
+      const query=vectors.queries.find(item=>item.query_id===args[1]);
+      if(!query) fail('query_id_not_found');
+      console.log(JSON.stringify(executeQuery(baseDocument(vectors),query),null,2));
+      return;
+    }
+    if(command==='inspect'){
+      if(args.length!==1){ usage(); process.exitCode=2; return; }
+      const projection=load(args[0]);
+      console.log(JSON.stringify({projection_id:projection.projection_id,instance_id:projection.instance_id,assertion_count:projection.assertion_count,slot_count:projection.slot_count,active_slot_count:projection.active_slot_count,retracted_slot_count:projection.retracted_slot_count,projection_digest:projection.projection_digest},null,2));
+      return;
+    }
+    usage();
+    process.exitCode=2;
+  }catch(error){
+    console.error(`FAIL structured versioned memory: ${error.message}`);
+    process.exitCode=1;
+  }
+}
+
+export { buildProjection, executeQuery, validateVectors, computeAssertionDigest, ConformanceError };
+if(import.meta.url===`file://${process.argv[1]}`) main();
