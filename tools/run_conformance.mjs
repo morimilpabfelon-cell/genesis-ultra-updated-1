@@ -43,6 +43,8 @@ const commands = [
   ["Validate neutral hybrid memory retrieval independently (Node)", process.execPath, ["tools/hybrid_memory_retrieval.mjs", "validate"]],
   ["Validate retrieval scopes and ACL (Python)", python, ["tools/validate_memory_retrieval_acl.py"]],
   ["Validate retrieval scopes and ACL independently (Node)", process.execPath, ["tools/memory_retrieval_acl.mjs", "validate"]],
+  ["Validate temporal memory metadata (Python)", python, ["tools/validate_temporal_memory_metadata.py"]],
+  ["Validate temporal memory metadata independently (Node)", process.execPath, ["tools/temporal_memory_metadata.mjs", "validate"]],
   ["Validate memory-gate retrieval bridge (Python)", python, ["tools/validate_memory_gate_retrieval_bridge.py"]],
   ["Validate memory-gate retrieval bridge independently (Node)", process.execPath, ["tools/memory_gate_retrieval_bridge.mjs", "validate"]],
   ["Validate neutral sense adapters (Python)", python, ["tools/validate_sense_adapters.py"]],
