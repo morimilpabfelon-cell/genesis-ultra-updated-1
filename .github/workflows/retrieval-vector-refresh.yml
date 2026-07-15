@@ -1,0 +1,51 @@
+name: Retrieval Vector Refresh
+
+on:
+  push:
+    branches:
+      - agent/deterministic-memory-retrieval
+    paths-ignore:
+      - conformance/memory_retrieval_vectors.json
+
+permissions:
+  contents: write
+
+jobs:
+  generate-retrieval-vectors:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate deterministic vectors
+        run: python tools/generate_memory_retrieval_vectors.py
+
+      - name: Validate independently
+        run: |
+          python tools/validate_memory_retrieval.py
+          node tools/validate_memory_retrieval.mjs
+
+      - name: Commit generated vector
+        shell: bash
+        run: |
+          if git diff --quiet -- conformance/memory_retrieval_vectors.json; then
+            echo "Retrieval vector already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add conformance/memory_retrieval_vectors.json
+          git commit -m "Generate deterministic memory retrieval vectors"
+          git push origin HEAD:agent/deterministic-memory-retrieval
