@@ -10,6 +10,14 @@ const FORBIDDEN_PUBLIC_FIELDS = new Set([
   "private_key",
   "secret"
 ]);
+const MATURITY_WEIGHTS = {
+  verified: 100,
+  live_tool: 100,
+  simulated: 70,
+  partial: 45,
+  specified: 25,
+  pending: 0
+};
 
 export function parseRepositorySlug(value) {
   if (typeof value !== "string" || value.trim() === "") return null;
@@ -112,6 +120,35 @@ function safeEdge(edge) {
   };
 }
 
+function safeMetricValue(value) {
+  if (value === null || ["string", "number", "boolean"].includes(typeof value)) return value;
+  if (Array.isArray(value)) return value.slice(0, 50).map(safeMetricValue);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([key]) => !FORBIDDEN_PUBLIC_FIELDS.has(key))
+        .slice(0, 50)
+        .map(([key, child]) => [key, safeMetricValue(child)])
+    );
+  }
+  return String(value);
+}
+
+function safeSubsystems(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  return Object.fromEntries(Object.entries(value).map(([id, subsystem]) => {
+    const record = subsystem && typeof subsystem === "object" && !Array.isArray(subsystem)
+      ? subsystem
+      : { status: subsystem };
+    return [id, {
+      status: typeof record.status === "string" ? record.status : "unknown",
+      active: Boolean(record.active),
+      updated_at: typeof record.updated_at === "string" ? record.updated_at : null,
+      metrics: safeMetricValue(record.metrics ?? {})
+    }];
+  }));
+}
+
 export function buildLocalSnapshot(document, options = {}) {
   const now = options.now ?? new Date().toISOString();
   const sourcePath = options.sourcePath ?? null;
@@ -138,9 +175,16 @@ export function buildLocalSnapshot(document, options = {}) {
       status: document?.status ?? null
     },
     identity: {
-      instance_id: projection?.instance_id ?? instanceIds[0] ?? null,
+      instance_id: projection?.instance_id ?? document?.identity?.instance_id ?? instanceIds[0] ?? null,
+      companion_name: document?.identity?.companion_name ?? null,
       body_ids: [...new Set(events.map((event) => event.body_id).filter(Boolean))],
+      active_body_id: document?.identity?.active_body_id ?? null,
       consistent_instance: instanceIds.length <= 1
+    },
+    runtime: {
+      status: sourceMode === "runtime" ? (document?.runtime_status ?? "connected") : "fixture",
+      heartbeat_at: document?.heartbeat_at ?? null,
+      subsystems: safeSubsystems(document?.subsystems ?? document?.runtime_components)
     },
     memory: {
       count: events.length,
@@ -169,6 +213,16 @@ export function buildLocalSnapshot(document, options = {}) {
 
 function asArray(value) {
   return Array.isArray(value) ? value : [];
+}
+
+function safeChangedFile(file) {
+  return {
+    filename: file?.filename ?? null,
+    status: file?.status ?? null,
+    additions: Number.isInteger(file?.additions) ? file.additions : null,
+    deletions: Number.isInteger(file?.deletions) ? file.deletions : null,
+    changes: Number.isInteger(file?.changes) ? file.changes : null
+  };
 }
 
 export function buildGithubSnapshot(payload, options = {}) {
@@ -225,7 +279,148 @@ export function buildGithubSnapshot(payload, options = {}) {
     commits,
     pulls,
     workflow_runs: runs,
-    latest_workflow: runs[0] ?? null
+    latest_workflow: runs[0] ?? null,
+    latest_commit_files: asArray(payload?.latest_commit?.files).map(safeChangedFile),
+    latest_pull: {
+      number: payload?.latest_pull_number ?? pulls[0]?.number ?? null,
+      files: asArray(payload?.latest_pull_files).map(safeChangedFile)
+    }
+  };
+  snapshot.fingerprint = stableFingerprint(snapshot);
+  return snapshot;
+}
+
+function evidenceKind(relativePath) {
+  if (relativePath.startsWith("spec/")) return "spec";
+  if (relativePath.startsWith("schemas/")) return "schema";
+  if (relativePath.startsWith("conformance/")) return "conformance";
+  if (relativePath.startsWith(".github/workflows/")) return "workflow";
+  if (relativePath.startsWith("docs/") || relativePath.endsWith("README.md")) return "documentation";
+  if (relativePath.includes("/test/") || relativePath.includes(".test.")) return "test";
+  if (relativePath.startsWith("tools/") || relativePath.startsWith("reference/") || relativePath.startsWith("observer/")) {
+    return "implementation";
+  }
+  return "other";
+}
+
+function matchesComponent(relativePath, keywords) {
+  const normalized = relativePath.toLowerCase();
+  return asArray(keywords).some((keyword) => normalized.includes(String(keyword).toLowerCase()));
+}
+
+function safeCatalogComponent(component) {
+  return {
+    id: component?.id ?? "unknown",
+    name: component?.name ?? component?.id ?? "Sin nombre",
+    layer: component?.layer ?? "other",
+    maturity: component?.maturity ?? "pending",
+    description: component?.description ?? "",
+    keywords: asArray(component?.keywords).map(String),
+    required_evidence: asArray(component?.required_evidence).map(String)
+  };
+}
+
+function checklistCounts(text) {
+  const checked = (String(text ?? "").match(/^- \[x\]/gmi) ?? []).length;
+  const pending = (String(text ?? "").match(/^- \[ \]/gmi) ?? []).length;
+  return { checked, pending, total: checked + pending };
+}
+
+export function affectedComponents(paths, catalog) {
+  const components = asArray(catalog?.components).map(safeCatalogComponent);
+  const result = new Set();
+  for (const relativePath of asArray(paths)) {
+    for (const component of components) {
+      if (matchesComponent(String(relativePath), component.keywords)) result.add(component.id);
+    }
+  }
+  return [...result];
+}
+
+export function buildProjectSnapshot(input, options = {}) {
+  const now = options.now ?? new Date().toISOString();
+  const catalog = input?.catalog ?? {};
+  const required = asArray(input?.requiredArtifacts?.required).map(String);
+  const manifest = input?.manifest ?? {};
+  const runtimeSubsystems = input?.runtimeSubsystems ?? {};
+  const git = input?.git ?? {};
+  const layers = asArray(catalog?.layers).map((layer) => ({
+    id: layer?.id ?? "other",
+    name: layer?.name ?? layer?.id ?? "Otra"
+  }));
+
+  const components = asArray(catalog?.components).map(safeCatalogComponent).map((component) => {
+    const files = required.filter((relativePath) => matchesComponent(relativePath, component.keywords));
+    const evidence = summarizeCounts(files.map((relativePath) => ({ kind: evidenceKind(relativePath) })), "kind");
+    const satisfied = component.required_evidence.filter((kind) => (evidence[kind] ?? 0) > 0);
+    const evidenceCoverage = component.required_evidence.length
+      ? Math.round((satisfied.length / component.required_evidence.length) * 100)
+      : 0;
+    const runtime = runtimeSubsystems?.[component.id] ?? null;
+    return {
+      ...component,
+      files,
+      file_count: files.length,
+      evidence,
+      evidence_coverage: evidenceCoverage,
+      missing_evidence: component.required_evidence.filter((kind) => !satisfied.includes(kind)),
+      maturity_score: MATURITY_WEIGHTS[component.maturity] ?? 0,
+      runtime: runtime ? {
+        status: runtime.status ?? "unknown",
+        active: Boolean(runtime.active),
+        updated_at: runtime.updated_at ?? null,
+        metrics: safeMetricValue(runtime.metrics ?? {})
+      } : {
+        status: "not_connected",
+        active: false,
+        updated_at: null,
+        metrics: {}
+      }
+    };
+  });
+
+  const maturity = summarizeCounts(components, "maturity");
+  const averageScore = components.length
+    ? Math.round(components.reduce((sum, component) => sum + component.maturity_score, 0) / components.length)
+    : 0;
+  const checklist = checklistCounts(input?.checklistText);
+  const latestCommitFiles = asArray(git?.latest_commit_files).map(String);
+  const changedFiles = asArray(git?.changed_files).map(String);
+
+  const snapshot = {
+    observed_at: now,
+    catalog_version: catalog?.schema_version ?? null,
+    progress: {
+      maturity_score: averageScore,
+      components: components.length,
+      verified: (maturity.verified ?? 0) + (maturity.live_tool ?? 0),
+      simulated: maturity.simulated ?? 0,
+      partial: maturity.partial ?? 0,
+      pending: (maturity.pending ?? 0) + (maturity.specified ?? 0),
+      checklist,
+      artifacts: {
+        required: required.length,
+        manifest_files: manifest?.file_count ?? null,
+        root_digest: manifest?.root_digest ?? null,
+        schemas: required.filter((path) => path.startsWith("schemas/")).length,
+        specs: required.filter((path) => path.startsWith("spec/")).length,
+        validators: required.filter((path) => /^tools\/validate_/.test(path)).length,
+        tests: required.filter((path) => path.includes("/test/") || path.includes(".test.")).length
+      }
+    },
+    repository: {
+      branch: git?.branch ?? null,
+      commit: git?.commit ?? null,
+      commit_time: git?.commit_time ?? null,
+      dirty: Boolean(git?.dirty),
+      changed_files: changedFiles,
+      latest_commit_files: latestCommitFiles,
+      affected_by_worktree: affectedComponents(changedFiles, catalog),
+      affected_by_latest_commit: affectedComponents(latestCommitFiles, catalog)
+    },
+    layers,
+    components,
+    flow: asArray(catalog?.flow).map(String)
   };
   snapshot.fingerprint = stableFingerprint(snapshot);
   return snapshot;
