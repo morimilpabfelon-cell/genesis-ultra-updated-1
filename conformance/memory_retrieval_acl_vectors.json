@@ -1,0 +1,47 @@
+{
+  "profile": "genesis.memory.retrieval_acl.conformance.v0.1",
+  "instance_id": "inst_01HACL000000000000001",
+  "authority_epoch": 3,
+  "source_chain_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "events": [
+    {"event_id":"evt_01HACL000000000000001","body_id":"body_01HACL00000000000001A","sequence":0,"event_type":"sense.vision.observation","privacy":"private_local"},
+    {"event_id":"evt_01HACL000000000000002","body_id":"body_01HACL00000000000001A","sequence":1,"event_type":"guardian.transfer.authorized","privacy":"guardian_shared"},
+    {"event_id":"evt_01HACL000000000000003","body_id":"body_01HACL00000000000001A","sequence":2,"event_type":"knowledge.requirement.recorded","privacy":"export_approved"},
+    {"event_id":"evt_01HACL000000000000004","body_id":"body_01HACL00000000000001B","sequence":3,"event_type":"recovery.continuity.verified","privacy":"private_local"},
+    {"event_id":"evt_01HACL000000000000005","body_id":"body_01HACL00000000000001A","sequence":4,"event_type":"security.suspicious.input","privacy":"quarantined"},
+    {"event_id":"evt_01HACL000000000000006","body_id":"body_01HACL00000000000001A","sequence":5,"event_type":"knowledge.release.summary","privacy":"export_approved"}
+  ],
+  "scope_bindings": [
+    {"event_id":"evt_01HACL000000000000001","scopes":["core","senses:vision"]},
+    {"event_id":"evt_01HACL000000000000002","scopes":["core","mobility"]},
+    {"event_id":"evt_01HACL000000000000003","scopes":["project:aurora"]},
+    {"event_id":"evt_01HACL000000000000004","scopes":["core","recovery"]},
+    {"event_id":"evt_01HACL000000000000005","scopes":["core","security"]},
+    {"event_id":"evt_01HACL000000000000006","scopes":["project:aurora"]}
+  ],
+  "policies": [
+    {"policy_id":"acl_instance","requester_type":"instance","requester_id":"inst_01HACL000000000000001","body_id":null,"purposes":["recall"],"allowed_privacy":["private_local","guardian_shared","export_approved"],"allowed_scopes":["core","mobility","project:aurora","recovery","security","senses:vision"],"event_type_prefixes":[],"authority_epoch":3,"valid_from_sequence":0,"valid_to_sequence":null},
+    {"policy_id":"acl_guardian","requester_type":"guardian","requester_id":"guardian_01HACL00000000001","body_id":null,"purposes":["guardian_review"],"allowed_privacy":["private_local","guardian_shared","export_approved"],"allowed_scopes":["core","mobility","project:aurora","recovery","security","senses:vision"],"event_type_prefixes":[],"authority_epoch":3,"valid_from_sequence":0,"valid_to_sequence":null},
+    {"policy_id":"acl_body_a","requester_type":"body","requester_id":"body_01HACL00000000000001A","body_id":"body_01HACL00000000000001A","purposes":["recall"],"allowed_privacy":["private_local","export_approved"],"allowed_scopes":["core","project:aurora","senses:vision"],"event_type_prefixes":[],"authority_epoch":3,"valid_from_sequence":0,"valid_to_sequence":null},
+    {"policy_id":"acl_engine","requester_type":"engine","requester_id":"engine_01HACL000000000001","body_id":null,"purposes":["reasoning_context"],"allowed_privacy":["guardian_shared","export_approved"],"allowed_scopes":["mobility","project:aurora"],"event_type_prefixes":[],"authority_epoch":3,"valid_from_sequence":0,"valid_to_sequence":null},
+    {"policy_id":"acl_observer","requester_type":"observer","requester_id":"observer_local","body_id":null,"purposes":["observability"],"allowed_privacy":["export_approved"],"allowed_scopes":["project:aurora"],"event_type_prefixes":["knowledge."],"authority_epoch":3,"valid_from_sequence":0,"valid_to_sequence":null}
+  ],
+  "requests": [
+    {"request_id":"req_instance_all","requester_type":"instance","requester_id":"inst_01HACL000000000000001","body_id":null,"purpose":"recall","requested_scopes":[],"event_type_prefixes":[],"as_of_sequence":4,"authority_epoch":3,"expected_policy_id":"acl_instance","expected_allowed_event_refs":["evt_01HACL000000000000001","evt_01HACL000000000000002","evt_01HACL000000000000003","evt_01HACL000000000000004"],"expected_denials":{"quarantined":1,"future_event":1}},
+    {"request_id":"req_body_core","requester_type":"body","requester_id":"body_01HACL00000000000001A","body_id":"body_01HACL00000000000001A","purpose":"recall","requested_scopes":["core"],"event_type_prefixes":[],"as_of_sequence":5,"authority_epoch":3,"expected_policy_id":"acl_body_a","expected_allowed_event_refs":["evt_01HACL000000000000001"],"expected_denials":{"privacy_not_allowed":1,"scope_not_allowed":2,"body_mismatch":1,"quarantined":1}},
+    {"request_id":"req_engine_mobility","requester_type":"engine","requester_id":"engine_01HACL000000000001","body_id":null,"purpose":"reasoning_context","requested_scopes":["mobility"],"event_type_prefixes":[],"as_of_sequence":5,"authority_epoch":3,"expected_policy_id":"acl_engine","expected_allowed_event_refs":["evt_01HACL000000000000002"],"expected_denials":{"scope_not_allowed":4,"quarantined":1}},
+    {"request_id":"req_observer_project","requester_type":"observer","requester_id":"observer_local","body_id":null,"purpose":"observability","requested_scopes":["project:aurora"],"event_type_prefixes":["knowledge."],"as_of_sequence":5,"authority_epoch":3,"expected_policy_id":"acl_observer","expected_allowed_event_refs":["evt_01HACL000000000000003","evt_01HACL000000000000006"],"expected_denials":{"scope_not_allowed":3,"quarantined":1}},
+    {"request_id":"req_guardian_recovery","requester_type":"guardian","requester_id":"guardian_01HACL00000000001","body_id":null,"purpose":"guardian_review","requested_scopes":["recovery"],"event_type_prefixes":[],"as_of_sequence":3,"authority_epoch":3,"expected_policy_id":"acl_guardian","expected_allowed_event_refs":["evt_01HACL000000000000004"],"expected_denials":{"scope_not_allowed":3,"future_event":2}},
+    {"request_id":"req_historical_project","requester_type":"instance","requester_id":"inst_01HACL000000000000001","body_id":null,"purpose":"recall","requested_scopes":["project:aurora"],"event_type_prefixes":[],"as_of_sequence":2,"authority_epoch":3,"expected_policy_id":"acl_instance","expected_allowed_event_refs":["evt_01HACL000000000000003"],"expected_denials":{"scope_not_allowed":2,"future_event":3}}
+  ],
+  "must_reject": [
+    {"case_id":"unknown_requester","mutation":{"target":"request","index":0,"field":"requester_id","value":"unknown"},"expected_error":"acl_policy_not_found"},
+    {"case_id":"stale_epoch","mutation":{"target":"request","index":0,"field":"authority_epoch","value":2},"expected_error":"acl_authority_epoch_mismatch"},
+    {"case_id":"unknown_scope","mutation":{"target":"request","index":0,"field":"requested_scopes","value":["unknown:scope"]},"expected_error":"acl_requested_scope_unknown"},
+    {"case_id":"duplicate_binding","mutation":{"target":"duplicate_binding","index":0},"expected_error":"acl_scope_binding_coverage_invalid"},
+    {"case_id":"unknown_event_binding","mutation":{"target":"binding","index":0,"field":"event_id","value":"evt_unknown"},"expected_error":"acl_scope_binding_event_unknown"},
+    {"case_id":"observer_private","mutation":{"target":"policy","index":4,"field":"allowed_privacy","value":["private_local","export_approved"]},"expected_error":"acl_observer_privacy_invalid"},
+    {"case_id":"policy_authority_field","mutation":{"target":"policy_add","index":0,"field":"active_writer","value":true},"expected_error":"acl_policy_contains_authority"},
+    {"case_id":"ambiguous_policy","mutation":{"target":"duplicate_policy","index":0,"new_policy_id":"acl_instance_duplicate"},"expected_error":"acl_policy_ambiguous"}
+  ]
+}

@@ -9,6 +9,8 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 
 ## Archivos
 
+- `memory_retrieval_acl_vectors.json`: seis eventos, cinco políticas, seis solicitudes y ocho mutaciones para scopes, privacidad, propósito, cuerpo e aislamiento histórico.
+
 - `associative_memory_projection_vectors.json`: proyección reconstruible de memoria aceptada,
   nodos y relaciones por digest, tres niveles de procedencia y rechazos de autoridad o datos
   crudos dentro del grafo.

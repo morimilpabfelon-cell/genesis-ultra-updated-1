@@ -1898,6 +1898,29 @@
         "projection_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
         "unexpected_core_field": true
       }
+    },
+    {
+      "case_id": "memory-retrieval-acl-decision-rejects-unexpected-field",
+      "schema": "memory_retrieval_acl_decision.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.memory.retrieval_acl.decision.v0.1",
+        "request_id": "req_schema_acl",
+        "policy_id": "acl_schema",
+        "instance_id": "inst_01HACL000000000000001",
+        "authority_epoch": 3,
+        "purpose": "recall",
+        "as_of_sequence": 0,
+        "effective_scopes": [
+          "core"
+        ],
+        "allowed_event_refs": [
+          "evt_01HACL000000000000001"
+        ],
+        "denial_counts": {},
+        "decision_digest": "aclsha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "write_memory": true
+      }
     }
   ]
 }

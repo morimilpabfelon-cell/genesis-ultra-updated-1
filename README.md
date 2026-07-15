@@ -174,6 +174,24 @@ cadena append-only y vista textual ligada por digest. No crea eventos, no acepta
 rechazadas o en cuarentena y nunca reemplaza la memoria autoritativa. El contrato está en
 [`spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md`](spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md).
 
+## Filtrar recuperación por scopes y ACL
+
+Validar las políticas y decisiones:
+
+```powershell
+npm run validate:retrieval-acl
+```
+
+Inspeccionar una decisión de ejemplo:
+
+```powershell
+npm run memory:acl:filter -- conformance/memory_retrieval_acl_vectors.json req_engine_mobility
+```
+
+La ACL se aplica antes del ranking léxico o semántico. `quarantined` siempre se rechaza,
+`as_of_sequence` impide filtración futura y ningún permiso de lectura concede autoridad de escritura.
+El contrato está en [`spec/MEMORY_RETRIEVAL_SCOPES_AND_ACL.md`](spec/MEMORY_RETRIEVAL_SCOPES_AND_ACL.md).
+
 ## Observabilidad local en vivo
 
 ```powershell

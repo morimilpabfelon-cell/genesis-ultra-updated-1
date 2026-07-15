@@ -70,6 +70,8 @@
       recuperación sin coincidencia literal, fallback léxico, aislamiento histórico y
       veinticuatro cruces de autoridad, integridad, proveedor o cobertura rechazados por Python y Node.
 
+- [x] Scopes y ACL de recuperación reproducidos por Python y Node: privacidad, propósito, cuerpo, época de autoridad, cuarentena e aislamiento histórico.
+
 ## Pendiente real
 
 - [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.

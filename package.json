@@ -17,6 +17,7 @@
     "validate:retrieval": "node tools/validate_memory_retrieval.mjs",
     "validate:retrieval-bridge": "node tools/memory_gate_retrieval_bridge.mjs validate",
     "validate:hybrid-retrieval": "node tools/hybrid_memory_retrieval.mjs validate",
+    "validate:retrieval-acl": "node tools/memory_retrieval_acl.mjs validate",
     "memory:build": "node tools/memory_retrieval.mjs build",
     "memory:query": "node tools/memory_retrieval.mjs query",
     "memory:bridge:build": "node tools/memory_gate_retrieval_bridge.mjs build",
@@ -25,6 +26,7 @@
     "memory:hybrid:build": "node tools/hybrid_memory_retrieval.mjs build",
     "memory:hybrid:sync": "node tools/hybrid_memory_retrieval.mjs sync",
     "memory:hybrid:query": "node tools/hybrid_memory_retrieval.mjs query",
+    "memory:acl:filter": "node tools/memory_retrieval_acl.mjs filter",
     "validate:vectors": "node tools/validate_protocol_vectors.mjs",
     "validate:schemas": "node tools/validate_artifacts.mjs"
   },
