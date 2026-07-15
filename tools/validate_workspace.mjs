@@ -103,6 +103,56 @@ function isSafePath(value) {
   return !segments.some((segment) => segment === "" || segment === "." || segment === "..");
 }
 
+function evaluateInvalidCase(testCase) {
+  const { category, input } = testCase;
+  if (category === "seed_path") {
+    return isSafePath(input) ? null : "invalid_relative_path";
+  }
+  if (category === "canonical_text") {
+    return input.normalize("NFC") === input ? null : "text_not_nfc";
+  }
+  if (category === "seed_manifest") {
+    return new Set(input).size === input.length ? null : "duplicate_manifest_path";
+  }
+  if (category === "body_registry") {
+    const activeWriters = input.filter((body) => body.status === "active_writer").length;
+    return activeWriters > 1 ? "multiple_active_writers" : null;
+  }
+  if (category === "memory_append") {
+    return input.body_status === "active_writer" ? null : "body_not_authorized";
+  }
+  if (category === "memory_chain") {
+    return new Set(input.children ?? []).size > 1 ? "fork_detected" : null;
+  }
+  if (category === "transfer") {
+    return input.package_instance_id === input.destination_instance_id
+      ? null
+      : "instance_id_mismatch";
+  }
+  if (category === "recovery") {
+    const hasGap = input.last_backup_sequence < input.last_known_sequence;
+    return hasGap && input.continuity_status === "complete" ? "undeclared_memory_gap" : null;
+  }
+  if (category === "guardian_authorization") {
+    if (input.revocation_event_present) return "authorization_revoked";
+    if (
+      input.evaluated_at !== undefined
+      && input.expires_at !== undefined
+      && Date.parse(input.evaluated_at) >= Date.parse(input.expires_at)
+    ) {
+      return "authorization_expired";
+    }
+    if (
+      input.mode === "one_time"
+      && (input.consumed_events ?? 0) >= (input.use_limit ?? 1)
+    ) {
+      return "authorization_use_limit_reached";
+    }
+    return null;
+  }
+  throw new Error(`unknown_invalid_case_category:${category}`);
+}
+
 function validateWorkspaceHygiene() {
   for (const [label, paths] of [["required", REQUIRED], ["forbidden", FORBIDDEN]]) {
     if (new Set(paths).size !== paths.length) fail(`duplicate_${label}_workspace_path`);
@@ -309,7 +359,8 @@ if (fs.existsSync(path.join(ROOT, "conformance/golden_vectors.json"))) {
 
 if (fs.existsSync(path.join(ROOT, "conformance/invalid_cases.json"))) {
   const invalid = readJson("conformance/invalid_cases.json");
-  const ids = (invalid.invalid_cases ?? []).map((item) => item.case_id);
+  const invalidCases = invalid.invalid_cases ?? [];
+  const ids = invalidCases.map((item) => item.case_id);
   if (ids.length === 0) fail("invalid_case_set_empty");
   if (new Set(ids).size !== ids.length) fail("duplicate_invalid_case_id");
 
@@ -324,9 +375,21 @@ if (fs.existsSync(path.join(ROOT, "conformance/invalid_cases.json"))) {
     "authorization_expired",
     "authorization_use_limit_reached"
   ]);
-  const presentErrors = new Set((invalid.invalid_cases ?? []).map((item) => item.expected_error));
+  const presentErrors = new Set(invalidCases.map((item) => item.expected_error));
   for (const requiredError of requiredErrors) {
     if (!presentErrors.has(requiredError)) fail(`missing_invalid_case:${requiredError}`);
+  }
+  for (const testCase of invalidCases) {
+    try {
+      const actualError = evaluateInvalidCase(testCase);
+      if (actualError !== testCase.expected_error) {
+        fail(
+          `invalid_case_mismatch:${testCase.case_id}:expected=${testCase.expected_error}:actual=${actualError}`
+        );
+      }
+    } catch (error) {
+      fail(`invalid_case_exception:${testCase.case_id}:${error.message}`);
+    }
   }
 }
 
@@ -345,4 +408,5 @@ console.log(`Checked ${REQUIRED.length} required artifacts and ${FORBIDDEN.lengt
 console.log("Workspace hygiene and local Markdown links are consistent.");
 console.log("Draft integrity manifest covers every required artifact except its declared self-exclusion.");
 console.log("Golden seed and memory hashes match genesis.hash.fields.v0.1.");
+console.log("All shared invalid cases are independently evaluated and rejected.");
 console.log("Reminder: passing this tool does not make the draft production-ready.");

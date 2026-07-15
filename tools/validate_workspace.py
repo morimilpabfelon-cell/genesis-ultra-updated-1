@@ -252,6 +252,8 @@ def main() -> int:
     failures = validate_workspace_hygiene()
 
     for path in ROOT.rglob("*.json"):
+        if any(part in {".git", "node_modules"} for part in path.parts):
+            continue
         try:
             with path.open("r", encoding="utf-8") as handle:
                 json.load(handle)

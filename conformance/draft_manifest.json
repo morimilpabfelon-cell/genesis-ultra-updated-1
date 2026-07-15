@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 79,
+  "file_count": 80,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -35,8 +35,8 @@
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 2762,
-      "digest": "sha256:76e4064e304fb78dda3c03915ada01223101b673961303a3939d097d13c7db28"
+      "size_bytes": 3044,
+      "digest": "sha256:098d92d502a5a0b9827d03b9964f0938f6df3b8810afde91af6f7d7818e95fd7"
     },
     {
       "path": "conformance/behavior_cases.json",
@@ -65,8 +65,8 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 3384,
-      "digest": "sha256:547f23eefb9d3b3f97fca22cc2f58601e008ae4ff8496d47dc4d33bc0edc142a"
+      "size_bytes": 3427,
+      "digest": "sha256:d9c972569cc3894bbdac5763b350bbef34d8e135f9147027a7ed655f3282207d"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
@@ -85,23 +85,23 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 3570,
-      "digest": "sha256:8c0fc3bee650c75abe5e7ee0b72a84f611809309114d16a07c8eba3b09929ab7"
+      "size_bytes": 3670,
+      "digest": "sha256:a9316aac04263eed86637c0f560387d47ef7c91d764f50015735cd16f36585c9"
     },
     {
       "path": "package-lock.json",
-      "size_bytes": 3074,
-      "digest": "sha256:59db65c440ce3661ca1a5e5c172b0d1a9183e4b4a28d000ade73981b49ac2eaa"
+      "size_bytes": 3412,
+      "digest": "sha256:ee77277264726bc9052a8151934d67b95d16889296f9e5ebd50f3b9863acf781"
     },
     {
       "path": "package.json",
-      "size_bytes": 538,
-      "digest": "sha256:9d128b6d05a321dc02091d9213e2e0efe8444af51e70436d7d9c5ee780ba419e"
+      "size_bytes": 633,
+      "digest": "sha256:f2e75dd0e13c9e55456b865b91d0354f174dcd3c88ab537bc793029eec0b1935"
     },
     {
       "path": "reference/README.md",
-      "size_bytes": 1109,
-      "digest": "sha256:34b2f724e31ed80fb6b921298573499bea7a6f8272363ca3e9b1f681ceec4396"
+      "size_bytes": 1124,
+      "digest": "sha256:2d30de56210ace8975a3bae7623b2e56c0d76576fcbb798aa5cc9dec89fbadd2"
     },
     {
       "path": "requirements.txt",
@@ -330,8 +330,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 3406,
-      "digest": "sha256:43c61797a484ae007a8d86557b9138f5a4c34b51cd69bbf2bad7cd0a4bd1c4e9"
+      "size_bytes": 3535,
+      "digest": "sha256:999835063274cf68cdddf5381e815f69d2fb715c129152196146d457c34ef742"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -389,20 +389,25 @@
       "digest": "sha256:2e4acc1e87243e33d5b5ba428ca8ed3a94b4e2b4a88340e0e650ecd1bf724c48"
     },
     {
+      "path": "tools/validate_protocol_vectors.mjs",
+      "size_bytes": 17332,
+      "digest": "sha256:e79ca8f260d6f05bd16c5361260fb09be0cf06f62a1f43c9ba12808f264734bb"
+    },
+    {
       "path": "tools/validate_transaction_journal.py",
       "size_bytes": 7953,
       "digest": "sha256:1d64f047dc9cb3268386eb6e4156a0aa3c827b86ca8ce3bc5f5835d3a626aecc"
     },
     {
       "path": "tools/validate_workspace.mjs",
-      "size_bytes": 12898,
-      "digest": "sha256:bf90adb68e0e74b9b6f48d94129faddfd2a8139887413fcb2acb8801d37afd80"
+      "size_bytes": 15214,
+      "digest": "sha256:4d6a064cd5921b1d6f808571ee2c5803c6672cf80b18b2686deb8bf674241de2"
     },
     {
       "path": "tools/validate_workspace.py",
-      "size_bytes": 11069,
-      "digest": "sha256:214323e7c15dd3e3827998967b0fe1c07c21cea462a950138157dca88ca6cd6c"
+      "size_bytes": 11163,
+      "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:66e971be04cf202eaf620621f83c0c9cff542f385ba8e5c295c34105b2c61148"
+  "root_digest": "sha256:04a115df26a090167d09d85fb8ac41f0c6d96f855ccda4ab3dfbe321f93fee1c"
 }
