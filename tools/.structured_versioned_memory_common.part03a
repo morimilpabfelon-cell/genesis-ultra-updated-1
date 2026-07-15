@@ -1,0 +1,39 @@
+
+def execute_query(document: dict, query: dict) -> dict:
+    expected_fields = {"query_id", "version_key", "as_of_sequence", "allowed_event_refs", "acl_decision_digest"}
+    if set(query) != expected_fields:
+        raise ConformanceError("query_fields_invalid")
+    if type(query["as_of_sequence"]) is not int or query["as_of_sequence"] < 0:
+        raise ConformanceError("query_as_of_invalid")
+    if not SHA_RE.fullmatch(query["acl_decision_digest"]):
+        raise ConformanceError("query_acl_digest_invalid")
+    event_ids = {event["event_id"] for event in document["source_events"]}
+    allowed = query["allowed_event_refs"]
+    if not isinstance(allowed, list) or len(set(allowed)) != len(allowed):
+        raise ConformanceError("query_allowed_event_refs_invalid")
+    if any(ref not in event_ids for ref in allowed):
+        raise ConformanceError("query_allowed_event_refs_invalid")
+    relevant = [
+        assertion for assertion in document["assertions"]
+        if assertion["version_key"] == query["version_key"]
+        and assertion["source_sequence"] <= query["as_of_sequence"]
+    ]
+    if not relevant:
+        status, slot_status, values, refs, history_count = "not_found", None, [], [], 0
+    elif any(assertion["source_event_ref"] not in set(allowed) for assertion in relevant):
+        status, slot_status, values, refs, history_count = "redacted_chain", None, [], [], 0
+    else:
+        projection = build_projection(
+            document,
+            as_of_sequence=query["as_of_sequence"],
+            allowed_event_refs=set(allowed),
+            target_version_key=query["version_key"],
+        )
+        if not projection["slots"]:
+            status, slot_status, values, refs, history_count = "not_found", None, [], [], 0
+        else:
+            slot = projection["slots"][0]
+            status, slot_status = "allowed", slot["status"]
+            values = [item["value"] for item in slot["current_items"]]
+            refs = [item["assertion_ref"] for item in slot["current_items"]]
+            history_count = len(slot["history"])
