@@ -61,8 +61,9 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 20 JSON Schema, exige que
-los artefactos generados por la simulación A→B sean válidos y estén enlazados, y ejecuta
+La suite ejecuta los validadores Python y Node, compila los 22 JSON Schema, exige que
+los artefactos generados por la simulación A→B sean válidos y estén enlazados, verifica
+el permiso permanente, los dispositivos registrados y el ledger de autoridad, y ejecuta
 los vectores de continuidad, criptografía y casos negativos. Pasar la suite no constituye
 una certificación de seguridad ni convierte el borrador en producción.
 

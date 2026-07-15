@@ -137,12 +137,15 @@ def evaluate_invalid_case(case: dict) -> str | None:
         return "undeclared_memory_gap" if has_gap and data.get("continuity_status") == "complete" else None
 
     if category == "guardian_authorization":
-        if data.get("revoked"):
+        if data.get("revocation_event_present"):
             return "authorization_revoked"
         if "evaluated_at" in data and "expires_at" in data:
             if parse_utc(data["evaluated_at"]) >= parse_utc(data["expires_at"]):
                 return "authorization_expired"
-        if data.get("used_count", 0) >= data.get("use_limit", 1):
+        if (
+            data.get("mode") == "one_time"
+            and data.get("consumed_events", 0) >= data.get("use_limit", 1)
+        ):
             return "authorization_use_limit_reached"
         return None
 

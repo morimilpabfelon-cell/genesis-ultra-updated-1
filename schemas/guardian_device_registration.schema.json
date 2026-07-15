@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:guardian-device-registration:v0.1",
+  "title": "Genesis Guardian Device Registration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registration_id",
+    "guardian_id",
+    "guardian_key_epoch_id",
+    "instance_id",
+    "authority_epoch",
+    "body_id",
+    "platform_profile",
+    "public_key_fingerprint",
+    "registered_at",
+    "registration_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.guardian.device.registration.v0.1" },
+    "registration_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "guardian_key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "authority_epoch": { "type": "integer", "minimum": 0 },
+    "body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "platform_profile": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "public_key_fingerprint": { "type": "string", "minLength": 16, "maxLength": 256 },
+    "registered_at": { "type": "string", "format": "date-time" },
+    "registration_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "signature": {
+          "type": "object",
+          "properties": {
+            "signer_type": { "const": "guardian" }
+          }
+        }
+      }
+    }
+  ]
+}

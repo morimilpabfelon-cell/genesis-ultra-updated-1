@@ -19,20 +19,24 @@
 - [ ] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [ ] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [ ] Lista compartida de artefactos requeridos.
-- [ ] Compilación de los 20 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [ ] Compilación de los 22 JSON Schema con JSON Schema 2020-12 y formatos activos.
 - [ ] Casos de regresión que demuestran el rechazo de artefactos inválidos por los schemas reales.
 - [ ] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
 - [ ] Validación cruzada de los enlaces checkpoint→paquete→recibo→finalización y de la
       autoridad final única.
 - [ ] Suite única local y CI mediante `npm test`.
+- [ ] Autorización permanente del guardián firmada, registrada y consumida por el
+      `transfer_id` exacto.
+- [ ] Ledger de autoridad append-only para registro de cuerpos, grants, consumos,
+      revocaciones y épocas.
+- [ ] Misma evaluación de autoridad usada por la simulación positiva y por los rechazos
+      de permiso ausente, expirado, agotado, revocado, de época antigua o destino desconocido.
 
 Marcar estos elementos únicamente después de una ejecución verde reproducible.
 
 ## Pendiente real
 
-- [ ] Autorización del guardián firmada, verificada, consumida y no reutilizable.
-- [ ] Tests negativos integrados contra la misma implementación positiva.
 - [ ] Backup, transfer y recovery como flujos transaccionales completos.
 - [ ] Segunda implementación independiente que reproduzca todos los vectores.
 - [ ] Manifiesto del borrador con hashes de todos los archivos.

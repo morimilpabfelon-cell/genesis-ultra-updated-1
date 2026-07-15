@@ -26,7 +26,9 @@ El cuerpo origen:
 
 - verifica la cadena completa;
 - verifica que sea el `active_writer`;
-- obtiene autorización del guardián;
+- evalúa una autorización del guardián concedida en el ledger de autoridad;
+- verifica que el destino esté registrado y no revocado;
+- registra `authorization.consumed` para el `transfer_id` exacto;
 - fija el cuerpo destino o declara una transferencia abierta controlada.
 
 ### `prepared → frozen`
@@ -89,6 +91,8 @@ Después de activar el destino, un fallo no puede resolverse reactivando silenci
 4. Un recibo no puede reutilizarse.
 5. Una autoridad anterior no revive automáticamente.
 6. Dos descendientes diferentes del mismo evento padre constituyen un fork detectable.
+7. Una autorización revocada, expirada, agotada o de una época anterior no puede preparar una transferencia.
+8. Un permiso permanente solo alcanza dispositivos registrados por el guardián.
 
 ## 7. Neutralidad del transporte
 
