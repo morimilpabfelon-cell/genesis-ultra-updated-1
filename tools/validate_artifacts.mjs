@@ -20,6 +20,10 @@ const SENSE_OBSERVATION_VECTORS = path.join(
   ROOT,
   "conformance/sense_observation_vectors.json"
 );
+const SENSE_ADAPTER_VECTORS = path.join(
+  ROOT,
+  "conformance/sense_adapter_vectors.json"
+);
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -1160,12 +1164,52 @@ function validateSenseObservationFixtures(validators) {
   return vectors.sense_observations.length;
 }
 
+function validateSenseAdapterFixtures(validators) {
+  const vectors = readJson(SENSE_ADAPTER_VECTORS);
+  for (const fixture of vectors.adapters) {
+    requireValid(
+      validators,
+      "sense_adapter_manifest.schema.json",
+      fixture.manifest,
+      fixture.case_id
+    );
+    requireValid(
+      validators,
+      "sense_capture_result.schema.json",
+      fixture.capture_result,
+      fixture.capture_result.capture_id
+    );
+    requireValid(
+      validators,
+      "sense_observation.schema.json",
+      fixture.observation,
+      fixture.observation.observation_id
+    );
+  }
+  for (const fixture of vectors.no_observation_cases) {
+    requireValid(
+      validators,
+      "sense_capture_result.schema.json",
+      fixture.capture_result,
+      fixture.capture_result.capture_id
+    );
+    if (fixture.observation !== null) {
+      throw new Error(`noncaptured_fixture_contains_observation:${fixture.case_id}`);
+    }
+  }
+  return {
+    adapterCount: vectors.adapters.length,
+    failClosedCount: vectors.no_observation_cases.length
+  };
+}
+
 function main() {
   const validators = loadValidators();
   const invalidCount = validateNegativeSchemaCases(validators);
   const hostAdapterCount = validateHostAdapterFixtures(validators);
   const identityPlatformCount = validateInstanceIdentityFixture(validators);
   const senseObservationCount = validateSenseObservationFixtures(validators);
+  const senseAdapterCounts = validateSenseAdapterFixtures(validators);
   requireValid(
     validators,
     "draft_manifest.schema.json",
@@ -1186,6 +1230,10 @@ function main() {
     `Immutable birth identity fixture: OK (${identityPlatformCount} platform declarations).`
   );
   console.log(`Signed sense observation fixtures: OK (${senseObservationCount} senses).`);
+  console.log(
+    `Neutral sense adapter fixtures: OK (${senseAdapterCounts.adapterCount} adapters, ` +
+    `${senseAdapterCounts.failClosedCount} fail-closed results).`
+  );
   console.log("Draft integrity manifest schema: OK.");
   if (artifactPath) console.log("Generated A -> B artifacts and cross-links: OK.");
   if (backupRecoveryPath) console.log("Generated backup -> recovery artifacts and cross-links: OK.");

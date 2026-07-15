@@ -60,7 +60,8 @@ implementada.
 
 1. **Completado en el borrador:** schema neutral de observación con procedencia y vectores negativos.
 2. **Completado en el borrador:** compuerta firmada que enlaza una observación aceptada con un evento append-only.
-3. Conectar primero Vista, Propiocepción e Interocepción mediante adaptadores sustituibles.
+3. **Completado como contrato y simulación:** Vista, Propiocepción e Interocepción mediante
+   adaptadores sustituibles; pendiente conectarlos a APIs físicas de cada plataforma.
 4. Añadir Tacto, Oído y sentido temporal solo con permisos y pruebas de privacidad.
 5. Integrar memoria, cognición, defensa, crecimiento y movilidad como sistemas separados.
 

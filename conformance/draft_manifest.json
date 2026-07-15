@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 96,
+  "file_count": 102,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,18 +25,18 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 4283,
-      "digest": "sha256:c6785f02894df5575a0a4774f22a0df3ff586b3636a1ea8aefd32ecd1ab7d74c"
+      "size_bytes": 4422,
+      "digest": "sha256:8481f497922ed832069ee244fedfcb64dd9d8e031ea9d164430f566bf180036e"
     },
     {
       "path": "START_HERE.md",
-      "size_bytes": 1846,
-      "digest": "sha256:2801b7a6275040432bbb8fcbf40353b4f12cf49f5ae50e923beb1b1d42523a2d"
+      "size_bytes": 1919,
+      "digest": "sha256:6eab5b2d5072c6b0593912e2d4ecd836d723352b219b9eb6a58b70ac650508e1"
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 4345,
-      "digest": "sha256:96edc2f135aa3dfde6c707620ae344448da48148285df91cf77a13ddd6fc1aac"
+      "size_bytes": 4850,
+      "digest": "sha256:f3fd6e983fc1bf2a0d356e1de5f42c5addbb8781405e0825999f4e4a7a87e66a"
     },
     {
       "path": "conformance/behavior_cases.json",
@@ -75,13 +75,18 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 4144,
-      "digest": "sha256:dc30a8a66c007f7b73f8f78d4f67adfdbe45d9563c12e0e79ea1836b3626909f"
+      "size_bytes": 4407,
+      "digest": "sha256:f8ff9cc297fad757b1dff5d0ee091c9212e11acef3dbd8eb2b897589427363b6"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 27092,
-      "digest": "sha256:b3bb65e6a0a6507e25ab84be0a610c2a684bc0f26ce41121c22a3878e2134b4c"
+      "size_bytes": 31000,
+      "digest": "sha256:f7b0a2642a9a23039c5a6099e699199ee2628d9b48bca401a3f00b6093450b0a"
+    },
+    {
+      "path": "conformance/sense_adapter_vectors.json",
+      "size_bytes": 25385,
+      "digest": "sha256:e22e3a6cedd803f4b4aa8382e1e53c3aa7095ebf915735da5879e749046bf906"
     },
     {
       "path": "conformance/sense_observation_vectors.json",
@@ -90,13 +95,13 @@
     },
     {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
-      "size_bytes": 14196,
-      "digest": "sha256:af277068132a5eaafa57aac99638c498917a0d448e21f309f8d41e966522f2f0"
+      "size_bytes": 14933,
+      "digest": "sha256:8634bd653f18c14080a16f24e1204e3e6a24ab6e85ab5ccf8a155e9fff703a54"
     },
     {
       "path": "docs/MORIMIL_SENSE_EXTRACTION_MAP.md",
-      "size_bytes": 5675,
-      "digest": "sha256:3667c6c66fbdcb7181d55073eeebeb38f5d2215201ab44ccec5c39c34fecdef5"
+      "size_bytes": 5763,
+      "digest": "sha256:ecce0cdb227f8ba6fa0d503d64a3a7928c901ad541664889afe987e27f345c5f"
     },
     {
       "path": "docs/SOURCE_EXTRACTION_MAP.md",
@@ -105,8 +110,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 4325,
-      "digest": "sha256:1bb465b46d8e648c1579d304ed6485815c2434a2214cb366a2e920d744468ed4"
+      "size_bytes": 4501,
+      "digest": "sha256:85b04fe8f80a3bde008d2de86860cb7f6c64b7583cbbdf3462fa211edcd5eaaa"
     },
     {
       "path": "package-lock.json",
@@ -115,13 +120,13 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 833,
-      "digest": "sha256:e3fcf41f2677bb71b37988aaf1bb29b16357e1809c8a29ca9f30861046c639c3"
+      "size_bytes": 906,
+      "digest": "sha256:e10c54c75b01de12a0f0bf741cc0459d1443a4974c861c81402dda47bbf840cd"
     },
     {
       "path": "reference/README.md",
-      "size_bytes": 1304,
-      "digest": "sha256:6852ca825736e9812467e96f45127806405b6afd0a4eb2aab0ddf8e8cf7c8c2f"
+      "size_bytes": 1380,
+      "digest": "sha256:bf5921eaa8b8acf1235d6c563ba571810a63002fc20d54902751f3b62aa8849d"
     },
     {
       "path": "requirements.txt",
@@ -249,6 +254,16 @@
       "digest": "sha256:418b15086d839a8aa7569695594bf0018a5888cffdef5bda9a8b796aa4cae9c1"
     },
     {
+      "path": "schemas/sense_adapter_manifest.schema.json",
+      "size_bytes": 2455,
+      "digest": "sha256:67ac9917f66d084cba3c324c174e153519504a067617f01fd27898d7d9963b60"
+    },
+    {
+      "path": "schemas/sense_capture_result.schema.json",
+      "size_bytes": 3101,
+      "digest": "sha256:7710501797821029764c2655664a23dd60959f1605571b5f62beaa95d024d3d8"
+    },
+    {
       "path": "schemas/sense_observation.schema.json",
       "size_bytes": 1986,
       "digest": "sha256:4e0b4b8ed194448b301f3dc53e3d0ff5b6fbfd3683fa7f3d114094614310c853"
@@ -340,8 +355,8 @@
     },
     {
       "path": "spec/HASH_PROFILE_DRAFT.md",
-      "size_bytes": 4413,
-      "digest": "sha256:a0d66665c2f3973bd09178ae315173e572176d828ae3cd3730536e7b110b76a0"
+      "size_bytes": 4856,
+      "digest": "sha256:3830bd1339629b84c2110c6e06d8cd84a9f1a31ff5d53a7b69dc86837444893f"
     },
     {
       "path": "spec/HOST_ADAPTER_CONTRACT.md",
@@ -357,6 +372,11 @@
       "path": "spec/RECOVERY_TRUST_MODEL.md",
       "size_bytes": 4031,
       "digest": "sha256:cbbe2978be3d5c2ff60a95ed404e3b13e9053e851e7a67f1d79d6efb1aa201c1"
+    },
+    {
+      "path": "spec/SENSE_ADAPTER_CONTRACT.md",
+      "size_bytes": 4716,
+      "digest": "sha256:4ab6d6abe1a3ec02b6a1fc4b63b4fb40c6c3b36837783584a8c298b39f405bfa"
     },
     {
       "path": "spec/SENSE_OBSERVATION_AND_MEMORY_GATE.md",
@@ -380,8 +400,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 4234,
-      "digest": "sha256:df08434a39ba2ce922eaac00e6f9a3ae13c25a124c814c65d59f5fb30cf1733a"
+      "size_bytes": 4461,
+      "digest": "sha256:55ea6cd6104ac92705194a60e3f7f03447035237785d279c6479f6d54e3b3143"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -415,8 +435,8 @@
     },
     {
       "path": "tools/validate_artifacts.mjs",
-      "size_bytes": 48260,
-      "digest": "sha256:f9471d0815d487a2dc4bc819edbb15dd6082e3ac60bb462e4d1821891b7a92bd"
+      "size_bytes": 49657,
+      "digest": "sha256:dc5ece5b8e1f9769611e0883795724bf564f5b4f9090f6133c2c2c69591a9fce"
     },
     {
       "path": "tools/validate_authority.py",
@@ -464,6 +484,16 @@
       "digest": "sha256:e79ca8f260d6f05bd16c5361260fb09be0cf06f62a1f43c9ba12808f264734bb"
     },
     {
+      "path": "tools/validate_sense_adapters.mjs",
+      "size_bytes": 19806,
+      "digest": "sha256:d5725d12cae9049f64d79fe3370e85eb842d483c609870faa25f892e1c9c1f0a"
+    },
+    {
+      "path": "tools/validate_sense_adapters.py",
+      "size_bytes": 18950,
+      "digest": "sha256:56141a10005e0c4684379e7c15512280bec302807fe97f7be41eb0fa465f7c43"
+    },
+    {
       "path": "tools/validate_sense_observations.mjs",
       "size_bytes": 15627,
       "digest": "sha256:f4f31d481d4133d43c6db07c0629935f606a74d4b84ccf47573e47bcf00cf160"
@@ -489,5 +519,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:babe70a3884817109da5b25a363b04a1b41ab1e6b7ff5aafd4764dd59f9a009a"
+  "root_digest": "sha256:07869211d10d843f6c394cc716368bd19ccce03b15cfc26d77689845664db1df"
 }

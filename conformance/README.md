@@ -18,6 +18,8 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `schema_invalid_cases.json`: artefactos que los JSON Schema reales deben rechazar.
 - `sense_observation_vectors.json`: seis observaciones firmadas, una decisión de compuerta,
   su evento de memoria enlazado y mutaciones que intentan saltarse la frontera.
+- `sense_adapter_vectors.json`: adaptadores neutrales simulados de Vista, Propiocepción e
+  Interocepción, resultados por digest, fallos cerrados y mutaciones de autoridad.
 - `continuity_vectors.json`: hashes compartidos de registro y transferencia.
 - `crypto_vectors.json`: digests y algoritmos criptográficos de borrador.
 - `draft_manifest.json`: tamaños y hashes reproducibles de todos los artefactos requeridos,
@@ -52,6 +54,11 @@ un digest recalculado no convierte el cambio en válido.
 Python y Node verifican de forma independiente las firmas Ed25519 de Vista, Oído, Tacto,
 Propiocepción, Interocepción y sentido temporal. También exigen que solo una decisión
 `accepted` firmada produzca un evento append-only con contenido y procedencia exactos.
+
+Python y Node reproducen además el mismo contrato de adaptador para Vista, Propiocepción e
+Interocepción. Solo una captura válida puede producir una observación firmada; permiso
+denegado, fuente no disponible o fallo no producen observación. Estos fixtures permanecen
+en `simulated` y no afirman acceso físico a sensores.
 
 ## Requisitos para una implementación
 

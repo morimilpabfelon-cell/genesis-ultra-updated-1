@@ -22,7 +22,7 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 30 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Compilación de los 32 JSON Schema con JSON Schema 2020-12 y formatos activos.
 - [x] Casos de regresión que demuestran el rechazo de artefactos inválidos por los schemas reales.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -55,6 +55,8 @@
       crecimiento, homeostasis, movilidad y acción externa.
 - [x] Observaciones firmadas para seis sentidos y compuerta firmada antes de memoria,
       reproducidas por Python y Node con diecisiete cruces de frontera rechazados.
+- [x] Adaptadores neutrales simulados de Vista, Propiocepción e Interocepción, con tres
+      fallos cerrados y veinticuatro cruces de frontera rechazados por Python y Node.
 
 ## Pendiente real
 

@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:sense-capture-result:v0.1",
+  "title": "Genesis Sense Capture Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "capture_id",
+    "adapter_id",
+    "adapter_version",
+    "sense",
+    "source_kind",
+    "status",
+    "captured_at",
+    "payload_digest",
+    "payload_media_type",
+    "privacy",
+    "permission_state",
+    "diagnostic_code",
+    "result_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.sense.capture.result.v0.1" },
+    "hash_profile": { "const": "genesis.hash.fields.v0.1" },
+    "capture_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "adapter_id": { "type": "string", "minLength": 3, "maxLength": 128 },
+    "adapter_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "sense": {
+      "type": "string",
+      "enum": ["vision", "proprioception", "interoception"]
+    },
+    "source_kind": {
+      "type": "string",
+      "enum": ["local_sensor", "user_input", "runtime_state", "network_evidence", "clock"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["captured", "denied", "unavailable", "failed"]
+    },
+    "captured_at": { "type": ["string", "null"], "format": "date-time" },
+    "payload_digest": {
+      "oneOf": [
+        { "$ref": "#/$defs/sha256" },
+        { "type": "null" }
+      ]
+    },
+    "payload_media_type": { "type": ["string", "null"], "minLength": 1, "maxLength": 255 },
+    "privacy": {
+      "type": "string",
+      "enum": ["private_local", "guardian_shared", "export_approved", "quarantined"]
+    },
+    "permission_state": {
+      "type": "string",
+      "enum": ["granted", "denied", "not_required", "unavailable"]
+    },
+    "diagnostic_code": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "result_digest": { "$ref": "#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "captured" } } },
+      "then": {
+        "properties": {
+          "captured_at": { "type": "string" },
+          "payload_digest": { "$ref": "#/$defs/sha256" },
+          "payload_media_type": { "type": "string", "minLength": 1 },
+          "permission_state": { "enum": ["granted", "not_required"] }
+        }
+      },
+      "else": {
+        "properties": {
+          "captured_at": { "type": "null" },
+          "payload_digest": { "type": "null" },
+          "payload_media_type": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "denied" } } },
+      "then": { "properties": { "permission_state": { "const": "denied" } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "unavailable" } } },
+      "then": { "properties": { "permission_state": { "const": "unavailable" } } }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}

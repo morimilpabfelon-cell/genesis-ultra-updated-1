@@ -356,7 +356,9 @@
         "adapter_id": "fixture.invalid-identity",
         "adapter_version": "0.1.0-draft",
         "platform_profile": "test-platform",
-        "protocol_versions": ["genesis.protocol.v0.1"],
+        "protocol_versions": [
+          "genesis.protocol.v0.1"
+        ],
         "verification_state": "declaration_only",
         "capabilities": [
           "genesis.host.atomic_commit.v0.1",
@@ -387,7 +389,9 @@
         "adapter_id": "fixture.invalid-account",
         "adapter_version": "0.1.0-draft",
         "platform_profile": "test-platform",
-        "protocol_versions": ["genesis.protocol.v0.1"],
+        "protocol_versions": [
+          "genesis.protocol.v0.1"
+        ],
         "verification_state": "declaration_only",
         "capabilities": [
           "genesis.host.atomic_commit.v0.1",
@@ -530,6 +534,99 @@
           "created_at": "2026-07-15T00:00:01Z",
           "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
         }
+      }
+    },
+    {
+      "case_id": "sense-adapter-cannot-write-memory",
+      "schema": "sense_adapter_manifest.schema.json",
+      "artifact": {
+        "schema_version": "genesis.sense.adapter.manifest.v0.1",
+        "adapter_id": "reference.vision.network-evidence",
+        "adapter_version": "0.1.0-draft",
+        "platform_profile": "reference-neutral",
+        "sense": "vision",
+        "source_kinds": [
+          "network_evidence"
+        ],
+        "verification_state": "simulated",
+        "permission_model": "os_runtime",
+        "capabilities": [
+          "genesis.sense.capture.digest_only.v0.1",
+          "genesis.sense.capture.fail_closed.v0.1",
+          "genesis.sense.capture.permission_aware.v0.1",
+          "genesis.sense.capture.provenance.v0.1"
+        ],
+        "boundary": {
+          "emits_raw_payload": false,
+          "exports_platform_handles": false,
+          "writes_memory": true,
+          "executes_actions": false,
+          "mutates_identity": false
+        }
+      }
+    },
+    {
+      "case_id": "captured-sense-result-requires-payload",
+      "schema": "sense_capture_result.schema.json",
+      "artifact": {
+        "schema_version": "genesis.sense.capture.result.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "capture_id": "capture_01HADAPTER00000000000001",
+        "adapter_id": "reference.vision.network-evidence",
+        "adapter_version": "0.1.0-draft",
+        "sense": "vision",
+        "source_kind": "network_evidence",
+        "status": "captured",
+        "captured_at": "2026-07-15T01:00:00Z",
+        "payload_digest": null,
+        "payload_media_type": "application/vnd.genesis.vision-evidence+json",
+        "privacy": "private_local",
+        "permission_state": "granted",
+        "diagnostic_code": "capture.completed",
+        "result_digest": "sha256:48ca9264b52039d2a77d5f4529712c48bbed76ef153481842bfeca94e5cec410"
+      }
+    },
+    {
+      "case_id": "denied-sense-result-forbids-payload",
+      "schema": "sense_capture_result.schema.json",
+      "artifact": {
+        "schema_version": "genesis.sense.capture.result.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "capture_id": "capture_01HADAPTER_NOOBS00000001",
+        "adapter_id": "reference.vision.network-evidence",
+        "adapter_version": "0.1.0-draft",
+        "sense": "vision",
+        "source_kind": "network_evidence",
+        "status": "denied",
+        "captured_at": "2026-07-15T01:00:03Z",
+        "payload_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "payload_media_type": "application/json",
+        "privacy": "private_local",
+        "permission_state": "denied",
+        "diagnostic_code": "permission.denied",
+        "result_digest": "sha256:a9e23d85ef2188d8edfc8799e11d15e2bd34a2b01fc773607d9e5a6bb5dd8545"
+      }
+    },
+    {
+      "case_id": "sense-capture-result-forbids-raw-payload",
+      "schema": "sense_capture_result.schema.json",
+      "artifact": {
+        "schema_version": "genesis.sense.capture.result.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "capture_id": "capture_01HADAPTER00000000000001",
+        "adapter_id": "reference.vision.network-evidence",
+        "adapter_version": "0.1.0-draft",
+        "sense": "vision",
+        "source_kind": "network_evidence",
+        "status": "captured",
+        "captured_at": "2026-07-15T01:00:00Z",
+        "payload_digest": "sha256:8a336202bf6e4f11c86b20524d984c31cbc52fddcb6a37201f7ebb67ea375f59",
+        "payload_media_type": "application/vnd.genesis.vision-evidence+json",
+        "privacy": "private_local",
+        "permission_state": "granted",
+        "diagnostic_code": "capture.completed",
+        "result_digest": "sha256:48ca9264b52039d2a77d5f4529712c48bbed76ef153481842bfeca94e5cec410",
+        "raw_payload": "forbidden"
       }
     }
   ]
