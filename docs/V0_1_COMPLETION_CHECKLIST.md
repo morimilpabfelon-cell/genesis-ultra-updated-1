@@ -6,8 +6,8 @@
 
 ## Evidencia de CI y publicación
 
-- [x] Suite completa verde en el [PR #3](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/3), workflow `Genesis Ultra Conformance` #7.
-- [x] Cambios verificados fusionados en `main` mediante el [commit `7123364`](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/commit/7123364c5a012a73f44ccc58e38a7c7f682246ef).
+- [x] Suite completa verde para la recuperación determinista en el [PR #15](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/15).
+- [ ] Cambios del PR #15 fusionados en `main`.
 - [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
 ## Implementado y verificado por la suite
@@ -22,8 +22,9 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 33 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [x] Casos de regresión que demuestran el rechazo de artefactos inválidos por los schemas reales.
+- [x] Compilación de los 34 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Cuarenta y dos regresiones que demuestran el rechazo de artefactos inválidos por los
+      schemas reales, con cobertura obligatoria para cada schema.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
 - [x] Validación cruzada de los enlaces checkpoint→paquete→recibo→finalización y de la
@@ -48,7 +49,8 @@
 - [x] Manifiesto neutral del borrador con tamaño y SHA-256 de todos los artefactos requeridos,
       autoexclusión explícita y hash raíz reproducido por Python y Node.
 - [x] Segunda implementación independiente en Node para todos los vectores compartidos,
-      incluidos continuidad, autoridad, Ed25519, XChaCha20-Poly1305, Argon2id y rechazos.
+      incluidos continuidad, autoridad, criptografía, memoria asociativa, recuperación de
+      recuerdos y rechazos de frontera.
 - [x] Contrato neutral core↔adaptador, anchor portable y doce rechazos anti-lock-in
       reproducidos por Python y Node para declaraciones Android, Apple y Windows.
 - [x] Mapa controlado de Morimil-app que separa sentidos de memoria, cognición, defensa,
@@ -60,10 +62,15 @@
 - [x] Proyección asociativa neutral y reconstruible desde memoria aceptada, reproducida por
       Python y Node con nodos y relaciones deterministas, procedencia extraída/inferida/
       confirmada y treinta cruces de autoridad, integridad y plataforma rechazados.
+- [x] Recuperación determinista de memoria aceptada con cinco frames, 38 términos, cuatro
+      consultas y cinco checkpoints de replay, reproducida por Python y Node con el mismo
+      digest y veintidós ataques de autoridad, integridad, ranking o filtración futura rechazados.
 
 ## Pendiente real
 
 - [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.
+- [ ] Recuperación semántica opcional con embeddings neutrales, perfiles versionados y
+      evaluación reproducible; no forma parte de la proyección léxica v0.1.
 - [ ] Revisión criptográfica y de seguridad externa.
 
 ## Prohibido declarar
