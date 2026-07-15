@@ -1,0 +1,63 @@
+
+negative_cases = [
+    mutation("reject-event-hash", "set", ["source_events", 0, "event_hash"], "evsha256:" + "0" * 64, "source_event_hash_mismatch"),
+    mutation("reject-event-chain", "set", ["source_events", 1, "previous_event_hash"], "GENESIS", "source_event_chain_invalid"),
+    mutation("reject-event-sequence", "set", ["source_events", 2, "sequence"], 9, "source_event_sequence_invalid"),
+    mutation("reject-event-instance", "set", ["source_events", 0, "instance_id"], "inst_wrong_0000000000000001", "source_event_instance_mismatch"),
+    mutation("reject-quarantined-source", "set", ["source_events", 0, "privacy"], "quarantined", "source_event_privacy_invalid"),
+    mutation("reject-forbidden-field", "set", ["assertions", 0, "guardian_id"], "guardian_unexpected", "forbidden_authority_or_platform_field"),
+    mutation("reject-assertion-fields", "delete", ["assertions", 0, "scope"], expected_error="assertion_fields_invalid"),
+    mutation("reject-assertion-instance", "set", ["assertions", 0, "instance_id"], "inst_wrong_0000000000000001", "assertion_instance_mismatch"),
+    mutation("reject-source-missing", "set", ["assertions", 0, "source_event_ref"], "evt_missing_000000000000001", "assertion_source_event_missing"),
+    mutation("reject-source-hash", "set", ["assertions", 0, "source_event_hash"], "evsha256:" + "0" * 64, "assertion_source_hash_mismatch"),
+    mutation("reject-source-content", "set", ["assertions", 0, "source_content_digest"], "sha256:" + "0" * 64, "assertion_source_content_digest_mismatch"),
+    mutation("reject-source-sequence", "set", ["assertions", 0, "source_sequence"], 3, "assertion_order_invalid"),
+    mutation("reject-asserted-at", "set", ["assertions", 0, "asserted_at"], "2026-07-15T10:00:01Z", "assertion_timestamp_mismatch"),
+    mutation("reject-privacy", "set", ["assertions", 0, "privacy"], "guardian_shared", "assertion_privacy_mismatch"),
+    mutation("reject-kind", "set", ["assertions", 0, "kind"], "identity", "assertion_kind_invalid"),
+    mutation("reject-operation", "set", ["assertions", 0, "operation"], "deletes", "assertion_operation_invalid"),
+    mutation("reject-polarity", "set", ["assertions", 0, "polarity"], "mixed", "assertion_polarity_invalid"),
+    mutation("reject-empty-value", "set", ["assertions", 0, "value"], "", "assertion_text_required"),
+    mutation("reject-version-key", "set", ["assertions", 0, "version_key"], "wrong:key", "assertion_version_key_mismatch"),
+    mutation("reject-confidence", "set", ["assertions", 0, "confidence_milli"], 1001, "assertion_confidence_invalid"),
+    mutation("reject-extractor-digest", "set", ["assertions", 0, "extractor_digest"], "bad", "assertion_extractor_digest_invalid"),
+    mutation("reject-validity-time", "set", ["assertions", 7, "valid_from"], "yesterday", "assertion_validity_timestamp_invalid"),
+    mutation("reject-validity-interval", "set", ["assertions", 7, "valid_to"], "2025-01-01T00:00:00Z", "assertion_validity_interval_invalid"),
+    mutation("reject-assertion-digest", "set", ["assertions", 0, "assertion_digest"], "svasha256:" + "0" * 64, "assertion_digest_mismatch"),
+    mutation("reject-duplicate-id", "set", ["assertions", 1, "assertion_id"], "ast_profile_name_0001", "assertion_id_duplicate"),
+    mutation("reject-duplicate-position", "set", ["assertions", 1, "source_sequence"], 0, "assertion_source_sequence_mismatch"),
+    mutation("reject-order", "swap", ["assertions"], expected_error="assertion_order_invalid", indices=[0, 1]),
+    mutation("reject-first-update", "set", ["assertions", 0, "operation"], "updates", "slot_first_operation_must_set"),
+    mutation("reject-previous-link", "set", ["assertions", 2, "previous_assertion_ref"], "ast_profile_name_0001", "slot_previous_assertion_mismatch"),
+    mutation("reject-set-active", "set", ["assertions", 2, "operation"], "sets", "slot_set_while_active"),
+    mutation("reject-extend-duplicate", "set", ["assertions", 5, "value"], "Mori", "slot_extend_duplicate_value"),
+    mutation("reject-retract-missing", "set", ["assertions", 6, "value"], "Unknown", "slot_retract_value_missing"),
+    mutation("reject-update-after-retract", "set", ["assertions", 9, "operation"], "updates", "slot_operation_requires_active"),
+    mutation("reject-kind-drift", "set", ["assertions", 2, "kind"], "fact", "slot_kind_drift"),
+    mutation("reject-scope-drift", "set", ["assertions", 2, "scope"], "other.scope", "slot_scope_drift"),
+    mutation("reject-non-nfc", "set", ["assertions", 0, "value"], "Cafe\u0301", "text_not_nfc"),
+]
+
+recompute_cases = {
+    "reject-first-update", "reject-previous-link", "reject-set-active", "reject-extend-duplicate",
+    "reject-retract-missing", "reject-update-after-retract", "reject-kind-drift", "reject-scope-drift",
+    "reject-duplicate-id",
+}
+for test_case in negative_cases:
+    if test_case["case_id"] in recompute_cases:
+        test_case["recompute_assertion_digests"] = True
+
+vector = {
+    "profile": base["profile"],
+    "instance_id": INSTANCE,
+    "source_events": events,
+    "assertions": assertions,
+    "queries": queries,
+    "expected_projection": projection,
+    "expected_query_results": results,
+    "negative_cases": negative_cases,
+}
+root = Path(__file__).resolve().parents[1]
+output = root / "conformance" / "structured_versioned_memory_vectors.json"
+output.write_text(json.dumps(vector, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+print(projection["projection_digest"], len(projection["slots"]), len(assertions), len(negative_cases))
