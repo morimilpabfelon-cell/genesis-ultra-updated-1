@@ -7,14 +7,8 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED_ARTIFACTS = path.join(os.tmpdir(), `genesis-ultra-transfer-${process.pid}.json`);
-const BACKUP_RECOVERY_ARTIFACTS = path.join(
-  os.tmpdir(),
-  `genesis-ultra-backup-recovery-${process.pid}.json`
-);
-const TRANSACTION_CRASH_ARTIFACTS = path.join(
-  os.tmpdir(),
-  `genesis-ultra-transaction-crash-${process.pid}.json`
-);
+const BACKUP_RECOVERY_ARTIFACTS = path.join(os.tmpdir(), `genesis-ultra-backup-recovery-${process.pid}.json`);
+const TRANSACTION_CRASH_ARTIFACTS = path.join(os.tmpdir(), `genesis-ultra-transaction-crash-${process.pid}.json`);
 
 process.on("exit", () => {
   fs.rmSync(GENERATED_ARTIFACTS, { force: true });
@@ -34,129 +28,36 @@ function resolvePython() {
 const python = resolvePython();
 const commands = [
   ["Validate workspace (Python)", python, ["tools/validate_workspace.py"]],
-  [
-    "Validate draft integrity manifest (Python)",
-    python,
-    ["tools/generate_draft_manifest.py", "--check"]
-  ],
+  ["Validate draft integrity manifest (Python)", python, ["tools/generate_draft_manifest.py", "--check"]],
   ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
-  [
-    "Validate live observer boundaries",
-    process.execPath,
-    ["--test", "observer/test/core.test.mjs"]
-  ],
+  ["Validate live observer boundaries", process.execPath, ["--test", "observer/test/core.test.mjs"]],
   ["Validate immutable birth identity (Python)", python, ["tools/validate_instance_identity.py"]],
-  [
-    "Validate immutable birth identity independently (Node)",
-    process.execPath,
-    ["tools/validate_instance_identity.mjs"]
-  ],
+  ["Validate immutable birth identity independently (Node)", process.execPath, ["tools/validate_instance_identity.mjs"]],
   ["Validate signed sense observations (Python)", python, ["tools/validate_sense_observations.py"]],
-  [
-    "Validate signed sense observations independently (Node)",
-    process.execPath,
-    ["tools/validate_sense_observations.mjs"]
-  ],
-  [
-    "Validate associative memory projection (Python)",
-    python,
-    ["tools/validate_associative_memory_projection.py"]
-  ],
-  [
-    "Validate associative memory projection independently (Node)",
-    process.execPath,
-    ["tools/validate_associative_memory_projection.mjs"]
-  ],
-  [
-    "Validate deterministic memory retrieval (Python)",
-    python,
-    ["tools/validate_memory_retrieval.py"]
-  ],
-  [
-    "Validate deterministic memory retrieval independently (Node)",
-    process.execPath,
-    ["tools/validate_memory_retrieval.mjs"]
-  ],
-  [
-    "Validate neutral hybrid memory retrieval (Python)",
-    python,
-    ["tools/validate_hybrid_memory_retrieval.py"]
-  ],
-  [
-    "Validate neutral hybrid memory retrieval independently (Node)",
-    process.execPath,
-    ["tools/hybrid_memory_retrieval.mjs", "validate"]
-  ],
-  [
-    "Validate memory-gate retrieval bridge (Python)",
-    python,
-    ["tools/validate_memory_gate_retrieval_bridge.py"]
-  ],
-  [
-    "Validate memory-gate retrieval bridge independently (Node)",
-    process.execPath,
-    ["tools/memory_gate_retrieval_bridge.mjs", "validate"]
-  ],
+  ["Validate signed sense observations independently (Node)", process.execPath, ["tools/validate_sense_observations.mjs"]],
+  ["Validate associative memory projection (Python)", python, ["tools/validate_associative_memory_projection.py"]],
+  ["Validate associative memory projection independently (Node)", process.execPath, ["tools/validate_associative_memory_projection.mjs"]],
+  ["Validate deterministic memory retrieval (Python)", python, ["tools/validate_memory_retrieval.py"]],
+  ["Validate deterministic memory retrieval independently (Node)", process.execPath, ["tools/validate_memory_retrieval.mjs"]],
+  ["Validate neutral hybrid memory retrieval (Python)", python, ["tools/validate_hybrid_memory_retrieval.py"]],
+  ["Validate neutral hybrid memory retrieval independently (Node)", process.execPath, ["tools/hybrid_memory_retrieval.mjs", "validate"]],
+  ["Validate retrieval scopes and ACL (Python)", python, ["tools/validate_memory_retrieval_acl.py"]],
+  ["Validate retrieval scopes and ACL independently (Node)", process.execPath, ["tools/memory_retrieval_acl.mjs", "validate"]],
+  ["Validate memory-gate retrieval bridge (Python)", python, ["tools/validate_memory_gate_retrieval_bridge.py"]],
+  ["Validate memory-gate retrieval bridge independently (Node)", process.execPath, ["tools/memory_gate_retrieval_bridge.mjs", "validate"]],
   ["Validate neutral sense adapters (Python)", python, ["tools/validate_sense_adapters.py"]],
-  [
-    "Validate neutral sense adapters independently (Node)",
-    process.execPath,
-    ["tools/validate_sense_adapters.mjs"]
-  ],
+  ["Validate neutral sense adapters independently (Node)", process.execPath, ["tools/validate_sense_adapters.mjs"]],
   ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
   ["Validate neutral host contract (Python)", python, ["tools/validate_host_adapter.py"]],
-  [
-    "Validate neutral host contract independently (Node)",
-    process.execPath,
-    ["tools/validate_host_adapter.mjs"]
-  ],
-  [
-    "Validate protocol vectors independently (Node)",
-    process.execPath,
-    ["tools/validate_protocol_vectors.mjs"]
-  ],
+  ["Validate neutral host contract independently (Node)", process.execPath, ["tools/validate_host_adapter.mjs"]],
+  ["Validate protocol vectors independently (Node)", process.execPath, ["tools/validate_protocol_vectors.mjs"]],
   ["Validate crypto vectors", python, ["tools/validate_crypto_vectors.py"]],
   ["Simulate transfer A -> B", python, ["tools/simulate_transfer.py", "--artifacts-output", GENERATED_ARTIFACTS]],
-  [
-    "Simulate committed backup and authorized recovery B -> C",
-    python,
-    [
-      "tools/simulate_backup_recovery.py",
-      "--source-artifacts",
-      GENERATED_ARTIFACTS,
-      "--artifacts-output",
-      BACKUP_RECOVERY_ARTIFACTS
-    ]
-  ],
-  [
-    "Simulate transaction journal crash recovery",
-    python,
-    [
-      "tools/simulate_transaction_crashes.py",
-      "--transfer-artifacts",
-      GENERATED_ARTIFACTS,
-      "--recovery-artifacts",
-      BACKUP_RECOVERY_ARTIFACTS,
-      "--artifacts-output",
-      TRANSACTION_CRASH_ARTIFACTS
-    ]
-  ],
-  [
-    "Validate generated artifacts",
-    process.execPath,
-    [
-      "tools/validate_artifacts.mjs",
-      GENERATED_ARTIFACTS,
-      BACKUP_RECOVERY_ARTIFACTS,
-      TRANSACTION_CRASH_ARTIFACTS
-    ]
-  ],
+  ["Simulate committed backup and authorized recovery B -> C", python, ["tools/simulate_backup_recovery.py", "--source-artifacts", GENERATED_ARTIFACTS, "--artifacts-output", BACKUP_RECOVERY_ARTIFACTS]],
+  ["Simulate transaction journal crash recovery", python, ["tools/simulate_transaction_crashes.py", "--transfer-artifacts", GENERATED_ARTIFACTS, "--recovery-artifacts", BACKUP_RECOVERY_ARTIFACTS, "--artifacts-output", TRANSACTION_CRASH_ARTIFACTS]],
+  ["Validate generated artifacts", process.execPath, ["tools/validate_artifacts.mjs", GENERATED_ARTIFACTS, BACKUP_RECOVERY_ARTIFACTS, TRANSACTION_CRASH_ARTIFACTS]],
   ["Simulate transfer and authority negative cases", python, ["tools/simulate_negatives.py"]],
-  [
-    "Simulate backup and recovery negative cases",
-    python,
-    ["tools/simulate_backup_recovery_negatives.py", "--artifacts", BACKUP_RECOVERY_ARTIFACTS]
-  ]
+  ["Simulate backup and recovery negative cases", python, ["tools/simulate_backup_recovery_negatives.py", "--artifacts", BACKUP_RECOVERY_ARTIFACTS]]
 ];
 
 for (const [label, command, args] of commands) {
