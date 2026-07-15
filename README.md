@@ -47,6 +47,8 @@ Una instancia puede pasar de un teléfono a una computadora, otro teléfono, un 
 - adaptadores sustituibles de Vista, Propiocepción e Interocepción con fallos cerrados;
 - proyección asociativa reconstruible que conecta memoria aceptada sin reemplazarla ni
   convertir inferencias en hechos;
+- recuperación determinista de recuerdos mediante índice léxico, replay temporal y apoyo
+  del grafo asociativo, siempre como proyección reconstruible;
 - especificación y vectores independientes del lenguaje.
 
 ## Estructura
@@ -55,7 +57,7 @@ Una instancia puede pasar de un teléfono a una computadora, otro teléfono, un 
 spec/           Reglas normativas en revisión.
 schemas/        Contratos neutrales de datos.
 conformance/    Vectores válidos y casos que deben rechazarse.
-docs/           Decisiones y mapa de extracción de los núcleos anteriores.
+docs/           Decisiones y mapas de extracción de proyectos evaluados.
 tools/          Herramientas auxiliares no normativas.
 observer/       Panel local de solo lectura para estado y actividad en vivo.
 reference/      Futuras implementaciones por lenguaje.
@@ -73,15 +75,14 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 33 JSON Schema, verifica en ambos
+La suite ejecuta los validadores Python y Node, compila los 34 JSON Schema, verifica en ambos
 lenguajes el nombre canónico, el digest de identidad, los adaptadores neutrales de los tres
-primeros sentidos, la compuerta firmada antes de memoria y la proyección asociativa
-reconstruible, y exige que
-los artefactos generados por la simulación A→B sean válidos y estén enlazados, verifica
-el permiso permanente, los dispositivos registrados y el ledger de autoridad, simula un
-backup cifrado comprometido seguido de pérdida y recuperación B→C, y ejecuta los vectores
-de continuidad, criptografía y casos negativos. Pasar la suite no constituye una
-certificación de seguridad ni convierte el borrador en producción.
+primeros sentidos, la compuerta firmada antes de memoria, la proyección asociativa y la
+recuperación determinista reconstruible. También exige que los artefactos generados por la
+simulación A→B sean válidos y estén enlazados, verifica el permiso permanente, los dispositivos
+registrados y el ledger de autoridad, simula un backup cifrado comprometido seguido de pérdida
+y recuperación B→C, y ejecuta los vectores de continuidad, criptografía y casos negativos.
+Pasar la suite no constituye una certificación de seguridad ni convierte el borrador en producción.
 
 También simula cierres en ocho puntos de una recuperación. El journal firmado decide si
 debe conservar, revertir, reproducir o aceptar el cambio de autoridad sin elegir por reloj
@@ -91,17 +92,44 @@ El manifiesto reproducible `conformance/draft_manifest.json` registra tamaño y 
 cada artefacto requerido. Python y Node rechazan omisiones, archivos inesperados, cambios de
 bytes, orden no canónico o un hash raíz incorrecto.
 
+## Consultar la memoria reconstruible
+
+Validar los vectores:
+
+```powershell
+npm run validate:retrieval
+```
+
+Construir una proyección desde un archivo compatible:
+
+```powershell
+npm run memory:build -- entrada.json salida.json
+```
+
+Consultar sin modificar la memoria append-only:
+
+```powershell
+npm run memory:query -- entrada.json "Aurora portable memory" --top-k 5
+```
+
+El resultado siempre devuelve referencias a eventos canónicos. El índice puede borrarse y
+reconstruirse; no concede autoridad y no sustituye la cadena. El diseño y la extracción limpia
+de ideas evaluadas en Memvid están documentados en
+[`spec/DETERMINISTIC_MEMORY_RETRIEVAL.md`](spec/DETERMINISTIC_MEMORY_RETRIEVAL.md) y
+[`docs/MEMVID_MEMORY_EXTRACTION_MAP.md`](docs/MEMVID_MEMORY_EXTRACTION_MAP.md).
+
 ## Observabilidad local en vivo
 
 ```powershell
 npm run observe
 ```
 
-Abre `http://127.0.0.1:4317`. El **Genesis Live Observatory** muestra la cadena de memoria,
-la proyección asociativa, procedencia, integridad y actividad de commits, pull requests y
-GitHub Actions mediante actualizaciones en vivo. Es una herramienta local no normativa y de
-solo lectura: no escribe recuerdos, no confirma inferencias y no modifica identidad ni
-autoridad. Configuración y conexión a un estado runtime en [`observer/README.md`](observer/README.md).
+Abre `http://127.0.0.1:4317`. El **Genesis Live Observatory** muestra la arquitectura completa,
+la cadena de memoria, las proyecciones reconstruibles, procedencia, integridad y actividad de
+commits, pull requests y GitHub Actions mediante actualizaciones en vivo. Es una herramienta
+local no normativa y de solo lectura: no escribe recuerdos, no confirma inferencias y no modifica
+identidad ni autoridad. Configuración y conexión a un estado runtime en
+[`observer/README.md`](observer/README.md).
 
 ## Neutralidad
 
