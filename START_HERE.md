@@ -35,6 +35,18 @@ npm ci
 npm test
 ```
 
+## Observar el estado en vivo
+
+Después de instalar las dependencias:
+
+```powershell
+npm run observe
+```
+
+Abre `http://127.0.0.1:4317`. El panel muestra el fixture asociativo actual, la integridad de la
+cadena y la actividad reciente del repositorio. Para conectarlo a un estado runtime o configurar
+GitHub, consulta [`observer/README.md`](./observer/README.md).
+
 ## Regla de trabajo
 
 No declarar una función como terminada solamente porque exista documentación o una implementación.
