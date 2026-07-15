@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 136,
+  "file_count": 141,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,18 +25,18 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 8982,
-      "digest": "sha256:7d9f588ed971c52707b16498afbad63fcd38f46654fb7da03689b59d3e2455e5"
+      "size_bytes": 9883,
+      "digest": "sha256:328af389cfa2aeaf2905cbddf11cd8d08bcc714c4c09a955005c4c20495e115a"
     },
     {
       "path": "START_HERE.md",
-      "size_bytes": 4461,
-      "digest": "sha256:8d5b28a519256d6d9f42a679060191923f86922842e4f3f6271545efce869558"
+      "size_bytes": 4835,
+      "digest": "sha256:f0ed38c58ce8c445434c5c79d7728c92aaf27bb2e650644ed97e12e48d8be77a"
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 8296,
-      "digest": "sha256:9ae24e9d35b83d880757a42a4c154d2d1fd46e473c87254955621b7a55f212bb"
+      "size_bytes": 8940,
+      "digest": "sha256:e45170b9864c3e65ff441c6630a1a46d9f1ab86386a9e4382d759e87ff21b71a"
     },
     {
       "path": "conformance/associative_memory_projection_vectors.json",
@@ -100,13 +100,13 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 5411,
-      "digest": "sha256:03628b0598f469604b81f6a742dfe10575d4c0290e8536bb16ffd39c2ff3102e"
+      "size_bytes": 5634,
+      "digest": "sha256:2029649374e6f27de9dea13c37178abd014bff4a8f20eca9869056c279bfe5a6"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 80186,
-      "digest": "sha256:5ca75cc471c6b9d6be70d33f7b8ad89bc9c9834a64c189ce488ab358272e7385"
+      "size_bytes": 81920,
+      "digest": "sha256:fc28fa22c9c171d129ad10281ab7cd121a69d632717922e7133690141277b6cf"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -119,14 +119,19 @@
       "digest": "sha256:a670db68f4a48513f4449fa545370fa9065f22456565711bb306b11cbcdcf850"
     },
     {
+      "path": "conformance/temporal_memory_metadata_vectors.json",
+      "size_bytes": 15102,
+      "digest": "sha256:f8edda7d7aaa095447f42529132ad2567bdacd83a119712b2e1b1af040c4410a"
+    },
+    {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
       "size_bytes": 15776,
       "digest": "sha256:34b5eeaeec8348535b76c150af6842cf5018da57c3ee404f041856db37f6de02"
     },
     {
       "path": "docs/MEMVID_MEMORY_EXTRACTION_MAP.md",
-      "size_bytes": 3434,
-      "digest": "sha256:249a2ead2ef3ca7cba3829b187e97f4b8b1a6fbabc57a96fb406347a82ae946e"
+      "size_bytes": 4028,
+      "digest": "sha256:0c95cf8ce51da624f483964659795e8b841c825d7ff63a6cdb4e5d1e75f84647"
     },
     {
       "path": "docs/MORIMIL_SENSE_EXTRACTION_MAP.md",
@@ -140,8 +145,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 6157,
-      "digest": "sha256:fd44da7e0fdffce69d814e6bb04db1470076e8b2dd8b9855ab4c689241a3148a"
+      "size_bytes": 6438,
+      "digest": "sha256:87fd5d9ecd6f100d501c0b289f260b65208699a496d0eae95116c80eefed5567"
     },
     {
       "path": "observer/README.md",
@@ -175,8 +180,8 @@
     },
     {
       "path": "observer/system-map.json",
-      "size_bytes": 8667,
-      "digest": "sha256:5794797f282d98c448bdff12bf2e64fead4c3034b1d35c2dea525a700a59ddf2"
+      "size_bytes": 9210,
+      "digest": "sha256:b266eac4499e02ce477f725468c54690c9d4805b637958c64d4e91279d710898"
     },
     {
       "path": "observer/test/core.test.mjs",
@@ -190,8 +195,8 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 1988,
-      "digest": "sha256:a72ded67721265516b884aeccff2a342993009c0ea13815b421e8790efb39daf"
+      "size_bytes": 2306,
+      "digest": "sha256:f6192986359bc9270af0dc0c49474cae07341680789f639ba7ae77155d20740b"
     },
     {
       "path": "reference/README.md",
@@ -364,6 +369,11 @@
       "digest": "sha256:cc3d73f4157aa7d6d0c9d94c13becaf4d3fc1f23b481cc6f0781fc9b5680cec0"
     },
     {
+      "path": "schemas/temporal_memory_projection.schema.json",
+      "size_bytes": 3551,
+      "digest": "sha256:28e0432950670956eb797f6560eb12258552a094bdd945846355e54ba7cb74ff"
+    },
+    {
       "path": "schemas/transaction_journal.schema.json",
       "size_bytes": 3978,
       "digest": "sha256:e5f20484992026d403a61b3b535305c908bc9502144ec88094c6d41e16c6815a"
@@ -499,6 +509,11 @@
       "digest": "sha256:a53bdf169e3a2e2d5131cf818e2cc6552dfdd797703fa3a3182c7da56e155b79"
     },
     {
+      "path": "spec/TEMPORAL_MEMORY_METADATA.md",
+      "size_bytes": 5635,
+      "digest": "sha256:638218c6394b5add3881afddd33bbea5eed2922d078535700494618711ad9164"
+    },
+    {
       "path": "spec/TRANSACTION_JOURNAL_AND_CRASH_RECOVERY.md",
       "size_bytes": 5826,
       "digest": "sha256:4eeda006fe1c8a808a28a9ef7dd98e4a57a3292be6cdd5bdb5d1b86b67843929"
@@ -535,8 +550,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 5502,
-      "digest": "sha256:b95e5be84eed3655c800f9f4c4401504fa54cba262f7bfaececee421d49b6e9e"
+      "size_bytes": 5740,
+      "digest": "sha256:b22ec040f9697f00b397fc435aaf4a8c5da7ac6ad2849c9bae24fdf13c580172"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -562,6 +577,11 @@
       "path": "tools/simulate_transfer.py",
       "size_bytes": 28670,
       "digest": "sha256:70781d055ce7c6d50a7769d0f72a12f698d7a409792eec0ddabb33f0b522eeb1"
+    },
+    {
+      "path": "tools/temporal_memory_metadata.mjs",
+      "size_bytes": 23970,
+      "digest": "sha256:014205d26507900933b8b86f8920f477f2e12e949de31cae6b39ae2db5bc1941"
     },
     {
       "path": "tools/validate.ps1",
@@ -674,6 +694,11 @@
       "digest": "sha256:65f7b73563e4de44c09ba1b3f9bba7c7bab5ceca9c08a18d433d66d1a177d31e"
     },
     {
+      "path": "tools/validate_temporal_memory_metadata.py",
+      "size_bytes": 26234,
+      "digest": "sha256:5040cd1941e808600eaa87a0946f2451cac81d2ed3e4c054696fc8e30f06e3b4"
+    },
+    {
       "path": "tools/validate_transaction_journal.py",
       "size_bytes": 9465,
       "digest": "sha256:b5c3ef7bf33565a84dae9ffc300a66e0f389c9e2439563d5558bbf0b3b21dd46"
@@ -689,5 +714,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:c50557bdc605f18a98541799151d53fb5631badf6d31d53efb33130109161f6d"
+  "root_digest": "sha256:e0e14287e2982e5ab019ebcf7577ff6516f03f9edfdca62007c68cf4c30a8def"
 }

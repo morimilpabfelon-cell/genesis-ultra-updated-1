@@ -9,6 +9,7 @@
 - [x] Suite completa verde para la recuperación determinista en el [PR #15](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/15).
 - [x] Suite completa verde para el puente compuerta→recuperación en el [PR #16](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/16).
 - [x] Suite completa verde para la búsqueda híbrida neutral en el [PR #17](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/17).
+- [x] Suite completa verde para metadata temporal verificable en el [PR #20](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/20).
 - [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
 ## Implementado y verificado por la suite
@@ -23,8 +24,8 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 35 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [x] Cuarenta y tres regresiones que demuestran el rechazo de artefactos inválidos por los
+- [x] Compilación de los 37 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Cuarenta y cinco regresiones que demuestran el rechazo de artefactos inválidos por los
       schemas reales, con cobertura obligatoria para cada schema.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -72,13 +73,15 @@
 
 - [x] Scopes y ACL de recuperación reproducidos por Python y Node: privacidad, propósito, cuerpo, época de autoridad, cuarentena e aislamiento histórico.
 
+- [x] Metadata temporal reconstruible con cinco anotaciones, ocho consultas, separación de
+      captura/almacenamiento/tiempo mencionado, relaciones verificadas, ACL previa, aislamiento
+      histórico y veinticinco cruces de frontera rechazados por Python y Node.
+
 ## Pendiente real
 
 - [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.
 - [ ] Adaptador semántico real con modelo local neutral, digest versionado y evaluación
       reproducible de calidad; el fixture actual prueba el protocolo, no un modelo entrenado.
-- [ ] Filtros, scopes y ACL de consulta enlazados con privacidad y autoridad.
-- [ ] Metadata temporal derivada con procedencia verificable.
 - [ ] Cápsulas portables neutrales y reconstruibles.
 - [ ] Extracción multimodal detrás de sentidos y compuerta de memoria.
 - [ ] Revisión criptográfica y de seguridad externa.

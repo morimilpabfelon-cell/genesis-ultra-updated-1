@@ -192,6 +192,31 @@ La ACL se aplica antes del ranking léxico o semántico. `quarantined` siempre s
 `as_of_sequence` impide filtración futura y ningún permiso de lectura concede autoridad de escritura.
 El contrato está en [`spec/MEMORY_RETRIEVAL_SCOPES_AND_ACL.md`](spec/MEMORY_RETRIEVAL_SCOPES_AND_ACL.md).
 
+## Metadata temporal de memoria
+
+Validar que Python y Node reconstruyen la misma proyección:
+
+```powershell
+npm run validate:temporal-metadata
+```
+
+Consultar una relación o intervalo temporal autorizado por ACL:
+
+```powershell
+npm run memory:temporal:query -- conformance/temporal_memory_metadata_vectors.json q_before_recovery
+```
+
+Construir o sincronizar atómicamente la proyección derivada:
+
+```powershell
+npm run memory:temporal:build -- conformance/temporal_memory_metadata_vectors.json temporal.json
+npm run memory:temporal:sync -- conformance/temporal_memory_metadata_vectors.json runtime/temporal.json
+```
+
+La capa separa captura, almacenamiento y tiempo mencionado. Verifica intervalos, relaciones,
+procedencia, ACL y cortes históricos; nunca reescribe `observed_at` ni la cadena append-only.
+El contrato está en [`spec/TEMPORAL_MEMORY_METADATA.md`](spec/TEMPORAL_MEMORY_METADATA.md).
+
 ## Observabilidad local en vivo
 
 ```powershell

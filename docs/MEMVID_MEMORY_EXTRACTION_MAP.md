@@ -43,3 +43,14 @@ Real embedding adapters remain separate. Before one can be marked verified it mu
 ## Non-copying statement
 
 The implementation is a clean-room Genesis design based on general architectural ideas and public behavior descriptions. No Memvid source file is copied into this repository.
+
+
+## Segunda extracción: metadata temporal
+
+Genesis adapta la separación entre tiempo de ingestión, tiempo mencionado y consulta histórica
+como una proyección neutral propia. La implementación liga cada anotación al evento y al digest
+de contenido, verifica intervalos y relaciones, y aplica ACL antes de consultar. No copia el
+parser, formato de archivo, dependencias ni código fuente de Memvid.
+
+Estado: contrato, schema, vectores y validación Python/Node implementados. Un parser general de
+lenguaje natural y zonas horarias ambiguas permanece diferido como adaptador reemplazable.

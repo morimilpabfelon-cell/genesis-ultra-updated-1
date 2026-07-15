@@ -91,6 +91,16 @@ npm run memory:bridge:sync -- entrada-puente.json runtime/retrieval.json
 El puente falla cerrado y deja intacto el snapshot anterior cuando una firma, enlace, digest o
 cobertura no coincide. Es una herramienta operativa invocada por el host; todavía no es un daemon.
 
+## Probar metadata temporal
+
+```powershell
+npm run validate:temporal-metadata
+npm run memory:temporal:query -- conformance/temporal_memory_metadata_vectors.json q_active_audit
+```
+
+La consulta recibe únicamente referencias autorizadas por ACL, aplica primero `as_of_sequence` y
+después evalúa captura, almacenamiento, intervalos mencionados o relaciones antes/después.
+
 ## Observar el estado en vivo
 
 Después de instalar las dependencias:

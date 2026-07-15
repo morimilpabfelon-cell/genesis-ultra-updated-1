@@ -36,6 +36,9 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
   su evento de memoria enlazado y mutaciones que intentan saltarse la frontera.
 - `sense_adapter_vectors.json`: adaptadores neutrales simulados de Vista, Propiocepción e
   Interocepción, resultados por digest, fallos cerrados y mutaciones de autoridad.
+- `temporal_memory_metadata_vectors.json`: cinco eventos aceptados, separación entre captura,
+  almacenamiento y tiempo mencionado, relaciones temporales, ocho consultas autorizadas por ACL,
+  digests reproducibles y veinticinco mutaciones que deben rechazarse.
 - `continuity_vectors.json`: hashes compartidos de registro y transferencia.
 - `crypto_vectors.json`: digests y algoritmos criptográficos de borrador.
 - `draft_manifest.json`: tamaños y hashes reproducibles de todos los artefactos requeridos,
@@ -100,6 +103,12 @@ decisión `accepted` firmada y enlazada a un evento append-only válido puede pr
 La vista textual debe coincidir con el contenido comprometido y estar ligada por digest. El
 recibo final compromete observaciones, decisiones, eventos, vistas, registros y proyección. La
 sincronización sustituye atómicamente el snapshot reconstruible y deja intacta la cadena.
+
+
+Python y Node reconstruyen además la misma proyección temporal. La capa copia el tiempo canónico
+de captura, liga el almacenamiento al registro aceptado, verifica intervalos y relaciones, y
+aplica ACL y corte histórico antes de cada predicado temporal. El fixture prueba cinco
+anotaciones, ocho consultas y veinticinco rechazos sin afirmar comprensión general del lenguaje.
 
 ## Requisitos para una implementación
 
