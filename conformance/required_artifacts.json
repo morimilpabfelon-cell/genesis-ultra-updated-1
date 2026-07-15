@@ -120,8 +120,6 @@
     "tools/validate_instance_identity.py",
     "tools/validate_memory_retrieval.mjs",
     "tools/validate_memory_retrieval.py",
-    "tools/validate_memory_retrieval_vectors.mjs",
-    "tools/validate_memory_retrieval_vectors.py",
     "tools/validate_protocol_vectors.mjs",
     "tools/validate_sense_adapters.mjs",
     "tools/validate_sense_adapters.py",
