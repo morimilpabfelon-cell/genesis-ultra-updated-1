@@ -1,9 +1,16 @@
 import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const GENERATED_ARTIFACTS = path.join(os.tmpdir(), `genesis-ultra-transfer-${process.pid}.json`);
+
+process.on("exit", () => {
+  fs.rmSync(GENERATED_ARTIFACTS, { force: true });
+});
 
 function resolvePython() {
   const candidates = process.platform === "win32" ? ["py", "python"] : ["python3", "python"];
@@ -20,7 +27,8 @@ const commands = [
   ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
   ["Validate continuity vectors", python, ["tools/validate_continuity.py"]],
   ["Validate crypto vectors", python, ["tools/validate_crypto_vectors.py"]],
-  ["Simulate transfer A -> B", python, ["tools/simulate_transfer.py"]],
+  ["Simulate transfer A -> B", python, ["tools/simulate_transfer.py", "--artifacts-output", GENERATED_ARTIFACTS]],
+  ["Validate generated artifacts", process.execPath, ["tools/validate_artifacts.mjs", GENERATED_ARTIFACTS]],
   ["Simulate negative cases", python, ["tools/simulate_negatives.py"]]
 ];
 

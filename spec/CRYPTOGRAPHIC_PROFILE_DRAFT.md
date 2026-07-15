@@ -65,15 +65,16 @@ Los parámetros concretos deben quedar dentro del manifiesto de cifrado. No se f
 Una autorización debe vincular como mínimo:
 
 - `authorization_id`;
-- `instance_id`;
 - `guardian_id`;
-- acción;
-- sujeto;
-- instante de emisión;
-- expiración;
-- límite de uso;
-- usos consumidos;
-- estado de revocación.
+- época de clave del guardián;
+- `instance_id` y época de autoridad;
+- permiso y modo (`one_time` o `standing`);
+- cuerpo origen opcional y alcance de destinos;
+- emisión y comienzo de validez;
+- expiración y límite de uso cuando correspondan.
+
+El permiso firmado es inmutable. Los consumos y revocaciones no modifican este digest;
+se registran como eventos posteriores en el ledger de autoridad.
 
 El digest se calcula con dominio:
 

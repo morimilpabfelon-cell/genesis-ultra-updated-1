@@ -8,7 +8,7 @@ if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
 }
 
 Write-Host "Validando Genesis Ultra desde: $Root"
-node tools/validate_workspace.mjs
+npm test
 if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }

@@ -11,6 +11,13 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 
 - `golden_vectors.json`: resultados criptográficos que deben coincidir byte por byte.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
+- `schema_invalid_cases.json`: artefactos que los JSON Schema reales deben rechazar.
+- `continuity_vectors.json`: hashes compartidos de registro y transferencia.
+- `crypto_vectors.json`: digests y algoritmos criptográficos de borrador.
+
+La simulación A→B también genera y valida registros de dispositivos, autorización de
+movilidad y eventos del ledger de autoridad. Las simulaciones negativas llaman la misma
+función de evaluación usada por el flujo positivo.
 
 ## Requisitos para una implementación
 

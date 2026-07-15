@@ -102,9 +102,7 @@
       "input": {
         "evaluated_at": "2026-07-12T00:00:00Z",
         "expires_at": "2026-07-11T00:00:00Z",
-        "revoked": false,
-        "use_limit": 1,
-        "used_count": 0
+        "revocation_event_present": false
       },
       "expected_error": "authorization_expired"
     },
@@ -112,9 +110,9 @@
       "case_id": "exhausted-authorization-001",
       "category": "guardian_authorization",
       "input": {
-        "revoked": false,
+        "mode": "one_time",
         "use_limit": 1,
-        "used_count": 1
+        "consumed_events": 1
       },
       "expected_error": "authorization_use_limit_reached"
     }

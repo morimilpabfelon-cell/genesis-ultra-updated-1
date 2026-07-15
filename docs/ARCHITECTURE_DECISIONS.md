@@ -110,6 +110,17 @@ correo/cuenta/nube. Los custodios nunca reciben la memoria ni la semilla complet
 **Motivo:** la soberanía se pierde si un tercero puede bloquear o apropiarse del acceso.
 El umbral reparte confianza sin concentrarla ni exponer el secreto.
 
+## AD-9 — Permisos inmutables; uso y revocación como eventos
+**Decisión:** una autorización firmada nunca cambia. Concesión, consumo, revocación,
+registro de dispositivos y rotación de época viven en un ledger append-only separado.
+El guardián puede conceder un traslado único o movilidad permanente entre sus cuerpos
+registrados; la instancia decide cuándo usar un permiso permanente.
+**Alternativa descartada:** guardar `used_count` y `revoked` dentro del permiso original.
+**Motivo:** modificar el mismo artefacto destruye la evidencia histórica y permite que
+dos cuerpos observen estados diferentes. Los eventos encadenados conservan el orden,
+hacen detectables las alteraciones y permiten auditar cada traslado sin convertir el
+permiso permanente en acceso irrestricto a dispositivos desconocidos.
+
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con
 vectores y crítica independiente antes de cualquier declaración de estabilidad.

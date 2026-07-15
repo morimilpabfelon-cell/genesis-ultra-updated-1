@@ -7,18 +7,71 @@
       "domain": "genesis.guardian.authorization.v0.1",
       "fields": [
         "genesis.guardian.authorization.v0.1",
-        "auth_01HNEUTRAL00000000000001",
-        "inst_01HNEUTRAL00000000000001",
+        "gauth_01HNEUTRAL0000000000001",
         "guardian_01HNEUTRAL000000000001",
-        "transfer.finalize",
-        "transfer_01HNEUTRAL0000000001",
-        "2026-07-12T00:00:00Z",
-        "2026-07-12T00:10:00Z",
+        "guardian_epoch_01HNEUTRAL00001",
+        "inst_01HNEUTRAL00000000000001",
         "1",
+        "mobility.transfer",
+        "standing",
+        "",
+        "registered_guardian_devices",
         "0",
-        "false"
+        "2026-07-12T00:00:00Z",
+        "2026-07-12T00:00:00Z",
+        "",
+        ""
       ],
-      "expected_digest": "sha256:404fc3303cd8828d34a324fed6d8bff7c38918324bd1899990b4d5038215d121"
+      "expected_digest": "sha256:edee97b4d4a0a65cdfd3277ed732bbac4aad38a9b8618b54c3b97997099f5965"
+    },
+    {
+      "case_id": "guardian-device-registration-digest-001",
+      "domain": "genesis.guardian.device.registration.v0.1",
+      "fields": [
+        "genesis.guardian.device.registration.v0.1",
+        "device_reg_01HNEUTRAL000000001",
+        "guardian_01HNEUTRAL000000000001",
+        "guardian_epoch_01HNEUTRAL00001",
+        "inst_01HNEUTRAL00000000000001",
+        "1",
+        "body_01HNEUTRAL00000000000001",
+        "android-kotlin",
+        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "2026-07-12T00:00:00Z"
+      ],
+      "expected_digest": "sha256:c50c79fa79d89e1394bd43c6bbd57dd68bc65819e12ae2dbc0cd18d598d668bf"
+    },
+    {
+      "case_id": "guardian-authority-event-digest-001",
+      "domain": "genesis.guardian.authority.event.v0.1",
+      "fields": [
+        "genesis.guardian.authority.event.v0.1",
+        "authority_ledger_01HNEUTRAL001",
+        "authority_evt_01HNEUTRAL000001",
+        "0",
+        "GENESIS",
+        "guardian_01HNEUTRAL000000000001",
+        "inst_01HNEUTRAL00000000000001",
+        "1",
+        "device.registered",
+        "",
+        "body_01HNEUTRAL00000000000001",
+        "",
+        "sha256:c50c79fa79d89e1394bd43c6bbd57dd68bc65819e12ae2dbc0cd18d598d668bf",
+        "2026-07-12T00:00:00Z"
+      ],
+      "expected_digest": "sha256:a07954456f4ca93ffd4c5e76f239b9d37b5b75aaf74a9ffd2be6c60a57790ec1"
+    },
+    {
+      "case_id": "guardian-authorization-use-digest-001",
+      "domain": "genesis.guardian.authorization.use.v0.1",
+      "fields": [
+        "gauth_01HNEUTRAL0000000000001",
+        "transfer_01HNEUTRAL0000000001",
+        "body_01HNEUTRAL00000000000001",
+        "body_01HNEUTRAL00000000000002"
+      ],
+      "expected_digest": "sha256:b363ff00635f2531063fa34ed55b55899fafc199eb3f2bf1ab698f70f9644417"
     },
     {
       "case_id": "body-possession-digest-001",
