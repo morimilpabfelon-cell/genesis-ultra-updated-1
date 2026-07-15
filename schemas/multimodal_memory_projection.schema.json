@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:multimodal-memory-projection:v0.1",
+  "title": "Genesis Multimodal Memory Projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "instance_id",
+    "record_count",
+    "records",
+    "projection_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.multimodal.memory.projection.v0.1" },
+    "profile": { "const": "genesis.multimodal.memory.pipeline.v0.1" },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "record_count": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/record" }
+    },
+    "projection_digest": { "$ref": "#/$defs/mmsha256" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "event_hash": { "type": "string", "pattern": "^evsha256:[0-9a-f]{64}$" },
+    "mmsha256": { "type": "string", "pattern": "^mmsha256:[0-9a-f]{64}$" },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_digest",
+        "modality",
+        "sense",
+        "media_type",
+        "extraction_id",
+        "extraction_digest",
+        "adapter_id",
+        "adapter_version",
+        "adapter_profile_digest",
+        "model_digest",
+        "accepted_text",
+        "accepted_text_digest",
+        "segment_count",
+        "observation_id",
+        "observation_digest",
+        "gate_decision_id",
+        "gate_decision_digest",
+        "memory_event_id",
+        "memory_event_hash",
+        "event_sequence",
+        "privacy",
+        "captured_at",
+        "record_digest"
+      ],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+        "source_digest": { "$ref": "#/$defs/sha256" },
+        "modality": { "type": "string", "enum": ["document", "image", "audio"] },
+        "sense": { "type": "string", "enum": ["vision", "hearing"] },
+        "media_type": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "extraction_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+        "extraction_digest": { "$ref": "#/$defs/sha256" },
+        "adapter_id": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "adapter_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+        },
+        "adapter_profile_digest": { "$ref": "#/$defs/sha256" },
+        "model_digest": {
+          "oneOf": [
+            { "$ref": "#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        },
+        "accepted_text": { "type": "string", "minLength": 1, "maxLength": 65536 },
+        "accepted_text_digest": { "$ref": "#/$defs/sha256" },
+        "segment_count": { "type": "integer", "minimum": 1, "maximum": 256 },
+        "observation_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+        "observation_digest": { "$ref": "#/$defs/sha256" },
+        "gate_decision_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+        "gate_decision_digest": { "$ref": "#/$defs/sha256" },
+        "memory_event_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+        "memory_event_hash": { "$ref": "#/$defs/event_hash" },
+        "event_sequence": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "privacy": {
+          "type": "string",
+          "enum": ["private_local", "guardian_shared", "export_approved"]
+        },
+        "captured_at": { "$ref": "#/$defs/timestamp" },
+        "record_digest": { "$ref": "#/$defs/mmsha256" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "modality": { "const": "audio" } }, "required": ["modality"] },
+          "then": { "properties": { "sense": { "const": "hearing" } } },
+          "else": { "properties": { "sense": { "const": "vision" } } }
+        }
+      ]
+    }
+  }
+}
