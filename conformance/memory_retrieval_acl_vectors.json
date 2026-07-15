@@ -38,7 +38,7 @@
     {"case_id":"unknown_requester","mutation":{"target":"request","index":0,"field":"requester_id","value":"unknown"},"expected_error":"acl_policy_not_found"},
     {"case_id":"stale_epoch","mutation":{"target":"request","index":0,"field":"authority_epoch","value":2},"expected_error":"acl_authority_epoch_mismatch"},
     {"case_id":"unknown_scope","mutation":{"target":"request","index":0,"field":"requested_scopes","value":["unknown:scope"]},"expected_error":"acl_requested_scope_unknown"},
-    {"case_id":"duplicate_binding","mutation":{"target":"duplicate_binding","index":0},"expected_error":"acl_scope_binding_duplicate"},
+    {"case_id":"duplicate_binding","mutation":{"target":"duplicate_binding","index":0},"expected_error":"acl_scope_binding_coverage_invalid"},
     {"case_id":"unknown_event_binding","mutation":{"target":"binding","index":0,"field":"event_id","value":"evt_unknown"},"expected_error":"acl_scope_binding_event_unknown"},
     {"case_id":"observer_private","mutation":{"target":"policy","index":4,"field":"allowed_privacy","value":["private_local","export_approved"]},"expected_error":"acl_observer_privacy_invalid"},
     {"case_id":"policy_authority_field","mutation":{"target":"policy_add","index":0,"field":"active_writer","value":true},"expected_error":"acl_policy_contains_authority"},

@@ -90,8 +90,8 @@
     },
     {
       "path": "conformance/memory_retrieval_acl_vectors.json",
-      "size_bytes": 7562,
-      "digest": "sha256:4ad515fae06f4c60675cf740940691361c90fc7dc1a57e25212500c28d773e1c"
+      "size_bytes": 7569,
+      "digest": "sha256:c8ab565d7a291a2520df2564f450fd8518918e33ee71d9c86e93aaae931f4b9c"
     },
     {
       "path": "conformance/memory_retrieval_vectors.json",
@@ -689,5 +689,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:c730e2e54bcb67f08c9d17116ecf8d823ed519edcea65a43ce021797ab749e4f"
+  "root_digest": "sha256:c50557bdc605f18a98541799151d53fb5631badf6d31d53efb33130109161f6d"
 }
