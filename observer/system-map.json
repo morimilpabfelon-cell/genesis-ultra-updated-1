@@ -62,6 +62,15 @@
       "required_evidence": ["spec", "schema", "conformance", "implementation"]
     },
     {
+      "id": "memory_retrieval",
+      "name": "Recuperación de memoria",
+      "layer": "perception",
+      "maturity": "verified",
+      "description": "Índice reconstruible con búsqueda léxica, replay temporal y ranking asistido por grafo.",
+      "keywords": ["memory_retrieval", "deterministic_memory_retrieval"],
+      "required_evidence": ["spec", "schema", "conformance", "implementation"]
+    },
+    {
       "id": "authority",
       "name": "Guardián y autoridad",
       "layer": "continuity",
@@ -152,5 +161,5 @@
       "required_evidence": ["documentation", "implementation", "test"]
     }
   ],
-  "flow": ["identity", "senses", "memory_gate", "memory_chain", "associative_memory", "reasoning", "action"]
+  "flow": ["identity", "senses", "memory_gate", "memory_chain", "associative_memory", "memory_retrieval", "reasoning", "action"]
 }
