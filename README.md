@@ -51,6 +51,8 @@ Una instancia puede pasar de un teléfono a una computadora, otro teléfono, un 
   del grafo asociativo, siempre como proyección reconstruible;
 - puente verificable desde la compuerta firmada hacia recuperación, solo después del commit
   append-only y sin conceder autoridad al índice;
+- búsqueda híbrida neutral que combina evidencia léxica, semántica opcional, grafo y tiempo,
+  con fallback léxico cuando el adaptador semántico no está disponible;
 - especificación y vectores independientes del lenguaje.
 
 ## Estructura
@@ -77,10 +79,10 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 34 JSON Schema, verifica en ambos
+La suite ejecuta los validadores Python y Node, compila los 35 JSON Schema, verifica en ambos
 lenguajes el nombre canónico, el digest de identidad, los adaptadores neutrales de los tres
 primeros sentidos, la compuerta firmada antes de memoria, el puente firmado hacia recuperación,
-la proyección asociativa y la recuperación determinista reconstruible. También exige que los
+la proyección asociativa, la recuperación determinista y la búsqueda híbrida neutral. También exige que los
 artefactos generados por la simulación A→B sean válidos y estén enlazados, verifica el permiso
 permanente, los dispositivos registrados y el ledger de autoridad, simula un backup cifrado
 comprometido seguido de pérdida y recuperación B→C, y ejecuta los vectores de continuidad,
@@ -120,6 +122,31 @@ reconstruirse; no concede autoridad y no sustituye la cadena. El diseño y la ex
 de ideas evaluadas en Memvid están documentados en
 [`spec/DETERMINISTIC_MEMORY_RETRIEVAL.md`](spec/DETERMINISTIC_MEMORY_RETRIEVAL.md) y
 [`docs/MEMVID_MEMORY_EXTRACTION_MAP.md`](docs/MEMVID_MEMORY_EXTRACTION_MAP.md).
+
+## Probar la búsqueda híbrida neutral
+
+Validar que Python y Node producen la misma proyección híbrida y el mismo fallback:
+
+```powershell
+npm run validate:hybrid-retrieval
+```
+
+Consulta léxica sin vector semántico:
+
+```powershell
+npm run memory:hybrid:query -- conformance/hybrid_memory_retrieval_vectors.json "workshop" --top-k 3
+```
+
+Consulta con evidencia semántica cuantizada:
+
+```powershell
+npm run memory:hybrid:query -- conformance/hybrid_memory_retrieval_vectors.json "move to another device" --semantic-vector 0,1000,0,0 --top-k 3
+```
+
+El vector del ejemplo es evidencia de conformidad del protocolo, no un modelo entrenado. Un
+adaptador real debe declarar el digest exacto de su modelo y transformar su salida al perfil
+neutral. Si el adaptador falta o falla, Génesis conserva la búsqueda léxica. El contrato está en
+[`spec/NEUTRAL_HYBRID_MEMORY_RETRIEVAL.md`](spec/NEUTRAL_HYBRID_MEMORY_RETRIEVAL.md).
 
 ## Conectar la compuerta firmada con recuperación
 

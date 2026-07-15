@@ -78,6 +78,16 @@ const commands = [
     ["tools/validate_memory_retrieval.mjs"]
   ],
   [
+    "Validate neutral hybrid memory retrieval (Python)",
+    python,
+    ["tools/validate_hybrid_memory_retrieval.py"]
+  ],
+  [
+    "Validate neutral hybrid memory retrieval independently (Node)",
+    process.execPath,
+    ["tools/hybrid_memory_retrieval.mjs", "validate"]
+  ],
+  [
     "Validate memory-gate retrieval bridge (Python)",
     python,
     ["tools/validate_memory_gate_retrieval_bridge.py"]
@@ -157,7 +167,7 @@ for (const [label, command, args] of commands) {
     process.exit(1);
   }
   if (result.status !== 0) {
-    console.error(`FAIL ${label}: exit ${result.status}`);
+    console.error(`FAIL ${label}: exit ${result.status ?? 1}`);
     process.exit(result.status ?? 1);
   }
 }

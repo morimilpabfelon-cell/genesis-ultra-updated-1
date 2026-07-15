@@ -66,8 +66,8 @@
       "name": "Recuperación de memoria",
       "layer": "perception",
       "maturity": "verified",
-      "description": "Índice reconstruible con búsqueda léxica, replay temporal, ranking asistido por grafo y entrada verificada desde la compuerta.",
-      "keywords": ["deterministic_memory_retrieval", "memory_gate_retrieval_bridge", "memory_retrieval"],
+      "description": "Índice reconstruible con búsqueda léxica, semántica opcional, replay temporal, ranking asistido por grafo y fallback verificable.",
+      "keywords": ["deterministic_memory_retrieval", "hybrid_memory_retrieval", "memory_gate_retrieval_bridge", "memory_retrieval", "neutral_hybrid_memory_retrieval"],
       "required_evidence": ["spec", "schema", "conformance", "implementation"]
     },
     {

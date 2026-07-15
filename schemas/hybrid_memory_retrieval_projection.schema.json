@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesis.local/schemas/hybrid_memory_retrieval_projection.schema.json",
+  "title": "Genesis neutral hybrid memory retrieval projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "projection_id",
+    "instance_id",
+    "projection_profile",
+    "base_projection_digest",
+    "semantic_profile_digest",
+    "semantic_coverage_status",
+    "source_event_count",
+    "source_last_sequence",
+    "semantic_frame_count",
+    "semantic_frames",
+    "query_results",
+    "projection_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.memory.hybrid_retrieval.projection.v0.1" },
+    "hash_profile": { "const": "genesis.hash.fields.v0.1" },
+    "projection_id": { "type": "string", "pattern": "^hrpsha256:[a-f0-9]{64}$" },
+    "instance_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "projection_profile": { "const": "genesis.memory.hybrid_retrieval.algorithm.v0.1" },
+    "base_projection_digest": { "$ref": "#/$defs/sha256" },
+    "semantic_profile_digest": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "semantic_coverage_status": { "enum": ["complete", "disabled"] },
+    "source_event_count": { "$ref": "#/$defs/positivePortableInteger" },
+    "source_last_sequence": { "$ref": "#/$defs/portableInteger" },
+    "semantic_frame_count": { "$ref": "#/$defs/portableInteger" },
+    "semantic_frames": {
+      "type": "array",
+      "maxItems": 1000000,
+      "items": { "$ref": "#/$defs/semanticFrameRef" }
+    },
+    "query_results": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "items": { "$ref": "#/$defs/queryResultSet" }
+    },
+    "projection_digest": { "$ref": "#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "semantic_coverage_status": { "const": "disabled" } } },
+      "then": {
+        "properties": {
+          "semantic_profile_digest": { "type": "null" },
+          "semantic_frame_count": { "const": 0 },
+          "semantic_frames": { "type": "array", "maxItems": 0 }
+        }
+      },
+      "else": {
+        "properties": {
+          "semantic_profile_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+          "semantic_frame_count": { "$ref": "#/$defs/positivePortableInteger" },
+          "semantic_frames": { "type": "array", "minItems": 1 }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "portableInteger": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "positivePortableInteger": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "semanticFrameRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "vector_digest"],
+      "properties": {
+        "event_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "vector_digest": { "type": "string", "pattern": "^sfsha256:[a-f0-9]{64}$" }
+      }
+    },
+    "queryResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rank",
+        "event_id",
+        "frame_id",
+        "sequence",
+        "score",
+        "lexical_score",
+        "semantic_score",
+        "graph_score",
+        "temporal_score",
+        "matched_terms",
+        "reason_codes"
+      ],
+      "properties": {
+        "rank": { "$ref": "#/$defs/positivePortableInteger" },
+        "event_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "frame_id": { "type": "string", "pattern": "^rfsha256:[a-f0-9]{64}$" },
+        "sequence": { "$ref": "#/$defs/portableInteger" },
+        "score": { "$ref": "#/$defs/portableInteger" },
+        "lexical_score": { "$ref": "#/$defs/portableInteger" },
+        "semantic_score": { "$ref": "#/$defs/portableInteger" },
+        "graph_score": { "$ref": "#/$defs/portableInteger" },
+        "temporal_score": { "$ref": "#/$defs/portableInteger" },
+        "matched_terms": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": { "type": "string", "pattern": "^[a-z0-9]+$", "maxLength": 128 }
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["lexical_match", "semantic_match", "graph_anchor", "graph_neighbor"]
+          }
+        }
+      }
+    },
+    "queryResultSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query_id",
+        "base_query_digest",
+        "semantic_query_digest",
+        "hybrid_query_digest",
+        "mode",
+        "normalized_terms",
+        "as_of_sequence",
+        "top_k",
+        "candidate_count",
+        "results",
+        "result_digest"
+      ],
+      "properties": {
+        "query_id": { "type": "string", "pattern": "^[A-Za-z0-9._:-]+$", "minLength": 1, "maxLength": 128 },
+        "base_query_digest": { "type": "string", "pattern": "^rqsha256:[a-f0-9]{64}$" },
+        "semantic_query_digest": {
+          "type": ["string", "null"],
+          "pattern": "^sqsha256:[a-f0-9]{64}$"
+        },
+        "hybrid_query_digest": { "type": "string", "pattern": "^hqsha256:[a-f0-9]{64}$" },
+        "mode": { "enum": ["hybrid", "lexical_fallback"] },
+        "normalized_terms": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": { "type": "string", "pattern": "^[a-z0-9]+$", "maxLength": 128 }
+        },
+        "as_of_sequence": { "$ref": "#/$defs/portableInteger" },
+        "top_k": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "candidate_count": { "$ref": "#/$defs/positivePortableInteger" },
+        "results": {
+          "type": "array",
+          "maxItems": 20,
+          "items": { "$ref": "#/$defs/queryResult" }
+        },
+        "result_digest": { "$ref": "#/$defs/sha256" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "mode": { "const": "lexical_fallback" } } },
+          "then": { "properties": { "semantic_query_digest": { "type": "null" } } },
+          "else": {
+            "properties": {
+              "semantic_query_digest": { "type": "string", "pattern": "^sqsha256:[a-f0-9]{64}$" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

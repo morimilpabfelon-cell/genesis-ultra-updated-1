@@ -15,6 +15,9 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `memory_retrieval_vectors.json`: cinco recuerdos aceptados, índice léxico determinista,
   consultas asistidas por grafo, replay temporal, digests esperados y veintidós mutaciones de
   autoridad, integridad, ranking o filtración futura que deben rechazarse.
+- `hybrid_memory_retrieval_vectors.json`: cinco consultas híbridas, vectores enteros ligados
+  por digest, recuperación semántica sin coincidencia literal, fallback léxico, aislamiento
+  histórico y veinticuatro cruces de autoridad, integridad, proveedor o cobertura rechazados.
 - `memory_gate_retrieval_bridge_vectors.json`: observación y compuerta firmadas, evento ya
   comprometido, vista textual ligada por digest, recibo de derivación y diecinueve ataques que
   intentan introducir firmas inválidas, cobertura incompleta, datos alterados o contenido futuro.
@@ -24,8 +27,8 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `instance_identity_vectors.json`: nombre canónico, digest de identidad, continuidad
   Android/Apple/Windows y cambios de identidad que deben rechazarse aunque se recalculen hashes.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
-- `schema_invalid_cases.json`: cuarenta y dos artefactos que los JSON Schema reales deben
-  rechazar, con regresiones conectadas a los contratos existentes. Los 34 schemas se compilan
+- `schema_invalid_cases.json`: cuarenta y tres artefactos que los JSON Schema reales deben
+  rechazar, con regresiones conectadas a los contratos existentes. Los 35 schemas se compilan
   con JSON Schema 2020-12 y formatos activos.
 - `sense_observation_vectors.json`: seis observaciones firmadas, una decisión de compuerta,
   su evento de memoria enlazado y mutaciones que intentan saltarse la frontera.
@@ -84,6 +87,12 @@ cinco checkpoints de replay y todos los digests. La búsqueda combina evidencia 
 vecindad asociativa y tiempo mediante aritmética entera; no usa modelos, red ni reloj de
 ejecución. Los resultados apuntan a eventos canónicos y no pueden modificar memoria o autoridad.
 
+Python y Node reproducen además la misma búsqueda híbrida neutral. La capa semántica usa
+vectores enteros ligados al contenido, perfil y consulta mediante digest; combina evidencia
+léxica, semántica, del grafo y temporal sin modificar la proyección v0.1. Una consulta sin vector
+semántico entra en `lexical_fallback`, y los filtros históricos se aplican antes de la similitud.
+Los fixtures prueban comportamiento del protocolo, no calidad de un modelo entrenado.
+
 Python y Node validan además el puente operacional entre la compuerta y recuperación. Solo una
 decisión `accepted` firmada y enlazada a un evento append-only válido puede producir un registro.
 La vista textual debe coincidir con el contenido comprometido y estar ligada por digest. El
@@ -122,6 +131,6 @@ Los vectores son de borrador. Antes de congelarlos deben ampliarse con:
 - rutas equivalentes y no normalizadas;
 - reconciliación completa de bifurcaciones de cadena;
 - adaptadores de almacenamiento real por plataforma;
-- recuperación semántica opcional mediante modelos neutrales y evaluada por separado;
+- adaptadores semánticos reales con modelos neutrales, digests versionados y evaluación de calidad;
 - invocación persistente del puente desde runtimes físicos después del commit append-only;
 - compatibilidad cruzada entre al menos tres implementaciones independientes.

@@ -1842,6 +1842,62 @@
         "root_hash": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
         "unexpected_core_field": true
       }
+    },
+    {
+      "case_id": "hybrid-memory-retrieval-projection-rejects-unexpected-field",
+      "schema": "hybrid_memory_retrieval_projection.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.memory.hybrid_retrieval.projection.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "projection_id": "hrpsha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "instance_id": "inst_01HHYBRIDSCHEMA0000001",
+        "projection_profile": "genesis.memory.hybrid_retrieval.algorithm.v0.1",
+        "base_projection_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "semantic_profile_digest": null,
+        "semantic_coverage_status": "disabled",
+        "source_event_count": 1,
+        "source_last_sequence": 0,
+        "semantic_frame_count": 0,
+        "semantic_frames": [],
+        "query_results": [
+          {
+            "query_id": "query_schema",
+            "base_query_digest": "rqsha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "semantic_query_digest": null,
+            "hybrid_query_digest": "hqsha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "mode": "lexical_fallback",
+            "normalized_terms": [
+              "memory"
+            ],
+            "as_of_sequence": 0,
+            "top_k": 1,
+            "candidate_count": 1,
+            "results": [
+              {
+                "rank": 1,
+                "event_id": "evt_01HHYBRIDSCHEMA000001",
+                "frame_id": "rfsha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "sequence": 0,
+                "score": 1,
+                "lexical_score": 1,
+                "semantic_score": 0,
+                "graph_score": 0,
+                "temporal_score": 0,
+                "matched_terms": [
+                  "memory"
+                ],
+                "reason_codes": [
+                  "lexical_match"
+                ]
+              }
+            ],
+            "result_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+          }
+        ],
+        "projection_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "unexpected_core_field": true
+      }
     }
   ]
 }
