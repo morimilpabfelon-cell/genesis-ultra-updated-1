@@ -1963,6 +1963,305 @@
         "projection_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
         "unexpected_core_field": true
       }
+    },
+    {
+      "case_id": "portable-memory-capsule-rejects-unexpected-field",
+      "schema": "portable_memory_capsule.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.memory.portable_capsule.v0.1",
+        "capsule_profile": "genesis.memory.portable_capsule.algorithm.v0.1",
+        "capsule_id": "capsha256:5be87774fd3bf82652ef9c20c931b9d617a87068a2f44541d806dc7ebbe09ca6",
+        "instance_id": "inst_01HPORTABLECAPSULE00001",
+        "export_request_id": "export_portable_full",
+        "recipient_type": "body",
+        "recipient_id": "body_gamma",
+        "created_at": "2026-07-15T11:00:00Z",
+        "source_as_of_sequence": 4,
+        "source_chain_tip_hash": "evsha256:fa30f213d454286f527fdcfcb22f1e51641840c43daccca278c01ff9532ebc60",
+        "included_event_count": 2,
+        "redacted_anchor_count": 3,
+        "entries": [
+          {
+            "entry_kind": "redacted_anchor",
+            "sequence": 0,
+            "canonical_event_hash": "evsha256:69ebc81b08511ab44b79effc5cc52a35ffeacf4bffcc2bf282fe12a9a82259a2",
+            "previous_event_hash": "GENESIS",
+            "redaction_reason": "not_exported",
+            "entry_digest": "cpsha256:1076d27866f93fd160bb6f7d9f522d651f72eee77f8e2a435fafed7cae3b5372"
+          },
+          {
+            "entry_kind": "redacted_anchor",
+            "sequence": 1,
+            "canonical_event_hash": "evsha256:1170d0a24a65e9b4f6353b66cf12b4006d8e46a55b07000e85a8a0dded09441a",
+            "previous_event_hash": "evsha256:69ebc81b08511ab44b79effc5cc52a35ffeacf4bffcc2bf282fe12a9a82259a2",
+            "redaction_reason": "not_exported",
+            "entry_digest": "cpsha256:76d72a2914923b5e1c4d0965ca244a7c72881b002c6dc0e7b5c8ea475ca4e084"
+          },
+          {
+            "entry_kind": "included_event",
+            "sequence": 2,
+            "canonical_event_hash": "evsha256:e8c21c7f4a771073b272b535392d1728317a09bc84cf96151a031e4d692cb1c6",
+            "previous_event_hash": "evsha256:1170d0a24a65e9b4f6353b66cf12b4006d8e46a55b07000e85a8a0dded09441a",
+            "event_id": "evt_caps_0003",
+            "body_id": "body_alpha",
+            "observed_at": "2026-07-15T10:10:00Z",
+            "privacy": "export_approved",
+            "content_type": "text/plain; charset=utf-8",
+            "content_digest": "sha256:8c7664a04fb7830fbfa868c4f58132cf34932350f48820de3586458faa8c11d4",
+            "content": "Aurora portable memory index prepared for transfer.",
+            "entry_digest": "cpsha256:4968eb85944d32efcd283309330c73758f51bd4f89649cfc501a9b41517860c9"
+          },
+          {
+            "entry_kind": "included_event",
+            "sequence": 3,
+            "canonical_event_hash": "evsha256:adcb29313fb5cc7e29a2f894662bc0e2c6141ea9ecf0401b1ca1e3d507506fb9",
+            "previous_event_hash": "evsha256:e8c21c7f4a771073b272b535392d1728317a09bc84cf96151a031e4d692cb1c6",
+            "event_id": "evt_caps_0004",
+            "body_id": "body_beta",
+            "observed_at": "2026-07-15T10:15:00Z",
+            "privacy": "export_approved",
+            "content_type": "text/plain; charset=utf-8",
+            "content_digest": "sha256:67ef1e56c0b3bdda4e8222caf8c1f0e9157968b0d24baf25749f04f72481fab1",
+            "content": "Temporal recovery annotation verified after migration.",
+            "entry_digest": "cpsha256:4d27664be591c69db0dbe83728684fd3a0efb0c146ac867183a7707b63d2b43e"
+          },
+          {
+            "entry_kind": "redacted_anchor",
+            "sequence": 4,
+            "canonical_event_hash": "evsha256:fa30f213d454286f527fdcfcb22f1e51641840c43daccca278c01ff9532ebc60",
+            "previous_event_hash": "evsha256:adcb29313fb5cc7e29a2f894662bc0e2c6141ea9ecf0401b1ca1e3d507506fb9",
+            "redaction_reason": "not_exported",
+            "entry_digest": "cpsha256:462e3540ae916b91eb7474bdad3b40f508c20d3f12c21079b0cb275e0a13aaed"
+          }
+        ],
+        "components": [
+          {
+            "path": "chain/continuity.json",
+            "role": "continuity_evidence",
+            "media_type": "application/json",
+            "source_event_refs": [
+              "evt_caps_0003",
+              "evt_caps_0004"
+            ],
+            "payload_digest": "sha256:4c80c4163469287330ef193b6e3f4c41ef6e541d87f99752d09cfb60558eafc6",
+            "payload": {
+              "source_first_sequence": 0,
+              "source_last_sequence": 4,
+              "source_chain_tip_hash": "evsha256:fa30f213d454286f527fdcfcb22f1e51641840c43daccca278c01ff9532ebc60",
+              "anchors": [
+                {
+                  "sequence": 0,
+                  "canonical_event_hash": "evsha256:69ebc81b08511ab44b79effc5cc52a35ffeacf4bffcc2bf282fe12a9a82259a2",
+                  "previous_event_hash": "GENESIS",
+                  "included": false
+                },
+                {
+                  "sequence": 1,
+                  "canonical_event_hash": "evsha256:1170d0a24a65e9b4f6353b66cf12b4006d8e46a55b07000e85a8a0dded09441a",
+                  "previous_event_hash": "evsha256:69ebc81b08511ab44b79effc5cc52a35ffeacf4bffcc2bf282fe12a9a82259a2",
+                  "included": false
+                },
+                {
+                  "sequence": 2,
+                  "canonical_event_hash": "evsha256:e8c21c7f4a771073b272b535392d1728317a09bc84cf96151a031e4d692cb1c6",
+                  "previous_event_hash": "evsha256:1170d0a24a65e9b4f6353b66cf12b4006d8e46a55b07000e85a8a0dded09441a",
+                  "included": true
+                },
+                {
+                  "sequence": 3,
+                  "canonical_event_hash": "evsha256:adcb29313fb5cc7e29a2f894662bc0e2c6141ea9ecf0401b1ca1e3d507506fb9",
+                  "previous_event_hash": "evsha256:e8c21c7f4a771073b272b535392d1728317a09bc84cf96151a031e4d692cb1c6",
+                  "included": true
+                },
+                {
+                  "sequence": 4,
+                  "canonical_event_hash": "evsha256:fa30f213d454286f527fdcfcb22f1e51641840c43daccca278c01ff9532ebc60",
+                  "previous_event_hash": "evsha256:adcb29313fb5cc7e29a2f894662bc0e2c6141ea9ecf0401b1ca1e3d507506fb9",
+                  "included": false
+                }
+              ]
+            }
+          },
+          {
+            "path": "events/accepted.json",
+            "role": "canonical_subset",
+            "media_type": "application/json",
+            "source_event_refs": [
+              "evt_caps_0003",
+              "evt_caps_0004"
+            ],
+            "payload_digest": "sha256:4717c5a85ed260532edf6161555a30aa29edcfc283955a57e491deacba6d76cb",
+            "payload": {
+              "events": [
+                {
+                  "entry_kind": "included_event",
+                  "sequence": 2,
+                  "canonical_event_hash": "evsha256:e8c21c7f4a771073b272b535392d1728317a09bc84cf96151a031e4d692cb1c6",
+                  "previous_event_hash": "evsha256:1170d0a24a65e9b4f6353b66cf12b4006d8e46a55b07000e85a8a0dded09441a",
+                  "event_id": "evt_caps_0003",
+                  "body_id": "body_alpha",
+                  "observed_at": "2026-07-15T10:10:00Z",
+                  "privacy": "export_approved",
+                  "content_type": "text/plain; charset=utf-8",
+                  "content_digest": "sha256:8c7664a04fb7830fbfa868c4f58132cf34932350f48820de3586458faa8c11d4",
+                  "content": "Aurora portable memory index prepared for transfer.",
+                  "entry_digest": "cpsha256:4968eb85944d32efcd283309330c73758f51bd4f89649cfc501a9b41517860c9"
+                },
+                {
+                  "entry_kind": "included_event",
+                  "sequence": 3,
+                  "canonical_event_hash": "evsha256:adcb29313fb5cc7e29a2f894662bc0e2c6141ea9ecf0401b1ca1e3d507506fb9",
+                  "previous_event_hash": "evsha256:e8c21c7f4a771073b272b535392d1728317a09bc84cf96151a031e4d692cb1c6",
+                  "event_id": "evt_caps_0004",
+                  "body_id": "body_beta",
+                  "observed_at": "2026-07-15T10:15:00Z",
+                  "privacy": "export_approved",
+                  "content_type": "text/plain; charset=utf-8",
+                  "content_digest": "sha256:67ef1e56c0b3bdda4e8222caf8c1f0e9157968b0d24baf25749f04f72481fab1",
+                  "content": "Temporal recovery annotation verified after migration.",
+                  "entry_digest": "cpsha256:4d27664be591c69db0dbe83728684fd3a0efb0c146ac867183a7707b63d2b43e"
+                }
+              ]
+            }
+          },
+          {
+            "path": "projections/retrieval.json",
+            "role": "rebuildable_projection",
+            "media_type": "application/json",
+            "source_event_refs": [
+              "evt_caps_0003",
+              "evt_caps_0004"
+            ],
+            "payload_digest": "sha256:09a1ddb07eccfb6bc1c89c1d94c28439f4fb91dcf2ee12ef613430dc0d8f9506",
+            "payload": {
+              "source_projection_id": "retrieval_capsule_source_v1",
+              "source_projection_digest": "sha256:bb042b03af7462b0b07a3f170a786cd64c2884ec8677ba2866296ad9050a9d1a",
+              "records": [
+                {
+                  "event_id": "evt_caps_0003",
+                  "frame_id": "frame_caps_0003",
+                  "terms": [
+                    "aurora",
+                    "portable",
+                    "memory",
+                    "transfer"
+                  ]
+                },
+                {
+                  "event_id": "evt_caps_0004",
+                  "frame_id": "frame_caps_0004",
+                  "terms": [
+                    "temporal",
+                    "recovery",
+                    "migration"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "path": "projections/temporal.json",
+            "role": "rebuildable_projection",
+            "media_type": "application/json",
+            "source_event_refs": [
+              "evt_caps_0003",
+              "evt_caps_0004"
+            ],
+            "payload_digest": "sha256:a05047ec2efb1684a89df12fa6371bbf1d6d7568b50440850460d793ffcaf13b",
+            "payload": {
+              "source_projection_id": "temporal_capsule_source_v1",
+              "source_projection_digest": "sha256:09dbe0a6e4f777a9fbcbc4d10840cbe688dc371f86ce5baa7c7a6afc261a78c4",
+              "annotations": [
+                {
+                  "event_id": "evt_caps_0003",
+                  "annotation_digest": "tmsha256:3333333333333333333333333333333333333333333333333333333333333333",
+                  "mentioned_start": "2026-07-17T09:00:00Z",
+                  "mentioned_end": "2026-07-17T10:00:00Z"
+                },
+                {
+                  "event_id": "evt_caps_0004",
+                  "annotation_digest": "tmsha256:4444444444444444444444444444444444444444444444444444444444444444",
+                  "mentioned_start": "2026-07-18T09:00:00Z",
+                  "mentioned_end": "2026-07-18T09:00:00Z"
+                }
+              ]
+            }
+          },
+          {
+            "path": "receipts/access.json",
+            "role": "access_receipt",
+            "media_type": "application/json",
+            "source_event_refs": [
+              "evt_caps_0003",
+              "evt_caps_0004"
+            ],
+            "payload_digest": "sha256:51fd92bde57c7c919f02199ace27d05d14fb484a879e4b7a2f0b34c275fee35d",
+            "payload": {
+              "acl_request_id": "acl_export_portable",
+              "purpose": "transfer_export",
+              "as_of_sequence": 4,
+              "allowed_event_refs_digest": "sha256:17df3ca1dcf4b96092b5ab83eb05faccc66dde9ea6ccf3463f87ba571bbb6c39",
+              "decision_digest": "aclsha256:82b5926cf5c3c06f96246a2471180197bf6bf0727a67abc55c0f6a4e15e47c6b"
+            }
+          }
+        ],
+        "manifest": {
+          "format": "genesis-portable-json-capsule",
+          "format_version": 1,
+          "file_count": 5,
+          "files": [
+            {
+              "path": "chain/continuity.json",
+              "role": "continuity_evidence",
+              "media_type": "application/json",
+              "size_bytes": 1241,
+              "digest": "sha256:4c80c4163469287330ef193b6e3f4c41ef6e541d87f99752d09cfb60558eafc6"
+            },
+            {
+              "path": "events/accepted.json",
+              "role": "canonical_subset",
+              "media_type": "application/json",
+              "size_bytes": 1306,
+              "digest": "sha256:4717c5a85ed260532edf6161555a30aa29edcfc283955a57e491deacba6d76cb"
+            },
+            {
+              "path": "projections/retrieval.json",
+              "role": "rebuildable_projection",
+              "media_type": "application/json",
+              "size_bytes": 377,
+              "digest": "sha256:09a1ddb07eccfb6bc1c89c1d94c28439f4fb91dcf2ee12ef613430dc0d8f9506"
+            },
+            {
+              "path": "projections/temporal.json",
+              "role": "rebuildable_projection",
+              "media_type": "application/json",
+              "size_bytes": 580,
+              "digest": "sha256:a05047ec2efb1684a89df12fa6371bbf1d6d7568b50440850460d793ffcaf13b"
+            },
+            {
+              "path": "receipts/access.json",
+              "role": "access_receipt",
+              "media_type": "application/json",
+              "size_bytes": 284,
+              "digest": "sha256:51fd92bde57c7c919f02199ace27d05d14fb484a879e4b7a2f0b34c275fee35d"
+            }
+          ],
+          "root_digest": "msha256:7fcdbc78599f0337b2e0b5e3a973e098b37c5c232d9620cb6abb46bf52727f42"
+        },
+        "export_receipt": {
+          "capsule_id": "capsha256:5be87774fd3bf82652ef9c20c931b9d617a87068a2f44541d806dc7ebbe09ca6",
+          "export_request_id": "export_portable_full",
+          "recipient_type": "body",
+          "recipient_id": "body_gamma",
+          "source_chain_tip_hash": "evsha256:fa30f213d454286f527fdcfcb22f1e51641840c43daccca278c01ff9532ebc60",
+          "manifest_root_digest": "msha256:7fcdbc78599f0337b2e0b5e3a973e098b37c5c232d9620cb6abb46bf52727f42",
+          "acl_decision_digest": "aclsha256:82b5926cf5c3c06f96246a2471180197bf6bf0727a67abc55c0f6a4e15e47c6b",
+          "receipt_digest": "rcptsha256:c6c718920b6d61999211718b58bf5d424061e2edf67d221c45a65ad4039b19d8"
+        },
+        "capsule_digest": "cpsha256:561855172db92e8d8d0762f4d75ae6732bbb7afa66f1ba626fd8b3375d3676b6",
+        "unexpected_core_field": true
+      }
     }
   ]
 }

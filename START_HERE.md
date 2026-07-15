@@ -101,6 +101,18 @@ npm run memory:temporal:query -- conformance/temporal_memory_metadata_vectors.js
 La consulta recibe únicamente referencias autorizadas por ACL, aplica primero `as_of_sequence` y
 después evalúa captura, almacenamiento, intervalos mencionados o relaciones antes/después.
 
+## Probar cápsulas portables
+
+```powershell
+npm run validate:portable-capsules
+npm run memory:capsule:build -- conformance/portable_memory_capsule_vectors.json export_portable_full memoria.gencap.json
+npm run memory:capsule:verify -- memoria.gencap.json
+```
+
+La exportación recibe únicamente eventos permitidos por una decisión ACL `transfer_export`.
+Los eventos omitidos se representan con anclas redactadas para conservar continuidad sin revelar
+contenido. Importar una cápsula requiere una transacción separada.
+
 ## Observar el estado en vivo
 
 Después de instalar las dependencias:

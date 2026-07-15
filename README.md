@@ -217,6 +217,32 @@ La capa separa captura, almacenamiento y tiempo mencionado. Verifica intervalos,
 procedencia, ACL y cortes históricos; nunca reescribe `observed_at` ni la cadena append-only.
 El contrato está en [`spec/TEMPORAL_MEMORY_METADATA.md`](spec/TEMPORAL_MEMORY_METADATA.md).
 
+## Cápsulas portables de memoria
+
+Validar que Python y Node producen las mismas cápsulas:
+
+```powershell
+npm run validate:portable-capsules
+```
+
+Construir una cápsula autorizada de un solo archivo:
+
+```powershell
+npm run memory:capsule:build -- conformance/portable_memory_capsule_vectors.json export_portable_full memoria.gencap.json
+```
+
+Verificar o inspeccionar una cápsula sin modificarla:
+
+```powershell
+npm run memory:capsule:verify -- memoria.gencap.json
+npm run memory:capsule:inspect -- memoria.gencap.json
+```
+
+La cápsula incluye eventos autorizados, anclas redactadas de continuidad, proyecciones opcionales,
+manifiesto y recibo enlazado a ACL. No es identidad, no concede escritura y no reemplaza la cadena
+append-only. El contrato está en
+[`spec/PORTABLE_MEMORY_CAPSULES.md`](spec/PORTABLE_MEMORY_CAPSULES.md).
+
 ## Observabilidad local en vivo
 
 ```powershell
