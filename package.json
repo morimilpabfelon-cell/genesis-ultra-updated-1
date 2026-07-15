@@ -15,8 +15,12 @@
     "validate:senses": "node tools/validate_sense_observations.mjs",
     "validate:sense-adapters": "node tools/validate_sense_adapters.mjs",
     "validate:retrieval": "node tools/validate_memory_retrieval.mjs",
+    "validate:retrieval-bridge": "node tools/memory_gate_retrieval_bridge.mjs validate",
     "memory:build": "node tools/memory_retrieval.mjs build",
     "memory:query": "node tools/memory_retrieval.mjs query",
+    "memory:bridge:build": "node tools/memory_gate_retrieval_bridge.mjs build",
+    "memory:bridge:sync": "node tools/memory_gate_retrieval_bridge.mjs sync",
+    "memory:bridge:query": "node tools/memory_gate_retrieval_bridge.mjs query",
     "validate:vectors": "node tools/validate_protocol_vectors.mjs",
     "validate:schemas": "node tools/validate_artifacts.mjs"
   },

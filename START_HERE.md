@@ -11,13 +11,14 @@ Genesis Ultra está en fase de diseño. El orden recomendado de revisión es:
 7. [`spec/SENSE_ADAPTER_CONTRACT.md`](./spec/SENSE_ADAPTER_CONTRACT.md)
 8. [`spec/ASSOCIATIVE_MEMORY_PROJECTION.md`](./spec/ASSOCIATIVE_MEMORY_PROJECTION.md)
 9. [`spec/DETERMINISTIC_MEMORY_RETRIEVAL.md`](./spec/DETERMINISTIC_MEMORY_RETRIEVAL.md)
-10. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
-11. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
-12. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
-13. [`spec/DRAFT_INTEGRITY_MANIFEST.md`](./spec/DRAFT_INTEGRITY_MANIFEST.md)
-14. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
-15. [`schemas/`](./schemas)
-16. [`conformance/`](./conformance)
+10. [`spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md`](./spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md)
+11. [`spec/CONTINUITY_AND_MIGRATION.md`](./spec/CONTINUITY_AND_MIGRATION.md)
+12. [`spec/HASH_PROFILE_DRAFT.md`](./spec/HASH_PROFILE_DRAFT.md)
+13. [`spec/CONTINUITY_HASHES.md`](./spec/CONTINUITY_HASHES.md)
+14. [`spec/DRAFT_INTEGRITY_MANIFEST.md`](./spec/DRAFT_INTEGRITY_MANIFEST.md)
+15. [`spec/CONFORMANCE_LEVELS.md`](./spec/CONFORMANCE_LEVELS.md)
+16. [`schemas/`](./schemas)
+17. [`conformance/`](./conformance)
 
 ## Comprobar el borrador
 
@@ -54,6 +55,23 @@ npm run memory:query -- conformance/memory_retrieval_vectors.json "Aurora portab
 La búsqueda usa únicamente registros aceptados, devuelve eventos canónicos y permite replay
 mediante `--as-of N`. El índice es una proyección eliminable; la cadena append-only sigue siendo
 la memoria verdadera.
+
+## Probar la entrada desde la compuerta
+
+Validar observación, decisión firmada, evento comprometido, vista aceptada y snapshot final:
+
+```powershell
+npm run validate:retrieval-bridge
+```
+
+Sincronizar atómicamente un bundle operativo después de escribir el evento append-only:
+
+```powershell
+npm run memory:bridge:sync -- entrada-puente.json runtime/retrieval.json
+```
+
+El puente falla cerrado y deja intacto el snapshot anterior cuando una firma, enlace, digest o
+cobertura no coincide. Es una herramienta operativa invocada por el host; todavía no es un daemon.
 
 ## Observar el estado en vivo
 

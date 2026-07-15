@@ -1,0 +1,298 @@
+{
+  "profile": "genesis.memory.gate.retrieval.bridge.v0.1",
+  "status": "draft",
+  "domains": {
+    "observation": "genesis.sense.observation.v0.1",
+    "observation_signature": "genesis.sense.observation.signature.v0.1",
+    "gate_decision": "genesis.memory.gate.decision.v0.1",
+    "gate_signature": "genesis.memory.gate.decision.signature.v0.1",
+    "memory_event": "genesis.memory.event.v0.1",
+    "accepted_view": "genesis.memory.retrieval.accepted.view.v0.1",
+    "bridge_receipt": "genesis.memory.gate.retrieval.bridge.receipt.v0.1"
+  },
+  "verification_keys": [
+    {
+      "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389",
+      "public_key_hex": "c6822637c7d310ec57627be00ba259d253749f4aaf644470cffbe53a35f73242"
+    }
+  ],
+  "observations": [
+    {
+      "schema_version": "genesis.sense.observation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "observation_id": "obs_01HSENSE000000000000001",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "observation_sequence": 0,
+      "sense": "vision",
+      "source_kind": "network_evidence",
+      "captured_at": "2026-07-15T00:00:00Z",
+      "payload_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "payload_media_type": "application/vnd.genesis.vision-evidence+json",
+      "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "privacy": "private_local",
+      "observation_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HSENSE000000000000001",
+        "key_epoch_id": "epoch_01HSENSE000000000000001",
+        "signed_domain": "genesis.sense.observation.signature.v0.1",
+        "signed_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+        "signature_value": "a7b77438507728c41a15e2da2016d803136c23c0e87071c431d11726e18f8940060ecd359c9f7b43fe65593a45d4a06f2c1ebcd325a77dd54584285b9a74b903",
+        "created_at": "2026-07-15T00:00:00Z",
+        "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+      }
+    }
+  ],
+  "gate_decisions": [
+    {
+      "schema_version": "genesis.memory.gate.decision.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "decision_id": "gate_01HSENSE000000000000001",
+      "observation_id": "obs_01HSENSE000000000000001",
+      "observation_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "decision": "accepted",
+      "reason_code": "policy.accepted.provenance_verified",
+      "policy_profile": "genesis.memory.gate.policy.v0.1",
+      "decided_at": "2026-07-15T00:00:01Z",
+      "memory_event_ref": "evt_01HSENSE000000000000001",
+      "decision_digest": "sha256:cd26e25fefdf0b490fa5ae4f260c1826a5091d1f476f79856ba92fc7f7558a03",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HSENSE000000000000001",
+        "key_epoch_id": "epoch_01HSENSE000000000000001",
+        "signed_domain": "genesis.memory.gate.decision.signature.v0.1",
+        "signed_digest": "sha256:cd26e25fefdf0b490fa5ae4f260c1826a5091d1f476f79856ba92fc7f7558a03",
+        "signature_value": "417c948b0c18e31ff81757345706db8c7ff63068b1a54998e8c36c3cadd2e051db6e6c0ec38058dbcb73275fa32d653ffa40e59e39af459edbf893086b370002",
+        "created_at": "2026-07-15T00:00:01Z",
+        "public_key_ref": "sha256:b4c1ece898ece24e24e601232f95c6a18971689a0dd669e6d78218537c21c389"
+      }
+    }
+  ],
+  "source_memory_events": [
+    {
+      "schema_version": "genesis.memory.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSENSE000000000000001",
+      "instance_id": "inst_01HSENSE000000000000001",
+      "body_id": "body_01HSENSE000000000000001",
+      "sequence": 0,
+      "previous_event_hash": "GENESIS",
+      "event_type": "sense.vision.observation",
+      "actor": "body",
+      "content_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "content_type": "application/vnd.genesis.vision-evidence+json",
+      "observed_at": "2026-07-15T00:00:00Z",
+      "provenance_digest": "sha256:b110737b4aee8fe12b5f62cc0dac8dab24ceb14eecce69c534c100a7b0b1da60",
+      "privacy": "private_local",
+      "event_hash": "evsha256:4f9b12646ece05403172791b57aa511c5838ff3362d9530199bd7640c03d8d7e"
+    }
+  ],
+  "accepted_content_views": [
+    {
+      "schema_version": "genesis.memory.retrieval.accepted.view.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "event_id": "evt_01HSENSE000000000000001",
+      "content_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "content_type": "application/vnd.genesis.vision-evidence+json",
+      "normalized_text": "Genesis observed the blue workshop door after the signed memory gate accepted the vision evidence.",
+      "generated_at": "2026-07-15T00:00:02Z",
+      "generator_profile": "genesis.memory.retrieval.text-view.manual.v0.1",
+      "view_digest": "sha256:f2cf337a4b1f00896d698ec40058d110c7e91ff1094fbbe8034623f7a7892b51"
+    }
+  ],
+  "associative_projection": {
+    "nodes": [],
+    "edges": []
+  },
+  "queries": [
+    {
+      "query_id": "query_signed_gate_memory",
+      "text": "signed memory gate workshop",
+      "top_k": 3,
+      "as_of_sequence": 0,
+      "anchor_event_refs": []
+    }
+  ],
+  "expected": {
+    "accepted_records": [
+      {
+        "record_id": "rrsha256:8c3453cb2b57265c0864ad7a14b2681b6ea011398af9caf47216428674bf181b",
+        "event_id": "evt_01HSENSE000000000000001",
+        "gate_decision_ref": "gate_01HSENSE000000000000001",
+        "content_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "normalized_text": "Genesis observed the blue workshop door after the signed memory gate accepted the vision evidence.",
+        "accepted_at": "2026-07-15T00:00:01Z"
+      }
+    ],
+    "projection_digest": "sha256:45eecc01e40d575872444c355926db21172c08a6dd856dc6e9c209ebbff9dc74",
+    "query_result_digest": "sha256:aaba18f8d4c5dc10a3d9917242f71e26c6632cb566533ad1a61045eb200ad536",
+    "bridge_digest": "sha256:d9595c625611d8aef1ed55f5307025da0d592604127245e04d9d42a09549e595"
+  },
+  "must_reject": [
+    {
+      "case_id": "bridge-observation-digest-corrupt-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["observations", 0, "observation_digest"],
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "observation_digest_mismatch"
+    },
+    {
+      "case_id": "bridge-observation-signature-corrupt-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["observations", 0, "signature", "signature_value"],
+        "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "observation_signature_invalid"
+    },
+    {
+      "case_id": "bridge-observation-key-unknown-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["observations", 0, "signature", "public_key_ref"],
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "observation_signature_key_unknown"
+    },
+    {
+      "case_id": "bridge-gate-not-accepted-001",
+      "mutation": {"operation": "set", "path": ["gate_decisions", 0, "decision"], "value": "rejected"},
+      "expected_error": "bridge_gate_not_accepted"
+    },
+    {
+      "case_id": "bridge-gate-digest-corrupt-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["gate_decisions", 0, "decision_digest"],
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "gate_decision_digest_mismatch"
+    },
+    {
+      "case_id": "bridge-gate-signature-corrupt-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["gate_decisions", 0, "signature", "signature_value"],
+        "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "gate_signature_invalid"
+    },
+    {
+      "case_id": "bridge-gate-observation-unknown-001",
+      "mutation": {"operation": "set", "path": ["gate_decisions", 0, "observation_id"], "value": "obs_01HUNKNOWN00000000000001"},
+      "expected_error": "bridge_gate_observation_unknown"
+    },
+    {
+      "case_id": "bridge-view-missing-001",
+      "mutation": {"operation": "delete", "path": ["accepted_content_views", 0]},
+      "expected_error": "bridge_coverage_invalid"
+    },
+    {
+      "case_id": "bridge-gate-duplicate-001",
+      "mutation": {"operation": "duplicate", "path": ["gate_decisions", 0], "target": ["gate_decisions"]},
+      "expected_error": "bridge_coverage_invalid"
+    },
+    {
+      "case_id": "bridge-view-digest-corrupt-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["accepted_content_views", 0, "view_digest"],
+        "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "accepted_view_digest_mismatch"
+    },
+    {
+      "case_id": "bridge-view-content-digest-mismatch-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["accepted_content_views", 0, "content_digest"],
+        "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "recompute_view_digest_index": 0
+      },
+      "expected_error": "bridge_view_content_digest_mismatch"
+    },
+    {
+      "case_id": "bridge-view-content-type-mismatch-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["accepted_content_views", 0, "content_type"],
+        "value": "text/plain; charset=utf-8",
+        "recompute_view_digest_index": 0
+      },
+      "expected_error": "bridge_view_content_type_mismatch"
+    },
+    {
+      "case_id": "bridge-view-before-gate-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["accepted_content_views", 0, "generated_at"],
+        "value": "2026-07-15T00:00:00Z",
+        "recompute_view_digest_index": 0
+      },
+      "expected_error": "accepted_view_before_gate"
+    },
+    {
+      "case_id": "bridge-view-empty-text-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["accepted_content_views", 0, "normalized_text"],
+        "value": "---",
+        "recompute_view_digest_index": 0
+      },
+      "expected_error": "accepted_record_text_empty"
+    },
+    {
+      "case_id": "bridge-view-non-nfc-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["accepted_content_views", 0, "normalized_text"],
+        "value": "Café memory",
+        "recompute_view_digest_index": 0
+      },
+      "expected_error": "bridge_text_not_nfc"
+    },
+    {
+      "case_id": "bridge-view-sensitive-field-001",
+      "mutation": {"operation": "set", "path": ["accepted_content_views", 0, "credential"], "value": "secret"},
+      "expected_error": "bridge_contains_sensitive_field"
+    },
+    {
+      "case_id": "bridge-event-hash-corrupt-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["source_memory_events", 0, "event_hash"],
+        "value": "evsha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected_error": "source_memory_event_hash_mismatch"
+    },
+    {
+      "case_id": "bridge-event-content-mismatch-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["source_memory_events", 0, "content_digest"],
+        "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "recompute_event_hash_index": 0
+      },
+      "expected_error": "memory_content_digest_mismatch"
+    },
+    {
+      "case_id": "bridge-event-type-mismatch-001",
+      "mutation": {
+        "operation": "set",
+        "path": ["source_memory_events", 0, "event_type"],
+        "value": "sense.hearing.observation",
+        "recompute_event_hash_index": 0
+      },
+      "expected_error": "bridge_memory_observation_mismatch"
+    }
+  ]
+}

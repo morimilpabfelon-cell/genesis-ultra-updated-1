@@ -49,6 +49,8 @@ Una instancia puede pasar de un teléfono a una computadora, otro teléfono, un 
   convertir inferencias en hechos;
 - recuperación determinista de recuerdos mediante índice léxico, replay temporal y apoyo
   del grafo asociativo, siempre como proyección reconstruible;
+- puente verificable desde la compuerta firmada hacia recuperación, solo después del commit
+  append-only y sin conceder autoridad al índice;
 - especificación y vectores independientes del lenguaje.
 
 ## Estructura
@@ -77,12 +79,13 @@ En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer co
 
 La suite ejecuta los validadores Python y Node, compila los 34 JSON Schema, verifica en ambos
 lenguajes el nombre canónico, el digest de identidad, los adaptadores neutrales de los tres
-primeros sentidos, la compuerta firmada antes de memoria, la proyección asociativa y la
-recuperación determinista reconstruible. También exige que los artefactos generados por la
-simulación A→B sean válidos y estén enlazados, verifica el permiso permanente, los dispositivos
-registrados y el ledger de autoridad, simula un backup cifrado comprometido seguido de pérdida
-y recuperación B→C, y ejecuta los vectores de continuidad, criptografía y casos negativos.
-Pasar la suite no constituye una certificación de seguridad ni convierte el borrador en producción.
+primeros sentidos, la compuerta firmada antes de memoria, el puente firmado hacia recuperación,
+la proyección asociativa y la recuperación determinista reconstruible. También exige que los
+artefactos generados por la simulación A→B sean válidos y estén enlazados, verifica el permiso
+permanente, los dispositivos registrados y el ledger de autoridad, simula un backup cifrado
+comprometido seguido de pérdida y recuperación B→C, y ejecuta los vectores de continuidad,
+criptografía y casos negativos. Pasar la suite no constituye una certificación de seguridad ni
+convierte el borrador en producción.
 
 También simula cierres en ocho puntos de una recuperación. El journal firmado decide si
 debe conservar, revertir, reproducir o aceptar el cambio de autoridad sin elegir por reloj
@@ -117,6 +120,32 @@ reconstruirse; no concede autoridad y no sustituye la cadena. El diseño y la ex
 de ideas evaluadas en Memvid están documentados en
 [`spec/DETERMINISTIC_MEMORY_RETRIEVAL.md`](spec/DETERMINISTIC_MEMORY_RETRIEVAL.md) y
 [`docs/MEMVID_MEMORY_EXTRACTION_MAP.md`](docs/MEMVID_MEMORY_EXTRACTION_MAP.md).
+
+## Conectar la compuerta firmada con recuperación
+
+Validar el puente completo:
+
+```powershell
+npm run validate:retrieval-bridge
+```
+
+Construir o sincronizar atómicamente un snapshot reconstruible después del commit append-only:
+
+```powershell
+npm run memory:bridge:build -- entrada-puente.json salida.json
+npm run memory:bridge:sync -- entrada-puente.json runtime/retrieval.json
+```
+
+Consultar directamente un bundle verificado:
+
+```powershell
+npm run memory:bridge:query -- entrada-puente.json "workshop memory" --top-k 5
+```
+
+El puente verifica firmas Ed25519, decisión `accepted`, enlaces observación→compuerta→evento,
+cadena append-only y vista textual ligada por digest. No crea eventos, no acepta decisiones
+rechazadas o en cuarentena y nunca reemplaza la memoria autoritativa. El contrato está en
+[`spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md`](spec/MEMORY_GATE_RETRIEVAL_BRIDGE.md).
 
 ## Observabilidad local en vivo
 
