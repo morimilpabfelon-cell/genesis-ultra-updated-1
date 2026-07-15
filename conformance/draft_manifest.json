@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 114,
+  "file_count": 115,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -80,8 +80,8 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 4893,
-      "digest": "sha256:656394f31d410019c3ba9d28ee14f2c033aed8e935336d45793d012d0e9dd372"
+      "size_bytes": 4925,
+      "digest": "sha256:8d348da56d674776ba481cbdf8bc8589f8db473146f3d03f1f1a442f90a96377"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
@@ -120,38 +120,43 @@
     },
     {
       "path": "observer/README.md",
-      "size_bytes": 2057,
-      "digest": "sha256:0a86bf156cff46db3aba28001f98de28b4f06cf274eade2a1aa7cdbe1d3e05db"
+      "size_bytes": 3817,
+      "digest": "sha256:408ad73dd5a525e4651aa9d3506b129b9f9485442ed89de3ff4bbb3547ee5ff5"
     },
     {
       "path": "observer/core.mjs",
-      "size_bytes": 8406,
-      "digest": "sha256:9e38a38eb206bffe4ab96cb7d507adf639ac915f7c14534aeb12169160d09c47"
+      "size_bytes": 16271,
+      "digest": "sha256:edd2ec698d0d44e67fe2d1ea4c34384376990c0384b308919ccbd3569d5e99a4"
     },
     {
       "path": "observer/public/app.js",
-      "size_bytes": 15394,
-      "digest": "sha256:761f73be0a93a5aeef0ff4c85a41a3fe472ec1f7a0fb63b699a4a23f09ba0a63"
+      "size_bytes": 29882,
+      "digest": "sha256:5487294d2f1fbea4685f52ba53b0a830b0f18409053a0fbaf9a052d71661d12d"
     },
     {
       "path": "observer/public/index.html",
-      "size_bytes": 4725,
-      "digest": "sha256:796dac08df0bffc93c9defe1e3b92e2f3547c9c56d0bf1f0ffd31fa7c6db05c2"
+      "size_bytes": 9744,
+      "digest": "sha256:395861d717a719c0e94eb5f0bb3d29484e0d250ae112703c0602cebded51505f"
     },
     {
       "path": "observer/public/styles.css",
-      "size_bytes": 7539,
-      "digest": "sha256:978c8b9a1de6387d7e64c8669433825e06102151c3b03cabb0c257d2e13ec0c8"
+      "size_bytes": 14919,
+      "digest": "sha256:a3070060154be0660bd32e3e36d74001267831b922212a5f4de4ebfe5e8bf691"
     },
     {
       "path": "observer/server.mjs",
-      "size_bytes": 10511,
-      "digest": "sha256:a0fa23fbf3b61454bfe43f80003ed0166fbd11273f8c65f44b2b659d3b5cd966"
+      "size_bytes": 14191,
+      "digest": "sha256:55809adc7690b0f9b28ebef0a36323c430da72b31a8d670634fe12b2adab3847"
+    },
+    {
+      "path": "observer/system-map.json",
+      "size_bytes": 6705,
+      "digest": "sha256:575c6511aada4c362d21f477f913412a1ac0f8bbc6d96e315c2a05b9e4656558"
     },
     {
       "path": "observer/test/core.test.mjs",
-      "size_bytes": 4450,
-      "digest": "sha256:23dd254da496958578d53b0f3662305298838b17a14aca852b05b81a62e08b23"
+      "size_bytes": 8060,
+      "digest": "sha256:55ed10e8a0d0561e7b2d434b101eee9fc7585ac19a5cf9d2c427329d393b5fc8"
     },
     {
       "path": "package-lock.json",
@@ -579,5 +584,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:979437fa7c7fa3329fe50d6a8e97a273273b862a6f971944688008f705aca55b"
+  "root_digest": "sha256:65728f09ea358c9803fc53efb3548e1cdb1490e68654e8ca4257cc502321d8d7"
 }
