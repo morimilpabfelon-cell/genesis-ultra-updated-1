@@ -8,6 +8,7 @@ import {
   assertObserverSnapshotSafe,
   buildGithubSnapshot,
   buildLocalSnapshot,
+  buildProjectSnapshot,
   parseRepositorySlug,
   stableFingerprint
 } from "./core.mjs";
@@ -21,6 +22,10 @@ const STATE_FILE = path.resolve(
   ROOT,
   process.env.GENESIS_STATE_FILE ?? "conformance/associative_memory_projection_vectors.json"
 );
+const SYSTEM_MAP_FILE = path.join(OBSERVER_DIR, "system-map.json");
+const REQUIRED_FILE = path.join(ROOT, "conformance/required_artifacts.json");
+const MANIFEST_FILE = path.join(ROOT, "conformance/draft_manifest.json");
+const CHECKLIST_FILE = path.join(ROOT, "docs/V0_1_COMPLETION_CHECKLIST.md");
 const TOKEN = process.env.GITHUB_TOKEN?.trim() || null;
 const GITHUB_MODE = TOKEN ? "authenticated" : "public";
 const GITHUB_INTERVAL_MS = boundedInteger(
@@ -28,6 +33,12 @@ const GITHUB_INTERVAL_MS = boundedInteger(
   TOKEN ? 20_000 : 300_000,
   TOKEN ? 15_000 : 60_000,
   3_600_000
+);
+const PROJECT_INTERVAL_MS = boundedInteger(
+  process.env.GENESIS_PROJECT_POLL_MS,
+  3_000,
+  1_000,
+  60_000
 );
 const KEEPALIVE_MS = 20_000;
 const MAX_CLIENTS = 32;
@@ -38,24 +49,53 @@ function boundedInteger(value, fallback, min, max) {
   return Math.min(Math.max(parsed, min), max);
 }
 
-function detectRepository() {
-  const configured = parseRepositorySlug(process.env.GENESIS_GITHUB_REPO ?? "");
-  if (configured) return configured;
+function gitText(args, fallback = null) {
   try {
-    const remote = execFileSync("git", ["remote", "get-url", "origin"], {
+    return execFileSync("git", args, {
       cwd: ROOT,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"]
     }).trim();
-    return parseRepositorySlug(remote);
   } catch {
-    return null;
+    return fallback;
   }
+}
+
+function detectRepository() {
+  const configured = parseRepositorySlug(process.env.GENESIS_GITHUB_REPO ?? "");
+  if (configured) return configured;
+  return parseRepositorySlug(gitText(["remote", "get-url", "origin"], "") ?? "");
+}
+
+function gitChangedFiles(statusText) {
+  if (!statusText) return [];
+  return statusText.split(/\r?\n/).filter(Boolean).map((line) => {
+    const raw = line.slice(3).trim();
+    return raw.includes(" -> ") ? raw.split(" -> ").at(-1) : raw;
+  }).filter(Boolean);
+}
+
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+function gitSnapshot() {
+  const status = gitText(["status", "--porcelain", "--untracked-files=all"], "") ?? "";
+  const latest = gitText(["diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"], "") ?? "";
+  return {
+    branch: gitText(["rev-parse", "--abbrev-ref", "HEAD"]),
+    commit: gitText(["rev-parse", "HEAD"]),
+    commit_time: gitText(["show", "-s", "--format=%cI", "HEAD"]),
+    dirty: status.length > 0,
+    changed_files: gitChangedFiles(status),
+    latest_commit_files: latest.split(/\r?\n/).filter(Boolean)
+  };
 }
 
 const repository = detectRepository();
 const state = {
   local: emptyLocalSnapshot(),
+  project: emptyProjectSnapshot(),
   github: buildGithubSnapshot(
     { error: repository ? "GitHub todavía no consultado." : "No se pudo detectar el repositorio." },
     { repository, mode: GITHUB_MODE }
@@ -65,7 +105,8 @@ const state = {
     host: HOST,
     port: PORT,
     state_file: path.relative(ROOT, STATE_FILE).replaceAll("\\", "/"),
-    github_poll_ms: GITHUB_INTERVAL_MS
+    github_poll_ms: GITHUB_INTERVAL_MS,
+    project_poll_ms: PROJECT_INTERVAL_MS
   }
 };
 const clients = new Set();
@@ -80,16 +121,29 @@ function emptyLocalSnapshot() {
   });
 }
 
+function emptyProjectSnapshot() {
+  return buildProjectSnapshot({
+    catalog: { components: [], layers: [], flow: [] },
+    requiredArtifacts: { required: [] },
+    manifest: {},
+    checklistText: "",
+    runtimeSubsystems: {},
+    git: {}
+  });
+}
+
 function combinedSnapshot() {
   const snapshot = {
     observed_at: new Date().toISOString(),
     server: state.server,
     local: state.local,
+    project: state.project,
     github: state.github,
     truth_boundary: {
       memory_authority: "append_only_chain",
       projection_role: "rebuildable_read_model",
-      observer_role: "read_only_non_normative"
+      observer_role: "read_only_non_normative",
+      maturity_role: "evidence_summary_not_consciousness"
     }
   };
   assertObserverSnapshotSafe(snapshot);
@@ -98,7 +152,11 @@ function combinedSnapshot() {
 
 function sendSnapshot(force = false) {
   const snapshot = combinedSnapshot();
-  const fingerprint = stableFingerprint({ local: snapshot.local, github: snapshot.github });
+  const fingerprint = stableFingerprint({
+    local: snapshot.local,
+    project: snapshot.project,
+    github: snapshot.github
+  });
   if (!force && fingerprint === lastCombinedFingerprint) return;
   lastCombinedFingerprint = fingerprint;
   const frame = `event: snapshot\ndata: ${JSON.stringify(snapshot)}\n\n`;
@@ -107,7 +165,7 @@ function sendSnapshot(force = false) {
 
 function readLocalState() {
   try {
-    const document = JSON.parse(fs.readFileSync(STATE_FILE, "utf8"));
+    const document = readJson(STATE_FILE);
     state.local = buildLocalSnapshot(document, {
       sourcePath: path.relative(ROOT, STATE_FILE).replaceAll("\\", "/")
     });
@@ -115,6 +173,25 @@ function readLocalState() {
     state.local = {
       ...emptyLocalSnapshot(),
       error: `No se pudo leer el estado local: ${error.message}`
+    };
+  }
+  readProjectState();
+}
+
+function readProjectState() {
+  try {
+    state.project = buildProjectSnapshot({
+      catalog: readJson(SYSTEM_MAP_FILE),
+      requiredArtifacts: readJson(REQUIRED_FILE),
+      manifest: readJson(MANIFEST_FILE),
+      checklistText: fs.readFileSync(CHECKLIST_FILE, "utf8"),
+      runtimeSubsystems: state.local.runtime.subsystems,
+      git: gitSnapshot()
+    });
+  } catch (error) {
+    state.project = {
+      ...emptyProjectSnapshot(),
+      error: `No se pudo construir el mapa del proyecto: ${error.message}`
     };
   }
   sendSnapshot();
@@ -179,8 +256,28 @@ async function refreshGithub() {
       fetchGithubEndpoint("pulls", `/repos/${encodedRepo}/pulls?state=all&sort=updated&direction=desc&per_page=10`),
       fetchGithubEndpoint("runs", `/repos/${encodedRepo}/actions/runs?per_page=10`)
     ]);
+
+    const latestSha = commits?.[0]?.sha;
+    const latestPullNumber = pulls?.[0]?.number;
+    const [latestCommit, latestPullFiles] = await Promise.all([
+      latestSha
+        ? fetchGithubEndpoint(`commit:${latestSha}`, `/repos/${encodedRepo}/commits/${encodeURIComponent(latestSha)}`)
+        : Promise.resolve(null),
+      latestPullNumber
+        ? fetchGithubEndpoint(`pull-files:${latestPullNumber}`, `/repos/${encodedRepo}/pulls/${latestPullNumber}/files?per_page=100`)
+        : Promise.resolve([])
+    ]);
+
     state.github = buildGithubSnapshot(
-      { repository: repoData, commits, pulls, runs },
+      {
+        repository: repoData,
+        commits,
+        pulls,
+        runs,
+        latest_commit: latestCommit,
+        latest_pull_number: latestPullNumber,
+        latest_pull_files: latestPullFiles
+      },
       { repository, mode: GITHUB_MODE }
     );
   } catch (error) {
@@ -190,6 +287,8 @@ async function refreshGithub() {
         commits: githubCache.get("commits")?.data,
         pulls: githubCache.get("pulls")?.data,
         runs: githubCache.get("runs")?.data,
+        latest_commit: [...githubCache.entries()].find(([key]) => key.startsWith("commit:"))?.[1]?.data,
+        latest_pull_files: [...githubCache.entries()].find(([key]) => key.startsWith("pull-files:"))?.[1]?.data,
         error: error.message
       },
       { repository, mode: GITHUB_MODE }
@@ -233,7 +332,7 @@ function serveStatic(requestPath, response, headOnly) {
     return;
   }
   fs.readFile(resolved, (error, data) => {
-    if (error || !fs.statSync(resolved).isFile()) {
+    if (error) {
       json(response, 404, { error: "not_found" });
       return;
     }
@@ -260,7 +359,12 @@ const server = http.createServer((request, response) => {
       role: "read_only_non_normative",
       clients: clients.size,
       repository,
-      source: state.local.source
+      source: state.local.source,
+      project: {
+        branch: state.project.repository.branch,
+        commit: state.project.repository.commit,
+        maturity_score: state.project.progress.maturity_score
+      }
     });
     return;
   }
@@ -296,12 +400,14 @@ const keepalive = setInterval(() => {
   for (const response of clients) response.write(": keepalive\n\n");
 }, KEEPALIVE_MS);
 const githubTimer = setInterval(refreshGithub, GITHUB_INTERVAL_MS);
+const projectTimer = setInterval(readProjectState, PROJECT_INTERVAL_MS);
 
 function shutdown(signal) {
   if (shuttingDown) return;
   shuttingDown = true;
   clearInterval(keepalive);
   clearInterval(githubTimer);
+  clearInterval(projectTimer);
   clearTimeout(fileWatchDebounce);
   for (const response of clients) response.end();
   server.close(() => process.exit(0));
@@ -316,8 +422,9 @@ readLocalState();
 watchLocalState();
 await refreshGithub();
 server.listen(PORT, HOST, () => {
-  console.log(`Genesis Live Observatory: http://${HOST}:${PORT}`);
+  console.log(`Genesis Complete Observatory: http://${HOST}:${PORT}`);
   console.log(`Estado local: ${path.relative(ROOT, STATE_FILE)}`);
+  console.log(`Proyecto: ${state.project.repository.branch ?? "sin rama"} @ ${state.project.repository.commit?.slice(0, 12) ?? "sin commit"}`);
   console.log(`GitHub: ${repository ?? "no configurado"} (${GITHUB_MODE}, ${GITHUB_INTERVAL_MS} ms)`);
-  console.log("Rol: observador local de solo lectura; no es memoria ni autoridad.");
+  console.log("Rol: observador local de solo lectura; no es memoria, autoridad ni consciencia.");
 });
