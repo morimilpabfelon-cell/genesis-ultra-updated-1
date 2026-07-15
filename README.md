@@ -63,7 +63,7 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 26 JSON Schema, exige que
+La suite ejecuta los validadores Python y Node, compila los 27 JSON Schema, exige que
 los artefactos generados por la simulación A→B sean válidos y estén enlazados, verifica
 el permiso permanente, los dispositivos registrados y el ledger de autoridad, simula un
 backup cifrado comprometido seguido de pérdida y recuperación B→C, y ejecuta los vectores
@@ -73,6 +73,10 @@ certificación de seguridad ni convierte el borrador en producción.
 También simula cierres en ocho puntos de una recuperación. El journal firmado decide si
 debe conservar, revertir, reproducir o aceptar el cambio de autoridad sin elegir por reloj
 ni permitir que un estado candidato no comprometido se convierta en escritor.
+
+El manifiesto reproducible `conformance/draft_manifest.json` registra tamaño y SHA-256 de
+cada artefacto requerido. Python y Node rechazan omisiones, archivos inesperados, cambios de
+bytes, orden no canónico o un hash raíz incorrecto.
 
 ## Neutralidad
 

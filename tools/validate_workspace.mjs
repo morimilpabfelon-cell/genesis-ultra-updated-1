@@ -106,6 +106,9 @@ function isSafePath(value) {
 function validateWorkspaceHygiene() {
   for (const [label, paths] of [["required", REQUIRED], ["forbidden", FORBIDDEN]]) {
     if (new Set(paths).size !== paths.length) fail(`duplicate_${label}_workspace_path`);
+    if (paths.some((item, index) => item !== [...paths].sort(compareUtf8)[index])) {
+      fail(`unsorted_${label}_workspace_paths`);
+    }
     for (const relativePath of paths) {
       if (!isSafePath(relativePath)) fail(`unsafe_${label}_workspace_path:${relativePath}`);
     }
@@ -172,7 +175,78 @@ function validateWorkspaceHygiene() {
   }
 }
 
+function computeDraftManifestRoot(manifest) {
+  const fields = [
+    manifest.schema_version,
+    manifest.protocol_version,
+    manifest.root_hash_profile,
+    manifest.file_digest_algorithm,
+    manifest.inventory_path,
+    manifest.manifest_path,
+    manifest.self_excluded ? "true" : "false",
+    String(manifest.file_count)
+  ];
+  for (const record of manifest.files) {
+    fields.push(record.path, String(record.size_bytes), record.digest);
+  }
+  const preimage = Buffer.concat([
+    frame("genesis.draft.integrity.root.v0.1"),
+    ...fields.map((value) => frame(value))
+  ]);
+  return `sha256:${sha256(preimage)}`;
+}
+
+function validateDraftManifest() {
+  const manifest = readJson("conformance/draft_manifest.json");
+  const expectedConstants = {
+    schema_version: "genesis.draft.manifest.v0.1",
+    protocol_version: "genesis.protocol.v0.1",
+    root_hash_profile: "genesis.hash.fields.v0.1",
+    file_digest_algorithm: "sha256",
+    inventory_path: "conformance/required_artifacts.json",
+    manifest_path: "conformance/draft_manifest.json",
+    self_excluded: true
+  };
+  for (const [field, expected] of Object.entries(expectedConstants)) {
+    if (manifest[field] !== expected) fail(`draft_manifest_${field}_invalid`);
+  }
+
+  if (REQUIRED.filter((item) => item === manifest.manifest_path).length !== 1) {
+    fail("draft_manifest_path_must_be_required_once");
+  }
+  const expectedPaths = REQUIRED
+    .filter((item) => item !== manifest.manifest_path)
+    .sort(compareUtf8);
+  const actualPaths = manifest.files.map((record) => record.path);
+  if (manifest.file_count !== manifest.files.length || manifest.file_count !== expectedPaths.length) {
+    fail("draft_manifest_file_count_mismatch");
+  }
+  if (new Set(actualPaths).size !== actualPaths.length) fail("draft_manifest_duplicate_path");
+  if (actualPaths.some((item, index) => item !== expectedPaths[index])) {
+    fail("draft_manifest_inventory_or_order_mismatch");
+  }
+  const forbiddenSet = new Set(FORBIDDEN);
+  if (actualPaths.some((item) => forbiddenSet.has(item))) fail("draft_manifest_forbidden_path");
+
+  for (const record of manifest.files) {
+    const filePath = path.join(ROOT, record.path);
+    if (!fs.existsSync(filePath)) {
+      fail(`draft_manifest_missing_file:${record.path}`);
+      continue;
+    }
+    const payload = fs.readFileSync(filePath);
+    if (record.size_bytes !== payload.length) fail(`draft_manifest_size_mismatch:${record.path}`);
+    const digest = `sha256:${sha256(payload)}`;
+    if (record.digest !== digest) fail(`draft_manifest_digest_mismatch:${record.path}`);
+  }
+
+  if (manifest.root_digest !== computeDraftManifestRoot(manifest)) {
+    fail("draft_manifest_root_digest_mismatch");
+  }
+}
+
 validateWorkspaceHygiene();
+validateDraftManifest();
 
 
 // Paridad de comportamiento: toda implementacion debe RECHAZAR estos casos.
@@ -269,5 +343,6 @@ if (failures.length > 0) {
 console.log("Genesis Ultra workspace: OK");
 console.log(`Checked ${REQUIRED.length} required artifacts and ${FORBIDDEN.length} forbidden legacy paths.`);
 console.log("Workspace hygiene and local Markdown links are consistent.");
+console.log("Draft integrity manifest covers every required artifact except its declared self-exclusion.");
 console.log("Golden seed and memory hashes match genesis.hash.fields.v0.1.");
 console.log("Reminder: passing this tool does not make the draft production-ready.");

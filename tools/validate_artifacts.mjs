@@ -10,6 +10,7 @@ import addFormats from "ajv-formats";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SCHEMA_DIR = path.join(ROOT, "schemas");
 const INVALID_CASES = path.join(ROOT, "conformance/schema_invalid_cases.json");
+const DRAFT_MANIFEST = path.join(ROOT, "conformance/draft_manifest.json");
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -1095,6 +1096,12 @@ function validateNegativeSchemaCases(validators) {
 function main() {
   const validators = loadValidators();
   const invalidCount = validateNegativeSchemaCases(validators);
+  requireValid(
+    validators,
+    "draft_manifest.schema.json",
+    readJson(DRAFT_MANIFEST),
+    "conformance/draft_manifest.json"
+  );
   const artifactPath = process.argv[2];
   const backupRecoveryPath = process.argv[3];
   const transactionCrashPath = process.argv[4];
@@ -1104,6 +1111,7 @@ function main() {
 
   console.log(`JSON Schema 2020-12: OK (${validators.size} schemas compiled).`);
   console.log(`Schema negative regressions: OK (${invalidCount} rejected).`);
+  console.log("Draft integrity manifest schema: OK.");
   if (artifactPath) console.log("Generated A -> B artifacts and cross-links: OK.");
   if (backupRecoveryPath) console.log("Generated backup -> recovery artifacts and cross-links: OK.");
   if (transactionCrashPath) console.log("Generated transaction journal and crash recovery decisions: OK.");

@@ -325,6 +325,28 @@
           "created_at": "2026-07-14T00:00:00Z"
         }
       }
+    },
+    {
+      "case_id": "draft-manifest-allows-self-hash",
+      "schema": "draft_manifest.schema.json",
+      "artifact": {
+        "schema_version": "genesis.draft.manifest.v0.1",
+        "protocol_version": "genesis.protocol.v0.1",
+        "root_hash_profile": "genesis.hash.fields.v0.1",
+        "file_digest_algorithm": "sha256",
+        "inventory_path": "conformance/required_artifacts.json",
+        "manifest_path": "conformance/draft_manifest.json",
+        "self_excluded": false,
+        "file_count": 1,
+        "files": [
+          {
+            "path": "README.md",
+            "size_bytes": 1,
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "root_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
     }
   ]
 }

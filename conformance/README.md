@@ -14,6 +14,8 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `schema_invalid_cases.json`: artefactos que los JSON Schema reales deben rechazar.
 - `continuity_vectors.json`: hashes compartidos de registro y transferencia.
 - `crypto_vectors.json`: digests y algoritmos criptográficos de borrador.
+- `draft_manifest.json`: tamaños y hashes reproducibles de todos los artefactos requeridos,
+  salvo su propia exclusión explícita.
 
 La simulación A→B también genera y valida registros de dispositivos, autorización de
 movilidad y eventos del ledger de autoridad. A partir de su resultado, la simulación
@@ -24,6 +26,9 @@ las mismas funciones de evaluación usadas por los flujos positivos.
 La simulación de journal corta la operación antes, durante y después del commit. Python y
 Node reproducen de forma independiente ocho decisiones de reinicio y verifican la cadena
 firmada; doce mutaciones del journal deben ser detectadas.
+
+Python regenera en memoria el manifiesto de integridad y Node lo recalcula de forma
+independiente. Ambos deben coincidir en cobertura, orden, tamaños, digests y hash raíz.
 
 ## Requisitos para una implementación
 

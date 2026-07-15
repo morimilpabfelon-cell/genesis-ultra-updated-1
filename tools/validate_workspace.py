@@ -66,6 +66,8 @@ def validate_workspace_hygiene() -> list[str]:
     for label, paths in (("required", REQUIRED_FILES), ("forbidden", FORBIDDEN_FILES)):
         if len(paths) != len(set(paths)):
             failures.append(f"duplicate_{label}_workspace_path")
+        if paths != sorted(paths, key=lambda value: value.encode("utf-8")):
+            failures.append(f"unsorted_{label}_workspace_paths")
         for relative in paths:
             if not safe_relative_path(relative):
                 failures.append(f"unsafe_{label}_workspace_path:{relative}")
