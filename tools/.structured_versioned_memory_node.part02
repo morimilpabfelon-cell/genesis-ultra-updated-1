@@ -1,0 +1,47 @@
+  if(a.valid_from&&a.valid_to&&a.valid_from>a.valid_to) fail('assertion_validity_interval_invalid');
+  if(computeAssertionDigest(a)!==a.assertion_digest) fail('assertion_digest_mismatch');
+}
+function applyAssertion(state,a){
+  const op=a.operation;
+  if(state===undefined){
+    if(op!=='sets'||a.previous_assertion_ref!==null) fail('slot_first_operation_must_set');
+    state={kind:a.kind,entity:a.entity,slot:a.slot,privacy:a.privacy,scope:a.scope,status:'retracted',items:new Map(),last_assertion_ref:null,history:[]};
+  }else{
+    for(const f of ['kind','entity','slot','privacy','scope']) if(state[f]!==a[f]) fail(`slot_${f}_drift`);
+    if(a.previous_assertion_ref!==state.last_assertion_ref) fail('slot_previous_assertion_mismatch');
+    if(op==='sets'&&state.status!=='retracted') fail('slot_set_while_active');
+    if(op!=='sets'&&state.status!=='active') fail('slot_operation_requires_active');
+  }
+  const value=a.value;
+  if(op==='sets'||op==='updates') state.items=new Map([[value,a.assertion_id]]);
+  else if(op==='extends'){ if(state.items.has(value)) fail('slot_extend_duplicate_value'); state.items.set(value,a.assertion_id); }
+  else if(op==='retracts'){ if(!state.items.has(value)) fail('slot_retract_value_missing'); state.items.delete(value); }
+  state.status=state.items.size?'active':'retracted';
+  const history={assertion_id:a.assertion_id,assertion_digest:a.assertion_digest,source_event_ref:a.source_event_ref,source_event_hash:a.source_event_hash,source_sequence:a.source_sequence,source_ordinal:a.source_ordinal,operation:op,value,value_digest:sha256Text(value),polarity:a.polarity,valid_from:a.valid_from,valid_to:a.valid_to,status_after:state.status};
+  history.history_digest=computeHistoryDigest(history); state.history.push(history); state.last_assertion_ref=a.assertion_id; return state;
+}
+function buildProjection(document,{asOfSequence=null,allowedEventRefs=null,targetVersionKey=null}={}){
+  validateNfc(document); ensureNoForbidden(document);
+  if(document.profile!=='genesis.memory.structured_versioned.v0.1') fail('document_profile_invalid');
+  const instanceId=document.instance_id; if(typeof instanceId!=='string'||!instanceId) fail('document_instance_invalid');
+  const events=validateEvents(document.source_events,instanceId);
+  const assertions=document.assertions; if(!Array.isArray(assertions)||assertions.length===0) fail('assertions_required');
+  const expected=[...assertions].sort((x,y)=>x.source_sequence-y.source_sequence||x.source_ordinal-y.source_ordinal||utf8Compare(x.assertion_id,y.assertion_id));
+  if(assertions.some((a,i)=>a!==expected[i])) fail('assertion_order_invalid');
+  const seenIds=new Set(),seenPositions=new Set(),states=new Map(),included=[];
+  for(const a of assertions){
+    validateAssertion(a,events,instanceId);
+    if(seenIds.has(a.assertion_id)) fail('assertion_id_duplicate'); seenIds.add(a.assertion_id);
+    const pos=`${a.source_sequence}:${a.source_ordinal}`; if(seenPositions.has(pos)) fail('assertion_source_position_duplicate'); seenPositions.add(pos);
+    if(asOfSequence!==null&&a.source_sequence>asOfSequence) continue;
+    if(targetVersionKey!==null&&a.version_key!==targetVersionKey) continue;
+    if(allowedEventRefs!==null&&!allowedEventRefs.has(a.source_event_ref)) continue;
+    states.set(a.version_key,applyAssertion(states.get(a.version_key),a)); included.push(a);
+  }
+  const slots=[];
+  for(const versionKey of [...states.keys()].sort(utf8Compare)){
+    const state=states.get(versionKey);
+    const current_items=[...state.items.keys()].sort(utf8Compare).map(value=>({value,value_digest:sha256Text(value),assertion_ref:state.items.get(value)}));
+    const slot={slot_id:computeSlotId(instanceId,state.entity,state.slot),version_key:versionKey,kind:state.kind,entity:state.entity,slot:state.slot,privacy:state.privacy,scope:state.scope,status:state.status,current_items,history:state.history};
+    slot.slot_digest=computeSlotDigest(slot); slots.push(slot);
+  }
