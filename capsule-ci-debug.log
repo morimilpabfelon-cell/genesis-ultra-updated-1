@@ -1,0 +1,24 @@
+=== Python capsule validator ===
+OK portable memory capsules (3 exports)
+OK capsule digest cpsha256:561855172db92e8d8d0762f4d75ae6732bbb7afa66f1ba626fd8b3375d3676b6
+OK source boundary rejection cases (35)
+OK capsule tamper rejection cases (17)
+NOTE capsules carry authorized subsets and never grant identity, write, or authority.
+python_exit=0
+=== Node capsule validator ===
+OK portable memory capsules (3 exports)
+OK capsule digest cpsha256:561855172db92e8d8d0762f4d75ae6732bbb7afa66f1ba626fd8b3375d3676b6
+OK source boundary rejection cases (35)
+OK capsule tamper rejection cases (17)
+NOTE capsules carry authorized subsets and never grant identity, write, or authority.
+node_exit=0
+=== Complete suite ===
+
+> genesis-ultra-workspace@0.1.0-draft test
+> node tools/run_conformance.mjs
+
+
+=== Validate workspace (Python) ===
+FAIL unlisted_tracked_file:.github/workflows/debug-portable-capsules.yml
+FAIL Validate workspace (Python): exit 1
+npm_exit=1
