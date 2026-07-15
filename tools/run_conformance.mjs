@@ -77,6 +77,16 @@ const commands = [
     process.execPath,
     ["tools/validate_memory_retrieval.mjs"]
   ],
+  [
+    "Validate memory-gate retrieval bridge (Python)",
+    python,
+    ["tools/validate_memory_gate_retrieval_bridge.py"]
+  ],
+  [
+    "Validate memory-gate retrieval bridge independently (Node)",
+    process.execPath,
+    ["tools/memory_gate_retrieval_bridge.mjs", "validate"]
+  ],
   ["Validate neutral sense adapters (Python)", python, ["tools/validate_sense_adapters.py"]],
   [
     "Validate neutral sense adapters independently (Node)",
