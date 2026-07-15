@@ -1,0 +1,62 @@
+name: Prepare Retrieval ACL
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  prepare-and-test:
+    if: github.head_ref == 'agent/retrieval-scopes-acl'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Finalize ACL evidence
+        run: python tools/prepare_acl_final.py
+
+      - name: Remove temporary preparation files
+        run: |
+          rm tools/prepare_acl_final.py
+          rm .github/workflows/prepare-retrieval-acl.yml
+
+      - name: Regenerate integrity manifest
+        run: python tools/generate_draft_manifest.py --write
+
+      - name: Commit final state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No finalization changes."
+          else
+            git commit -m "Finalize retrieval scopes and ACL"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+
+      - name: Install pinned Python dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Install locked Node dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run complete conformance suite
+        run: npm test
