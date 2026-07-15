@@ -24,11 +24,11 @@
     "guardian_id": { "type": "string", "minLength": 1, "maxLength": 128 },
     "guardian_key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
-    "authority_epoch": { "type": "integer", "minimum": 0 },
+    "authority_epoch": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
     "body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "platform_profile": { "type": "string", "minLength": 1, "maxLength": 128 },
     "public_key_fingerprint": { "type": "string", "minLength": 16, "maxLength": 256 },
-    "registered_at": { "type": "string", "format": "date-time" },
+    "registered_at": { "type": "string", "format": "date-time", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$" },
     "registration_digest": {
       "type": "string",
       "pattern": "^sha256:[a-f0-9]{64}$"

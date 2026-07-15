@@ -108,14 +108,22 @@ def compute_observation_digest(observation: dict, domain: str) -> str:
     return hash_fields(domain, values)
 
 
-def signature_bytes(domain: str, digest: str) -> bytes:
-    return encode_field(domain) + encode_field(digest)
+def signature_bytes(envelope: dict) -> bytes:
+    values = [
+        envelope["schema_version"], envelope["signature_profile"],
+        envelope["signer_type"], envelope["signer_id"], envelope["key_epoch_id"],
+        envelope["signed_domain"], envelope["signed_digest"], envelope["created_at"],
+        envelope["public_key_ref"],
+    ]
+    return encode_field("genesis.signature.envelope.bytes.v0.1") + b"".join(
+        encode_field(value) for value in values
+    )
 
 
 def sign_envelope(envelope: dict, digest: str, domain: str, signing_key: SigningKey) -> None:
     envelope["signed_domain"] = domain
     envelope["signed_digest"] = digest
-    envelope["signature_value"] = signing_key.sign(signature_bytes(domain, digest)).signature.hex()
+    envelope["signature_value"] = signing_key.sign(signature_bytes(envelope)).signature.hex()
 
 
 def validate_signature(
@@ -139,7 +147,7 @@ def validate_signature(
         raise ConformanceError("observation_signature_key_mismatch")
     try:
         signature = bytes.fromhex(envelope["signature_value"])
-        VerifyKey(public_key).verify(signature_bytes(domain, digest), signature)
+        VerifyKey(public_key).verify(signature_bytes(envelope), signature)
     except (BadSignatureError, ValueError, KeyError):
         raise ConformanceError("observation_signature_invalid") from None
 
@@ -264,6 +272,11 @@ def validate_observation(
         raise ConformanceError("observation_schema_version_invalid")
     if observation["hash_profile"] != "genesis.hash.fields.v0.1":
         raise ConformanceError("observation_hash_profile_invalid")
+    if (
+        type(observation["observation_sequence"]) is not int
+        or not 0 <= observation["observation_sequence"] <= 9007199254740991
+    ):
+        raise ConformanceError("observation_sequence_invalid")
     links = (
         ("sense", "observation_sense_mismatch"),
         ("source_kind", "observation_source_mismatch"),

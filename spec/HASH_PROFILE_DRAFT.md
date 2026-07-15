@@ -35,7 +35,22 @@ niño  -> 5:niño\n
 Los números enteros se representan en decimal ASCII, sin signo `+`, espacios ni ceros
 a la izquierda, excepto el valor `0`.
 
+Todo entero que entre en un artefacto normativo debe estar dentro del intervalo portable
+`[-9007199254740991, 9007199254740991]`. Cada schema puede imponer un intervalo más
+estrecho. Este límite evita que una plataforma que usa números IEEE-754 acepte un valor que
+otra plataforma convierta a un entero diferente antes de hashearlo.
+
 Los booleanos se representan exactamente como `true` o `false`.
+
+Todo timestamp normativo usa UTC, precisión exacta de segundos y sufijo `Z`:
+
+```text
+YYYY-MM-DDTHH:MM:SSZ
+```
+
+No se aceptan offsets, fracciones de segundo ni representaciones equivalentes alternativas.
+El schema combina este patrón con validación `date-time`; una implementación debe rechazar,
+no normalizar silenciosamente, cualquier otra forma.
 
 ## 3. Orden de rutas
 
@@ -179,6 +194,7 @@ Una implementación debe rechazar, sin intentar corregir silenciosamente:
 - rutas duplicadas;
 - campos ausentes;
 - números fuera del dominio permitido;
+- timestamps fuera de la forma UTC canónica;
 - algoritmos o perfiles desconocidos;
 - hashes con mayúsculas o longitud incorrecta;
 - campos adicionales dentro de un artefacto cerrado.

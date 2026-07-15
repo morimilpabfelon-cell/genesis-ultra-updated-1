@@ -31,7 +31,30 @@ Requisitos:
 - separación de dominio;
 - firma sobre el digest final, no sobre objetos internos del lenguaje.
 
-Las implementaciones que no soporten este perfil pueden declarar otro perfil versionado, pero no pueden afirmar conformidad criptográfica plena hasta superar vectores equivalentes.
+La firma Ed25519 de un `genesis.signature.envelope.v0.1` se calcula sobre esta preimagen
+enmarcada con el perfil de hash neutral:
+
+```text
+FRAME("genesis.signature.envelope.bytes.v0.1")
+FRAME(schema_version)
+FRAME(signature_profile)
+FRAME(signer_type)
+FRAME(signer_id)
+FRAME(key_epoch_id)
+FRAME(signed_domain)
+FRAME(signed_digest)
+FRAME(created_at)
+FRAME(public_key_ref)
+```
+
+`signature_value` es el único campo excluido. Por tanto, cambiar el firmante, la época de
+clave, el dominio, el digest, el instante o la referencia de clave invalida la firma. El
+perfil v0.1 exige una firma Ed25519 de 64 bytes codificada como 128 caracteres hexadecimales
+minúsculos y una referencia `sha256` a la clave pública.
+
+Una implementación que necesite otro algoritmo debe declarar otro perfil y otro schema de
+sobre versionados; no puede colocar un algoritmo distinto dentro del sobre v0.1 ni afirmar
+conformidad criptográfica plena hasta superar vectores equivalentes.
 
 ### 3.2 Cifrado de backups
 
@@ -159,7 +182,9 @@ genesis.recovery.finalization.signature.v0.1
 
 ## 8. Firmas fuera de preimagen
 
-Los campos `signature`, `acknowledgement` y equivalentes quedan fuera del digest del objeto. La firma cubre el digest ya calculado, junto con un dominio criptográfico versionado.
+Los campos `signature`, `acknowledgement` y equivalentes quedan fuera del digest del objeto.
+El sobre de firma cubre el digest ya calculado, su dominio criptográfico y todos los
+metadatos enumerados en la sección 3.1.
 
 ## 9. Estado
 

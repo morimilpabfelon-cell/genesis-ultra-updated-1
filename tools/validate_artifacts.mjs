@@ -24,6 +24,9 @@ const SENSE_ADAPTER_VECTORS = path.join(
   ROOT,
   "conformance/sense_adapter_vectors.json"
 );
+const MAX_PORTABLE_INTEGER = Number.MAX_SAFE_INTEGER;
+const CANONICAL_TIMESTAMP_PATTERN =
+  "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$";
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -33,6 +36,48 @@ function formatErrors(errors) {
   return (errors ?? [])
     .map((error) => `${error.instancePath || "/"} ${error.message}`)
     .join("; ");
+}
+
+function validatePortableSchemaScalars() {
+  let integerCount = 0;
+  let timestampCount = 0;
+
+  function visit(node, schemaName, location) {
+    if (Array.isArray(node)) {
+      node.forEach((child, index) => visit(child, schemaName, `${location}[${index}]`));
+      return;
+    }
+    if (!node || typeof node !== "object") return;
+
+    const types = Array.isArray(node.type) ? node.type : [node.type];
+    if (types.includes("integer")) {
+      integerCount += 1;
+      if (
+        !Number.isSafeInteger(node.maximum)
+        || node.maximum > MAX_PORTABLE_INTEGER
+      ) {
+        throw new Error(`portable_integer_maximum_missing:${schemaName}:${location}`);
+      }
+      if (node.minimum !== undefined && !Number.isSafeInteger(node.minimum)) {
+        throw new Error(`portable_integer_minimum_invalid:${schemaName}:${location}`);
+      }
+    }
+    if (node.format === "date-time") {
+      timestampCount += 1;
+      if (node.pattern !== CANONICAL_TIMESTAMP_PATTERN) {
+        throw new Error(`canonical_timestamp_pattern_missing:${schemaName}:${location}`);
+      }
+    }
+    for (const [key, child] of Object.entries(node)) {
+      visit(child, schemaName, `${location}.${key}`);
+    }
+  }
+
+  for (const entry of fs.readdirSync(SCHEMA_DIR, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith(".schema.json")) continue;
+    visit(readJson(path.join(SCHEMA_DIR, entry.name)), entry.name, "$");
+  }
+  return { integerCount, timestampCount };
 }
 
 function frame(value) {
@@ -45,6 +90,83 @@ function frame(value) {
 function hashFields(domain, fields) {
   const preimage = Buffer.concat([frame(domain), ...fields.map((field) => frame(field))]);
   return `sha256:${crypto.createHash("sha256").update(preimage).digest("hex")}`;
+}
+
+function privateEd25519KeyFromSeed(seed) {
+  const prefix = Buffer.from("302e020100300506032b657004220420", "hex");
+  return crypto.createPrivateKey({
+    key: Buffer.concat([prefix, seed]),
+    format: "der",
+    type: "pkcs8"
+  });
+}
+
+function rawEd25519PublicKey(publicKey) {
+  const exported = publicKey.export({ format: "der", type: "spki" });
+  const prefix = Buffer.from("302a300506032b6570032100", "hex");
+  if (!exported.subarray(0, prefix.length).equals(prefix)) {
+    throw new Error("journal_test_public_key_encoding_invalid");
+  }
+  return exported.subarray(prefix.length);
+}
+
+function signatureEnvelopeBytes(envelope) {
+  return Buffer.concat([
+    frame("genesis.signature.envelope.bytes.v0.1"),
+    ...[
+      envelope.schema_version,
+      envelope.signature_profile,
+      envelope.signer_type,
+      envelope.signer_id,
+      envelope.key_epoch_id,
+      envelope.signed_domain,
+      envelope.signed_digest,
+      envelope.created_at,
+      envelope.public_key_ref
+    ].map((value) => frame(value))
+  ]);
+}
+
+const FIXTURE_PUBLIC_KEYS = new Map(
+  [0xa1, 0xb2, 0xc3, 0xd4].map((seedByte) => {
+    const publicKey = crypto.createPublicKey(
+      privateEd25519KeyFromSeed(Buffer.alloc(32, seedByte))
+    );
+    return [sha256Bytes(rawEd25519PublicKey(publicKey)), publicKey];
+  })
+);
+const JOURNAL_TEST_KEY_REF = sha256Bytes(
+  rawEd25519PublicKey(
+    crypto.createPublicKey(privateEd25519KeyFromSeed(Buffer.alloc(32, 0xd4)))
+  )
+);
+const JOURNAL_TEST_PUBLIC_KEY = FIXTURE_PUBLIC_KEYS.get(JOURNAL_TEST_KEY_REF);
+
+function verifyFixtureSignature(envelope, label) {
+  const publicKey = FIXTURE_PUBLIC_KEYS.get(envelope.public_key_ref);
+  if (!publicKey) throw new Error(`fixture_signature_key_unknown:${label}`);
+  const signature = Buffer.from(envelope.signature_value, "hex");
+  if (
+    signature.length !== 64
+    || !crypto.verify(null, signatureEnvelopeBytes(envelope), publicKey, signature)
+  ) {
+    throw new Error(`fixture_signature_invalid:${label}`);
+  }
+}
+
+function verifyAllFixtureSignatures(value, label) {
+  if (Array.isArray(value)) {
+    value.forEach((child, index) => verifyAllFixtureSignatures(child, `${label}[${index}]`));
+    return;
+  }
+  if (!value || typeof value !== "object") return;
+  if (value.schema_version === "genesis.signature.envelope.v0.1") {
+    verifyFixtureSignature(value, label);
+    return;
+  }
+  for (const [key, child] of Object.entries(value)) {
+    verifyAllFixtureSignatures(child, `${label}.${key}`);
+  }
 }
 
 function optionalText(value) {
@@ -344,6 +466,15 @@ function requireValid(validators, schema, artifact, label) {
 
 function validateGeneratedArtifacts(validators, artifactPath) {
   const generated = readJson(artifactPath);
+  verifyAllFixtureSignatures(generated, "transfer");
+  const forgedAuthorization = structuredClone(generated.guardian_authorization.signature);
+  forgedAuthorization.signature_value = "00".repeat(64);
+  try {
+    verifyFixtureSignature(forgedAuthorization, "transfer.forged_authorization");
+    throw new Error("forged_transfer_signature_accepted");
+  } catch (error) {
+    if (!error.message.startsWith("fixture_signature_invalid:")) throw error;
+  }
   const requiredTopLevel = [
     "guardian_device_registrations",
     "guardian_authorization",
@@ -610,6 +741,7 @@ function validateGeneratedArtifacts(validators, artifactPath) {
 
 function validateBackupRecoveryArtifacts(validators, artifactPath) {
   const generated = readJson(artifactPath);
+  verifyAllFixtureSignatures(generated, "backup_recovery");
   const requiredTopLevel = [
     "backup_checkpoint",
     "backup_manifest",
@@ -981,12 +1113,30 @@ function validateTransactionJournalChain(entries) {
 
     const signature = entry.signature;
     if (
-      signature.signed_digest !== entry.journal_digest
+      signature.schema_version !== "genesis.signature.envelope.v0.1"
+      || signature.signature_profile !== "genesis.signature.ed25519.v0.1"
+      || signature.signed_digest !== entry.journal_digest
       || signature.signer_type !== "body"
       || signature.signer_id !== entry.coordinator_body_id
       || signature.signed_domain !== "genesis.transaction.journal.signature.v0.1"
+      || signature.created_at !== entry.updated_at
     ) {
       return "journal_signature_unbound";
+    }
+    if (signature.public_key_ref !== JOURNAL_TEST_KEY_REF) {
+      return "journal_signature_key_mismatch";
+    }
+    const signatureValue = Buffer.from(signature.signature_value, "hex");
+    if (
+      signatureValue.length !== 64
+      || !crypto.verify(
+        null,
+        signatureEnvelopeBytes(signature),
+        JOURNAL_TEST_PUBLIC_KEY,
+        signatureValue
+      )
+    ) {
+      return "journal_signature_invalid";
     }
 
     if (entry.status === "pending") {
@@ -1045,6 +1195,7 @@ function evaluateJournalRestart(entries, observed, previous, candidate, finaliza
 
 function validateTransactionCrashArtifacts(validators, artifactPath) {
   const generated = readJson(artifactPath);
+  verifyAllFixtureSignatures(generated, "transaction_crash");
   const entries = generated.journal_entries;
   if (!Array.isArray(entries)) throw new Error("crash_journal_entries_missing");
   for (const [index, entry] of entries.entries()) {
@@ -1054,6 +1205,11 @@ function validateTransactionCrashArtifacts(validators, artifactPath) {
 
   const chainError = validateTransactionJournalChain(entries);
   if (chainError) throw new Error(chainError);
+  const forgedEntries = structuredClone(entries);
+  forgedEntries.at(-1).signature.signature_value = "00".repeat(64);
+  if (validateTransactionJournalChain(forgedEntries) !== "journal_signature_invalid") {
+    throw new Error("journal_forged_signature_not_rejected");
+  }
   const first = entries[0];
   const latest = entries.at(-1);
   if (
@@ -1086,7 +1242,7 @@ function validateTransactionCrashArtifacts(validators, artifactPath) {
   }
   if (
     generated.restart_cases.length !== 8
-    || generated.negative_cases.length !== 12
+    || generated.negative_cases.length !== 13
     || generated.negative_cases.some((testCase) => !testCase.detected)
     || !generated.single_writer_before
     || !generated.single_writer_after
@@ -1098,10 +1254,28 @@ function validateTransactionCrashArtifacts(validators, artifactPath) {
 
 function validateNegativeSchemaCases(validators) {
   const cases = readJson(INVALID_CASES).cases;
+  const coveredSchemas = new Set();
   for (const testCase of cases) {
     const validate = validators.get(testCase.schema);
     if (!validate) throw new Error(`unknown_negative_case_schema:${testCase.schema}`);
     if (validate(testCase.artifact)) throw new Error(`invalid_case_accepted:${testCase.case_id}`);
+    coveredSchemas.add(testCase.schema);
+    if (
+      testCase.expected_error_keyword
+      && (
+        validate.errors?.length !== 1
+        || validate.errors[0].keyword !== testCase.expected_error_keyword
+      )
+    ) {
+      throw new Error(
+        `negative_case_wrong_error:${testCase.case_id}:${formatErrors(validate.errors)}`
+      );
+    }
+  }
+  for (const schemaName of validators.keys()) {
+    if (!coveredSchemas.has(schemaName)) {
+      throw new Error(`schema_without_negative_regression:${schemaName}`);
+    }
   }
   return cases.length;
 }
@@ -1204,6 +1378,7 @@ function validateSenseAdapterFixtures(validators) {
 }
 
 function main() {
+  const scalarCounts = validatePortableSchemaScalars();
   const validators = loadValidators();
   const invalidCount = validateNegativeSchemaCases(validators);
   const hostAdapterCount = validateHostAdapterFixtures(validators);
@@ -1224,6 +1399,10 @@ function main() {
   if (transactionCrashPath) validateTransactionCrashArtifacts(validators, path.resolve(transactionCrashPath));
 
   console.log(`JSON Schema 2020-12: OK (${validators.size} schemas compiled).`);
+  console.log(
+    `Portable scalars: OK (${scalarCounts.integerCount} integers, ` +
+    `${scalarCounts.timestampCount} canonical UTC timestamps).`
+  );
   console.log(`Schema negative regressions: OK (${invalidCount} rejected).`);
   console.log(`Host capability manifest fixtures: OK (${hostAdapterCount} declarations).`);
   console.log(

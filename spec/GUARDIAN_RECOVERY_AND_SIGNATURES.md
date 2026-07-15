@@ -20,7 +20,10 @@ Toda firma se representa mediante `genesis.signature.envelope.v0.1` y debe vincu
 - digest firmado;
 - instante de creación.
 
-La firma cubre un digest normativo ya calculado. Nunca cubre directamente un objeto interno de Kotlin, JavaScript, Python, Swift, Rust o cualquier otro lenguaje.
+La firma cubre un digest normativo ya calculado y todos los metadatos anteriores mediante
+la preimagen `genesis.signature.envelope.bytes.v0.1` definida en el perfil criptográfico.
+`public_key_ref` también queda firmado. Nunca se firma directamente un objeto interno de
+Kotlin, JavaScript, Python, Swift, Rust o cualquier otro lenguaje.
 
 ## 4. Recuperación del guardián
 
@@ -90,6 +93,8 @@ Está prohibido:
 - copiar una clave privada entre cuerpos como sustituto de una transferencia;
 - aceptar una firma sin dominio versionado;
 - aceptar una firma sobre un digest diferente al declarado;
+- aceptar una firma sin verificar criptográficamente su `signature_value`;
+- aceptar metadatos del sobre que no estén cubiertos por la firma;
 - omitir la época de clave;
 - tratar una copia de backup como cuerpo autorizado.
 

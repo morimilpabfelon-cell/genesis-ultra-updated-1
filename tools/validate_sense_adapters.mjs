@@ -130,15 +130,28 @@ function rawPublicKey(privateKey) {
   return exported.subarray(prefix.length);
 }
 
-function signatureBytes(domain, digest) {
-  return Buffer.concat([frame(domain), frame(digest)]);
+function signatureBytes(envelope) {
+  return Buffer.concat([
+    frame("genesis.signature.envelope.bytes.v0.1"),
+    ...[
+      envelope.schema_version,
+      envelope.signature_profile,
+      envelope.signer_type,
+      envelope.signer_id,
+      envelope.key_epoch_id,
+      envelope.signed_domain,
+      envelope.signed_digest,
+      envelope.created_at,
+      envelope.public_key_ref
+    ].map((value) => frame(value))
+  ]);
 }
 
 function signEnvelope(envelope, digest, domain, privateKey) {
   envelope.signed_domain = domain;
   envelope.signed_digest = digest;
   envelope.signature_value = crypto
-    .sign(null, signatureBytes(domain, digest), privateKey)
+    .sign(null, signatureBytes(envelope), privateKey)
     .toString("hex");
 }
 
@@ -167,7 +180,7 @@ function validateSignature(envelope, digest, bodyId, keys) {
   }
   if (
     signature.length !== 64
-    || !crypto.verify(null, signatureBytes(domain, digest), keys.publicKey, signature)
+    || !crypto.verify(null, signatureBytes(envelope), keys.publicKey, signature)
   ) {
     throw new ConformanceError("observation_signature_invalid");
   }
@@ -337,6 +350,9 @@ function validateObservation(observation, result, keys) {
   }
   if (observation.hash_profile !== "genesis.hash.fields.v0.1") {
     throw new ConformanceError("observation_hash_profile_invalid");
+  }
+  if (!Number.isSafeInteger(observation.observation_sequence) || observation.observation_sequence < 0) {
+    throw new ConformanceError("observation_sequence_invalid");
   }
   const links = [
     ["sense", "observation_sense_mismatch"],

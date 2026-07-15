@@ -82,9 +82,18 @@ def make_entry(
     return entry
 
 
-def rebind(entry: dict) -> None:
+def rebind(entry: dict, signing_key: SigningKey) -> None:
     entry["journal_digest"] = compute_journal_digest(entry)
-    entry["signature"]["signed_digest"] = entry["journal_digest"]
+    previous_signature = entry["signature"]
+    entry["signature"] = make_signature_envelope(
+        signing_key,
+        entry["journal_digest"],
+        signer_type=previous_signature["signer_type"],
+        signer_id=previous_signature["signer_id"],
+        key_epoch_id=previous_signature["key_epoch_id"],
+        signed_domain=previous_signature["signed_domain"],
+        created_at=entry["updated_at"],
+    )
 
 
 def main() -> int:
@@ -144,7 +153,7 @@ def main() -> int:
             signing_key=signing_key_c,
         )
 
-    assert validate_journal_chain(entries) is None
+    assert validate_journal_chain(entries, signing_key_c.verify_key) is None
 
     restart_inputs = [
         ("crash-after-discovered", 0, previous_digest, "retain_previous_authority"),
@@ -165,6 +174,7 @@ def main() -> int:
     for case_id, latest_sequence, observed, expected_action in restart_inputs:
         result = evaluate_restart(
             entries[: latest_sequence + 1],
+            verify_key=signing_key_c.verify_key,
             observed_state_digest=observed,
             expected_previous_state_digest=previous_digest,
             expected_candidate_state_digest=candidate_digest,
@@ -187,6 +197,7 @@ def main() -> int:
     def expect_error(case_id: str, expected_error: str, candidate_entries: list[dict], **overrides) -> None:
         result = evaluate_restart(
             candidate_entries,
+            verify_key=signing_key_c.verify_key,
             observed_state_digest=overrides.get("observed", candidate_digest),
             expected_previous_state_digest=overrides.get("previous", previous_digest),
             expected_candidate_state_digest=overrides.get("candidate", candidate_digest),
@@ -203,48 +214,52 @@ def main() -> int:
 
     candidate = deepcopy(entries)
     candidate[-1]["sequence"] = 99
-    rebind(candidate[-1])
+    rebind(candidate[-1], signing_key_c)
     expect_error("journal-sequence-gap", "journal_sequence_invalid", candidate)
 
     candidate = deepcopy(entries)
     candidate[-1]["previous_journal_digest"] = "sha256:" + "11" * 32
-    rebind(candidate[-1])
+    rebind(candidate[-1], signing_key_c)
     expect_error("journal-broken-link", "journal_chain_broken", candidate)
 
     candidate = deepcopy(entries)
     candidate[-1]["instance_id"] = "inst_01HSIM_OTHER000000000001"
-    rebind(candidate[-1])
+    rebind(candidate[-1], signing_key_c)
     expect_error("journal-cross-instance", "journal_identity_changed", candidate)
 
     candidate = deepcopy(entries)
     candidate[-1]["phase"] = "verified"
-    rebind(candidate[-1])
+    rebind(candidate[-1], signing_key_c)
     expect_error("journal-phase-regression", "journal_phase_regression", candidate)
 
     candidate = deepcopy(entries)
     candidate[-1]["commit_marker_digest"] = "sha256:" + "22" * 32
-    rebind(candidate[-1])
+    rebind(candidate[-1], signing_key_c)
     expect_error("journal-false-commit-marker", "journal_commit_marker_mismatch", candidate)
 
     candidate = deepcopy(entries)
     candidate[-1]["previous_state_digest"] = "sha256:" + "33" * 32
-    rebind(candidate[-1])
+    rebind(candidate[-1], signing_key_c)
     expect_error("journal-previous-state-changed", "journal_previous_state_changed", candidate)
 
     candidate = deepcopy(entries)
     candidate[-1]["candidate_state_digest"] = "sha256:" + "44" * 32
-    rebind(candidate[-1])
+    rebind(candidate[-1], signing_key_c)
     expect_error("journal-candidate-state-changed", "journal_candidate_state_changed", candidate)
 
     candidate = deepcopy(entries)
     candidate[-1]["finalization_digest"] = "sha256:" + "55" * 32
     candidate[-1]["commit_marker_digest"] = candidate[-1]["finalization_digest"]
-    rebind(candidate[-1])
+    rebind(candidate[-1], signing_key_c)
     expect_error("journal-finalization-changed", "journal_finalization_changed", candidate)
 
     candidate = deepcopy(entries)
     candidate[-1]["signature"]["signer_id"] = "body_01HSIM_OTHER000000000001"
     expect_error("journal-signature-detached", "journal_signature_unbound", candidate)
+
+    candidate = deepcopy(entries)
+    candidate[-1]["signature"]["signature_value"] = "00" * 64
+    expect_error("journal-signature-forged", "journal_signature_invalid", candidate)
 
     candidate = deepcopy(entries)
     appended = deepcopy(candidate[-1])
@@ -253,7 +268,7 @@ def main() -> int:
     appended["status"] = "pending"
     appended["commit_marker_digest"] = None
     appended["updated_at"] = "2026-07-12T03:06:10Z"
-    rebind(appended)
+    rebind(appended, signing_key_c)
     candidate.append(appended)
     expect_error("journal-entry-after-terminal", "journal_entry_after_terminal", candidate)
 

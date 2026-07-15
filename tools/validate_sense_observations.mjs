@@ -114,14 +114,27 @@ function rawPublicKey(privateKey) {
   return exported.subarray(prefix.length);
 }
 
-function signatureBytes(domain, digest) {
-  return Buffer.concat([frame(domain), frame(digest)]);
+function signatureBytes(envelope) {
+  return Buffer.concat([
+    frame("genesis.signature.envelope.bytes.v0.1"),
+    ...[
+      envelope.schema_version,
+      envelope.signature_profile,
+      envelope.signer_type,
+      envelope.signer_id,
+      envelope.key_epoch_id,
+      envelope.signed_domain,
+      envelope.signed_digest,
+      envelope.created_at,
+      envelope.public_key_ref
+    ].map((value) => frame(value))
+  ]);
 }
 
 function signEnvelope(envelope, digest, domain, privateKey) {
   envelope.signed_domain = domain;
   envelope.signed_digest = digest;
-  envelope.signature_value = crypto.sign(null, signatureBytes(domain, digest), privateKey).toString("hex");
+  envelope.signature_value = crypto.sign(null, signatureBytes(envelope), privateKey).toString("hex");
 }
 
 function validateSignature(envelope, { digest, domain, bodyId, publicKey, fingerprint, privateKey, prefix }) {
@@ -146,7 +159,7 @@ function validateSignature(envelope, { digest, domain, bodyId, publicKey, finger
   } catch {
     throw new ConformanceError(`${prefix}_signature_invalid`);
   }
-  const message = signatureBytes(domain, digest);
+  const message = signatureBytes(envelope);
   const expected = crypto.sign(null, message, privateKey);
   if (
     signature.length !== 64

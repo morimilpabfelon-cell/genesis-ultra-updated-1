@@ -342,6 +342,23 @@ function rawEd25519PublicKey(key) {
   return exported.subarray(spkiPrefix.length);
 }
 
+function signatureEnvelopeBytes(envelope) {
+  return Buffer.concat([
+    frame("genesis.signature.envelope.bytes.v0.1"),
+    ...[
+      envelope.schema_version,
+      envelope.signature_profile,
+      envelope.signer_type,
+      envelope.signer_id,
+      envelope.key_epoch_id,
+      envelope.signed_domain,
+      envelope.signed_digest,
+      envelope.created_at,
+      envelope.public_key_ref
+    ].map((value) => frame(value))
+  ]);
+}
+
 async function verifyCryptoVectors() {
   const vectors = readJson("conformance/crypto_vectors.json");
   if (vectors.profile !== "genesis.crypto.digests.v0.1") {
@@ -354,14 +371,21 @@ async function verifyCryptoVectors() {
   console.log(`OK Node authority and possession digests (${vectors.vectors.length})`);
 
   const ed = vectors.algorithms.ed25519;
-  const edMessage = Buffer.concat([frame(ed.algorithm), frame(ed.message)]);
+  const edMessage = signatureEnvelopeBytes(ed.envelope);
   const privateKey = ed25519PrivateKeyFromSeed(Buffer.from(ed.seed_hex, "hex"));
   const publicKey = crypto.createPublicKey(privateKey);
   const expectedPublicKey = Buffer.from(ed.public_key_hex, "hex");
   if (!rawEd25519PublicKey(privateKey).equals(expectedPublicKey)) {
     throw new VectorError("ed25519_public_key_mismatch");
   }
-  const expectedSignature = Buffer.from(ed.signature_hex, "hex");
+  const expectedKeyRef = `sha256:${crypto
+    .createHash("sha256")
+    .update(expectedPublicKey)
+    .digest("hex")}`;
+  if (ed.envelope.public_key_ref !== expectedKeyRef) {
+    throw new VectorError("ed25519_public_key_ref_mismatch");
+  }
+  const expectedSignature = Buffer.from(ed.envelope.signature_value, "hex");
   const generatedSignature = crypto.sign(null, edMessage, privateKey);
   if (!generatedSignature.equals(expectedSignature)) throw new VectorError("ed25519_signature_mismatch");
   if (!crypto.verify(null, edMessage, publicKey, expectedSignature)) {
@@ -379,6 +403,14 @@ async function verifyCryptoVectors() {
   changedMessage[changedMessage.length - 1] ^= 1;
   if (crypto.verify(null, changedMessage, publicKey, expectedSignature)) {
     throw new VectorError("ed25519_corrupted_message_accepted");
+  }
+  if (ed.corruption.mutate_created_at_must_fail !== true) {
+    throw new VectorError("ed25519_metadata_corruption_requirement_missing");
+  }
+  const changedEnvelope = structuredClone(ed.envelope);
+  changedEnvelope.created_at = "2026-07-15T02:30:01Z";
+  if (crypto.verify(null, signatureEnvelopeBytes(changedEnvelope), publicKey, expectedSignature)) {
+    throw new VectorError("ed25519_mutated_envelope_metadata_accepted");
   }
   console.log("OK Node Ed25519 generation, verification, and corruption rejection");
 
