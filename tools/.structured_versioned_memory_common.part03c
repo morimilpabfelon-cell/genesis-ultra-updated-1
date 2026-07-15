@@ -1,0 +1,29 @@
+
+def apply_mutation(base: dict, mutation: dict) -> dict:
+    value = deepcopy(base)
+    action = mutation["action"]
+    path = mutation.get("path", [])
+    if action == "set":
+        set_path(value, path, mutation["value"])
+    elif action == "delete":
+        delete_path(value, path)
+    elif action == "append":
+        cursor = value
+        for part in path:
+            cursor = cursor[part]
+        cursor.append(deepcopy(mutation["value"]))
+    elif action == "swap":
+        cursor = value
+        for part in path:
+            cursor = cursor[part]
+        first, second = mutation["indices"]
+        cursor[first], cursor[second] = cursor[second], cursor[first]
+    else:
+        raise ValueError(f"unknown mutation action: {action}")
+    return value
+
+def atomic_write(path: Path, data: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary.replace(path)
