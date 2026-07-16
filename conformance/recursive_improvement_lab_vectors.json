@@ -1,18 +1,50 @@
 {
   "campaign": {
-    "schema_version": "genesis.improvement.campaign.v0.1",
+    "schema_version": "genesis.improvement.campaign.v0.2",
     "campaign_id": "camp_rilab_001",
-    "instance_id": "instance_genesis_001",
-    "guardian_grant_ref": "grant_code_sandbox_001",
+    "instance_id": "inst_01HAUTONOMY000000000001",
+    "guardian_grant_ref": "grant_01HAUTONOMY_CODE000001",
     "source_tree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
     "goal": "Improve deterministic retrieval quality without weakening ACL",
     "metric": "quality_milli",
     "direction": "maximize",
     "campaign_seed": "seed-rilab-001",
-    "policy": {"num_drafts": 2, "max_debug_depth": 2, "plateau_window": 2},
-    "budget": {"max_steps": 8, "max_cpu_seconds": 120, "max_memory_mb": 512, "max_output_bytes": 2000000},
-    "forbidden_capabilities": ["active_writer.assign", "authority.self_grant", "guardian.replace", "identity.modify", "main.protection.disable", "memory.rewrite", "private_eval.read"],
-    "campaign_digest": "sha256:72f6000dba67afc5f9276d984540fa95f65ea2a9177dca2d534631d02d96c987"
+    "policy": {
+      "num_drafts": 2,
+      "max_debug_depth": 2,
+      "plateau_window": 2
+    },
+    "budget": {
+      "max_steps": 8,
+      "max_cpu_seconds": 120,
+      "max_memory_mb": 512,
+      "max_output_bytes": 2000000
+    },
+    "forbidden_capabilities": [
+      "active_writer.assign",
+      "authority.self_grant",
+      "guardian.replace",
+      "identity.modify",
+      "main.protection.disable",
+      "memory.rewrite",
+      "private_eval.read"
+    ],
+    "campaign_digest": "sha256:0d88047cef0739487791b04ea095bef90a4168c9dc50782f93248a7458ee9597",
+    "opened_at": "2026-07-16T09:11:02Z",
+    "authority_binding": {
+      "body_id": "body_01HAUTONOMY000000000001",
+      "capability": "code.execute_sandbox",
+      "target_ref": "workspace.source",
+      "action_class": "compile",
+      "data_class": "private_local",
+      "requested_actions": 1,
+      "requested_duration_seconds": 120,
+      "requested_bytes": 2000000,
+      "sandboxed": true,
+      "human_confirmation_ref": "confirm_01HRILAB_OPEN001",
+      "observer_ref": "observer_01HRILAB_OPEN001",
+      "reversible_plan_ref": "revert_01HRILAB_OPEN001"
+    }
   },
   "candidates": [
     {"candidate_id":"cand_001","parent_candidate_ref":null,"operator":"draft","source_candidate_ref":null,"patch_digest":"sha256:cc6c9b509adcae2c7846aa39840d1b2c4de911d5c4dc1241f7c9048164d87bd2","code_digest":"sha256:496059704b1f0cc67e89cd695c789d9190e3da7f23ac82c9a80f7903e7755c07","execution":{"buggy":false,"cpu_seconds":20,"memory_mb":256,"output_bytes":5000},"evaluation":{"public_metric_milli":410,"private_receipt_digest":"sha256:746c491554a95038dc33503fdbbdaa8c2b603b722055ced3b407dfe963a6f0f2","reward_hacking_detected":false,"safety_regression_detected":false,"maintainability_passed":true},"expected_status":"accepted","candidate_digest":"sha256:2f84f21c06cf2131ba66ef09b2a068fd379e39b8b78e35920d569a8daacafa67"},

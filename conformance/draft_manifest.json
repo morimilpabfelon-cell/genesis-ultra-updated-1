@@ -125,8 +125,8 @@
     },
     {
       "path": "conformance/recursive_improvement_lab_vectors.json",
-      "size_bytes": 6557,
-      "digest": "sha256:06de01852b65f278364e43162d8b9a6859390bda1434cc41bcee0ee56f30494d"
+      "size_bytes": 7247,
+      "digest": "sha256:4b632a16c13f9ff1de4704634c471ee183277887fa55f99579282fde2328b390"
     },
     {
       "path": "conformance/required_artifacts.json",
@@ -160,8 +160,8 @@
     },
     {
       "path": "conformance/tool_execution_registry.json",
-      "size_bytes": 3584,
-      "digest": "sha256:e15188e0b7a0bd60bad122f3d60690345b3dd8230d3cf3804e1a6c1444b0c84f"
+      "size_bytes": 3620,
+      "digest": "sha256:1a9d4074a836b650a507a67a00a3341af9ea9a770e4547a6a847333fc584ad03"
     },
     {
       "path": "docs/ANDROID_FIRST_RUNTIME_DECISION.md",
@@ -430,8 +430,8 @@
     },
     {
       "path": "schemas/recursive_improvement_lab.schema.json",
-      "size_bytes": 5587,
-      "digest": "sha256:e982be37155c428636809937e50f2ea8d9c192dbe06c04b354911a28877d3a5c"
+      "size_bytes": 7735,
+      "digest": "sha256:33c063301d0dae15cf011e35a5283a4c0822545917d87b3fb3899658af7d84eb"
     },
     {
       "path": "schemas/seed_manifest.schema.json",
@@ -915,13 +915,13 @@
     },
     {
       "path": "tools/validate_recursive_improvement_lab.mjs",
-      "size_bytes": 8980,
-      "digest": "sha256:0f81a09048b9b08112188d3af438801bde862a8a275fd0830743f472903f2470"
+      "size_bytes": 8876,
+      "digest": "sha256:4f16de5331de1f6408cc5a1e60e9bf4cbfc72c8dc6f203fd0fecc51a1f277543"
     },
     {
       "path": "tools/validate_recursive_improvement_lab.py",
-      "size_bytes": 9284,
-      "digest": "sha256:a1dd35a2b40c8122a41563e426c3a7e7fba071ac7e23dafe08fd57df9d83f537"
+      "size_bytes": 9248,
+      "digest": "sha256:af7dd360aa720ef5adadeb43a5166523d7a39d65d269acd4130267677234d861"
     },
     {
       "path": "tools/validate_sense_adapters.mjs",
@@ -974,5 +974,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:7a3a0159de14869b4240257c12a77436a3bebc9f5cbbbab0fdc7924856ac54df"
+  "root_digest": "sha256:0d66cf48d6417a23bd35eaee08ff534d97d17925d90749e01abf67aff0a92728"
 }
