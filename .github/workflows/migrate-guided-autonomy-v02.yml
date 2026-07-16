@@ -1,4 +1,4 @@
-name: Capture Guided Autonomy v0.2 Error
+name: Repair Guided Autonomy Ledger Regressions
 
 on:
   pull_request:
@@ -8,10 +8,10 @@ permissions:
   contents: write
 
 jobs:
-  capture:
+  repair:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout PR branch
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
@@ -23,17 +23,49 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install Python dependencies
-        run: python -m pip install -r requirements.txt
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "20"
 
-      - name: Capture validator output
+      - name: Install dependencies
         run: |
-          set +e
-          python tools/validate_guided_autonomy.py > guided-v02-error.log 2>&1
-          status=$?
-          echo "exit_status=$status" >> guided-v02-error.log
+          python -m pip install -r requirements.txt
+          npm ci --ignore-scripts
+
+      - name: Repair regression targets, verify, and commit
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("conformance/guided_autonomy_vectors.json")
+          document = json.loads(path.read_text(encoding="utf-8"))
+          indexes = {
+              "ledger-event-hash-mismatch": 3,
+              "ledger-grant-binding-mismatch": 4,
+              "ledger-consumption-unknown-use": 3,
+              "ledger-consumption-body-mismatch": 3,
+              "ledger-invalid-resume-transition": 4,
+              "ledger-time-regression": 5,
+              "ledger-consumption-before-request": 3,
+          }
+          found = set()
+          for case in document["must_reject"]:
+              if case["case_id"] in indexes:
+                  case["mutation"]["index"] = indexes[case["case_id"]]
+                  found.add(case["case_id"])
+          if found != set(indexes):
+              raise SystemExit(f"regression_cases_missing:{sorted(set(indexes) - found)}")
+          path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+          PY
+          python tools/generate_draft_manifest.py --write
+          python tools/validate_guided_autonomy.py
+          node tools/guided_autonomy.mjs validate
+          python tools/validate_recursive_improvement_lab.py
+          node tools/validate_recursive_improvement_lab.mjs
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add guided-v02-error.log
-          git commit -m "Capture guided autonomy v0.2 validator error"
+          git add conformance/guided_autonomy_vectors.json conformance/draft_manifest.json
+          git commit -m "Realign guided autonomy ledger regressions"
           git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
