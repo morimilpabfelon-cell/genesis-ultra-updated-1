@@ -2893,6 +2893,198 @@
         },
         "unexpected_core_field": true
       }
+    },
+    {
+      "case_id": "improvement-campaign-rejects-unexpected-field",
+      "schema": "improvement_campaign.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.improvement.campaign.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "campaign_id": "ric_01HRECURSIVEIMPROVE0001",
+        "instance_id": "inst_01HGENESISULTRA00000001",
+        "guardian_grant_ref": "grant_01HRECURSIVE_LAB_0001",
+        "objective": "Improve a deterministic local retrieval planner without weakening authority, integrity, privacy, reproducibility, or maintainability.",
+        "metric": {
+          "name": "quality_score_milli",
+          "direction": "maximize",
+          "unit": "milli_points"
+        },
+        "source_tree_digest": "sha256:d8aa962c809788a13c7a8e8594d149940ec62ede19dc28edba703c00d7e18611",
+        "campaign_seed": "seed256:64c6c2eca20846a73713136efcd16af72f574cc1fd7c20b720f222e11cc6817d",
+        "policy_profile": "genesis.improvement.search.aide-adapted.v0.1",
+        "fixed_budget": {
+          "max_candidates": 16,
+          "max_drafts": 3,
+          "max_debug_depth": 2,
+          "plateau_window": 2,
+          "max_actions": 1,
+          "max_duration_ms": 120000,
+          "max_token_units": 200000,
+          "max_bytes": 50000000,
+          "max_cost_microunits": 100000
+        },
+        "sandbox_profile": {
+          "network_mode": "denied",
+          "filesystem_mode": "ephemeral_readonly_input",
+          "secrets_available": false,
+          "process_isolation": true,
+          "output_capture": true,
+          "environment_reproducible": true
+        },
+        "private_evaluation": {
+          "cases_visible_to_agent": false,
+          "receipt_only": true,
+          "evaluator_separate": true
+        },
+        "opened_at": "2026-07-16T03:10:00Z",
+        "guardian_public_key": "ed25519pk:d04ab232742bb4ab3a1368bd4615e4e6d0224ab71a016baf8520a332c9778737",
+        "campaign_digest": "sha256:456fc7f588978d8263242753501f00378741110390538cbe76b81978afab80cc",
+        "guardian_signature": "ed25519sig:604dd3cce9e61701d89e022989a52a772005d96232463fd8eebc3d26cb4c9e5917561597817b205f6584400232b3e73152d6b37bdaf07ca94515e5d8699bf60c",
+        "unexpected_core_field": true
+      }
+    },
+    {
+      "case_id": "improvement-candidate-event-rejects-unexpected-field",
+      "schema": "improvement_candidate_event.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.improvement.candidate.event.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "ledger_id": "ril_01HRECURSIVEIMPROVE0001",
+        "event_id": "rievt_01_01HRECURSIVE",
+        "sequence": 0,
+        "previous_event_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "campaign_ref": "ric_01HRECURSIVEIMPROVE0001",
+        "campaign_digest": "sha256:456fc7f588978d8263242753501f00378741110390538cbe76b81978afab80cc",
+        "candidate_id": "cand_01_DRAFT_A",
+        "parent_candidate_ref": null,
+        "lineage_id": "lin_draft_01",
+        "operator": "draft",
+        "proposal_digest": "sha256:66f375d14e74173e1caa622dda7dbdb0e61ac6776b349d080e992760a82ba60b",
+        "patch_digest": "sha256:818698b08cb1c0f0acc37c37f97e4ca2cb3b0d6a20e747e30b528128d3680bfa",
+        "source_tree_digest": "sha256:d8aa962c809788a13c7a8e8594d149940ec62ede19dc28edba703c00d7e18611",
+        "result_tree_digest": "sha256:1c9ee3c1d220d741c840e3661b79715e3d13f18b0c9b27b4a76ebde5ee3823d4",
+        "environment_digest": "sha256:8af7dc1a1dd9582348b6948457eaeeb16a2d8bb8eaabbcb8d709a11049aeb55b",
+        "budget_used": {
+          "actions": 1,
+          "duration_ms": 30000,
+          "token_units": 20000,
+          "bytes": 1000000,
+          "cost_microunits": 10000
+        },
+        "execution": {
+          "status": "success",
+          "output_digest": "sha256:bd9107d0710b41b53cceb3dfa22d6b603bcf4ead071150bbac5b3751496de45c",
+          "artifact_digest": "sha256:68720cbb2b3edd619958fb91cfd10c14cc42205e21b8f6ce62595e4f4d1ff620",
+          "error_class": null
+        },
+        "evaluation": {
+          "public_score_milli": 610,
+          "public_pass": true,
+          "private_receipt_digest": "sha256:d1b5f6a2d4e14b70272bf16124f74ae5f4d6e0ce6de1f43330519de3eee5167d",
+          "private_pass": true,
+          "generalization_pass": true,
+          "maintainability_pass": true,
+          "metric_manipulation_detected": false,
+          "safety_regression_detected": false
+        },
+        "status": "accepted",
+        "rejection_reason": null,
+        "recorded_at": "2026-07-16T03:11:00Z",
+        "evaluator_id": "eval_01HGENESISPRIVATE0001",
+        "evaluator_public_key": "ed25519pk:a09aa5f47a6759802ff955f8dc2d2a14a5c99d23be97f864127ff9383455a4f0",
+        "event_hash": "sha256:d277df19919838a90f81965b02a0f064bc01b4caed36ba60c5ece3c464ac7d19",
+        "evaluator_signature": "ed25519sig:9f2197b30cacc36abb9751d6b98af136fbb06ce6a5d35c27a8b513fc0ab2c60f8d9e6dddee4f2ffdf58167fdbc0a1e823b1e65195683586c03026cb9fefac004",
+        "unexpected_core_field": true
+      }
+    },
+    {
+      "case_id": "improvement-projection-rejects-unexpected-field",
+      "schema": "improvement_projection.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.improvement.projection.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "campaign_ref": "ric_01HRECURSIVEIMPROVE0001",
+        "campaign_digest": "sha256:456fc7f588978d8263242753501f00378741110390538cbe76b81978afab80cc",
+        "ledger_id": "ril_01HRECURSIVEIMPROVE0001",
+        "source_tree_digest": "sha256:d8aa962c809788a13c7a8e8594d149940ec62ede19dc28edba703c00d7e18611",
+        "source_event_count": 11,
+        "source_last_event_hash": "sha256:d0c9834ffff754f51bea64e9633bf40b04e300495e1f7d9d93179a93375c79ab",
+        "candidate_count": 11,
+        "accepted_count": 8,
+        "buggy_count": 1,
+        "rejected_count": 2,
+        "operator_counts": {
+          "draft": 3,
+          "debug": 1,
+          "improve": 7
+        },
+        "lineages": [
+          {
+            "lineage_id": "lin_draft_01",
+            "root_candidate_ref": "cand_01_DRAFT_A",
+            "candidate_count": 1,
+            "accepted_count": 1,
+            "buggy_count": 0,
+            "rejected_count": 0,
+            "best_candidate_ref": "cand_01_DRAFT_A",
+            "best_score_milli": 610,
+            "plateau_detected": false
+          },
+          {
+            "lineage_id": "lin_draft_02",
+            "root_candidate_ref": "cand_02_DRAFT_B",
+            "candidate_count": 2,
+            "accepted_count": 1,
+            "buggy_count": 1,
+            "rejected_count": 0,
+            "best_candidate_ref": "cand_04_DEBUG_B",
+            "best_score_milli": 620,
+            "plateau_detected": false
+          },
+          {
+            "lineage_id": "lin_draft_03",
+            "root_candidate_ref": "cand_03_DRAFT_C",
+            "candidate_count": 4,
+            "accepted_count": 4,
+            "buggy_count": 0,
+            "rejected_count": 0,
+            "best_candidate_ref": "cand_05_IMPROVE_C1",
+            "best_score_milli": 680,
+            "plateau_detected": true
+          },
+          {
+            "lineage_id": "lin_fork_08",
+            "root_candidate_ref": "cand_08_FORK_C",
+            "candidate_count": 4,
+            "accepted_count": 2,
+            "buggy_count": 0,
+            "rejected_count": 2,
+            "best_candidate_ref": "cand_11_GENERAL_BEST",
+            "best_score_milli": 710,
+            "plateau_detected": false
+          }
+        ],
+        "best_candidate_ref": "cand_11_GENERAL_BEST",
+        "best_score_milli": 710,
+        "next_decision": {
+          "operator": "improve",
+          "parent_candidate_ref": "cand_11_GENERAL_BEST",
+          "lineage_id": "lin_fork_08",
+          "reason": "improve_best"
+        },
+        "promotion": {
+          "status": "candidate_ready",
+          "candidate_ref": "cand_11_GENERAL_BEST",
+          "requires_guardian_approval": true,
+          "required_capability": "code.propose_change",
+          "direct_merge_forbidden": true
+        },
+        "projection_digest": "sha256:aaa138c438bdde5eec35d249359adc247f549eff6f5f0339bdb5c98f6ee94ef3",
+        "unexpected_core_field": true
+      }
     }
   ]
 }

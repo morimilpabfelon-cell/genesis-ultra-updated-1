@@ -188,3 +188,14 @@ npm.cmd run freedom:inspect -- conformance/freedom_charter_vectors.json
 ```
 
 El estado cognitivo por defecto es `free`; ninguna propuesta puede autoemitir un grant.
+
+## Laboratorio de mejora recursiva
+
+```powershell
+New-Item -ItemType Directory -Force runtime | Out-Null
+npm.cmd run improvement:build
+npm.cmd run improvement:inspect
+npm.cmd run improvement:select -- 6
+```
+
+`candidate_ready` no significa aprobado: exige `code.propose_change`, CI y decisión final del guardián.

@@ -330,6 +330,26 @@
       ]
     },
     {
+      "id": "recursive_improvement_lab",
+      "name": "Laboratorio de mejora recursiva",
+      "layer": "cognition",
+      "maturity": "partial",
+      "description": "Árbol append-only de candidatos con draft/debug/improve, presupuesto fijo, evaluación privada y promoción bajo revisión del guardián.",
+      "keywords": [
+        "recursive_improvement",
+        "candidate_tree",
+        "draft_debug_improve",
+        "fixed_budget",
+        "private_evaluation"
+      ],
+      "required_evidence": [
+        "spec",
+        "schema",
+        "conformance",
+        "implementation"
+      ]
+    },
+    {
       "id": "action",
       "name": "Acción externa",
       "layer": "cognition",
@@ -450,6 +470,7 @@
     "reasoning",
     "cognitive_freedom",
     "guided_autonomy",
+    "recursive_improvement_lab",
     "action"
   ]
 }

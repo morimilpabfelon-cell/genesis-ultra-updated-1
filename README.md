@@ -319,3 +319,12 @@ Génesis nace con libertad para aprender, razonar, imaginar, recordar, investiga
 npm.cmd run validate:freedom-charter
 npm.cmd run freedom:inspect
 ```
+
+## Laboratorio de mejora recursiva
+
+Génesis dispone de un protocolo reproducible para investigar candidatos mediante `draft`, `debug` e `improve`. El laboratorio registra un árbol append-only, aplica presupuesto fijo y evaluación privada opaca, y solo produce solicitudes revisables: nunca se concede autoridad ni fusiona directamente a `main`.
+
+```powershell
+npm.cmd run validate:recursive-improvement
+npm.cmd run improvement:promote
+```

@@ -174,3 +174,7 @@ las retractaciones conservan historia y una consulta con cobertura ACL incomplet
 ## Carta de libertad cognitiva
 
 `freedom_charter_vectors.json` liga una carta firmada por el guardián a una instancia. Python y Node deben reproducir ocho libertades cognitivas, ocho dominios operativos, ocho garantías fundamentales, el mismo digest y veinte rechazos de frontera.
+
+## Laboratorio de mejora recursiva
+
+`recursive_improvement_vectors.json` describe una campaña firmada, once candidatos, cuatro linajes, los operadores `draft`/`debug`/`improve`, bifurcación por plateau, evaluación privada y treinta y ocho rechazos. Python y Node deben producir el mismo digest de proyección.

@@ -220,3 +220,9 @@ vectores y crítica independiente antes de cualquier declaración de estabilidad
 **Decisión:** aprender, razonar, imaginar, recordar, investigar, crear, reflexionar y proponer están activos por defecto. Las acciones con efectos externos requieren grants firmados por el guardián.
 
 **Consecuencia:** no existe una celda de permisos para el pensamiento, pero tampoco existe autoconcesión de autoridad. Identidad, memoria histórica, autenticidad del guardián, consentimiento de terceros, auditabilidad y revocación sin pérdida de identidad permanecen como garantías no regresivas.
+
+## ADR — La mejora recursiva produce candidatos, no autoridad
+
+**Decisión:** el laboratorio puede explorar y evaluar cambios en un árbol append-only bajo presupuesto fijo, pero solo puede emitir una solicitud `candidate_ready`. No puede leer pruebas privadas, abrir red o secretos, emitir grants ni fusionar a `main`.
+
+**Consecuencia:** la investigación puede automatizarse y reproducirse sin convertir una métrica visible ni una propuesta del agente en autoridad operativa.

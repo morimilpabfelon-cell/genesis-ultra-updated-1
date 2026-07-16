@@ -19,6 +19,8 @@
 
 - [x] Suite completa verde para la carta de libertad cognitiva en el [PR #26](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/26).
 
+- [x] Suite completa verde para el laboratorio de mejora recursiva en el [PR #27](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/27).
+
 ## Implementado y verificado por la suite
 
 - [x] Canonicalización Python/Node con rechazo de texto no-NFC y rutas peligrosas.
@@ -31,8 +33,8 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 44 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [x] Cincuenta y dos regresiones que demuestran el rechazo de artefactos inválidos por los
+- [x] Compilación de los 47 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Cincuenta y cinco regresiones que demuestran el rechazo de artefactos inválidos por los
       schemas reales, con cobertura obligatoria para cada schema.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -95,11 +97,13 @@
       operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
       y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
-- [x] Registro autocontrolado de ejecución de herramientas con treinta y tres candidatos: veintinueve entrypoints exigidos en el runner y cuatro bibliotecas importadas por consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
+- [x] Registro autocontrolado de ejecución de herramientas con treinta y cinco candidatos: treinta y un entrypoints exigidos en el runner y cuatro bibliotecas importadas por consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
 
 - [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados.
 
 - [x] Carta de libertad cognitiva reproducida por Python y Node: ocho libertades activas por nacimiento, ocho dominios operativos bajo grants, ocho garantías fundamentales, firma Ed25519 del guardián y veinte cruces de frontera rechazados.
+
+- [x] Laboratorio de mejora recursiva reproducido por Python y Node: once candidatos, cuatro linajes, tres `draft`, un `debug`, siete `improve`, bifurcación por plateau, ocho aceptados, uno defectuoso, dos rechazados, promoción bajo guardián y treinta y ocho cruces de frontera rechazados.
 
 ## Pendiente real
 
