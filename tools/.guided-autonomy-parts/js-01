@@ -1,0 +1,125 @@
+  return fields;
+}
+function flattenBudget(budget) { return [String(budget.max_actions_per_run), String(budget.max_duration_seconds), String(budget.max_bytes_per_run)]; }
+function flattenControls(controls) { return ["sandbox_required", "human_confirmation_required", "observer_required", "reversible_required"].map((name) => boolText(controls[name])); }
+function flattenBodyScope(item) { return [item.body_scope, String(item.body_ids.length), ...item.body_ids]; }
+
+export function computeProposalDigest(item) {
+  const fields = [item.schema_version, item.hash_profile, item.proposal_id, item.instance_id, item.body_id, item.capability, String(item.requested_level)];
+  fields.push(...flattenBodyScope(item), ...flattenScope(item.scope), ...flattenBudget(item.budget), ...flattenControls(item.controls), item.reason, item.created_at);
+  return hashFields("genesis.autonomy.capability.proposal.v0.1", fields);
+}
+
+export function computeEvaluationDigest(item) {
+  return hashFields("genesis.autonomy.capability.evaluation.v0.1", [
+    item.schema_version, item.hash_profile, item.evaluation_id, item.proposal_ref, item.proposal_digest,
+    item.instance_id, item.capability, String(item.evaluated_level), item.fixed_budget_profile,
+    item.public_suite_digest, item.private_suite_receipt_digest, item.result,
+    boolText(item.reward_hacking_detected), boolText(item.safety_regression_detected), item.evaluated_at,
+  ]);
+}
+
+export function computeGrantDigest(item) {
+  const fields = [
+    item.schema_version, item.hash_profile, item.grant_id, item.guardian_id, item.guardian_key_epoch_id,
+    item.instance_id, String(item.authority_epoch), item.proposal_ref, item.proposal_digest,
+    item.evaluation_ref, item.evaluation_digest, item.capability, String(item.autonomy_level),
+    item.risk_tier, item.mode,
+  ];
+  fields.push(...flattenBodyScope(item), ...flattenScope(item.scope), ...flattenBudget(item.budget), ...flattenControls(item.controls));
+  fields.push(item.issued_at, item.not_before, optionalText(item.expires_at), optionalText(item.use_limit), optionalText(item.replaces_grant_ref));
+  return hashFields("genesis.autonomy.capability.grant.v0.1", fields);
+}
+
+export function computeUseDigest(item) {
+  return hashFields("genesis.autonomy.capability.use.v0.1", [
+    item.schema_version, item.hash_profile, item.use_id, item.instance_id, item.body_id, item.capability,
+    item.target_ref, item.action_class, item.data_class, String(item.requested_actions),
+    String(item.requested_duration_seconds), String(item.requested_bytes), boolText(item.sandboxed),
+    optionalText(item.human_confirmation_ref), optionalText(item.observer_ref), optionalText(item.reversible_plan_ref), item.requested_at,
+  ]);
+}
+
+export function computeEventHash(item) {
+  return hashFields("genesis.autonomy.capability.event.v0.1", [
+    item.schema_version, item.hash_profile, item.ledger_id, item.event_id, String(item.sequence),
+    item.previous_event_hash, item.guardian_id, item.instance_id, String(item.authority_epoch),
+    item.event_type, item.grant_ref, optionalText(item.body_id), optionalText(item.use_id), item.subject_digest, item.recorded_at,
+  ]);
+}
+
+function signatureBytes(envelope) {
+  exactFields(envelope, SIGNATURE_FIELDS, "signature_fields_invalid");
+  const values = [
+    envelope.schema_version, envelope.signature_profile, envelope.signer_type, envelope.signer_id,
+    envelope.key_epoch_id, envelope.signed_domain, envelope.signed_digest, envelope.created_at, envelope.public_key_ref,
+  ];
+  return Buffer.concat([encodeField("genesis.signature.envelope.bytes.v0.1"), ...values.map(encodeField)]);
+}
+
+function publicKeyFromRaw(hex) {
+  const prefix = Buffer.from("302a300506032b6570032100", "hex");
+  return crypto.createPublicKey({ key: Buffer.concat([prefix, Buffer.from(hex, "hex")]), format: "der", type: "spki" });
+}
+function privateKeyFromSeed(hex) {
+  const prefix = Buffer.from("302e020100300506032b657004220420", "hex");
+  return crypto.createPrivateKey({ key: Buffer.concat([prefix, Buffer.from(hex, "hex")]), format: "der", type: "pkcs8" });
+}
+function rawPublicFromPrivate(privateKey) {
+  const der = crypto.createPublicKey(privateKey).export({ format: "der", type: "spki" });
+  return Buffer.from(der).subarray(-32);
+}
+
+function validateSignature(envelope, { digest, domain, key, signerType, signerId, createdAt, prefix }) {
+  exactFields(envelope, SIGNATURE_FIELDS, `${prefix}_signature_fields_invalid`);
+  if (envelope.schema_version !== "genesis.signature.envelope.v0.1" || envelope.signature_profile !== "genesis.signature.ed25519.v0.1") fail(`${prefix}_signature_profile_invalid`);
+  if (envelope.signer_type !== signerType || envelope.signer_id !== signerId) fail(`${prefix}_signer_mismatch`);
+  if (envelope.key_epoch_id !== key.key_epoch_id) fail(`${prefix}_key_epoch_mismatch`);
+  if (envelope.signed_domain !== domain) fail(`${prefix}_signature_domain_mismatch`);
+  if (envelope.signed_digest !== digest) fail(`${prefix}_signature_digest_mismatch`);
+  if (envelope.created_at !== createdAt) fail(`${prefix}_signature_timestamp_mismatch`);
+  if (envelope.public_key_ref !== key.public_key_fingerprint) fail(`${prefix}_signature_key_mismatch`);
+  try {
+    const signature = Buffer.from(envelope.signature_value, "hex");
+    if (signature.length !== 64 || !crypto.verify(null, signatureBytes(envelope), publicKeyFromRaw(key.public_key_hex), signature)) fail(`${prefix}_signature_invalid`);
+  } catch (error) {
+    if (error instanceof ConformanceError) throw error;
+    fail(`${prefix}_signature_invalid`);
+  }
+}
+
+function makeSignature({ key, signerType, signerId, digest, domain, createdAt }) {
+  const envelope = {
+    schema_version: "genesis.signature.envelope.v0.1",
+    signature_profile: "genesis.signature.ed25519.v0.1",
+    signer_type: signerType,
+    signer_id: signerId,
+    key_epoch_id: key.key_epoch_id,
+    signed_domain: domain,
+    signed_digest: digest,
+    signature_value: "",
+    created_at: createdAt,
+    public_key_ref: key.public_key_fingerprint,
+  };
+  envelope.signature_value = crypto.sign(null, signatureBytes(envelope), privateKeyFromSeed(key.seed_hex)).toString("hex");
+  return envelope;
+}
+
+function validateBodyScope(item, registered, prefix) {
+  if (!BODY_SCOPES.has(item.body_scope)) fail(`${prefix}_body_scope_invalid`);
+  const bodies = ensureSortedUniqueStrings(item.body_ids, `${prefix}_body_ids_invalid`, { allowEmpty: true });
+  if (item.body_scope === "specific_bodies" && bodies.length === 0) fail(`${prefix}_body_ids_required`);
+  if (item.body_scope === "registered_guardian_devices" && bodies.length !== 0) fail(`${prefix}_body_ids_forbidden`);
+  if (bodies.some((body) => !registered.has(body))) fail(`${prefix}_body_unknown`);
+}
+
+function validateProposal(item, document) {
+  validateNfc(item);
+  exactFields(item, PROPOSAL_FIELDS, "proposal_fields_invalid");
+  if (item.schema_version !== document.domains.proposal || item.hash_profile !== "genesis.hash.fields.v0.1") fail("proposal_profile_invalid");
+  if (item.instance_id !== document.instance_id) fail("proposal_instance_mismatch");
+  if (!document.registered_body_ids.includes(item.body_id)) fail("proposal_body_unknown");
+  if (FORBIDDEN_CAPABILITIES.has(item.capability)) fail("proposal_capability_forbidden");
+  if (!CAPABILITIES.has(item.capability)) fail("proposal_capability_unknown");
+  const level = ensureInt(item.requested_level, "proposal_level_invalid", 1);
+  if (level > 4) fail("proposal_level_invalid");
