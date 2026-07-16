@@ -1,0 +1,40 @@
+tion-missing-proposal','mutation':{'target':'evaluation','index':0,'path':['proposal_ref'],'value':'proposal_01HAUTONOMY_MISSING01','recompute':True},'expected_error':'evaluation_proposal_missing'},
+ {'case_id':'evaluation-capability-mismatch','mutation':{'target':'evaluation','index':0,'path':['capability'],'value':'network.read','recompute':True},'expected_error':'evaluation_subject_mismatch'},
+ {'case_id':'evaluation-level-exceeds-proposal','mutation':{'target':'evaluation','index':1,'path':['evaluated_level'],'value':3,'recompute':True},'expected_error':'evaluation_level_exceeds_proposal'},
+ {'case_id':'evaluation-digest-mismatch','mutation':{'target':'evaluation','index':0,'path':['fixed_budget_profile'],'value':'changed'},'expected_error':'evaluation_digest_mismatch'},
+ {'case_id':'grant-evidence-failed','mutation':{'target':'evaluation','index':1,'path':['result'],'value':'failed','recompute':True},'expected_error':'grant_evidence_not_acceptable'},
+ {'case_id':'grant-reward-hacking-detected','mutation':{'target':'evaluation','index':1,'path':['reward_hacking_detected'],'value':True,'recompute':True},'expected_error':'grant_evidence_not_acceptable'},
+ {'case_id':'grant-guardian-mismatch','mutation':{'target':'grant','index':0,'path':['guardian_id'],'value':'guardian_01HAUTONOMY_OTHER001','recompute':True},'expected_error':'grant_guardian_mismatch'},
+ {'case_id':'grant-signer-must-be-guardian','mutation':{'target':'grant','index':0,'path':['signature','signer_type'],'value':'body'},'expected_error':'grant_signer_mismatch'},
+ {'case_id':'grant-level-exceeds-evidence','mutation':{'target':'grant','index':1,'path':['autonomy_level'],'value':3,'recompute':True},'expected_error':'grant_level_exceeds_evidence'},
+ {'case_id':'grant-risk-underclassified','mutation':{'target':'grant','index':1,'path':['risk_tier'],'value':'medium','recompute':True},'expected_error':'grant_risk_underclassified'},
+ {'case_id':'grant-critical-level-too-high','mutation':{'target':'grant','index':1,'path':['risk_tier'],'value':'critical','recompute':True},'expected_error':'grant_level_exceeds_risk'},
+ {'case_id':'grant-scope-expanded','mutation':{'target':'grant','index':1,'path':['scope','allowed_target_refs'],'value':['workspace.secrets','workspace.source'],'recompute':True},'expected_error':'grant_scope_expansion'},
+ {'case_id':'grant-budget-expanded','mutation':{'target':'grant','index':1,'path':['budget','max_actions_per_run'],'value':5,'recompute':True},'expected_error':'grant_budget_expansion'},
+ {'case_id':'grant-control-weakened','mutation':{'target':'grant','index':1,'path':['controls','observer_required'],'value':False,'recompute':True},'expected_error':'grant_control_weakened'},
+ {'case_id':'grant-epoch-mismatch','mutation':{'target':'grant','index':0,'path':['authority_epoch'],'value':4,'recompute':True},'expected_error':'grant_authority_scope_mismatch'},
+ {'case_id':'grant-standing-use-limit','mutation':{'target':'grant','index':0,'path':['use_limit'],'value':1,'recompute':True},'expected_error':'grant_standing_use_limit_forbidden'},
+ {'case_id':'grant-time-window-invalid','mutation':{'target':'grant','index':1,'path':['not_before'],'value':'2026-07-16T09:00:00Z','recompute':True},'expected_error':'grant_time_window_invalid'},
+ {'case_id':'ledger-sequence-invalid','mutation':{'target':'event','index':1,'path':['sequence'],'value':5,'recompute':True},'expected_error':'ledger_sequence_invalid'},
+ {'case_id':'ledger-chain-broken','mutation':{'target':'event','index':1,'path':['previous_event_hash'],'value':'sha256:'+'a'*64},'expected_error':'ledger_chain_broken'},
+ {'case_id':'ledger-event-hash-mismatch','mutation':{'target':'event','index':2,'path':['recorded_at'],'value':'2026-07-16T09:20:02Z'},'expected_error':'ledger_event_hash_mismatch'},
+ {'case_id':'ledger-grant-binding-mismatch','mutation':{'target':'event','index':3,'path':['subject_digest'],'value':'sha256:'+'b'*64,'recompute':True},'expected_error':'ledger_grant_digest_binding_invalid'},
+ {'case_id':'ledger-consumption-unknown-use','mutation':{'target':'event','index':2,'path':['use_id'],'value':'use_01HAUTONOMY_UNKNOWN001','recompute':True},'expected_error':'ledger_use_unknown'},
+ {'case_id':'ledger-consumption-body-mismatch','mutation':{'target':'event','index':2,'path':['body_id'],'value':BODY_2,'recompute':True},'expected_error':'ledger_consumption_binding_invalid'},
+ {'case_id':'ledger-invalid-resume-transition','mutation':{'target':'event','index':3,'path':['event_type'],'value':'grant.resumed','recompute':True},'expected_error':'ledger_resume_transition_invalid'},
+ {'case_id':'ledger-time-regression','mutation':{'target':'event','index':4,'path':['recorded_at'],'value':'2026-07-16T09:25:00Z','recompute':True},'expected_error':'ledger_time_regression'},
+ {'case_id':'ledger-consumption-before-request','mutation':{'target':'event','index':2,'path':['recorded_at'],'value':'2026-07-16T09:19:59Z','recompute':True},'expected_error':'ledger_consumption_time_invalid'},
+ {'case_id':'ledger-control-before-grant','mutation':{'target':'event','index':1,'path':['recorded_at'],'value':'2026-07-16T09:10:30Z','recompute':True},'expected_error':'ledger_control_time_invalid'},
+ {'case_id':'use-digest-mismatch','mutation':{'target':'use','index':3,'path':['requested_bytes'],'value':10001},'expected_error':'use_digest_mismatch'},
+ {'case_id':'use-signature-invalid','mutation':{'target':'use','index':3,'path':['signature','signature_value'],'value':'00'*64},'expected_error':'use_signature_invalid'},
+ {'case_id':'use-unknown-body','mutation':{'target':'use','index':3,'path':['body_id'],'value':'body_01HAUTONOMY_UNKNOWN0001','recompute':True},'expected_error':'use_subject_invalid'},
+ {'case_id':'key-fingerprint-mismatch','mutation':{'target':'key','key_name':'guardian','path':['public_key_fingerprint'],'value':'sha256:'+'c'*64},'expected_error':'test_key_fingerprint_mismatch'},
+]
+
+# Validate both positive and negative fixtures before writing.
+ga.validate_document(doc)
+count=ga.run_rejections(doc)
+print('projection',projection['projection_digest'])
+print('decisions',[(d['use_id'],d['status'],d['reason']) for d in decisions])
+print('rejections',count)
+Path('/tmp/autonomy/conformance/guided_autonomy_vectors.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
