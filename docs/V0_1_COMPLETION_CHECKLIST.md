@@ -112,6 +112,8 @@
       apertura sin consumo, solicitud de uso con `grant_ref` firmado, reevaluación contra ledger
       y catorce rechazos adicionales de autoridad, firma de campaña/evaluador, NFC, entero portable, tiempo, presupuesto, suspensión, revocación, ledger público o mapping de consumo inválido; seis candidatos producen once usos firmados y agotan el grant dedicado.
 
+- [x] Extracción selectiva de PR #27 documentada y trazable: mecanismos aceptados, reestructurados y rechazados; sin merge directo, cherry-pick masivo ni eliminación de la rama fuente.
+
 - [x] Deliberación operacional y prueba adaptadas de Fable Method, reproducidas por Python y Node:
       ocho tareas, diez adaptadores de dominio, dieciocho modos de fallo, diez trampas,
       dos excepciones locales acotadas, una denegación constitucional y cuarenta cruces rechazados.
@@ -126,9 +128,6 @@
 - [ ] Conteos documentales derivados automáticamente de los artefactos comprobados.
 - [ ] Reglas neutrales de evolución, compatibilidad y migración entre versiones del protocolo.
 - [ ] Modelo de amenazas unificado para identidad, memoria, autoridad, herramientas y supply chain.
-- [ ] Extraer una API neutral `validateAuthorityBundle` sin semillas ni expectativas TEST ONLY.
-- [ ] Permitir múltiples grants por capacidad con resolución y proyección canónica por `grant_ref`.
-- [ ] Definir y verificar el mapeo candidato→solicitudes firmadas→eventos `grant.consumed`.
 - [ ] Conformidad del workspace reproducida en Ubuntu, Windows y macOS.
 - [ ] Revisión criptográfica y de seguridad externa.
 - [ ] Decisiones definitivas de licencia, nombre, contribuciones, marca, certificación y publicación.
