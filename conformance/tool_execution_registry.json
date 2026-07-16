@@ -75,14 +75,14 @@
       "used_by": [
         "tools/validate_recursive_improvement_lab.mjs"
       ],
-      "purpose": "Validación neutral de bundles públicos de autoridad, resolución exacta de grants y decisiones firmadas de uso consumida por el laboratorio."
+      "purpose": "Adaptador de conformidad sobre el fixture validado de autonomía guiada: resolución exacta de grants y decisiones firmadas de uso consumida por el laboratorio."
     },
     {
       "path": "tools/validate_guided_autonomy_authority.py",
       "used_by": [
         "tools/validate_recursive_improvement_lab.py"
       ],
-      "purpose": "Validación neutral de bundles públicos de autoridad, resolución exacta de grants y decisiones firmadas de uso consumida por el laboratorio."
+      "purpose": "Adaptador de conformidad sobre el fixture validado de autonomía guiada: resolución exacta de grants y decisiones firmadas de uso consumida por el laboratorio."
     },
     {
       "path": "tools/validate_transaction_journal.py",
