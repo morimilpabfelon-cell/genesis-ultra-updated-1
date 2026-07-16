@@ -25,8 +25,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 7323,
-      "digest": "sha256:934b18a00ed2748a6c7770f5b24b0667ec17090e68f4331ccc16d13e9cd714b2"
+      "size_bytes": 13149,
+      "digest": "sha256:17af1d3adadcbe6b9c18dbf8795d2b34f58392cc91bf1ecf58ae8901666cc97a"
     },
     {
       "path": "START_HERE.md",
@@ -964,5 +964,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:6f15b25c4d6b25510650504d4552872cdc9a592b535e944441736c8c37c93b95"
+  "root_digest": "sha256:2c101560e71fe194ade13e4ccf7d2ffd88e35b2bf43ccaae20f98ac38ca7ec5a"
 }
