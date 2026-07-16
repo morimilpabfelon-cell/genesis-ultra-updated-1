@@ -1,14 +1,17 @@
 name: Diagnose Improvement Lab
 on:
-  push:
-    branches: [agent/recursive-improvement-lab]
+  pull_request:
+    types: [synchronize, reopened]
 permissions:
   contents: read
 jobs:
   diagnose:
+    if: github.head_ref == 'agent/recursive-improvement-lab'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - uses: actions/setup-node@v4
