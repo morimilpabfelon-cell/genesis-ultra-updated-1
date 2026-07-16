@@ -36,9 +36,27 @@ jobs:
         run: npm ci
 
       - name: Assemble and finalize guided autonomy
+        id: finalize
+        continue-on-error: true
         run: |
           cat tools/.guided-autonomy-parts/prep-* > tools/prepare_guided_autonomy_phase.py
-          python tools/prepare_guided_autonomy_phase.py --pr-number "${{ github.event.pull_request.number }}"
+          python tools/prepare_guided_autonomy_phase.py --pr-number "${{ github.event.pull_request.number }}" > guided-autonomy-finalize.log 2>&1
+          status=$?
+          cat guided-autonomy-finalize.log
+          exit $status
+
+      - name: Upload finalizer diagnostic
+        if: always() && steps.finalize.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: guided-autonomy-finalizer-diagnostic
+          path: guided-autonomy-finalize.log
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Stop after finalizer failure
+        if: steps.finalize.outcome == 'failure'
+        run: exit 1
 
       - name: Commit final state
         run: |
