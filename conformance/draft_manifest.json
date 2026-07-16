@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 165,
+  "file_count": 168,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -110,8 +110,8 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 7326,
-      "digest": "sha256:1297eec9d33aa1bce62d986c8b1adc9760c453229aca88bd3ad7138c86cb448d"
+      "size_bytes": 7466,
+      "digest": "sha256:7b21b759427518a80589ea95ea9b61bf48ae9746a439256343550274a2bd82a0"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
@@ -139,9 +139,19 @@
       "digest": "sha256:f8edda7d7aaa095447f42529132ad2567bdacd83a119712b2e1b1af040c4410a"
     },
     {
+      "path": "conformance/tool_execution_registry.json",
+      "size_bytes": 2618,
+      "digest": "sha256:9033fe0da6fc5498d482acc29180a4340eee3c7d0440e7795402a76f171f1956"
+    },
+    {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
       "size_bytes": 15776,
       "digest": "sha256:34b5eeaeec8348535b76c150af6842cf5018da57c3ee404f041856db37f6de02"
+    },
+    {
+      "path": "docs/AUDIT_TOOL_EXECUTION_REPORT.md",
+      "size_bytes": 6750,
+      "digest": "sha256:8da77ea36a4b25899ddf588193d37325fe98483c8778ab287b762806031f5f39"
     },
     {
       "path": "docs/MEMVID_MEMORY_EXTRACTION_MAP.md",
@@ -160,8 +170,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 7623,
-      "digest": "sha256:5f7a6209a9a0894a4d495dde8a12108c72b3210868f3e9691d91f1648f06d914"
+      "size_bytes": 7877,
+      "digest": "sha256:31c9b1052be5481ba311b0516483c1a1baa272370493e20b3b0dddcef512a50f"
     },
     {
       "path": "observer/README.md",
@@ -645,8 +655,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 6472,
-      "digest": "sha256:65178bbc431608664eba0c57312123f8be12fcc8432c7670bd418411159df2f4"
+      "size_bytes": 6567,
+      "digest": "sha256:d043a97c98bc5ee1eb91fa6cc3ec0d3313ddb85b9124256502f872153a8d4f18"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -819,6 +829,11 @@
       "digest": "sha256:5040cd1941e808600eaa87a0946f2451cac81d2ed3e4c054696fc8e30f06e3b4"
     },
     {
+      "path": "tools/validate_tool_execution_registry.py",
+      "size_bytes": 8523,
+      "digest": "sha256:fcd7abec2b44042517c18b4ff54dfd09f98a68a9ddc70c14f77d09a504a049d2"
+    },
+    {
       "path": "tools/validate_transaction_journal.py",
       "size_bytes": 9465,
       "digest": "sha256:b5c3ef7bf33565a84dae9ffc300a66e0f389c9e2439563d5558bbf0b3b21dd46"
@@ -834,5 +849,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:d05fc66a8bb76ad4d5291639264ff9b83c912b3ea281afa262a24b0132cf9b48"
+  "root_digest": "sha256:88b472407d763602f9daf1752c171e11123750be71a5b57b6af3474571dc73ab"
 }

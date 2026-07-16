@@ -29,6 +29,7 @@ const python = resolvePython();
 const commands = [
   ["Validate workspace (Python)", python, ["tools/validate_workspace.py"]],
   ["Validate draft integrity manifest (Python)", python, ["tools/generate_draft_manifest.py", "--check"]],
+  ["Validate tool execution registry", python, ["tools/validate_tool_execution_registry.py"]],
   ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
   ["Validate live observer boundaries", process.execPath, ["--test", "observer/test/core.test.mjs"]],
   ["Validate immutable birth identity (Python)", python, ["tools/validate_instance_identity.py"]],
