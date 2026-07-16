@@ -36,7 +36,11 @@ jobs:
         run: npm ci
 
       - name: Finalize recursive improvement laboratory
-        run: python tools/.finalize_recursive_improvement.py --pr-number "${{ github.event.pull_request.number }}"
+        run: |
+          python tools/.finalize_recursive_improvement.py --pr-number "${{ github.event.pull_request.number }}"
+          rm -f runtime/improvement-projection.json
+          python tools/generate_draft_manifest.py --write
+          python tools/generate_draft_manifest.py --check
 
       - name: Commit final state
         run: |
