@@ -1,9 +1,0 @@
-
-> genesis-ultra-workspace@0.1.0-draft test
-> node tools/run_conformance.mjs
-
-
-=== Validate workspace (Python) ===
-FAIL unlisted_tracked_file:.github/workflows/authority-diagnostics.yml
-FAIL Validate workspace (Python): exit 1
-exit_status=1
