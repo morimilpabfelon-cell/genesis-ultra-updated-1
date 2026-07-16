@@ -1,0 +1,238 @@
+        if item["proposal_id"] in proposals: fail("proposal_id_duplicate")
+        proposals[item["proposal_id"]] = item
+    evaluations: dict[str, dict] = {}
+    for item in document["evaluations"]:
+        proposal = proposals.get(item.get("proposal_ref"))
+        if proposal is None: fail("evaluation_proposal_missing")
+        validate_evaluation(item, proposal, document)
+        if item["evaluation_id"] in evaluations: fail("evaluation_id_duplicate")
+        evaluations[item["evaluation_id"]] = item
+    grants: list[dict] = []
+    grant_ids: set[str] = set()
+    capabilities: set[str] = set()
+    for item in document["grants"]:
+        proposal = proposals.get(item.get("proposal_ref")); evaluation = evaluations.get(item.get("evaluation_ref"))
+        if proposal is None: fail("grant_proposal_missing")
+        if evaluation is None: fail("grant_evaluation_missing")
+        validate_grant(item, proposal, evaluation, document)
+        if item["grant_id"] in grant_ids: fail("grant_id_duplicate")
+        if item["capability"] in capabilities: fail("capability_multiple_grants")
+        grant_ids.add(item["grant_id"]); capabilities.add(item["capability"]); grants.append(item)
+    uses: list[dict] = []
+    use_ids: set[str] = set()
+    for item in document["use_requests"]:
+        validate_use(item, document)
+        if item["use_id"] in use_ids: fail("use_id_duplicate")
+        use_ids.add(item["use_id"]); uses.append(item)
+    validate_ledger(document["ledger_events"], grants, uses, document)
+    decisions = [evaluate_use(item, grants, document["ledger_events"], set(registered)) for item in uses]
+    projection = build_projection(document, grants, document["ledger_events"])
+    expected = document["expected"]
+    if set(expected) != {"projection_at", "projection_digest", "decision_digests", "allowed_count", "denied_count"}:
+        fail("expected_fields_invalid")
+    if projection["projection_digest"] != expected["projection_digest"]:
+        fail("expected_projection_digest_mismatch")
+    decision_map = {item["use_id"]: item["decision_digest"] for item in decisions}
+    if decision_map != expected["decision_digests"]:
+        fail("expected_decision_digest_mismatch")
+    if sum(item["status"] == "allowed" for item in decisions) != expected["allowed_count"] or sum(item["status"] == "denied" for item in decisions) != expected["denied_count"]:
+        fail("expected_decision_count_mismatch")
+    return projection, decisions
+
+def set_path(target: object, path: list[object], value: object) -> None:
+    cursor = target
+    for part in path[:-1]:
+        cursor = cursor[part]
+    cursor[path[-1]] = value
+
+def make_signature(*, key: dict, signer_type: str, signer_id: str, digest: str, domain: str, created_at: str) -> dict:
+    envelope = {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": signer_type,
+        "signer_id": signer_id,
+        "key_epoch_id": key["key_epoch_id"],
+        "signed_domain": domain,
+        "signed_digest": digest,
+        "signature_value": "",
+        "created_at": created_at,
+        "public_key_ref": key["public_key_fingerprint"],
+    }
+    envelope["signature_value"] = SigningKey(bytes.fromhex(key["seed_hex"])).sign(signature_bytes(envelope)).signature.hex()
+    return envelope
+
+def resign_proposal(document: dict, item: dict) -> None:
+    item["proposal_digest"] = compute_proposal_digest(item)
+    item["signature"] = make_signature(
+        key=document["keys"]["body"],
+        signer_type="body",
+        signer_id=item["body_id"],
+        digest=item["proposal_digest"],
+        domain=document["domains"]["proposal_signature"],
+        created_at=item["created_at"],
+    )
+
+
+def resign_evaluation(document: dict, item: dict) -> None:
+    item["evaluation_digest"] = compute_evaluation_digest(item)
+    item["signature"] = make_signature(
+        key=document["keys"]["guardian"],
+        signer_type="guardian",
+        signer_id=document["guardian_id"],
+        digest=item["evaluation_digest"],
+        domain=document["domains"]["evaluation_signature"],
+        created_at=item["evaluated_at"],
+    )
+
+
+def resign_grant(document: dict, item: dict) -> None:
+    item["grant_digest"] = compute_grant_digest(item)
+    item["signature"] = make_signature(
+        key=document["keys"]["guardian"],
+        signer_type="guardian",
+        signer_id=document["guardian_id"],
+        digest=item["grant_digest"],
+        domain=document["domains"]["grant_signature"],
+        created_at=item["issued_at"],
+    )
+
+
+def resign_use(document: dict, item: dict) -> None:
+    item["use_digest"] = compute_use_digest(item)
+    item["signature"] = make_signature(
+        key=document["keys"]["body"],
+        signer_type="body",
+        signer_id=item["body_id"],
+        digest=item["use_digest"],
+        domain=document["domains"]["use_signature"],
+        created_at=item["requested_at"],
+    )
+
+
+def rebuild_ledger(document: dict) -> None:
+    grants = {item["grant_id"]: item for item in document["grants"]}
+    uses = {item["use_id"]: item for item in document["use_requests"]}
+    previous = "GENESIS"
+    for event in document["ledger_events"]:
+        event["previous_event_hash"] = previous
+        if event["event_type"] == "grant.consumed":
+            use = uses.get(event["use_id"])
+            if use is not None:
+                event["subject_digest"] = use["use_digest"]
+            key_name = "body"
+            signer_type = "body"
+            signer_id = event["body_id"]
+        else:
+            grant = grants.get(event["grant_ref"])
+            if grant is not None:
+                event["subject_digest"] = grant["grant_digest"]
+            key_name = "guardian"
+            signer_type = "guardian"
+            signer_id = document["guardian_id"]
+        event["event_hash"] = compute_event_hash(event)
+        event["signature"] = make_signature(
+            key=document["keys"][key_name],
+            signer_type=signer_type,
+            signer_id=signer_id,
+            digest=event["event_hash"],
+            domain=document["domains"]["event_signature"],
+            created_at=event["recorded_at"],
+        )
+        previous = event["event_hash"]
+
+
+def refresh_proposal_dependents(document: dict, proposal: dict) -> None:
+    evaluations_by_id: dict[str, dict] = {}
+    for evaluation in document["evaluations"]:
+        if evaluation["proposal_ref"] == proposal["proposal_id"]:
+            evaluation["proposal_digest"] = proposal["proposal_digest"]
+            resign_evaluation(document, evaluation)
+        evaluations_by_id[evaluation["evaluation_id"]] = evaluation
+    for grant in document["grants"]:
+        if grant["proposal_ref"] == proposal["proposal_id"]:
+            grant["proposal_digest"] = proposal["proposal_digest"]
+            evaluation = evaluations_by_id.get(grant["evaluation_ref"])
+            if evaluation is not None:
+                grant["evaluation_digest"] = evaluation["evaluation_digest"]
+            resign_grant(document, grant)
+    rebuild_ledger(document)
+
+
+def refresh_evaluation_dependents(document: dict, evaluation: dict) -> None:
+    for grant in document["grants"]:
+        if grant["evaluation_ref"] == evaluation["evaluation_id"]:
+            grant["evaluation_digest"] = evaluation["evaluation_digest"]
+            resign_grant(document, grant)
+    rebuild_ledger(document)
+
+
+def recompute_mutated(document: dict, target: str, item: dict) -> None:
+    if target == "proposal":
+        resign_proposal(document, item)
+        refresh_proposal_dependents(document, item)
+    elif target == "evaluation":
+        resign_evaluation(document, item)
+        refresh_evaluation_dependents(document, item)
+    elif target == "grant":
+        resign_grant(document, item)
+        rebuild_ledger(document)
+    elif target == "use":
+        resign_use(document, item)
+        rebuild_ledger(document)
+    elif target == "event":
+        item["event_hash"] = compute_event_hash(item)
+        key_name = "body" if item["event_type"] == "grant.consumed" else "guardian"
+        signer_type = "body" if key_name == "body" else "guardian"
+        signer_id = item["body_id"] if key_name == "body" else document["guardian_id"]
+        item["signature"] = make_signature(
+            key=document["keys"][key_name],
+            signer_type=signer_type,
+            signer_id=signer_id,
+            digest=item["event_hash"],
+            domain=document["domains"]["event_signature"],
+            created_at=item["recorded_at"],
+        )
+
+def apply_mutation(document: dict, mutation: dict) -> None:
+    target = mutation["target"]
+    if target == "document": item = document
+    else:
+        collection = {"proposal": "proposals", "evaluation": "evaluations", "grant": "grants", "event": "ledger_events", "use": "use_requests", "key": "keys"}[target]
+        item = document[collection][mutation.get("index", 0)] if collection != "keys" else document["keys"][mutation.get("key_name", "guardian")]
+    set_path(item, mutation["path"], mutation["value"])
+    if mutation.get("recompute"):
+        recompute_mutated(document, target, item)
+
+def run_rejections(document: dict) -> int:
+    rejected = 0
+    for test in document["must_reject"]:
+        candidate = deepcopy(document)
+        apply_mutation(candidate, test["mutation"])
+        try:
+            validate_document(candidate)
+        except ConformanceError as error:
+            if str(error) != test["expected_error"]:
+                raise RuntimeError(f"{test['case_id']}:expected:{test['expected_error']}:got:{error}") from error
+            rejected += 1
+            continue
+        raise RuntimeError(f"{test['case_id']}:mutation_accepted")
+    return rejected
+
+def main(argv: list[str]) -> int:
+    source = Path(argv[0]).resolve() if argv else DEFAULT_VECTOR
+    document = json.loads(source.read_text(encoding="utf-8"))
+    projection, decisions = validate_document(document)
+    rejected = run_rejections(document)
+    print(f"OK guided autonomy grants ({projection['grant_count']} doors, {projection['source_event_count']} ledger events)")
+    print(f"OK autonomy projection digest {projection['projection_digest']}")
+    print(f"OK use decisions ({sum(item['status']=='allowed' for item in decisions)} allowed, {sum(item['status']=='denied' for item in decisions)} denied)")
+    print(f"OK guided autonomy boundary rejection cases ({rejected})")
+    print("NOTE proposals and evaluations never self-authorize; only signed guardian grants open capabilities.")
+    return 0
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main(sys.argv[1:]))
+    except Exception as error:
+        print(error, file=sys.stderr)
+        raise SystemExit(1)
