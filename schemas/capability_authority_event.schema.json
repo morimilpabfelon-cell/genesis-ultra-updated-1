@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:capability-authority-event:v0.1",
+  "title": "Genesis Guided Autonomy Capability Authority Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "ledger_id",
+    "event_id",
+    "sequence",
+    "previous_event_hash",
+    "guardian_id",
+    "instance_id",
+    "authority_epoch",
+    "event_type",
+    "grant_ref",
+    "body_id",
+    "use_id",
+    "subject_digest",
+    "recorded_at",
+    "event_hash",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.autonomy.capability.event.v0.1" },
+    "hash_profile": { "const": "genesis.hash.fields.v0.1" },
+    "ledger_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "event_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "sequence": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "previous_event_hash": {
+      "anyOf": [
+        { "const": "GENESIS" },
+        { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+      ]
+    },
+    "guardian_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "authority_epoch": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "event_type": {
+      "type": "string",
+      "enum": ["grant.issued", "grant.suspended", "grant.resumed", "grant.revoked", "grant.consumed"]
+    },
+    "grant_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "body_id": { "type": ["string", "null"], "minLength": 16, "maxLength": 128 },
+    "use_id": { "type": ["string", "null"], "minLength": 16, "maxLength": 128 },
+    "subject_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+    },
+    "event_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event_type": { "enum": ["grant.issued", "grant.suspended", "grant.resumed", "grant.revoked"] }
+        },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "body_id": { "type": "null" },
+          "use_id": { "type": "null" },
+          "signature": {
+            "type": "object",
+            "properties": { "signer_type": { "const": "guardian" } }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "grant.consumed" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "body_id": { "type": "string" },
+          "use_id": { "type": "string" },
+          "signature": {
+            "type": "object",
+            "properties": { "signer_type": { "const": "body" } }
+          }
+        }
+      }
+    }
+  ]
+}
