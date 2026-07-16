@@ -10,8 +10,8 @@
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
-      "size_bytes": 810,
-      "digest": "sha256:2b6665452aee2c717f9f36fb839072f988ba60b2913b3f7949ae27bc3840c39a"
+      "size_bytes": 948,
+      "digest": "sha256:d3e43662cbf25f7447458ac5e9cebb35898f6d55db468e43fd9f7bf7d594fd92"
     },
     {
       "path": ".gitignore",
@@ -25,8 +25,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 13149,
-      "digest": "sha256:24b8be7359738680feba5484174d5c26acd4514676af4aaec2bc954cc92ae2e9"
+      "size_bytes": 7323,
+      "digest": "sha256:934b18a00ed2748a6c7770f5b24b0667ec17090e68f4331ccc16d13e9cd714b2"
     },
     {
       "path": "START_HERE.md",
@@ -200,8 +200,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 10169,
-      "digest": "sha256:b3b1baff390bbb0263142d5097b3f60b0c45fdb11c23d44e5f56275742dd7a86"
+      "size_bytes": 10711,
+      "digest": "sha256:cdb30528c911422d3fedd67243fb446a049f6960aac8fb726fc99859b2ed19ae"
     },
     {
       "path": "observer/README.md",
@@ -964,5 +964,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:2065799466c7b25226be201285302839cbc0e159a09b5ad0056c28823f5892bf"
+  "root_digest": "sha256:6f15b25c4d6b25510650504d4552872cdc9a592b535e944441736c8c37c93b95"
 }
