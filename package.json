@@ -46,7 +46,12 @@
     "memory:structured:build": "node tools/structured_versioned_memory.mjs build",
     "memory:structured:sync": "node tools/structured_versioned_memory.mjs sync",
     "memory:structured:query": "node tools/structured_versioned_memory.mjs query",
-    "memory:structured:inspect": "node tools/structured_versioned_memory.mjs inspect"
+    "memory:structured:inspect": "node tools/structured_versioned_memory.mjs inspect",
+    "validate:guided-autonomy": "node tools/guided_autonomy.mjs validate",
+    "autonomy:build": "node tools/guided_autonomy.mjs build",
+    "autonomy:sync": "node tools/guided_autonomy.mjs sync",
+    "autonomy:decide": "node tools/guided_autonomy.mjs decide",
+    "autonomy:inspect": "node tools/guided_autonomy.mjs inspect"
   },
   "devDependencies": {
     "ajv": "8.17.1",

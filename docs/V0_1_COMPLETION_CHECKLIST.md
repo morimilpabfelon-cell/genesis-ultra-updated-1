@@ -15,6 +15,8 @@
 - [x] Suite completa verde para memoria estructurada y versionada en el [PR #23](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/23).
 - [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
+- [x] Suite completa verde para autonomía guiada y grants progresivos en el [PR #25](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/25).
+
 ## Implementado y verificado por la suite
 
 - [x] Canonicalización Python/Node con rechazo de texto no-NFC y rutas peligrosas.
@@ -92,6 +94,8 @@
       y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
 - [x] Registro autocontrolado de ejecución de herramientas con treinta candidatos: veintiséis entrypoints exigidos en el runner y cuatro bibliotecas importadas por consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
+
+- [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados.
 
 ## Pendiente real
 

@@ -301,3 +301,12 @@ La capa organiza hechos, preferencias, eventos, perfiles, relaciones y objetivos
 consultas requieren cobertura ACL completa de la cadena del slot; una versión oculta produce
 `redacted_chain`. El contrato está en
 [`spec/STRUCTURED_VERSIONED_MEMORY.md`](spec/STRUCTURED_VERSIONED_MEMORY.md).
+
+## Autonomía guiada
+
+Génesis puede proponer y evaluar nuevas capacidades, pero únicamente un grant Ed25519 firmado por el guardián abre una puerta. Los grants fijan nivel, riesgo, alcance, presupuesto, controles, vigencia y revocación. Propuestas y evaluaciones nunca se autorizan a sí mismas.
+
+```powershell
+npm.cmd run validate:guided-autonomy
+npm.cmd run autonomy:decide -- conformance/guided_autonomy_vectors.json use_01HAUTONOMY_CODE_REVOKED
+```
