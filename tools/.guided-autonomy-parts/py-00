@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+"""Valida autonomía guiada y grants progresivos de capacidades."""
+from __future__ import annotations
+
+from copy import deepcopy
+from pathlib import Path
+from datetime import datetime
+import hashlib
+import json
+import sys
+import unicodedata
+
+try:
+    from nacl.exceptions import BadSignatureError
+    from nacl.signing import SigningKey, VerifyKey
+except ImportError:
+    print("FAIL PyNaCl requerido para validar autonomía guiada", file=sys.stderr)
+    raise SystemExit(1)
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_VECTOR = ROOT / "conformance" / "guided_autonomy_vectors.json"
+MAX_INT = 9007199254740991
+
+CAPABILITIES = {
+    "memory.read": "low",
+    "memory.propose_append": "medium",
+    "network.read": "medium",
+    "code.propose_change": "medium",
+    "code.execute_sandbox": "high",
+    "external.action": "high",
+    "body.device.control": "critical",
+    "transfer.prepare": "high",
+}
+FORBIDDEN_CAPABILITIES = {
+    "memory.rewrite", "authority.self_grant", "guardian.replace", "identity.modify",
+    "main.protection.disable", "private_eval.read", "active_writer.assign",
+}
+RISK_LEVEL = {"low": 1, "medium": 2, "high": 3, "critical": 4}
+MAX_LEVEL = {"low": 4, "medium": 3, "high": 2, "critical": 1}
+MODES = {"one_time", "bounded", "standing"}
+BODY_SCOPES = {"specific_bodies", "registered_guardian_devices"}
+DATA_CLASSES = {"private_local", "guardian_shared", "export_approved", "public"}
+EVENT_TYPES = {"grant.issued", "grant.suspended", "grant.resumed", "grant.revoked", "grant.consumed"}
+TS_RE = __import__("re").compile(r"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$")
+SHA_RE = __import__("re").compile(r"^sha256:[0-9a-f]{64}$")
+
+SCOPE_FIELDS = {"allowed_target_refs", "allowed_action_classes", "allowed_data_classes"}
+BUDGET_FIELDS = {"max_actions_per_run", "max_duration_seconds", "max_bytes_per_run"}
+CONTROL_FIELDS = {"sandbox_required", "human_confirmation_required", "observer_required", "reversible_required"}
+SIGNATURE_FIELDS = {"schema_version", "signature_profile", "signer_type", "signer_id", "key_epoch_id", "signed_domain", "signed_digest", "signature_value", "created_at", "public_key_ref"}
+PROPOSAL_FIELDS = {"schema_version", "hash_profile", "proposal_id", "instance_id", "body_id", "capability", "requested_level", "body_scope", "body_ids", "scope", "budget", "controls", "reason", "created_at", "proposal_digest", "signature"}
+EVALUATION_FIELDS = {"schema_version", "hash_profile", "evaluation_id", "proposal_ref", "proposal_digest", "instance_id", "capability", "evaluated_level", "fixed_budget_profile", "public_suite_digest", "private_suite_receipt_digest", "result", "reward_hacking_detected", "safety_regression_detected", "evaluated_at", "evaluation_digest", "signature"}
+GRANT_FIELDS = {"schema_version", "hash_profile", "grant_id", "guardian_id", "guardian_key_epoch_id", "instance_id", "authority_epoch", "proposal_ref", "proposal_digest", "evaluation_ref", "evaluation_digest", "capability", "autonomy_level", "risk_tier", "mode", "body_scope", "body_ids", "scope", "budget", "controls", "issued_at", "not_before", "expires_at", "use_limit", "replaces_grant_ref", "grant_digest", "signature"}
+EVENT_FIELDS = {"schema_version", "hash_profile", "ledger_id", "event_id", "sequence", "previous_event_hash", "guardian_id", "instance_id", "authority_epoch", "event_type", "grant_ref", "body_id", "use_id", "subject_digest", "recorded_at", "event_hash", "signature"}
+USE_FIELDS = {"schema_version", "hash_profile", "use_id", "instance_id", "body_id", "capability", "target_ref", "action_class", "data_class", "requested_actions", "requested_duration_seconds", "requested_bytes", "sandboxed", "human_confirmation_ref", "observer_ref", "reversible_plan_ref", "requested_at", "use_digest", "signature"}
+
+class ConformanceError(ValueError):
+    pass
+
+def fail(code: str) -> None:
+    raise ConformanceError(code)
+
+def encode_field(value: str) -> bytes:
+    if not isinstance(value, str):
+        fail("field_must_be_string")
+    if unicodedata.normalize("NFC", value) != value:
+        fail("text_not_nfc")
+    raw = value.encode("utf-8")
+    return str(len(raw)).encode("ascii") + b":" + raw + b"\n"
+
+def hash_fields(domain: str, fields: list[str]) -> str:
+    payload = encode_field(domain) + b"".join(encode_field(value) for value in fields)
+    return "sha256:" + hashlib.sha256(payload).hexdigest()
+
+def bool_text(value: bool) -> str:
+    return "true" if value else "false"
+
+def optional_text(value: object) -> str:
+    return "" if value is None else str(value)
+
+def utf8_key(value: str) -> bytes:
+    return value.encode("utf-8")
+
+def parse_utc(value: str) -> datetime:
+    if not isinstance(value, str) or not TS_RE.fullmatch(value):
+        fail("timestamp_invalid")
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+def validate_nfc(value: object) -> None:
+    if isinstance(value, str):
+        if unicodedata.normalize("NFC", value) != value:
+            fail("text_not_nfc")
+    elif isinstance(value, list):
+        for item in value:
+            validate_nfc(item)
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            validate_nfc(key)
+            validate_nfc(item)
+
+def exact_fields(value: dict, fields: set[str], code: str) -> None:
+    if not isinstance(value, dict) or set(value) != fields:
+        fail(code)
+
+def ensure_int(value: object, code: str, minimum: int = 0) -> int:
+    if type(value) is not int or value < minimum or value > MAX_INT:
+        fail(code)
+    return value
+
+def ensure_sorted_unique_strings(values: object, code: str, *, allow_empty: bool = False) -> list[str]:
+    if not isinstance(values, list) or (not allow_empty and not values):
+        fail(code)
+    if any(not isinstance(item, str) or not item for item in values):
+        fail(code)
+    if len(values) != len(set(values)) or values != sorted(values, key=utf8_key):
+        fail(code)
+    return values
+
+def validate_scope(scope: dict, prefix: str) -> None:
+    exact_fields(scope, SCOPE_FIELDS, f"{prefix}_scope_fields_invalid")
+    ensure_sorted_unique_strings(scope["allowed_target_refs"], f"{prefix}_targets_invalid")
+    ensure_sorted_unique_strings(scope["allowed_action_classes"], f"{prefix}_actions_invalid")
+    data = ensure_sorted_unique_strings(scope["allowed_data_classes"], f"{prefix}_data_classes_invalid")
+    if any(item not in DATA_CLASSES for item in data):
+        fail(f"{prefix}_data_class_invalid")
+
+def validate_budget(budget: dict, prefix: str) -> None:
+    exact_fields(budget, BUDGET_FIELDS, f"{prefix}_budget_fields_invalid")
+    ensure_int(budget["max_actions_per_run"], f"{prefix}_action_budget_invalid", 1)
+    ensure_int(budget["max_duration_seconds"], f"{prefix}_duration_budget_invalid", 1)
+    ensure_int(budget["max_bytes_per_run"], f"{prefix}_byte_budget_invalid", 0)
+
+def validate_controls(controls: dict, prefix: str) -> None:
+    exact_fields(controls, CONTROL_FIELDS, f"{prefix}_control_fields_invalid")
+    if any(type(controls[field]) is not bool for field in CONTROL_FIELDS):
+        fail(f"{prefix}_controls_invalid")
+
+def flatten_scope(scope: dict) -> list[str]:
+    fields: list[str] = []
+    for name in ["allowed_target_refs", "allowed_action_classes", "allowed_data_classes"]:
+        values = scope[name]
+        fields.extend([str(len(values)), *values])
+    return fields
+
+def flatten_budget(budget: dict) -> list[str]:
