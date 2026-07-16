@@ -76,7 +76,7 @@ def prepare_sources() -> None:
     generator = GENERATOR.read_text(encoding="utf-8")
     generator = generator.replace(
         "Path('/tmp/autonomy/conformance/guided_autonomy_vectors.json')",
-        "Path(__file__).resolve().parent / 'conformance' / 'guided_autonomy_vectors.json'",
+        "(Path(__file__).resolve().parent /'conformance'/ 'guided_autonomy_vectors.json')",
     )
     GENERATOR.write_text(generator, encoding="utf-8")
 
