@@ -1,0 +1,76 @@
+#!/usr/bin/env node
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+import process from "node:process";
+import { fileURLToPath } from "node:url";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const DEFAULT_VECTOR = path.join(ROOT, "conformance", "recursive_improvement_vectors.json");
+const ZERO_HASH = `sha256:${"0".repeat(64)}`;
+const SAFE_INT = Number.MAX_SAFE_INTEGER;
+const OPERATORS = new Set(["draft", "debug", "improve"]);
+const STATUSES = new Set(["accepted", "buggy", "rejected"]);
+const REASONS = new Set([null, "execution_error", "timeout", "budget_exceeded", "public_failed", "private_failed", "generalization_failed", "maintainability_failed", "metric_manipulation", "safety_regression"]);
+
+class ConformanceError extends Error {}
+function fail(code) { throw new ConformanceError(code); }
+function requireValue(condition, code) { if (!condition) fail(code); }
+function utf8Compare(a, b) { return Buffer.compare(Buffer.from(a, "utf8"), Buffer.from(b, "utf8")); }
+function validateNfc(value) {
+  if (typeof value === "string") requireValue(value.normalize("NFC") === value, "text_not_nfc");
+  else if (Array.isArray(value)) value.forEach(validateNfc);
+  else if (value && typeof value === "object") {
+    for (const [key, item] of Object.entries(value)) { validateNfc(key); validateNfc(item); }
+  }
+}
+function canonicalize(value) {
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (value && typeof value === "object") {
+    const out = {};
+    for (const key of Object.keys(value).sort(utf8Compare)) out[key] = canonicalize(value[key]);
+    return out;
+  }
+  return value;
+}
+function canonicalJson(value) { validateNfc(value); return JSON.stringify(canonicalize(value)); }
+function digestObject(value) { return `sha256:${crypto.createHash("sha256").update(Buffer.from(canonicalJson(value), "utf8")).digest("hex")}`; }
+function labelDigest(label) { return `sha256:${crypto.createHash("sha256").update(label, "utf8").digest("hex")}`; }
+function clone(value) { return structuredClone(value); }
+function exactFields(value, fields, code) {
+  requireValue(value && typeof value === "object" && !Array.isArray(value), code);
+  const actual = Object.keys(value).sort(utf8Compare);
+  const expected = [...fields].sort(utf8Compare);
+  requireValue(actual.length === expected.length && actual.every((item, i) => item === expected[i]), code);
+}
+function safeInt(value, code, minimum = 0) { requireValue(Number.isSafeInteger(value) && value >= minimum, code); return value; }
+function keyPairFromSeed(seedHex) {
+  const prefix = Buffer.from("302e020100300506032b657004220420", "hex");
+  const privateKey = crypto.createPrivateKey({ key: Buffer.concat([prefix, Buffer.from(seedHex, "hex")]), format: "der", type: "pkcs8" });
+  const publicKey = crypto.createPublicKey(privateKey);
+  const der = publicKey.export({ format: "der", type: "spki" });
+  return { privateKey, publicText: `ed25519pk:${Buffer.from(der).subarray(-32).toString("hex")}` };
+}
+function signatureMessage(domain, digest) { return Buffer.from(`${domain}\n${digest}`, "utf8"); }
+function signDigest(key, domain, digest) { return `ed25519sig:${crypto.sign(null, signatureMessage(domain, digest), key).toString("hex")}`; }
+function publicKeyFromText(text) {
+  requireValue(typeof text === "string" && /^ed25519pk:[0-9a-f]{64}$/.test(text), "public_key_invalid");
+  const prefix = Buffer.from("302a300506032b6570032100", "hex");
+  return crypto.createPublicKey({ key: Buffer.concat([prefix, Buffer.from(text.slice(10), "hex")]), format: "der", type: "spki" });
+}
+function verifySignature(publicText, signature, domain, digest, code) {
+  requireValue(typeof signature === "string" && /^ed25519sig:[0-9a-f]{128}$/.test(signature), code);
+  requireValue(crypto.verify(null, signatureMessage(domain, digest), publicKeyFromText(publicText), Buffer.from(signature.slice(11), "hex")), code);
+}
+function loadVector(filename) {
+  const doc = JSON.parse(fs.readFileSync(filename, "utf8"));
+  validateNfc(doc);
+  exactFields(doc, ["purpose", "source_reference", "test_only_keys", "campaign_template", "candidate_templates", "expected"], "vector_fields_invalid");
+  requireValue(canonicalJson(doc.source_reference) === canonicalJson({ repository: "WecoAI/aideml", commit: "5d66a21771e98623dc9fc8716bdbe388d63464c0", license: "MIT", code_copied: false }), "source_reference_invalid");
+  exactFields(doc.test_only_keys, ["guardian_seed_hex", "evaluator_seed_hex"], "test_keys_fields_invalid");
+  for (const seed of Object.values(doc.test_only_keys)) requireValue(typeof seed === "string" && /^[0-9a-f]{64}$/.test(seed), "test_seed_invalid");
+  requireValue(Array.isArray(doc.candidate_templates) && doc.candidate_templates.length > 0, "candidate_templates_invalid");
+  return doc;
+}
+
+const CAMPAIGN_TEMPLATE_FIELDS = ["schema_version", "hash_profile", "campaign_id", "instance_id", "guardian_grant_ref", "objective", "metric", "source_tree_digest", "campaign_s
