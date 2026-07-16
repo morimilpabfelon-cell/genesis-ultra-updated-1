@@ -365,18 +365,18 @@
     },
     {
       "path": "schemas/improvement_campaign.schema.json",
-      "size_bytes": 3603,
-      "digest": "sha256:bc25e6cbe682a48f3e01a8a1da3183c5ba0bf9b648ce088ec6102cff8bfa91ff"
+      "size_bytes": 3864,
+      "digest": "sha256:ed0e4fe6e60942a487dcb4206fb95f56d4f18f29372efed2ca6e6dc400fab62c"
     },
     {
       "path": "schemas/improvement_candidate_event.schema.json",
-      "size_bytes": 4378,
-      "digest": "sha256:fd082215bf50be28dd05a03c99962e3485df0448d18fc4bd8c7d04a74f3d5265"
+      "size_bytes": 4552,
+      "digest": "sha256:0e2c70717f725e55f1d75ecfbc4336dfd2d3c92ead2d5e2aa5be93f3b016199c"
     },
     {
       "path": "schemas/improvement_projection.schema.json",
-      "size_bytes": 3763,
-      "digest": "sha256:de482085d0ce7c13abd5a153f48da779a6042cf14838f722e5a55b7db5e0f9e9"
+      "size_bytes": 4229,
+      "digest": "sha256:ad4b4a5e5117734c839f09731e1806fee94d6a02fcf84b0a9214ecf974178f19"
     },
     {
       "path": "schemas/instance_identity.schema.json",
@@ -949,5 +949,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:3f15a3fa55a74fddbe477346988f7032305d26051c1316625a22154ee9f3c1da"
+  "root_digest": "sha256:07ada6d0ca50e75e2ea641a2bda4b4a625d841f6660288adb3f6273adadde50e"
 }
