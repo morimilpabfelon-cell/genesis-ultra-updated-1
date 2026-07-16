@@ -1,0 +1,37 @@
+ction(mutator, doc, campaign, events, label)
+    return len(cases)
+
+
+def command_validate(vector_path: Path) -> int:
+    doc = load_vector(vector_path)
+    campaign, events = build_signed_fixture(doc)
+    projection = validate_complete(doc, campaign, events)
+    negatives = run_negative_cases(doc, campaign, events)
+    require(negatives == doc["expected"]["boundary_rejections"], "boundary_rejection_count_mismatch")
+    print(f"OK recursive improvement campaign ({len(events)} candidates, {len(projection['lineages'])} lineages)")
+    counts = projection["operator_counts"]
+    print(f"OK operators (draft={counts['draft']}, debug={counts['debug']}, improve={counts['improve']})")
+    print(f"OK outcomes ({projection['accepted_count']} accepted, {projection['buggy_count']} buggy, {projection['rejected_count']} rejected)")
+    print(f"OK projection digest {projection['projection_digest']}")
+    print(f"OK recursive improvement boundary rejection cases ({negatives})")
+    print("NOTE promotion requires guardian review.")
+    return 0
+
+
+def atomic_write(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_name(f".{path.name}.tmp")
+    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temp.replace(path)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(dest="command")
+    validate_parser = sub.add_parser("validate")
+    validate_parser.add_argument("vector", nargs="?", default=str(DEFAULT_VECTOR))
+    build_parser = sub.add_parser("build")
+    build_parser.add_argument("vector")
+    build_parser.add_argument("output")
+    select_parser = sub.add_parser("select")
+    
