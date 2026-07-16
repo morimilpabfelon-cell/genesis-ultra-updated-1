@@ -1,0 +1,74 @@
+{
+  "schema_version": "genesis.tool.execution.registry.v0.1",
+  "purpose": "Clasifica herramientas con nombres de validación como entrypoints ejecutados por la suite o bibliotecas alcanzables desde entrypoints registrados.",
+  "discovery": {
+    "include": [
+      "tools/*_conformance.mjs",
+      "tools/validate_*.mjs",
+      "tools/validate_*.py"
+    ],
+    "exclude": [
+      "tools/run_conformance.mjs"
+    ]
+  },
+  "entrypoints": [
+    "tools/validate_artifacts.mjs",
+    "tools/validate_associative_memory_projection.mjs",
+    "tools/validate_associative_memory_projection.py",
+    "tools/validate_continuity.py",
+    "tools/validate_crypto_vectors.py",
+    "tools/validate_host_adapter.mjs",
+    "tools/validate_host_adapter.py",
+    "tools/validate_hybrid_memory_retrieval.py",
+    "tools/validate_instance_identity.mjs",
+    "tools/validate_instance_identity.py",
+    "tools/validate_memory_gate_retrieval_bridge.py",
+    "tools/validate_memory_retrieval.mjs",
+    "tools/validate_memory_retrieval.py",
+    "tools/validate_memory_retrieval_acl.py",
+    "tools/validate_multimodal_memory_pipeline.py",
+    "tools/validate_portable_memory_capsule.py",
+    "tools/validate_protocol_vectors.mjs",
+    "tools/validate_sense_adapters.mjs",
+    "tools/validate_sense_adapters.py",
+    "tools/validate_sense_observations.mjs",
+    "tools/validate_sense_observations.py",
+    "tools/validate_structured_versioned_memory.py",
+    "tools/validate_temporal_memory_metadata.py",
+    "tools/validate_tool_execution_registry.py",
+    "tools/validate_workspace.mjs",
+    "tools/validate_workspace.py"
+  ],
+  "libraries": [
+    {
+      "path": "tools/portable_capsule_conformance.mjs",
+      "used_by": [
+        "tools/portable_memory_capsule.mjs"
+      ],
+      "purpose": "Módulo de conformidad importado por el entrypoint Node de cápsulas."
+    },
+    {
+      "path": "tools/validate_authority.py",
+      "used_by": [
+        "tools/simulate_negatives.py",
+        "tools/simulate_transfer.py"
+      ],
+      "purpose": "Reglas compartidas de autoridad y movilidad consumidas por simulaciones registradas."
+    },
+    {
+      "path": "tools/validate_backup_recovery.py",
+      "used_by": [
+        "tools/simulate_backup_recovery.py",
+        "tools/simulate_backup_recovery_negatives.py"
+      ],
+      "purpose": "Reglas y digests compartidos de backup y recuperación."
+    },
+    {
+      "path": "tools/validate_transaction_journal.py",
+      "used_by": [
+        "tools/simulate_transaction_crashes.py"
+      ],
+      "purpose": "Reglas compartidas de validación y replay del journal transaccional."
+    }
+  ]
+}
