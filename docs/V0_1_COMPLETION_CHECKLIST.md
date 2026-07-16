@@ -21,6 +21,8 @@
 
 - [x] Suite completa verde para el laboratorio de mejora recursiva en el [PR #28](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/28).
 
+- [ ] Suite completa verde para deliberación operacional, prueba independiente y adaptación de Fable Method en el [PR #29](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/29).
+
 ## Implementado y verificado por la suite
 
 - [x] Canonicalización Python/Node con rechazo de texto no-NFC y rutas peligrosas.
@@ -97,7 +99,9 @@
       operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
       y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
-- [x] Registro autocontrolado de ejecución de herramientas con treinta y tres candidatos: veintinueve entrypoints exigidos en el runner y cuatro bibliotecas importadas por consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
+- [x] Registro autocontrolado de ejecución de herramientas con treinta y siete candidatos:
+      treinta y tres entrypoints exigidos en el runner y cuatro bibliotecas importadas por
+      consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
 
 - [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados.
 
@@ -105,12 +109,22 @@
 
 - [x] Laboratorio de mejora recursiva reproducido por Python y Node: seis candidatos append-only, operadores draft/debug/improve, presupuesto fijo, recibo privado opaco, tres aceptados, un bug y dos rechazos por presupuesto o reward hacking.
 
+- [ ] Deliberación operacional y prueba adaptadas de Fable Method, reproducidas por Python y Node:
+      ocho tareas, diez adaptadores de dominio, dieciocho modos de fallo, diez trampas,
+      dos excepciones locales acotadas, una denegación constitucional y cuarenta cruces rechazados.
+
+- [x] Decisión arquitectónica Android-first: `Morimil-app` será el primer cuerpo operativo después
+      de limpieza, auditoría y build reproducible; la compilación o instalación no crea por sí sola
+      una identidad de nacimiento ni asigna `active_writer`.
+
 ## Pendiente real
 
-- [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.
+- [ ] Limpieza total, auditoría del árbol, build reproducible e instalación de prueba de `Morimil-app` en el dispositivo Android real.
+- [ ] Adaptador y pruebas de journal con almacenamiento real primero en Android; Apple y Windows quedan como cuerpos posteriores.
 - [ ] Adaptador semántico real con modelo local neutral, digest versionado y evaluación
       reproducible de calidad; el fixture actual prueba el protocolo, no un modelo entrenado.
 - [ ] Adaptadores productivos y evaluados de PDF/DOCX/XLSX, OCR, visión y transcripción local.
+- [ ] Orquestador operacional real, juez aislado, trampas ejecutadas contra modelos reales y evaluaciones con múltiples semillas.
 - [ ] Revisión criptográfica y de seguridad externa.
 
 ## Prohibido declarar
