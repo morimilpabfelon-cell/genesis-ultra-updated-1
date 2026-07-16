@@ -1,0 +1,33 @@
+name: Draft Manifest Preview
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Generate exact draft manifest
+        run: |
+          python tools/generate_draft_manifest.py --write
+          python - <<'PY'
+          import base64
+          from pathlib import Path
+          payload = Path("conformance/draft_manifest.json").read_bytes()
+          print("MANIFEST_BASE64_BEGIN")
+          print(base64.b64encode(payload).decode("ascii"))
+          print("MANIFEST_BASE64_END")
+          PY
