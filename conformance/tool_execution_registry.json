@@ -75,14 +75,14 @@
       "used_by": [
         "tools/validate_recursive_improvement_lab.mjs"
       ],
-      "purpose": "Adaptador de conformidad sobre el fixture validado de autonomía guiada: resolución exacta de grants y decisiones firmadas de uso consumida por el laboratorio."
+      "purpose": "Validador neutral de bundles públicos de autoridad, resolución exacta de grants y decisiones firmadas de uso; el fixture TEST ONLY es una capa separada."
     },
     {
       "path": "tools/validate_guided_autonomy_authority.py",
       "used_by": [
         "tools/validate_recursive_improvement_lab.py"
       ],
-      "purpose": "Adaptador de conformidad sobre el fixture validado de autonomía guiada: resolución exacta de grants y decisiones firmadas de uso consumida por el laboratorio."
+      "purpose": "Validador neutral de bundles públicos de autoridad, resolución exacta de grants y decisiones firmadas de uso; el fixture TEST ONLY es una capa separada."
     },
     {
       "path": "tools/validate_transaction_journal.py",

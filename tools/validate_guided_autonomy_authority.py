@@ -8,7 +8,7 @@ from typing import Any
 import unicodedata
 from nacl.exceptions import BadSignatureError
 from nacl.signing import SigningKey, VerifyKey
-from validate_guided_autonomy import validate_document
+from validate_guided_autonomy import ConformanceError, ensure_int, ensure_sorted_unique_strings, validate_document, validate_evaluation, validate_grant, validate_ledger, validate_nfc, validate_proposal, validate_use
 
 TS_RE=__import__('re').compile(r'^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$')
 USE_FIELDS={"schema_version","hash_profile","use_id","grant_ref","instance_id","body_id","capability","target_ref","action_class","data_class","requested_actions","requested_duration_seconds","requested_bytes","sandboxed","human_confirmation_ref","observer_ref","reversible_plan_ref","requested_at","use_digest","signature"}
@@ -39,12 +39,74 @@ def verify_envelope(e,key,*,digest,domain,signer_type,signer_id,created_at,prefi
  except (BadSignatureError,ValueError,KeyError): fail(f'{prefix}_signature_invalid')
 @dataclass(frozen=True)
 class Authority:
- document:dict; grants:dict; registered:frozenset
+ bundle:dict; grants:dict; registered:frozenset; key_resolver:object
 
+
+BUNDLE_FIELDS={"profile","domains","instance_id","guardian_id","authority_epoch","registered_body_ids","proposals","evaluations","grants","ledger_events","use_requests"}
+PUBLIC_KEY_FIELDS={"public_key_hex","public_key_fingerprint","key_epoch_id"}
+
+def resolve_public_key(public_key_resolver,envelope,signer_type,signer_id):
+ if not callable(public_key_resolver): fail('public_key_resolver_required')
+ key=public_key_resolver({'signer_type':signer_type,'signer_id':signer_id,'key_epoch_id':envelope['key_epoch_id'],'public_key_ref':envelope['public_key_ref']})
+ exact(key,PUBLIC_KEY_FIELDS,'public_key_record_invalid')
+ if not __import__('re').fullmatch(r'[0-9a-f]{64}',key['public_key_hex']): fail('public_key_hex_invalid')
+ if not __import__('re').fullmatch(r'sha256:[0-9a-f]{64}',key['public_key_fingerprint']): fail('public_key_fingerprint_invalid')
+ if key['key_epoch_id']!=envelope['key_epoch_id'] or key['public_key_fingerprint']!=envelope['public_key_ref']: fail('public_key_resolution_mismatch')
+ return key
+
+def public_authority_bundle_from_fixture(document):
+ return __import__('copy').deepcopy({'profile':'genesis.autonomy.authority.bundle.v0.1','domains':document['domains'],'instance_id':document['instance_id'],'guardian_id':document['guardian_id'],'authority_epoch':document['authority_epoch'],'registered_body_ids':document['registered_body_ids'],'proposals':document['proposals'],'evaluations':document['evaluations'],'grants':document['grants'],'ledger_events':document['ledger_events'],'use_requests':document['use_requests']})
+
+def public_key_resolver_from_fixture(document):
+ records={}
+ for signer_type,source in document['keys'].items():
+  key={'public_key_hex':source['public_key_hex'],'public_key_fingerprint':source['public_key_fingerprint'],'key_epoch_id':source['key_epoch_id']}
+  records[(signer_type,source['signer_id'],source['key_epoch_id'],source['public_key_fingerprint'])]=key
+ return lambda query: records.get((query['signer_type'],query['signer_id'],query['key_epoch_id'],query['public_key_ref']))
+
+def _validate_authority_bundle(bundle,public_key_resolver):
+ validate_nfc(bundle);exact(bundle,BUNDLE_FIELDS,'authority_bundle_fields_invalid')
+ if bundle['profile']!='genesis.autonomy.authority.bundle.v0.1': fail('authority_bundle_profile_invalid')
+ ensure_int(bundle['authority_epoch'],'authority_bundle_epoch_invalid',0);registered=ensure_sorted_unique_strings(bundle['registered_body_ids'],'authority_bundle_registered_bodies_invalid')
+ base={'domains':bundle['domains'],'instance_id':bundle['instance_id'],'guardian_id':bundle['guardian_id'],'authority_epoch':bundle['authority_epoch'],'registered_body_ids':registered}
+ proposals={}
+ for item in bundle['proposals']:
+  body_key=resolve_public_key(public_key_resolver,item['signature'],'body',item['body_id']);validate_proposal(item,{**base,'keys':{'body':body_key,'guardian':None}})
+  if item['proposal_id'] in proposals: fail('proposal_id_duplicate')
+  proposals[item['proposal_id']]=item
+ evaluations={}
+ for item in bundle['evaluations']:
+  proposal=proposals.get(item['proposal_ref'])
+  if proposal is None: fail('evaluation_proposal_missing')
+  guardian_key=resolve_public_key(public_key_resolver,item['signature'],'guardian',bundle['guardian_id']);validate_evaluation(item,proposal,{**base,'keys':{'body':None,'guardian':guardian_key}})
+  if item['evaluation_id'] in evaluations: fail('evaluation_id_duplicate')
+  evaluations[item['evaluation_id']]=item
+ grants=[];grant_ids=set()
+ for item in bundle['grants']:
+  proposal=proposals.get(item['proposal_ref']);evaluation=evaluations.get(item['evaluation_ref'])
+  if proposal is None: fail('grant_proposal_missing')
+  if evaluation is None: fail('grant_evaluation_missing')
+  guardian_key=resolve_public_key(public_key_resolver,item['signature'],'guardian',bundle['guardian_id']);validate_grant(item,proposal,evaluation,{**base,'keys':{'body':None,'guardian':guardian_key}})
+  if item['grant_id'] in grant_ids: fail('grant_id_duplicate')
+  grant_ids.add(item['grant_id']);grants.append(item)
+ uses=[];use_ids=set()
+ for item in bundle['use_requests']:
+  body_key=resolve_public_key(public_key_resolver,item['signature'],'body',item['body_id']);validate_use(item,{**base,'keys':{'body':body_key,'guardian':None}})
+  if item['use_id'] in use_ids: fail('use_id_duplicate')
+  use_ids.add(item['use_id']);uses.append(item)
+ def ledger_resolver(query): return resolve_public_key(public_key_resolver,query['envelope'],query['signer_type'],query['signer_id'])
+ validate_ledger(bundle['ledger_events'],grants,uses,{**base,'keys':{}},ledger_resolver)
+ return Authority(bundle,{g['grant_id']:g for g in grants},frozenset(registered),public_key_resolver)
+
+def validate_authority_bundle(bundle,public_key_resolver):
+ try: return _validate_authority_bundle(bundle,public_key_resolver)
+ except AuthorityError: raise
+ except ConformanceError as error: fail(str(error))
+
+validateAuthorityBundle=validate_authority_bundle
 def authority_from_validated_fixture(document):
- validate_document(__import__('copy').deepcopy(document)); grants={g['grant_id']:g for g in document['grants']}
- if len(grants)!=len(document['grants']): fail('grant_id_duplicate')
- return Authority(document,grants,frozenset(document['registered_body_ids']))
+ validate_document(__import__('copy').deepcopy(document))
+ return validate_authority_bundle(public_authority_bundle_from_fixture(document),public_key_resolver_from_fixture(document))
 def state_at(grant,events,at):
  status='not_issued'; consumed=set(); head_ref=None; head_hash='GENESIS'
  for event in events:
@@ -64,7 +126,7 @@ def resolve_exact_grant(grant_ref,capability,instance_id,at_value,authority):
  if grant is None: return {'grant':None,'state':None,'reason':'grant_missing'}
  if grant['instance_id']!=instance_id: return {'grant':grant,'state':None,'reason':'grant_instance_mismatch'}
  if grant['capability']!=capability: return {'grant':grant,'state':None,'reason':'grant_capability_mismatch'}
- at=parse_utc(at_value); state=state_at(grant,authority.document['ledger_events'],at); reason='allowed'
+ at=parse_utc(at_value); state=state_at(grant,authority.bundle['ledger_events'],at); reason='allowed'
  if at<parse_utc(grant['not_before']): reason='grant_not_yet_valid'
  elif grant['expires_at'] is not None and at>=parse_utc(grant['expires_at']): reason='grant_expired'
  elif state['status']!='active': reason='grant_'+state['status']
@@ -88,7 +150,7 @@ def evaluate_authorized_use(i,a):
  exact(i,USE_FIELDS,'authorized_use_fields_invalid'); digest=compute_authorized_use_digest(i)
  if i['schema_version']!='genesis.autonomy.capability.use.v0.2' or i['hash_profile']!='genesis.hash.fields.v0.1': fail('authorized_use_profile_invalid')
  if i['use_digest']!=digest: fail('authorized_use_digest_mismatch')
- verify_envelope(i['signature'],a.document['keys']['body'],digest=digest,domain='genesis.autonomy.capability.use.signature.v0.2',signer_type='body',signer_id=i['body_id'],created_at=i['requested_at'],prefix='authorized_use')
+ body_key=resolve_public_key(a.key_resolver,i['signature'],'body',i['body_id']);verify_envelope(i['signature'],body_key,digest=digest,domain='genesis.autonomy.capability.use.signature.v0.2',signer_type='body',signer_id=i['body_id'],created_at=i['requested_at'],prefix='authorized_use')
  r=resolve_exact_grant(i['grant_ref'],i['capability'],i['instance_id'],i['requested_at'],a); reason=r['reason']
  if reason=='allowed': reason='use_already_consumed' if i['use_id'] in r['state']['consumed'] else envelope_reason(i,r['grant'],a)
  remaining=None if r['grant'] is None or r['grant']['use_limit'] is None else max(0,r['grant']['use_limit']-len(r['state']['consumed'])-(1 if reason=='allowed' else 0)); status='allowed' if reason=='allowed' else 'denied'
@@ -96,4 +158,4 @@ def evaluate_authorized_use(i,a):
 def authorize_campaign_opening(r,a):
  x=resolve_exact_grant(r['grant_ref'],r['capability'],r['instance_id'],r['authorized_at'],a); reason=x['reason']
  if reason=='allowed': reason=envelope_reason(r,x['grant'],a)
- status='allowed' if reason=='allowed' else 'denied'; rd=hash_authority_fields('genesis.improvement.campaign.authority.request.v0.1',[r['campaign_digest'],r['grant_ref'],r['instance_id'],r['body_id'],r['capability'],r['target_ref'],r['action_class'],r['data_class'],str(r['requested_actions']),str(r['requested_duration_seconds']),str(r['requested_bytes']),btext(r['sandboxed']),optional(r['human_confirmation_ref']),optional(r['observer_ref']),optional(r['reversible_plan_ref']),r['authorized_at']]); gd='' if x['grant'] is None else x['grant']['grant_digest']; st=x['state']; digest=hash_authority_fields('genesis.improvement.campaign.authorization.v0.1',[r['campaign_digest'],r['grant_ref'],gd,str(a.document['authority_epoch']),a.document['ledger_events'][0]['ledger_id'],optional(None if st is None else st['head_ref']),'GENESIS' if st is None else st['head_hash'],r['authorized_at'],status,reason,rd,a.document['keys']['guardian']['key_epoch_id'],r['body_id']]); return {'decision_status':status,'decision_reason':reason,'grant_ref':r['grant_ref'],'grant_digest':gd or None,'authority_request_digest':rd,'campaign_authorization_digest':digest,'ledger_head_event_ref':None if st is None else st['head_ref'],'ledger_head_hash':'GENESIS' if st is None else st['head_hash']}
+ status='allowed' if reason=='allowed' else 'denied'; rd=hash_authority_fields('genesis.improvement.campaign.authority.request.v0.1',[r['campaign_digest'],r['grant_ref'],r['instance_id'],r['body_id'],r['capability'],r['target_ref'],r['action_class'],r['data_class'],str(r['requested_actions']),str(r['requested_duration_seconds']),str(r['requested_bytes']),btext(r['sandboxed']),optional(r['human_confirmation_ref']),optional(r['observer_ref']),optional(r['reversible_plan_ref']),r['authorized_at']]); gd='' if x['grant'] is None else x['grant']['grant_digest']; st=x['state']; digest=hash_authority_fields('genesis.improvement.campaign.authorization.v0.1',[r['campaign_digest'],r['grant_ref'],gd,str(a.bundle['authority_epoch']),a.bundle['ledger_events'][0]['ledger_id'],optional(None if st is None else st['head_ref']),'GENESIS' if st is None else st['head_hash'],r['authorized_at'],status,reason,rd,'' if x['grant'] is None else x['grant']['guardian_key_epoch_id'],r['body_id']]); return {'decision_status':status,'decision_reason':reason,'grant_ref':r['grant_ref'],'grant_digest':gd or None,'authority_request_digest':rd,'campaign_authorization_digest':digest,'ledger_head_event_ref':None if st is None else st['head_ref'],'ledger_head_hash':'GENESIS' if st is None else st['head_hash']}

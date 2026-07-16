@@ -460,7 +460,7 @@ def evaluate_use(item: dict, grants: list[dict], events: list[dict], registered:
     return {"use_id": item["use_id"], "status": status, "reason": reason, "grant_ref": grant_ref, "remaining_uses": remaining, "decision_digest": digest}
 
 
-def validate_ledger(events: list[dict], grants: list[dict], uses: list[dict], document: dict) -> None:
+def validate_ledger(events: list[dict], grants: list[dict], uses: list[dict], document: dict, key_resolver=None) -> None:
     if not isinstance(events, list) or not events:
         fail("ledger_events_required")
     grants_by_id = {grant["grant_id"]: grant for grant in grants}
@@ -513,7 +513,8 @@ def validate_ledger(events: list[dict], grants: list[dict], uses: list[dict], do
                 fail("ledger_consumption_time_invalid")
             if event["body_id"] != use["body_id"] or event["subject_digest"] != use["use_digest"]:
                 fail("ledger_consumption_binding_invalid")
-            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=document["keys"]["body"], signer_type="body", signer_id=use["body_id"], created_at=event["recorded_at"], prefix="ledger")
+            body_key = key_resolver({"envelope": event["signature"], "signer_type": "body", "signer_id": use["body_id"]}) if key_resolver else document["keys"]["body"]
+            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=body_key, signer_type="body", signer_id=use["body_id"], created_at=event["recorded_at"], prefix="ledger")
             seen_uses.add(event["use_id"])
         else:
             if event["body_id"] is not None or event["use_id"] is not None:
@@ -522,7 +523,8 @@ def validate_ledger(events: list[dict], grants: list[dict], uses: list[dict], do
                 fail("ledger_control_time_invalid")
             if event["subject_digest"] != grant["grant_digest"]:
                 fail("ledger_grant_digest_binding_invalid")
-            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=document["keys"]["guardian"], signer_type="guardian", signer_id=document["guardian_id"], created_at=event["recorded_at"], prefix="ledger")
+            guardian_key = key_resolver({"envelope": event["signature"], "signer_type": "guardian", "signer_id": document["guardian_id"]}) if key_resolver else document["keys"]["guardian"]
+            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=guardian_key, signer_type="guardian", signer_id=document["guardian_id"], created_at=event["recorded_at"], prefix="ledger")
             current = status.get(grant["grant_id"], "not_issued")
             if kind == "grant.issued":
                 if current != "not_issued": fail("ledger_grant_issued_twice")

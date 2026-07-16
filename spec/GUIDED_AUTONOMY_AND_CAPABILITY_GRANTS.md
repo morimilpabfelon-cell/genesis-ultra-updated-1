@@ -197,6 +197,10 @@ Antes de ejecutar una acción se comprueba:
 
 El resultado es `allowed` o `denied` con un código estable. La decisión no ejecuta la acción; solamente prueba si estaba autorizada.
 
+## 10.0 Bundle neutral de autoridad
+
+`genesis.autonomy.authority.bundle.v0.1` contiene únicamente dominios, identidad, cuerpos registrados, propuestas, evaluaciones, grants, solicitudes firmadas y ledger. No contiene semillas privadas, expectativas doradas ni mutaciones negativas. `validateAuthorityBundle(bundle, publicKeyResolver)` resuelve cada clave mediante `signer_type`, `signer_id`, `key_epoch_id` y `public_key_ref`, y reutiliza las mismas reglas normativas del validador de conformidad.
+
 ## 10.1 Selección exacta y usos v0.2
 
 El perfil permite varios grants para una misma capacidad. `grant_id` continúa siendo único; la coexistencia de grants con distinto alcance, presupuesto o cuerpo no es un error.

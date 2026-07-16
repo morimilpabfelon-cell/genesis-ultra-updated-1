@@ -4,7 +4,7 @@ from copy import deepcopy
 from datetime import datetime,timedelta,timezone
 import hashlib,json,sys
 from pathlib import Path
-from validate_guided_autonomy_authority import AuthorityError,authority_from_validated_fixture,authorize_campaign_opening,compute_authorized_use_digest,evaluate_authorized_use,sign_fixture_envelope,verify_envelope
+from validate_guided_autonomy_authority import AuthorityError,authority_from_validated_fixture,authorize_campaign_opening,compute_authorized_use_digest,evaluate_authorized_use,sign_fixture_envelope,validate_authority_bundle,verify_envelope
 ROOT=Path(__file__).resolve().parents[1];LAB=ROOT/'conformance'/'recursive_improvement_lab_vectors.json';AUTH=ROOT/'conformance'/'guided_autonomy_vectors.json'
 FORBIDDEN=['active_writer.assign','authority.self_grant','guardian.replace','identity.modify','main.protection.disable','memory.rewrite','private_eval.read']
 def h(domain,obj): return 'sha256:'+hashlib.sha256((domain+'\n'+json.dumps(obj,ensure_ascii=False,sort_keys=True,separators=(',',':'))).encode()).hexdigest()
@@ -47,7 +47,9 @@ def expect_failure(label,fn):
  except AuthorityError: return
  raise ValueError(f'{label}:accepted')
 def validate_authority(lab,guided):
- authority=authority_from_validated_fixture(guided);grant=next((g for g in guided['grants'] if g['grant_id']==lab['campaign']['guardian_grant_ref']),None)
+ authority=authority_from_validated_fixture(guided)
+ if any(field in authority.bundle for field in ['keys','expected','must_reject']): raise ValueError('neutral_bundle_contains_test_fields')
+ grant=next((g for g in guided['grants'] if g['grant_id']==lab['campaign']['guardian_grant_ref']),None)
  if grant is None: raise ValueError('declared_grant_missing')
  if lab['campaign']['instance_id']!=guided['instance_id'] or grant['instance_id']!=lab['campaign']['instance_id']: raise ValueError('campaign_instance_mismatch')
  binding=lab['campaign']['authority_binding'];body=binding['body_id'];issued=next((e for e in guided['ledger_events'] if e['grant_ref']==grant['grant_id'] and e['event_type']=='grant.issued'),None)
@@ -64,6 +66,7 @@ def validate_authority(lab,guided):
   event=next((e for e in guided['ledger_events'] if e['grant_ref']==grant['grant_id'] and e['event_type']==event_type),None)
   if event is None: raise ValueError(event_type+'_fixture_missing')
   expect_reason(event_type,reason,lambda event=event:authorize_campaign_opening({**request,'authorized_at':event['recorded_at']},authority));negatives+=1
+ broken=deepcopy(authority.bundle);broken['ledger_events'][1]['previous_event_hash']='sha256:'+'0'*64;expect_failure('neutral_bundle_ledger',lambda:validate_authority_bundle(broken,authority.key_resolver));negatives+=1
  return {'receipt':receipt,'decision':decision,'negatives':negatives}
 
 def main():

@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { validateDocument } from "./guided_autonomy.mjs";
+import { ConformanceError, ensureInt, ensureSortedUniqueStrings, validateDocument, validateEvaluation, validateGrant, validateLedger, validateNfc, validateProposal, validateUse } from "./guided_autonomy.mjs";
 
 const MARK = Symbol("validated-guided-autonomy-authority");
 const TS_RE = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$/;
@@ -57,11 +57,108 @@ export function verifyEnvelope(envelope, key, { digest, domain, signerType, sign
   if (signature.length !== 64 || !crypto.verify(null, signatureBytes(envelope), publicKeyFromRaw(key.public_key_hex), signature)) fail(`${prefix}_signature_invalid`);
 }
 
+
+const BUNDLE_FIELDS = new Set(["profile", "domains", "instance_id", "guardian_id", "authority_epoch", "registered_body_ids", "proposals", "evaluations", "grants", "ledger_events", "use_requests"]);
+const PUBLIC_KEY_FIELDS = new Set(["public_key_hex", "public_key_fingerprint", "key_epoch_id"]);
+
+function resolvePublicKey(publicKeyResolver, envelope, signerType, signerId) {
+  if (typeof publicKeyResolver !== "function") fail("public_key_resolver_required");
+  const key = publicKeyResolver({ signer_type: signerType, signer_id: signerId, key_epoch_id: envelope.key_epoch_id, public_key_ref: envelope.public_key_ref });
+  exact(key, PUBLIC_KEY_FIELDS, "public_key_record_invalid");
+  if (!/^[0-9a-f]{64}$/.test(key.public_key_hex)) fail("public_key_hex_invalid");
+  if (!/^sha256:[0-9a-f]{64}$/.test(key.public_key_fingerprint)) fail("public_key_fingerprint_invalid");
+  if (key.key_epoch_id !== envelope.key_epoch_id || key.public_key_fingerprint !== envelope.public_key_ref) fail("public_key_resolution_mismatch");
+  return key;
+}
+
+export function publicAuthorityBundleFromFixture(document) {
+  return structuredClone({
+    profile: "genesis.autonomy.authority.bundle.v0.1",
+    domains: document.domains,
+    instance_id: document.instance_id,
+    guardian_id: document.guardian_id,
+    authority_epoch: document.authority_epoch,
+    registered_body_ids: document.registered_body_ids,
+    proposals: document.proposals,
+    evaluations: document.evaluations,
+    grants: document.grants,
+    ledger_events: document.ledger_events,
+    use_requests: document.use_requests,
+  });
+}
+
+export function publicKeyResolverFromFixture(document) {
+  const records = new Map();
+  for (const [signerType, source] of Object.entries(document.keys)) {
+    const key = { public_key_hex: source.public_key_hex, public_key_fingerprint: source.public_key_fingerprint, key_epoch_id: source.key_epoch_id };
+    records.set(`${signerType}:${source.signer_id}:${source.key_epoch_id}:${source.public_key_fingerprint}`, Object.freeze(key));
+  }
+  return ({ signer_type, signer_id, key_epoch_id, public_key_ref }) => records.get(`${signer_type}:${signer_id}:${key_epoch_id}:${public_key_ref}`) ?? null;
+}
+
+function validateAuthorityBundleInternal(bundle, publicKeyResolver) {
+  validateNfc(bundle);
+  exact(bundle, BUNDLE_FIELDS, "authority_bundle_fields_invalid");
+  if (bundle.profile !== "genesis.autonomy.authority.bundle.v0.1") fail("authority_bundle_profile_invalid");
+  ensureInt(bundle.authority_epoch, "authority_bundle_epoch_invalid", 0);
+  const registered = ensureSortedUniqueStrings(bundle.registered_body_ids, "authority_bundle_registered_bodies_invalid");
+  const base = { domains: bundle.domains, instance_id: bundle.instance_id, guardian_id: bundle.guardian_id, authority_epoch: bundle.authority_epoch, registered_body_ids: registered };
+  const proposalMap = new Map();
+  for (const item of bundle.proposals) {
+    const bodyKey = resolvePublicKey(publicKeyResolver, item.signature, "body", item.body_id);
+    validateProposal(item, { ...base, keys: { body: bodyKey, guardian: null } });
+    if (proposalMap.has(item.proposal_id)) fail("proposal_id_duplicate");
+    proposalMap.set(item.proposal_id, item);
+  }
+  const evaluationMap = new Map();
+  for (const item of bundle.evaluations) {
+    const proposal = proposalMap.get(item.proposal_ref);
+    if (!proposal) fail("evaluation_proposal_missing");
+    const guardianKey = resolvePublicKey(publicKeyResolver, item.signature, "guardian", bundle.guardian_id);
+    validateEvaluation(item, proposal, { ...base, keys: { body: null, guardian: guardianKey } });
+    if (evaluationMap.has(item.evaluation_id)) fail("evaluation_id_duplicate");
+    evaluationMap.set(item.evaluation_id, item);
+  }
+  const grants = [];
+  const grantIds = new Set();
+  for (const item of bundle.grants) {
+    const proposal = proposalMap.get(item.proposal_ref);
+    const evaluation = evaluationMap.get(item.evaluation_ref);
+    if (!proposal) fail("grant_proposal_missing");
+    if (!evaluation) fail("grant_evaluation_missing");
+    const guardianKey = resolvePublicKey(publicKeyResolver, item.signature, "guardian", bundle.guardian_id);
+    validateGrant(item, proposal, evaluation, { ...base, keys: { body: null, guardian: guardianKey } });
+    if (grantIds.has(item.grant_id)) fail("grant_id_duplicate");
+    grantIds.add(item.grant_id);
+    grants.push(item);
+  }
+  const uses = [];
+  const useIds = new Set();
+  for (const item of bundle.use_requests) {
+    const bodyKey = resolvePublicKey(publicKeyResolver, item.signature, "body", item.body_id);
+    validateUse(item, { ...base, keys: { body: bodyKey, guardian: null } });
+    if (useIds.has(item.use_id)) fail("use_id_duplicate");
+    useIds.add(item.use_id);
+    uses.push(item);
+  }
+  const ledgerResolver = ({ envelope, signer_type, signer_id }) => resolvePublicKey(publicKeyResolver, envelope, signer_type, signer_id);
+  validateLedger(bundle.ledger_events, grants, uses, { ...base, keys: {} }, ledgerResolver);
+  const grantMap = new Map(grants.map((grant) => [grant.grant_id, grant]));
+  return Object.freeze({ [MARK]: true, bundle, grants: grantMap, registered: new Set(registered), keyResolver: publicKeyResolver });
+}
+
+export function validateAuthorityBundle(bundle, publicKeyResolver) {
+  try { return validateAuthorityBundleInternal(bundle, publicKeyResolver); }
+  catch (error) {
+    if (error instanceof AuthorityError) throw error;
+    if (error instanceof ConformanceError) throw new AuthorityError(error.message);
+    throw error;
+  }
+}
+
 export function authorityFromValidatedFixture(document) {
   validateDocument(structuredClone(document));
-  const grants = new Map(document.grants.map((grant) => [grant.grant_id, grant]));
-  if (grants.size !== document.grants.length) fail("grant_id_duplicate");
-  return Object.freeze({ [MARK]: true, document, grants, registered: new Set(document.registered_body_ids) });
+  return validateAuthorityBundle(publicAuthorityBundleFromFixture(document), publicKeyResolverFromFixture(document));
 }
 function requireAuthority(authority) { if (!authority || authority[MARK] !== true) fail("authority_not_validated"); }
 function stateAt(grant, events, at) {
@@ -89,7 +186,7 @@ export function resolveExactGrant(grantRef, capability, instanceId, atValue, aut
   if (grant.instance_id !== instanceId) return { grant, state: null, reason: "grant_instance_mismatch" };
   if (grant.capability !== capability) return { grant, state: null, reason: "grant_capability_mismatch" };
   const at = parseUtc(atValue);
-  const state = stateAt(grant, authority.document.ledger_events, at);
+  const state = stateAt(grant, authority.bundle.ledger_events, at);
   let reason = "allowed";
   if (at < parseUtc(grant.not_before)) reason = "grant_not_yet_valid";
   else if (grant.expires_at !== null && at >= parseUtc(grant.expires_at)) reason = "grant_expired";
@@ -119,7 +216,8 @@ export function evaluateAuthorizedUse(item, authority) {
   if (item.schema_version !== "genesis.autonomy.capability.use.v0.2" || item.hash_profile !== "genesis.hash.fields.v0.1") fail("authorized_use_profile_invalid");
   const digest = computeAuthorizedUseDigest(item);
   if (item.use_digest !== digest) fail("authorized_use_digest_mismatch");
-  verifyEnvelope(item.signature, authority.document.keys.body, { digest, domain: "genesis.autonomy.capability.use.signature.v0.2", signerType: "body", signerId: item.body_id, createdAt: item.requested_at, prefix: "authorized_use" });
+  const bodyKey = resolvePublicKey(authority.keyResolver, item.signature, "body", item.body_id);
+  verifyEnvelope(item.signature, bodyKey, { digest, domain: "genesis.autonomy.capability.use.signature.v0.2", signerType: "body", signerId: item.body_id, createdAt: item.requested_at, prefix: "authorized_use" });
   const resolved = resolveExactGrant(item.grant_ref, item.capability, item.instance_id, item.requested_at, authority);
   let reason = resolved.reason;
   if (reason === "allowed") reason = resolved.state.consumed.has(item.use_id) ? "use_already_consumed" : envelopeReason(item, resolved.grant, authority);
@@ -136,6 +234,6 @@ export function authorizeCampaignOpening(request, authority) {
   const requestDigest = hashAuthorityFields("genesis.improvement.campaign.authority.request.v0.1", [request.campaign_digest, request.grant_ref, request.instance_id, request.body_id, request.capability, request.target_ref, request.action_class, request.data_class, String(request.requested_actions), String(request.requested_duration_seconds), String(request.requested_bytes), boolText(request.sandboxed), optional(request.human_confirmation_ref), optional(request.observer_ref), optional(request.reversible_plan_ref), request.authorized_at]);
   const grantDigest = resolved.grant?.grant_digest ?? "";
   const state = resolved.state;
-  const digest = hashAuthorityFields("genesis.improvement.campaign.authorization.v0.1", [request.campaign_digest, request.grant_ref, grantDigest, String(authority.document.authority_epoch), authority.document.ledger_events[0].ledger_id, optional(state?.head_ref), state?.head_hash ?? "GENESIS", request.authorized_at, status, reason, requestDigest, authority.document.keys.guardian.key_epoch_id, request.body_id]);
+  const digest = hashAuthorityFields("genesis.improvement.campaign.authorization.v0.1", [request.campaign_digest, request.grant_ref, grantDigest, String(authority.bundle.authority_epoch), authority.bundle.ledger_events[0].ledger_id, optional(state?.head_ref), state?.head_hash ?? "GENESIS", request.authorized_at, status, reason, requestDigest, resolved.grant?.guardian_key_epoch_id ?? "", request.body_id]);
   return { decision_status: status, decision_reason: reason, grant_ref: request.grant_ref, grant_digest: grantDigest || null, authority_request_digest: requestDigest, campaign_authorization_digest: digest, ledger_head_event_ref: state?.head_ref ?? null, ledger_head_hash: state?.head_hash ?? "GENESIS" };
 }

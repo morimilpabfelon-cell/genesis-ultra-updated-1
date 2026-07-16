@@ -74,7 +74,7 @@ function parseUtc(value) {
   return parsed;
 }
 
-function validateNfc(value) {
+export function validateNfc(value) {
   if (typeof value === "string") {
     if (value.normalize("NFC") !== value) fail("text_not_nfc");
   } else if (Array.isArray(value)) {
@@ -93,12 +93,12 @@ function exactFields(value, fields, code) {
   if (keys.length !== fields.size || keys.some((key) => !fields.has(key))) fail(code);
 }
 
-function ensureInt(value, code, minimum = 0) {
+export function ensureInt(value, code, minimum = 0) {
   if (!Number.isSafeInteger(value) || value < minimum || value > MAX_INT) fail(code);
   return value;
 }
 
-function ensureSortedUniqueStrings(values, code, { allowEmpty = false } = {}) {
+export function ensureSortedUniqueStrings(values, code, { allowEmpty = false } = {}) {
   if (!Array.isArray(values) || (!allowEmpty && values.length === 0)) fail(code);
   if (values.some((item) => typeof item !== "string" || item.length === 0)) fail(code);
   if (new Set(values).size !== values.length) fail(code);
@@ -251,7 +251,7 @@ function validateBodyScope(item, registered, prefix) {
   if (bodies.some((body) => !registered.has(body))) fail(`${prefix}_body_unknown`);
 }
 
-function validateProposal(item, document) {
+export function validateProposal(item, document) {
   validateNfc(item);
   exactFields(item, PROPOSAL_FIELDS, "proposal_fields_invalid");
   if (item.schema_version !== document.domains.proposal || item.hash_profile !== "genesis.hash.fields.v0.1") fail("proposal_profile_invalid");
@@ -272,7 +272,7 @@ function validateProposal(item, document) {
   validateSignature(item.signature, { digest, domain: document.domains.proposal_signature, key: document.keys.body, signerType: "body", signerId: item.body_id, createdAt: item.created_at, prefix: "proposal" });
 }
 
-function validateEvaluation(item, proposal, document) {
+export function validateEvaluation(item, proposal, document) {
   validateNfc(item);
   exactFields(item, EVALUATION_FIELDS, "evaluation_fields_invalid");
   if (item.schema_version !== document.domains.evaluation || item.hash_profile !== "genesis.hash.fields.v0.1") fail("evaluation_profile_invalid");
@@ -300,7 +300,7 @@ function controlsRequired(capability, risk, level) {
 }
 function isSubsetList(child, parent) { return child.every((item) => parent.includes(item)); }
 
-function validateGrant(item, proposal, evaluation, document) {
+export function validateGrant(item, proposal, evaluation, document) {
   validateNfc(item);
   exactFields(item, GRANT_FIELDS, "grant_fields_invalid");
   if (item.schema_version !== document.domains.grant || item.hash_profile !== "genesis.hash.fields.v0.1") fail("grant_profile_invalid");
@@ -344,7 +344,7 @@ function validateGrant(item, proposal, evaluation, document) {
   validateSignature(item.signature, { digest, domain: document.domains.grant_signature, key: document.keys.guardian, signerType: "guardian", signerId: document.guardian_id, createdAt: item.issued_at, prefix: "grant" });
 }
 
-function validateUse(item, document) {
+export function validateUse(item, document) {
   validateNfc(item);
   const v2 = item.schema_version === "genesis.autonomy.capability.use.v0.2";
   exactFields(item, v2 ? USE_FIELDS_V2 : USE_FIELDS_V1, "use_fields_invalid");
@@ -431,7 +431,7 @@ export function evaluateUse(item, grants, events, registered) {
   return { use_id: item.use_id, status, reason, grant_ref: grantRef, remaining_uses: remaining, decision_digest: decisionDigest };
 }
 
-function validateLedger(events, grants, uses, document) {
+export function validateLedger(events, grants, uses, document, keyResolver = null) {
   if (!Array.isArray(events) || events.length === 0) fail("ledger_events_required");
   const grantsById = new Map(grants.map((grant) => [grant.grant_id, grant]));
   const usesById = new Map(uses.map((use) => [use.use_id, use]));
@@ -469,13 +469,15 @@ function validateLedger(events, grants, uses, document) {
       if (decision.status !== "allowed" || decision.grant_ref !== event.grant_ref) fail("ledger_consumed_use_not_authorized");
       if (recorded < parseUtc(use.requested_at)) fail("ledger_consumption_time_invalid");
       if (event.body_id !== use.body_id || event.subject_digest !== use.use_digest) fail("ledger_consumption_binding_invalid");
-      validateSignature(event.signature, { digest, domain: document.domains.event_signature, key: document.keys.body, signerType: "body", signerId: use.body_id, createdAt: event.recorded_at, prefix: "ledger" });
+      const bodyKey = keyResolver ? keyResolver({ envelope: event.signature, signer_type: "body", signer_id: use.body_id }) : document.keys.body;
+      validateSignature(event.signature, { digest, domain: document.domains.event_signature, key: bodyKey, signerType: "body", signerId: use.body_id, createdAt: event.recorded_at, prefix: "ledger" });
       seenUses.add(event.use_id);
     } else {
       if (event.body_id !== null || event.use_id !== null) fail("ledger_guardian_event_subject_invalid");
       if (recorded < parseUtc(grant.issued_at)) fail("ledger_control_time_invalid");
       if (event.subject_digest !== grant.grant_digest) fail("ledger_grant_digest_binding_invalid");
-      validateSignature(event.signature, { digest, domain: document.domains.event_signature, key: document.keys.guardian, signerType: "guardian", signerId: document.guardian_id, createdAt: event.recorded_at, prefix: "ledger" });
+      const guardianKey = keyResolver ? keyResolver({ envelope: event.signature, signer_type: "guardian", signer_id: document.guardian_id }) : document.keys.guardian;
+      validateSignature(event.signature, { digest, domain: document.domains.event_signature, key: guardianKey, signerType: "guardian", signerId: document.guardian_id, createdAt: event.recorded_at, prefix: "ledger" });
       const current = status.get(grant.grant_id) ?? "not_issued";
       if (kind === "grant.issued") {
         if (current !== "not_issued") fail("ledger_grant_issued_twice");

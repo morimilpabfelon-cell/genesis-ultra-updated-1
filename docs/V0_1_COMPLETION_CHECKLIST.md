@@ -110,7 +110,7 @@
 - [x] Laboratorio de mejora recursiva v0.2 reproducido por Python y Node: seis candidatos
       append-only, grant exacto firmado, binding explícito de instancia/cuerpo/scope/presupuesto,
       apertura sin consumo, solicitud de uso con `grant_ref` firmado, reevaluación contra ledger
-      y ocho rechazos adicionales de autoridad, firma, tiempo, presupuesto, suspensión o revocación.
+      y nueve rechazos adicionales de autoridad, firma, tiempo, presupuesto, suspensión, revocación o ledger público inválido.
 
 - [x] Deliberación operacional y prueba adaptadas de Fable Method, reproducidas por Python y Node:
       ocho tareas, diez adaptadores de dominio, dieciocho modos de fallo, diez trampas,

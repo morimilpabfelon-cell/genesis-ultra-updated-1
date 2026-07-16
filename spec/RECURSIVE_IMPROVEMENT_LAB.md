@@ -122,13 +122,12 @@ El perfil v0.2 verifica independientemente en Python y Node:
 - schema de campaña v0.2 y regresión negativa de campo inesperado;
 - manifiesto de integridad y registro de ejecución de herramientas.
 
-Los adaptadores `validate_guided_autonomy_authority.{mjs,py}` consumen actualmente el fixture completo y validado de autonomía guiada. Son adaptadores de conformidad, no todavía una API productiva neutral.
+`validate_guided_autonomy_authority.{mjs,py}` expone `validateAuthorityBundle`/`validate_authority_bundle` sobre objetos públicos, firmas, enlaces y ledger. El bundle neutral excluye semillas privadas, `expected` y `must_reject`; el fixture TEST ONLY se valida por separado y solo provee un resolvedor público para conformidad.
 
 ## Trabajo pendiente de autoridad
 
 Antes de declarar cerrada la integración de autoridad deben completarse:
 
-- separar `validateAuthorityBundle` de semillas y expectativas TEST ONLY;
 - permitir varios grants de una misma capacidad y resolver siempre por `grant_ref` exacto;
 - incorporar `grant_ref` al contrato general de solicitudes de uso, no solo al adaptador v0.2 del laboratorio;
 - ordenar proyecciones con varios grants por `(capability, grant_id)` en bytes UTF-8;
