@@ -1,19 +1,21 @@
 name: Diagnose Recursive Improvement Suite
 
 on:
-  push:
-    branches:
-      - agent/recursive-improvement-laboratory
+  pull_request:
+    types: [synchronize, reopened]
 
 permissions:
   contents: read
 
 jobs:
   diagnose:
+    if: github.head_ref == 'agent/recursive-improvement-laboratory'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout feature branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Remove diagnostic workflow from tested tree
         run: rm -f .github/workflows/diagnose-recursive-improvement.yml
