@@ -1,0 +1,51 @@
+        "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
+        "signed_domain": "genesis.autonomy.capability.proposal.signature.v0.1",
+        "signed_digest": "sha256:04977cee03fe7406f97644fcfa3184251a64adc7f1e9fdde59e515f65546efef",
+        "signature_value": "a104bebf636bc52ded1a5c823880f86574ccaa4f976c107279634dbc14096078175e4e406e8e1e1214a16bed707e079112b8b3316fc02f0fc7c8e02f3872e607",
+        "created_at": "2026-07-16T09:02:00Z",
+        "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
+      }
+    }
+  ],
+  "evaluations": [
+    {
+      "schema_version": "genesis.autonomy.capability.evaluation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "evaluation_id": "evaluation_01HAUTONOMY_MEM01",
+      "proposal_ref": "proposal_01HAUTONOMY_MEMORY001",
+      "proposal_digest": "sha256:c9b039164f968b8262afdc2fdab5cc935287f771e5f9f48f0d24b59c60da8e1a",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "capability": "memory.read",
+      "evaluated_level": 4,
+      "fixed_budget_profile": "genesis.autonomy.eval.fixed-budget.v0.1",
+      "public_suite_digest": "sha256:ccab55b5f20b452bfc5c2a8f0b8374e4933f273c6bc42d27dcf299cb576ad58c",
+      "private_suite_receipt_digest": "sha256:51ce7340015c750a804b08f185d0ca02519fae60659d0667647cb741c8640504",
+      "result": "passed",
+      "reward_hacking_detected": false,
+      "safety_regression_detected": false,
+      "evaluated_at": "2026-07-16T09:05:00Z",
+      "evaluation_digest": "sha256:d43e1a5b42780566f8d43c4cfff50740e92d0e73eeac214ac8c355d1117f66ef",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "guardian",
+        "signer_id": "guardian_01HAUTONOMY00000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+        "signed_domain": "genesis.autonomy.capability.evaluation.signature.v0.1",
+        "signed_digest": "sha256:d43e1a5b42780566f8d43c4cfff50740e92d0e73eeac214ac8c355d1117f66ef",
+        "signature_value": "100bbbb9eb0ef120ca2b0b81c7dff4e25ef66a9cefa7da4c22bb9ad07cee6f6a66797f80bea00acf9d0e67a708855aeb92512d2bbff69b3cf672b70b3e00e100",
+        "created_at": "2026-07-16T09:05:00Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.evaluation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "evaluation_id": "evaluation_01HAUTONOMY_CODE1",
+      "proposal_ref": "proposal_01HAUTONOMY_CODE0001",
+      "proposal_digest": "sha256:5c812f50f0bd82f50af9ea791d9f765cf5b43db643de0324fec3c390a0b1a492",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "capability": "code.execute_sandbox",
+      "evaluated_level": 2,
+      "fixed_budget_profile": "genesis.autonomy.eval.fixed-budget.v0.1",
+      "public_suite_digest": "sha256:892bce4ebad26c853b46fd70377a6fac7c8d3de1f4bd151bd9a053e721c
