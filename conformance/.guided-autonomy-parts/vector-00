@@ -1,0 +1,183 @@
+{
+  "profile": "genesis.autonomy.guided.v0.1",
+  "status": "draft",
+  "domains": {
+    "proposal": "genesis.autonomy.capability.proposal.v0.1",
+    "proposal_signature": "genesis.autonomy.capability.proposal.signature.v0.1",
+    "evaluation": "genesis.autonomy.capability.evaluation.v0.1",
+    "evaluation_signature": "genesis.autonomy.capability.evaluation.signature.v0.1",
+    "grant": "genesis.autonomy.capability.grant.v0.1",
+    "grant_signature": "genesis.autonomy.capability.grant.signature.v0.1",
+    "event": "genesis.autonomy.capability.event.v0.1",
+    "event_signature": "genesis.autonomy.capability.event.signature.v0.1",
+    "use": "genesis.autonomy.capability.use.v0.1",
+    "use_signature": "genesis.autonomy.capability.use.signature.v0.1"
+  },
+  "keys": {
+    "body": {
+      "warning": "TEST ONLY - never use this seed outside conformance fixtures",
+      "seed_hex": "6666666666666666666666666666666666666666666666666666666666666666",
+      "public_key_hex": "34b4d9043156cb6dcf0beb0a2949b7559c940d2bcb6dbe8c53a9b30278e3a746",
+      "public_key_fingerprint": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477",
+      "signer_id": "body_01HAUTONOMY000000000001",
+      "key_epoch_id": "epoch_01HAUTONOMY_BODY000001"
+    },
+    "guardian": {
+      "warning": "TEST ONLY - never use this seed outside conformance fixtures",
+      "seed_hex": "7777777777777777777777777777777777777777777777777777777777777777",
+      "public_key_hex": "c853ad0f0cd2b619aea92ceec4fd56a24d6499d584ce79257e45cfd8139b60a7",
+      "public_key_fingerprint": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814",
+      "signer_id": "guardian_01HAUTONOMY00000001",
+      "key_epoch_id": "epoch_01HAUTONOMY_GUARD001"
+    }
+  },
+  "instance_id": "inst_01HAUTONOMY000000000001",
+  "guardian_id": "guardian_01HAUTONOMY00000001",
+  "authority_epoch": 3,
+  "registered_body_ids": [
+    "body_01HAUTONOMY000000000001",
+    "body_01HAUTONOMY000000000002"
+  ],
+  "proposals": [
+    {
+      "schema_version": "genesis.autonomy.capability.proposal.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "proposal_id": "proposal_01HAUTONOMY_MEMORY001",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "body_id": "body_01HAUTONOMY000000000001",
+      "capability": "memory.read",
+      "requested_level": 4,
+      "body_scope": "registered_guardian_devices",
+      "body_ids": [],
+      "scope": {
+        "allowed_target_refs": [
+          "memory.accepted"
+        ],
+        "allowed_action_classes": [
+          "read"
+        ],
+        "allowed_data_classes": [
+          "guardian_shared",
+          "private_local"
+        ]
+      },
+      "budget": {
+        "max_actions_per_run": 20,
+        "max_duration_seconds": 30,
+        "max_bytes_per_run": 1048576
+      },
+      "controls": {
+        "sandbox_required": false,
+        "human_confirmation_required": false,
+        "observer_required": true,
+        "reversible_required": false
+      },
+      "reason": "Leer memoria aceptada dentro de ACL sin escribirla.",
+      "created_at": "2026-07-16T09:00:00Z",
+      "proposal_digest": "sha256:c9b039164f968b8262afdc2fdab5cc935287f771e5f9f48f0d24b59c60da8e1a",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HAUTONOMY000000000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
+        "signed_domain": "genesis.autonomy.capability.proposal.signature.v0.1",
+        "signed_digest": "sha256:c9b039164f968b8262afdc2fdab5cc935287f771e5f9f48f0d24b59c60da8e1a",
+        "signature_value": "d59d836094e4eaabed5344b85050e0607bee94de95b374bd5011b7344f444a2de771ea916758827e70b26c70d5b75e9c56509bcb2a44f0ba4afe0a31bccda100",
+        "created_at": "2026-07-16T09:00:00Z",
+        "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
+      }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.proposal.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "proposal_id": "proposal_01HAUTONOMY_CODE0001",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "body_id": "body_01HAUTONOMY000000000001",
+      "capability": "code.execute_sandbox",
+      "requested_level": 2,
+      "body_scope": "specific_bodies",
+      "body_ids": [
+        "body_01HAUTONOMY000000000001"
+      ],
+      "scope": {
+        "allowed_target_refs": [
+          "workspace.source"
+        ],
+        "allowed_action_classes": [
+          "compile",
+          "test"
+        ],
+        "allowed_data_classes": [
+          "private_local"
+        ]
+      },
+      "budget": {
+        "max_actions_per_run": 4,
+        "max_duration_seconds": 120,
+        "max_bytes_per_run": 5242880
+      },
+      "controls": {
+        "sandbox_required": true,
+        "human_confirmation_required": true,
+        "observer_required": true,
+        "reversible_required": true
+      },
+      "reason": "Ejecutar compilación y pruebas únicamente en sandbox reversible.",
+      "created_at": "2026-07-16T09:01:00Z",
+      "proposal_digest": "sha256:5c812f50f0bd82f50af9ea791d9f765cf5b43db643de0324fec3c390a0b1a492",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HAUTONOMY000000000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
+        "signed_domain": "genesis.autonomy.capability.proposal.signature.v0.1",
+        "signed_digest": "sha256:5c812f50f0bd82f50af9ea791d9f765cf5b43db643de0324fec3c390a0b1a492",
+        "signature_value": "05376d398f2be68ddd7fbbb958ae4aeb474a7dc6c5a156c180a5649c788931fbfec01149aea586f7c44fb4083fc44015bd32908608ee8fdacc881f21b917b009",
+        "created_at": "2026-07-16T09:01:00Z",
+        "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
+      }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.proposal.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "proposal_id": "proposal_01HAUTONOMY_EXT00001",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "body_id": "body_01HAUTONOMY000000000001",
+      "capability": "external.action",
+      "requested_level": 2,
+      "body_scope": "specific_bodies",
+      "body_ids": [
+        "body_01HAUTONOMY000000000001"
+      ],
+      "scope": {
+        "allowed_target_refs": [
+          "external.ticket"
+        ],
+        "allowed_action_classes": [
+          "create"
+        ],
+        "allowed_data_classes": [
+          "guardian_shared"
+        ]
+      },
+      "budget": {
+        "max_actions_per_run": 1,
+        "max_duration_seconds": 20,
+        "max_bytes_per_run": 4096
+      },
+      "controls": {
+        "sandbox_required": true,
+        "human_confirmation_required": true,
+        "observer_required": true,
+        "reversible_required": true
+      },
+      "reason": "Crear tickets externos bajo confirmación humana.",
+      "created_at": "2026-07-16T09:02:00Z",
+      "proposal_digest": "sha256:04977cee03fe7406f97644fcfa3184251a64adc7f1e9fdde59e515f65546efef",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HAUTONOMY000000000001",
