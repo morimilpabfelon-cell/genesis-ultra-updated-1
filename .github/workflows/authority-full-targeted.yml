@@ -1,0 +1,136 @@
+name: Authority Full Targeted Runner
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  targeted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TRANSFER_ARTIFACTS: /tmp/genesis-ultra-transfer-targeted.json
+      RECOVERY_ARTIFACTS: /tmp/genesis-ultra-recovery-targeted.json
+      JOURNAL_ARTIFACTS: /tmp/genesis-ultra-journal-targeted.json
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Remove diagnostic workflow from workspace
+        run: rm .github/workflows/authority-full-targeted.yml
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "20"
+
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Install Node dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate workspace Python
+        run: python tools/validate_workspace.py
+      - name: Validate draft integrity manifest
+        run: python tools/generate_draft_manifest.py --check
+      - name: Validate tool registry
+        run: python tools/validate_tool_execution_registry.py
+      - name: Validate guided autonomy Python
+        run: python tools/validate_guided_autonomy.py
+      - name: Validate guided autonomy Node
+        run: node tools/guided_autonomy.mjs validate
+      - name: Validate cognitive freedom Python
+        run: python tools/validate_freedom_charter.py
+      - name: Validate cognitive freedom Node
+        run: node tools/validate_freedom_charter.mjs validate
+      - name: Validate recursive improvement Python
+        run: python tools/validate_recursive_improvement_lab.py
+      - name: Validate recursive improvement Node
+        run: node tools/validate_recursive_improvement_lab.mjs
+      - name: Validate operational deliberation Python
+        run: python tools/validate_operational_deliberation.py
+      - name: Validate operational deliberation Node
+        run: node tools/validate_operational_deliberation.mjs
+      - name: Validate workspace Node
+        run: node tools/validate_workspace.mjs
+      - name: Validate observer boundaries
+        run: node --test observer/test/core.test.mjs
+      - name: Validate instance identity Python
+        run: python tools/validate_instance_identity.py
+      - name: Validate instance identity Node
+        run: node tools/validate_instance_identity.mjs
+      - name: Validate sense observations Python
+        run: python tools/validate_sense_observations.py
+      - name: Validate sense observations Node
+        run: node tools/validate_sense_observations.mjs
+      - name: Validate associative projection Python
+        run: python tools/validate_associative_memory_projection.py
+      - name: Validate associative projection Node
+        run: node tools/validate_associative_memory_projection.mjs
+      - name: Validate memory retrieval Python
+        run: python tools/validate_memory_retrieval.py
+      - name: Validate memory retrieval Node
+        run: node tools/validate_memory_retrieval.mjs
+      - name: Validate hybrid retrieval Python
+        run: python tools/validate_hybrid_memory_retrieval.py
+      - name: Validate hybrid retrieval Node
+        run: node tools/hybrid_memory_retrieval.mjs validate
+      - name: Validate retrieval ACL Python
+        run: python tools/validate_memory_retrieval_acl.py
+      - name: Validate retrieval ACL Node
+        run: node tools/memory_retrieval_acl.mjs validate
+      - name: Validate temporal metadata Python
+        run: python tools/validate_temporal_memory_metadata.py
+      - name: Validate temporal metadata Node
+        run: node tools/temporal_memory_metadata.mjs validate
+      - name: Validate portable capsules Python
+        run: python tools/validate_portable_memory_capsule.py
+      - name: Validate portable capsules Node
+        run: node tools/portable_memory_capsule.mjs validate
+      - name: Validate multimodal pipeline Python
+        run: python tools/validate_multimodal_memory_pipeline.py
+      - name: Validate multimodal pipeline Node
+        run: node tools/multimodal_memory_pipeline.mjs validate
+      - name: Validate structured memory Python
+        run: python tools/validate_structured_versioned_memory.py
+      - name: Validate structured memory Node
+        run: node tools/structured_versioned_memory.mjs validate
+      - name: Validate memory gate bridge Python
+        run: python tools/validate_memory_gate_retrieval_bridge.py
+      - name: Validate memory gate bridge Node
+        run: node tools/memory_gate_retrieval_bridge.mjs validate
+      - name: Validate sense adapters Python
+        run: python tools/validate_sense_adapters.py
+      - name: Validate sense adapters Node
+        run: node tools/validate_sense_adapters.mjs
+      - name: Validate continuity
+        run: python tools/validate_continuity.py
+      - name: Validate host adapter Python
+        run: python tools/validate_host_adapter.py
+      - name: Validate host adapter Node
+        run: node tools/validate_host_adapter.mjs
+      - name: Validate protocol vectors
+        run: node tools/validate_protocol_vectors.mjs
+      - name: Validate crypto vectors
+        run: python tools/validate_crypto_vectors.py
+      - name: Simulate transfer
+        run: python tools/simulate_transfer.py --artifacts-output "$TRANSFER_ARTIFACTS"
+      - name: Simulate backup recovery
+        run: python tools/simulate_backup_recovery.py --source-artifacts "$TRANSFER_ARTIFACTS" --artifacts-output "$RECOVERY_ARTIFACTS"
+      - name: Simulate transaction crashes
+        run: python tools/simulate_transaction_crashes.py --transfer-artifacts "$TRANSFER_ARTIFACTS" --recovery-artifacts "$RECOVERY_ARTIFACTS" --artifacts-output "$JOURNAL_ARTIFACTS"
+      - name: Validate generated artifacts
+        run: node tools/validate_artifacts.mjs "$TRANSFER_ARTIFACTS" "$RECOVERY_ARTIFACTS" "$JOURNAL_ARTIFACTS"
+      - name: Simulate transfer negatives
+        run: python tools/simulate_negatives.py
+      - name: Simulate recovery negatives
+        run: python tools/simulate_backup_recovery_negatives.py --artifacts "$RECOVERY_ARTIFACTS"
