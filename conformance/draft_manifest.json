@@ -71,7 +71,7 @@
     {
       "path": "conformance/guided_autonomy_vectors.json",
       "size_bytes": 71299,
-      "digest": "sha256:fc032f8e9c02aa2692734475e60379f41277a39ad0c93981376ed0685dec6d67"
+      "digest": "sha256:3a8092dc2733c8ea9c7975fa3afc5c537992b876b994945b477a614993a5fb73"
     },
     {
       "path": "conformance/host_adapter_vectors.json",
@@ -974,5 +974,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:0657b22eb6c040fbfc107c7d93b7a3b32bbebcc454e9b775cb833aa22fde977b"
+  "root_digest": "sha256:919d45e0c3aa9bb9407743a7d13038bb2d7970566d935030cd6162e57f17026c"
 }

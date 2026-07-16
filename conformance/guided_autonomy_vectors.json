@@ -1540,7 +1540,7 @@
       "case_id": "ledger-event-hash-mismatch",
       "mutation": {
         "target": "event",
-        "index": 2,
+        "index": 3,
         "path": [
           "recorded_at"
         ],
@@ -1552,7 +1552,7 @@
       "case_id": "ledger-grant-binding-mismatch",
       "mutation": {
         "target": "event",
-        "index": 3,
+        "index": 4,
         "path": [
           "subject_digest"
         ],
@@ -1565,7 +1565,7 @@
       "case_id": "ledger-consumption-unknown-use",
       "mutation": {
         "target": "event",
-        "index": 2,
+        "index": 3,
         "path": [
           "use_id"
         ],
@@ -1578,7 +1578,7 @@
       "case_id": "ledger-consumption-body-mismatch",
       "mutation": {
         "target": "event",
-        "index": 2,
+        "index": 3,
         "path": [
           "body_id"
         ],
@@ -1591,7 +1591,7 @@
       "case_id": "ledger-invalid-resume-transition",
       "mutation": {
         "target": "event",
-        "index": 3,
+        "index": 4,
         "path": [
           "event_type"
         ],
@@ -1604,7 +1604,7 @@
       "case_id": "ledger-time-regression",
       "mutation": {
         "target": "event",
-        "index": 4,
+        "index": 5,
         "path": [
           "recorded_at"
         ],
@@ -1617,7 +1617,7 @@
       "case_id": "ledger-consumption-before-request",
       "mutation": {
         "target": "event",
-        "index": 2,
+        "index": 3,
         "path": [
           "recorded_at"
         ],
