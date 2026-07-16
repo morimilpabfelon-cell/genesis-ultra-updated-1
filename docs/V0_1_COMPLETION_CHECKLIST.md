@@ -29,8 +29,8 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 40 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [x] Cuarenta y ocho regresiones que demuestran el rechazo de artefactos inválidos por los
+- [x] Compilación de los 43 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Cincuenta y una regresiones que demuestran el rechazo de artefactos inválidos por los
       schemas reales, con cobertura obligatoria para cada schema.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
@@ -93,7 +93,7 @@
       operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
       y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
-- [x] Registro autocontrolado de ejecución de herramientas con treinta candidatos: veintiséis entrypoints exigidos en el runner y cuatro bibliotecas importadas por consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
+- [x] Registro autocontrolado de ejecución de herramientas con treinta y un candidatos: veintisiete entrypoints exigidos en el runner y cuatro bibliotecas importadas por consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
 
 - [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados.
 
