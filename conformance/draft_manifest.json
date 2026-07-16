@@ -150,8 +150,8 @@
     },
     {
       "path": "docs/AUDIT_TOOL_EXECUTION_REPORT.md",
-      "size_bytes": 6092,
-      "digest": "sha256:53512a581a7e135ad198b32b01fdb11f3da2619fa49c8bc92ed226519061c18d"
+      "size_bytes": 6750,
+      "digest": "sha256:8da77ea36a4b25899ddf588193d37325fe98483c8778ab287b762806031f5f39"
     },
     {
       "path": "docs/MEMVID_MEMORY_EXTRACTION_MAP.md",
@@ -849,5 +849,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:b4a82c99bb022d649ca786c4cca31c19b636b583014b7c28a58872d314224c39"
+  "root_digest": "sha256:88b472407d763602f9daf1752c171e11123750be71a5b57b6af3474571dc73ab"
 }
