@@ -1,0 +1,44 @@
+name: Diagnose Fable Operational Proof
+
+on:
+  pull_request:
+    types: [synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    if: github.head_ref == 'agent/fable-operational-proof'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: python -m pip install --disable-pip-version-check -r requirements.txt
+      - run: npm ci --ignore-scripts
+      - id: suite
+        continue-on-error: true
+        run: |
+          rm .github/workflows/diagnose-fable-proof.yml
+          npm test > fable-proof-suite.log 2>&1
+          status=$?
+          echo "exit_status=$status" >> fable-proof-suite.log
+          cat fable-proof-suite.log
+          exit $status
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fable-proof-suite-diagnostic
+          path: fable-proof-suite.log
+          retention-days: 1
+      - if: steps.suite.outcome == 'failure'
+        run: exit 1
