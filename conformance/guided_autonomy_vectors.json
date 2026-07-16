@@ -238,6 +238,57 @@
         "created_at": "2026-07-16T09:01:00Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
       }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.proposal.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "proposal_id": "proposal_01HAUTONOMY_RILAB001",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "body_id": "body_01HAUTONOMY000000000001",
+      "capability": "code.execute_sandbox",
+      "requested_level": 2,
+      "body_scope": "specific_bodies",
+      "body_ids": [
+        "body_01HAUTONOMY000000000001"
+      ],
+      "scope": {
+        "allowed_target_refs": [
+          "workspace.source"
+        ],
+        "allowed_action_classes": [
+          "compile",
+          "test"
+        ],
+        "allowed_data_classes": [
+          "private_local"
+        ]
+      },
+      "budget": {
+        "max_actions_per_run": 1,
+        "max_duration_seconds": 120,
+        "max_bytes_per_run": 2000000
+      },
+      "controls": {
+        "sandbox_required": true,
+        "human_confirmation_required": true,
+        "observer_required": true,
+        "reversible_required": true
+      },
+      "reason": "Ejecutar las operaciones compile y test del laboratorio mediante usos firmados por candidato.",
+      "created_at": "2026-07-16T11:00:40Z",
+      "proposal_digest": "sha256:24497b09aba593be0dd3c0e2ab2d04460ce39bd23b754696b83f2dac8fac2383",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HAUTONOMY000000000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
+        "signed_domain": "genesis.autonomy.capability.proposal.signature.v0.1",
+        "signed_digest": "sha256:24497b09aba593be0dd3c0e2ab2d04460ce39bd23b754696b83f2dac8fac2383",
+        "signature_value": "fc2309b634e37cf30b22e042f9a4a69c7a935885ef232a8a32222f0daefb2ceb8d2a4c87ac54ba6d42ce263802fbe7d6fe030fa48d7ca058ec1f062ae65ca404",
+        "created_at": "2026-07-16T11:00:40Z",
+        "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
+      }
     }
   ],
   "evaluations": [
@@ -358,6 +409,36 @@
         "signed_digest": "sha256:1c5bd7e7d39a01ed386fb8d403679970319f442872f094730f1c8e16e1ceec03",
         "signature_value": "7a304e992ad981474d95cdd8be7c2a90c8b747b8ed29158d4fb229c219e0bf99e653e56fd862ff7dabcf7698af96cee17b799bb02213dcb0fa667cccdd6f4400",
         "created_at": "2026-07-16T09:02:00Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.evaluation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "evaluation_id": "evaluation_01HAUTONOMY_RILAB1",
+      "proposal_ref": "proposal_01HAUTONOMY_RILAB001",
+      "proposal_digest": "sha256:24497b09aba593be0dd3c0e2ab2d04460ce39bd23b754696b83f2dac8fac2383",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "capability": "code.execute_sandbox",
+      "evaluated_level": 2,
+      "fixed_budget_profile": "genesis.autonomy.eval.fixed-budget.v0.1",
+      "public_suite_digest": "sha256:892bce4ebad26c853b46fd70377a6fac7c8d3de1f4bd151bd9a053e721c79214",
+      "private_suite_receipt_digest": "sha256:127c6df170d91d1a05c5b5450c9521bce1e8d74a806793653badb232f5108096",
+      "result": "passed",
+      "reward_hacking_detected": false,
+      "safety_regression_detected": false,
+      "evaluated_at": "2026-07-16T11:00:50Z",
+      "evaluation_digest": "sha256:4c56ff2e4af11636960ce92b15087242b2bd822c328adae763541fab99125f6b",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "guardian",
+        "signer_id": "guardian_01HAUTONOMY00000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+        "signed_domain": "genesis.autonomy.capability.evaluation.signature.v0.1",
+        "signed_digest": "sha256:4c56ff2e4af11636960ce92b15087242b2bd822c328adae763541fab99125f6b",
+        "signature_value": "f393cff7fd1394ad593b6ed5b8ca611727a722c24afbbb697635e4a11d6a8273a2fd60dd655f82e9289f63f1226efd292d9f5ac0c3355685f287960d80810e0b",
+        "created_at": "2026-07-16T11:00:50Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
       }
     }
@@ -543,6 +624,68 @@
         "signed_digest": "sha256:3bc95cd75773045b0a48a780cbd7f986e17c1882734f1b491e73870edac6acab",
         "signature_value": "1030bb06f864809ed87837ee565790260b8108c1feb7b457031d2951b0c266447e0ef5dfeb092ecbace8d7c5334316d14bdf2676a8047bd448e62164041ea902",
         "created_at": "2026-07-16T09:11:02Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.grant.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "grant_id": "grant_01HAUTONOMY_RILAB0001",
+      "guardian_id": "guardian_01HAUTONOMY00000001",
+      "guardian_key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "authority_epoch": 3,
+      "proposal_ref": "proposal_01HAUTONOMY_RILAB001",
+      "proposal_digest": "sha256:24497b09aba593be0dd3c0e2ab2d04460ce39bd23b754696b83f2dac8fac2383",
+      "evaluation_ref": "evaluation_01HAUTONOMY_RILAB1",
+      "evaluation_digest": "sha256:4c56ff2e4af11636960ce92b15087242b2bd822c328adae763541fab99125f6b",
+      "capability": "code.execute_sandbox",
+      "autonomy_level": 2,
+      "risk_tier": "high",
+      "mode": "bounded",
+      "body_scope": "specific_bodies",
+      "body_ids": [
+        "body_01HAUTONOMY000000000001"
+      ],
+      "scope": {
+        "allowed_target_refs": [
+          "workspace.source"
+        ],
+        "allowed_action_classes": [
+          "compile",
+          "test"
+        ],
+        "allowed_data_classes": [
+          "private_local"
+        ]
+      },
+      "budget": {
+        "max_actions_per_run": 1,
+        "max_duration_seconds": 120,
+        "max_bytes_per_run": 2000000
+      },
+      "controls": {
+        "sandbox_required": true,
+        "human_confirmation_required": true,
+        "observer_required": true,
+        "reversible_required": true
+      },
+      "issued_at": "2026-07-16T11:01:00Z",
+      "not_before": "2026-07-16T11:01:00Z",
+      "expires_at": "2026-07-17T11:01:00Z",
+      "use_limit": 11,
+      "replaces_grant_ref": null,
+      "grant_digest": "sha256:a6ef35adab22fd5495cbd0d441ba429bda7b31640d932fef3452a936eb3369d9",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "guardian",
+        "signer_id": "guardian_01HAUTONOMY00000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+        "signed_domain": "genesis.autonomy.capability.grant.signature.v0.1",
+        "signed_digest": "sha256:a6ef35adab22fd5495cbd0d441ba429bda7b31640d932fef3452a936eb3369d9",
+        "signature_value": "6599e6351dcfc708f2699ad745dc0526c378f035073886ad922c96be81c8df379b7bf26e6ac41adf5122205f0e5137ef75c3c08c3a5272e7ccac8c6c8ee62204",
+        "created_at": "2026-07-16T11:01:00Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
       }
     }
@@ -785,6 +928,36 @@
         "signed_digest": "sha256:5b1b45c5bdfb03dc96a04558b02656a4c4ee8c7fe00f0c2345939b6b971edab7",
         "signature_value": "17d98ecb2d82380f0941a47e21d167c86354e85f6bd33aeb7f4573c7297f0c53c219c567e741ec444224467a1e774a37457d438defaae287bfe54bb159021e09",
         "created_at": "2026-07-16T11:00:00Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "ledger_id": "capledger_01HAUTONOMY000001",
+      "event_id": "capevent_01HAUTONOMY_RILAB01",
+      "sequence": 8,
+      "previous_event_hash": "sha256:5b1b45c5bdfb03dc96a04558b02656a4c4ee8c7fe00f0c2345939b6b971edab7",
+      "guardian_id": "guardian_01HAUTONOMY00000001",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "authority_epoch": 3,
+      "event_type": "grant.issued",
+      "grant_ref": "grant_01HAUTONOMY_RILAB0001",
+      "body_id": null,
+      "use_id": null,
+      "subject_digest": "sha256:a6ef35adab22fd5495cbd0d441ba429bda7b31640d932fef3452a936eb3369d9",
+      "recorded_at": "2026-07-16T11:01:01Z",
+      "event_hash": "sha256:8d4e3923c388264eca8d8e6f84c513a804c8ba7036e9119932c0a353410e22b9",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "guardian",
+        "signer_id": "guardian_01HAUTONOMY00000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+        "signed_domain": "genesis.autonomy.capability.event.signature.v0.1",
+        "signed_digest": "sha256:8d4e3923c388264eca8d8e6f84c513a804c8ba7036e9119932c0a353410e22b9",
+        "signature_value": "c353d87745ff6318e08b47b2a8852c47b99cda432c7dffe929a80ce708505f6998cf98e0e9fca795b48c6f1c719c7d7a36a384a1329c65a29072829c3cc78f0c",
+        "created_at": "2026-07-16T11:01:01Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
       }
     }
@@ -1184,8 +1357,8 @@
     }
   ],
   "expected": {
-    "projection_at": "2026-07-16T12:00:00Z",
-    "projection_digest": "sha256:24a88c7059dd6a4043232ccdbb084a733ef05413638a623c2f162bf77760c2f8",
+    "projection_at": "2026-07-16T11:01:02Z",
+    "projection_digest": "sha256:016ca06864c89085e0788ae627437b76feba1ff020c6cbfa024b7929a7558cc3",
     "decision_digests": {
       "use_01HAUTONOMY_CODE_ALLOW1": "sha256:e3779011797d2a3727eca062e84c977e4ec1d28e95c29203808e1335d757dbfe",
       "use_01HAUTONOMY_CODE_SUSPEND": "sha256:e6cd629a490bce8d46e80a0e61e2cbdc70b754911ed3291d2a4103b74b7838fa",

@@ -209,6 +209,8 @@ Una solicitud `genesis.autonomy.capability.use.v0.2` incluye `grant_ref` dentro 
 
 Las proyecciones ordenan puertas por `(capability, grant_id)` en bytes UTF-8.
 
+El vector integrado incluye un grant dedicado `code.execute_sandbox` para el laboratorio, con once usos limitados que demuestran el encadenamiento candidato→solicitud→consumo. Su ID es de conformidad, no normativo.
+
 ## 11. Proyección de puertas
 
 `genesis.autonomy.capability.projection.v0.1` es una vista reconstruible. Muestra cada capacidad concedida, nivel, riesgo, estado, usos restantes, expiración y los digests del alcance y controles.

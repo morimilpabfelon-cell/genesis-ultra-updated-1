@@ -103,14 +103,14 @@
       treinta y tres entrypoints exigidos en el runner y seis bibliotecas importadas por
       consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
 
-- [x] Autonomía guiada reproducida por Python y Node: tres puertas, ocho eventos append-only, doce intentos de uso, cuatro permitidos, ocho denegados y treinta y ocho cruces de autoridad, integridad, selección exacta, alcance, presupuesto o controles rechazados; varios grants de una misma capacidad se ordenan por `(capability, grant_id)`.
+- [x] Autonomía guiada reproducida por Python y Node: cuatro puertas, nueve eventos append-only, doce intentos de uso, cuatro permitidos, ocho denegados y treinta y ocho cruces de autoridad, integridad, selección exacta, alcance, presupuesto o controles rechazados; varios grants de una misma capacidad se ordenan por `(capability, grant_id)`.
 
 - [x] Carta de libertad cognitiva reproducida por Python y Node: ocho libertades activas por nacimiento, ocho dominios operativos bajo grants, ocho garantías fundamentales, firma Ed25519 del guardián y veinte cruces de frontera rechazados.
 
 - [x] Laboratorio de mejora recursiva v0.2 reproducido por Python y Node: seis candidatos
       append-only, grant exacto firmado, binding explícito de instancia/cuerpo/scope/presupuesto,
       apertura sin consumo, solicitud de uso con `grant_ref` firmado, reevaluación contra ledger
-      y nueve rechazos adicionales de autoridad, firma, tiempo, presupuesto, suspensión, revocación o ledger público inválido.
+      y once rechazos adicionales de autoridad, firma, tiempo, presupuesto, suspensión, revocación, ledger público o mapping de consumo inválido; seis candidatos producen once usos firmados y agotan el grant dedicado.
 
 - [x] Deliberación operacional y prueba adaptadas de Fable Method, reproducidas por Python y Node:
       ocho tareas, diez adaptadores de dominio, dieciocho modos de fallo, diez trampas,

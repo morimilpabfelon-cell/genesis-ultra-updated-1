@@ -90,6 +90,17 @@ La solicitud se evalúa nuevamente contra el estado actual del ledger. Suspensi�
 
 La unidad de consumo es un `use_id` firmado y posteriormente registrado como `grant.consumed`. `requested_actions` puede representar varias acciones de una misma `action_class`. El mapeo completo de cada candidato a una o más solicitudes de uso permanece pendiente antes de ejecutar candidatos reales.
 
+## Mapeo candidato → uso → consumo
+
+El perfil de conformidad `v0.2` asigna operaciones de autoridad de forma determinista:
+
+- cada candidato genera una solicitud firmada `compile`;
+- un candidato cuya ejecución no es `buggy` genera además una solicitud firmada `test`;
+- cada solicitud permitida se enlaza inmediatamente a un evento firmado `grant.consumed`;
+- `candidate_ref`, `action_class`, `use_ref`, `event_ref` y `decision_digest` forman un mapping digest reproducible.
+
+Los seis candidatos producen once solicitudes: seis `compile` y cinco `test`. El grant dedicado de laboratorio tiene `use_limit = 11`; después del último consumo su estado debe ser `exhausted`. Omitir un consumo o cambiar el grant de un evento invalida la prueba.
+
 ## Presupuesto
 
 La jerarquía de menor privilegio es:
@@ -131,7 +142,6 @@ Antes de declarar cerrada la integración de autoridad deben completarse:
 - permitir varios grants de una misma capacidad y resolver siempre por `grant_ref` exacto;
 - incorporar `grant_ref` al contrato general de solicitudes de uso, no solo al adaptador v0.2 del laboratorio;
 - ordenar proyecciones con varios grants por `(capability, grant_id)` en bytes UTF-8;
-- definir el mapeo candidato → solicitudes firmadas y sus consumos;
 - añadir sandbox físico, ejecución real y evaluador privado externo.
 
 ## Prohibiciones

@@ -2903,7 +2903,7 @@
           "schema_version": "genesis.improvement.campaign.v0.2",
           "campaign_id": "camp_rilab_001",
           "instance_id": "inst_01HAUTONOMY000000000001",
-          "guardian_grant_ref": "grant_01HAUTONOMY_CODE000001",
+          "guardian_grant_ref": "grant_01HAUTONOMY_RILAB0001",
           "source_tree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
           "goal": "Improve deterministic retrieval quality without weakening ACL",
           "metric": "quality_milli",
@@ -2929,8 +2929,8 @@
             "memory.rewrite",
             "private_eval.read"
           ],
-          "campaign_digest": "sha256:0d88047cef0739487791b04ea095bef90a4168c9dc50782f93248a7458ee9597",
-          "opened_at": "2026-07-16T09:11:02Z",
+          "campaign_digest": "sha256:b2d522d2b3e0ee1a5e553081697e3ade2a892be99ce1ab009b5a32a7e86b12d2",
+          "opened_at": "2026-07-16T11:01:02Z",
           "authority_binding": {
             "body_id": "body_01HAUTONOMY000000000001",
             "capability": "code.execute_sandbox",
@@ -3154,6 +3154,15 @@
           "projection_digest_mismatch",
           "best_candidate_invalid"
         ],
+        "expected_authority_execution": {
+          "operation_count": 11,
+          "compile_count": 6,
+          "test_count": 5,
+          "consumed_use_count": 11,
+          "final_grant_status": "exhausted",
+          "mapping_digest": "sha256:55bb3f06b9eb4a93b5c7e51d126c2116f44aa7ec2694797328c06777d9a32a31",
+          "final_ledger_head_hash": "sha256:5d20b3f718b35595ec3f008e7b25c82be27c08d0fcaf352b7b562a00bf099d56"
+        },
         "unexpected_core_field": true
       }
     }
