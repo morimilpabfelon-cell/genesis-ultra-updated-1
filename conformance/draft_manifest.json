@@ -195,8 +195,8 @@
     },
     {
       "path": "docs/PR27_SELECTIVE_EXTRACTION_REPORT.md",
-      "size_bytes": 7851,
-      "digest": "sha256:005018a3f7916770ad18cf089292003d9cbf57b2ac77807998941c179a1100ee"
+      "size_bytes": 8059,
+      "digest": "sha256:c1ff1fe23d6887f9a10adee691f88e64fcfd4d7d0ee6a05ca509897709ec373a"
     },
     {
       "path": "docs/SOURCE_EXTRACTION_MAP.md",
@@ -205,8 +205,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 11312,
-      "digest": "sha256:472ddfd548dd3467b99468a500ff69f83ad82d70c8b1571cd90b64d7fd76a531"
+      "size_bytes": 11315,
+      "digest": "sha256:27491df10968c046eb25e5ce6785eadce7f49d2ad459f7505e558789a00297a6"
     },
     {
       "path": "observer/README.md",
@@ -840,13 +840,13 @@
     },
     {
       "path": "tools/validate_guided_autonomy_authority.mjs",
-      "size_bytes": 17501,
-      "digest": "sha256:362986f5c9038384e00552f36021f81f0df3d2d575021631e43699da230cd098"
+      "size_bytes": 18838,
+      "digest": "sha256:93731251042e51e8b906389ab3c2d1e82abcb7c708d6e1820055e3d033958e66"
     },
     {
       "path": "tools/validate_guided_autonomy_authority.py",
-      "size_bytes": 15236,
-      "digest": "sha256:8e513f373c23d669ba9f8fb5dbb7df65b7f1eac48d1901ed8ab39b48cd152384"
+      "size_bytes": 15733,
+      "digest": "sha256:cdffdc580e4c51897c7f407d0fcdc33b36bfb1b219b6f9ce97765ccfc5afdb96"
     },
     {
       "path": "tools/validate_host_adapter.mjs",
@@ -920,13 +920,13 @@
     },
     {
       "path": "tools/validate_recursive_improvement_lab.mjs",
-      "size_bytes": 16275,
-      "digest": "sha256:65ce53b1ed4faefeab2bafd54b0de9353691a90f4d6eeff5f233f2b41c2cd81b"
+      "size_bytes": 17151,
+      "digest": "sha256:548a49089650c8f26b4ef49a0d62c588bc3251565888c2d458bd801af1897f7e"
     },
     {
       "path": "tools/validate_recursive_improvement_lab.py",
-      "size_bytes": 16598,
-      "digest": "sha256:5b56734abe1a25a4592912940a8d73f1a9aa5ca42749eb8da03044408fbb36b5"
+      "size_bytes": 17471,
+      "digest": "sha256:5802aef6869a1570e05893a770f8debfc8c3bc6c2ecd982c436b05a32c68fe3c"
     },
     {
       "path": "tools/validate_sense_adapters.mjs",
@@ -979,5 +979,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:cdad0e6835e2eea6af0c7515104e929899518709552a47f768f5d7b8bfd2c923"
+  "root_digest": "sha256:f316bfd85df54f227401f21627db5ff72b935f679ac994b1f0644788d2fed086"
 }

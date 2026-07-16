@@ -107,7 +107,16 @@ def validate_authority(lab,guided):
  control=next(g for g in guided['grants'] if g['grant_id']=='grant_01HAUTONOMY_CODE000001')
  for event_type,reason in [('grant.suspended','grant_suspended'),('grant.revoked','grant_revoked')]:
   event=next(e for e in guided['ledger_events'] if e['grant_ref']==control['grant_id'] and e['event_type']==event_type);expect_reason(event_type,reason,lambda event=event:authorize_campaign_opening({**request,'grant_ref':control['grant_id'],'authorized_at':event['recorded_at']},authority));negatives+=1
- broken=deepcopy(authority.bundle);broken['ledger_events'][1]['previous_event_hash']='sha256:'+'0'*64;expect_failure('neutral_bundle_ledger',lambda:validate_authority_bundle(broken,authority.key_resolver));negatives+=1;wrong=deepcopy(execution['bundle']);wrong['ledger_events'][-1]['grant_ref']='grant_other';expect_failure('candidate_consumption_grant',lambda:validate_authority_bundle(wrong,authority.key_resolver));negatives+=1;short=deepcopy(execution['bundle']);short['ledger_events'].pop();short_authority=validate_authority_bundle(short,authority.key_resolver);short_state=resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],plus(short['ledger_events'][-1]['recorded_at'],1),short_authority)
+ broken=deepcopy(authority.bundle);broken['ledger_events'][1]['previous_event_hash']='sha256:'+'0'*64;expect_failure('neutral_bundle_ledger',lambda:validate_authority_bundle(broken,authority.key_resolver));negatives+=1
+ def bad_fingerprint_resolver(query):
+  key=authority.key_resolver(query)
+  return None if key is None else {**key,'public_key_hex':'00'*32}
+ expect_failure('public_key_fingerprint',lambda:validate_authority_bundle(deepcopy(authority.bundle),bad_fingerprint_resolver));negatives+=1
+ source_bundle=deepcopy(authority.bundle);isolated_authority=validate_authority_bundle(source_bundle,authority.key_resolver);source_bundle['ledger_events'][0]['event_hash']='sha256:'+'0'*64
+ if resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],opened,isolated_authority)['reason']!='allowed': raise ValueError('authority_source_mutation_leaked')
+ negatives+=1;exposed=isolated_authority.bundle;exposed['authority_epoch']+=1
+ if isolated_authority.bundle['authority_epoch']!=guided['authority_epoch']: raise ValueError('authority_snapshot_mutable')
+ negatives+=1;wrong=deepcopy(execution['bundle']);wrong['ledger_events'][-1]['grant_ref']='grant_other';expect_failure('candidate_consumption_grant',lambda:validate_authority_bundle(wrong,authority.key_resolver));negatives+=1;short=deepcopy(execution['bundle']);short['ledger_events'].pop();short_authority=validate_authority_bundle(short,authority.key_resolver);short_state=resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],plus(short['ledger_events'][-1]['recorded_at'],1),short_authority)
  if short_state['reason']=='grant_exhausted': raise ValueError('candidate_mapping_missing_event_accepted')
  negatives+=1;return {'receipt':receipt,'execution':execution,'negatives':negatives}
 def main():

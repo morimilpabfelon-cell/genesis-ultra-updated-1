@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Exact-grant authority adapter over the validated guided-autonomy conformance fixture."""
 from __future__ import annotations
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
 import hashlib
+from types import MappingProxyType
 from typing import Any
 import unicodedata
 from nacl.exceptions import BadSignatureError
@@ -39,7 +41,11 @@ def verify_envelope(e,key,*,digest,domain,signer_type,signer_id,created_at,prefi
  except (BadSignatureError,ValueError,KeyError): fail(f'{prefix}_signature_invalid')
 @dataclass(frozen=True)
 class Authority:
- bundle:dict; grants:dict; registered:frozenset; key_resolver:object
+ _bundle:dict; _grants:dict; registered:frozenset; key_resolver:object
+ @property
+ def bundle(self): return deepcopy(self._bundle)
+ @property
+ def grants(self): return MappingProxyType(deepcopy(self._grants))
 
 
 BUNDLE_FIELDS={"profile","domains","instance_id","guardian_id","authority_epoch","registered_body_ids","proposals","evaluations","grants","ledger_events","use_requests"}
@@ -47,10 +53,13 @@ PUBLIC_KEY_FIELDS={"public_key_hex","public_key_fingerprint","key_epoch_id"}
 
 def resolve_public_key(public_key_resolver,envelope,signer_type,signer_id):
  if not callable(public_key_resolver): fail('public_key_resolver_required')
+ exact(envelope,SIG_FIELDS,'public_key_envelope_invalid')
  key=public_key_resolver({'signer_type':signer_type,'signer_id':signer_id,'key_epoch_id':envelope['key_epoch_id'],'public_key_ref':envelope['public_key_ref']})
  exact(key,PUBLIC_KEY_FIELDS,'public_key_record_invalid')
  if not __import__('re').fullmatch(r'[0-9a-f]{64}',key['public_key_hex']): fail('public_key_hex_invalid')
  if not __import__('re').fullmatch(r'sha256:[0-9a-f]{64}',key['public_key_fingerprint']): fail('public_key_fingerprint_invalid')
+ expected_fingerprint='sha256:'+hashlib.sha256(bytes.fromhex(key['public_key_hex'])).hexdigest()
+ if key['public_key_fingerprint']!=expected_fingerprint: fail('public_key_fingerprint_mismatch')
  if key['key_epoch_id']!=envelope['key_epoch_id'] or key['public_key_fingerprint']!=envelope['public_key_ref']: fail('public_key_resolution_mismatch')
  return key
 
@@ -62,7 +71,7 @@ def public_key_resolver_from_fixture(document):
  for signer_type,source in document['keys'].items():
   key={'public_key_hex':source['public_key_hex'],'public_key_fingerprint':source['public_key_fingerprint'],'key_epoch_id':source['key_epoch_id']}
   records[(signer_type,source['signer_id'],source['key_epoch_id'],source['public_key_fingerprint'])]=key
- return lambda query: records.get((query['signer_type'],query['signer_id'],query['key_epoch_id'],query['public_key_ref']))
+ return lambda query: deepcopy(records.get((query['signer_type'],query['signer_id'],query['key_epoch_id'],query['public_key_ref'])))
 
 def _validate_authority_bundle(bundle,public_key_resolver):
  validate_nfc(bundle);exact(bundle,BUNDLE_FIELDS,'authority_bundle_fields_invalid')
@@ -96,10 +105,10 @@ def _validate_authority_bundle(bundle,public_key_resolver):
   use_ids.add(item['use_id']);uses.append(item)
  def ledger_resolver(query): return resolve_public_key(public_key_resolver,query['envelope'],query['signer_type'],query['signer_id'])
  validate_ledger(bundle['ledger_events'],grants,uses,{**base,'keys':{}},ledger_resolver)
- return Authority(bundle,{g['grant_id']:g for g in grants},frozenset(registered),public_key_resolver)
+ return Authority(deepcopy(bundle),{g['grant_id']:deepcopy(g) for g in grants},frozenset(registered),public_key_resolver)
 
 def validate_authority_bundle(bundle,public_key_resolver):
- try: return _validate_authority_bundle(bundle,public_key_resolver)
+ try: return _validate_authority_bundle(deepcopy(bundle),public_key_resolver)
  except AuthorityError: raise
  except ConformanceError as error: fail(str(error))
 
@@ -122,11 +131,11 @@ def state_at(grant,events,at):
  return {'status':status,'consumed':consumed,'head_ref':head_ref,'head_hash':head_hash}
 def resolve_exact_grant(grant_ref,capability,instance_id,at_value,authority):
  if not isinstance(authority,Authority): fail('authority_not_validated')
- grant=authority.grants.get(grant_ref)
+ grant=authority._grants.get(grant_ref)
  if grant is None: return {'grant':None,'state':None,'reason':'grant_missing'}
  if grant['instance_id']!=instance_id: return {'grant':grant,'state':None,'reason':'grant_instance_mismatch'}
  if grant['capability']!=capability: return {'grant':grant,'state':None,'reason':'grant_capability_mismatch'}
- at=parse_utc(at_value); state=state_at(grant,authority.bundle['ledger_events'],at); reason='allowed'
+ at=parse_utc(at_value); state=state_at(grant,authority._bundle['ledger_events'],at); reason='allowed'
  if at<parse_utc(grant['not_before']): reason='grant_not_yet_valid'
  elif grant['expires_at'] is not None and at>=parse_utc(grant['expires_at']): reason='grant_expired'
  elif state['status']!='active': reason='grant_'+state['status']
@@ -158,4 +167,4 @@ def evaluate_authorized_use(i,a):
 def authorize_campaign_opening(r,a):
  x=resolve_exact_grant(r['grant_ref'],r['capability'],r['instance_id'],r['authorized_at'],a); reason=x['reason']
  if reason=='allowed': reason=envelope_reason(r,x['grant'],a)
- status='allowed' if reason=='allowed' else 'denied'; rd=hash_authority_fields('genesis.improvement.campaign.authority.request.v0.1',[r['campaign_digest'],r['grant_ref'],r['instance_id'],r['body_id'],r['capability'],r['target_ref'],r['action_class'],r['data_class'],str(r['requested_actions']),str(r['requested_duration_seconds']),str(r['requested_bytes']),btext(r['sandboxed']),optional(r['human_confirmation_ref']),optional(r['observer_ref']),optional(r['reversible_plan_ref']),r['authorized_at']]); gd='' if x['grant'] is None else x['grant']['grant_digest']; st=x['state']; digest=hash_authority_fields('genesis.improvement.campaign.authorization.v0.1',[r['campaign_digest'],r['grant_ref'],gd,str(a.bundle['authority_epoch']),a.bundle['ledger_events'][0]['ledger_id'],optional(None if st is None else st['head_ref']),'GENESIS' if st is None else st['head_hash'],r['authorized_at'],status,reason,rd,'' if x['grant'] is None else x['grant']['guardian_key_epoch_id'],r['body_id']]); return {'decision_status':status,'decision_reason':reason,'grant_ref':r['grant_ref'],'grant_digest':gd or None,'authority_request_digest':rd,'campaign_authorization_digest':digest,'ledger_head_event_ref':None if st is None else st['head_ref'],'ledger_head_hash':'GENESIS' if st is None else st['head_hash']}
+ status='allowed' if reason=='allowed' else 'denied'; rd=hash_authority_fields('genesis.improvement.campaign.authority.request.v0.1',[r['campaign_digest'],r['grant_ref'],r['instance_id'],r['body_id'],r['capability'],r['target_ref'],r['action_class'],r['data_class'],str(r['requested_actions']),str(r['requested_duration_seconds']),str(r['requested_bytes']),btext(r['sandboxed']),optional(r['human_confirmation_ref']),optional(r['observer_ref']),optional(r['reversible_plan_ref']),r['authorized_at']]); gd='' if x['grant'] is None else x['grant']['grant_digest']; st=x['state']; digest=hash_authority_fields('genesis.improvement.campaign.authorization.v0.1',[r['campaign_digest'],r['grant_ref'],gd,str(a._bundle['authority_epoch']),a._bundle['ledger_events'][0]['ledger_id'],optional(None if st is None else st['head_ref']),'GENESIS' if st is None else st['head_hash'],r['authorized_at'],status,reason,rd,'' if x['grant'] is None else x['grant']['guardian_key_epoch_id'],r['body_id']]); return {'decision_status':status,'decision_reason':reason,'grant_ref':r['grant_ref'],'grant_digest':gd or None,'authority_request_digest':rd,'campaign_authorization_digest':digest,'ledger_head_event_ref':None if st is None else st['head_ref'],'ledger_head_hash':'GENESIS' if st is None else st['head_hash']}

@@ -109,7 +109,7 @@ La lógica de autoridad no se copió dentro del laboratorio. Se extrajo una API 
 validateAuthorityBundle / validate_authority_bundle
 ```
 
-El bundle neutral contiene solo datos públicos y no acepta semillas privadas, `expected` ni `must_reject`. Las claves se resuelven por tipo de firmante, ID, época y fingerprint.
+El bundle neutral contiene solo datos públicos y no acepta semillas privadas, `expected` ni `must_reject`. Las claves se resuelven por tipo de firmante, ID, época y fingerprint. El fingerprint se recalcula desde `public_key_hex`, y el resultado validado conserva una copia aislada con bundle congelado o expuesto únicamente por copia, evitando mutaciones posteriores a la validación.
 
 ## Contenido rechazado o no portado directamente
 

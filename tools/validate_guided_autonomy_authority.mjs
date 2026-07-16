@@ -10,6 +10,40 @@ export class AuthorityError extends Error {}
 const fail = (code) => { throw new AuthorityError(code); };
 const optional = (value) => value === null || value === undefined ? "" : String(value);
 const boolText = (value) => value ? "true" : "false";
+function deepFreeze(value) {
+  if (Array.isArray(value)) {
+    for (const item of value) deepFreeze(item);
+    return Object.freeze(value);
+  }
+  if (value && typeof value === "object") {
+    for (const item of Object.values(value)) deepFreeze(item);
+    return Object.freeze(value);
+  }
+  return value;
+}
+function readOnlyMap(map) {
+  const view = {
+    get: (key) => map.get(key),
+    has: (key) => map.has(key),
+    entries: () => map.entries(),
+    keys: () => map.keys(),
+    values: () => map.values(),
+    get size() { return map.size; },
+    [Symbol.iterator]: () => map[Symbol.iterator](),
+  };
+  return Object.freeze(view);
+}
+function readOnlySet(set) {
+  const view = {
+    has: (value) => set.has(value),
+    entries: () => set.entries(),
+    keys: () => set.keys(),
+    values: () => set.values(),
+    get size() { return set.size; },
+    [Symbol.iterator]: () => set[Symbol.iterator](),
+  };
+  return Object.freeze(view);
+}
 
 function encode(value) {
   if (typeof value !== "string" || value.normalize("NFC") !== value) fail("authority_text_invalid");
@@ -63,10 +97,13 @@ const PUBLIC_KEY_FIELDS = new Set(["public_key_hex", "public_key_fingerprint", "
 
 function resolvePublicKey(publicKeyResolver, envelope, signerType, signerId) {
   if (typeof publicKeyResolver !== "function") fail("public_key_resolver_required");
+  exact(envelope, SIGNATURE_FIELDS, "public_key_envelope_invalid");
   const key = publicKeyResolver({ signer_type: signerType, signer_id: signerId, key_epoch_id: envelope.key_epoch_id, public_key_ref: envelope.public_key_ref });
   exact(key, PUBLIC_KEY_FIELDS, "public_key_record_invalid");
   if (!/^[0-9a-f]{64}$/.test(key.public_key_hex)) fail("public_key_hex_invalid");
   if (!/^sha256:[0-9a-f]{64}$/.test(key.public_key_fingerprint)) fail("public_key_fingerprint_invalid");
+  const expectedFingerprint = `sha256:${crypto.createHash("sha256").update(Buffer.from(key.public_key_hex, "hex")).digest("hex")}`;
+  if (key.public_key_fingerprint !== expectedFingerprint) fail("public_key_fingerprint_mismatch");
   if (key.key_epoch_id !== envelope.key_epoch_id || key.public_key_fingerprint !== envelope.public_key_ref) fail("public_key_resolution_mismatch");
   return key;
 }
@@ -143,12 +180,13 @@ function validateAuthorityBundleInternal(bundle, publicKeyResolver) {
   }
   const ledgerResolver = ({ envelope, signer_type, signer_id }) => resolvePublicKey(publicKeyResolver, envelope, signer_type, signer_id);
   validateLedger(bundle.ledger_events, grants, uses, { ...base, keys: {} }, ledgerResolver);
+  const frozenBundle = deepFreeze(bundle);
   const grantMap = new Map(grants.map((grant) => [grant.grant_id, grant]));
-  return Object.freeze({ [MARK]: true, bundle, grants: grantMap, registered: new Set(registered), keyResolver: publicKeyResolver });
+  return Object.freeze({ [MARK]: true, bundle: frozenBundle, grants: readOnlyMap(grantMap), registered: readOnlySet(new Set(registered)), keyResolver: publicKeyResolver });
 }
 
 export function validateAuthorityBundle(bundle, publicKeyResolver) {
-  try { return validateAuthorityBundleInternal(bundle, publicKeyResolver); }
+  try { return validateAuthorityBundleInternal(structuredClone(bundle), publicKeyResolver); }
   catch (error) {
     if (error instanceof AuthorityError) throw error;
     if (error instanceof ConformanceError) throw new AuthorityError(error.message);

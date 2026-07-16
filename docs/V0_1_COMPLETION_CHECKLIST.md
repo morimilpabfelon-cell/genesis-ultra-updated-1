@@ -110,7 +110,7 @@
 - [x] Laboratorio de mejora recursiva v0.2 reproducido por Python y Node: seis candidatos
       append-only, grant exacto firmado, binding explícito de instancia/cuerpo/scope/presupuesto,
       apertura sin consumo, solicitud de uso con `grant_ref` firmado, reevaluación contra ledger
-      y catorce rechazos adicionales de autoridad, firma de campaña/evaluador, NFC, entero portable, tiempo, presupuesto, suspensión, revocación, ledger público o mapping de consumo inválido; seis candidatos producen once usos firmados y agotan el grant dedicado.
+      y diecisiete rechazos adicionales de autoridad, firma de campaña/evaluador, NFC, entero portable, tiempo, presupuesto, suspensión, revocación, ledger público o mapping de consumo inválido; seis candidatos producen once usos firmados y agotan el grant dedicado.
 
 - [x] Extracción selectiva de PR #27 documentada y trazable: mecanismos aceptados, reestructurados y rechazados; sin merge directo, cherry-pick masivo ni eliminación de la rama fuente.
 
