@@ -135,8 +135,8 @@
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 137961,
-      "digest": "sha256:ff3f43644005d140754dac1bbcc6421b8de6d2f7f5f51ede6f95dd15ca8f7edb"
+      "size_bytes": 138639,
+      "digest": "sha256:5ab48a30eb811032e900801bc39aa357aa7bf8613b10e5de723ff1afa7a4a2d9"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -974,5 +974,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:0d66cf48d6417a23bd35eaee08ff534d97d17925d90749e01abf67aff0a92728"
+  "root_digest": "sha256:0e185f08f7ff74eb43ed4cc7fafec771b73e04a3b7c1a850deabeb9d896012f1"
 }

@@ -2900,10 +2900,10 @@
       "expected_error_keyword": "additionalProperties",
       "artifact": {
         "campaign": {
-          "schema_version": "genesis.improvement.campaign.v0.1",
+          "schema_version": "genesis.improvement.campaign.v0.2",
           "campaign_id": "camp_rilab_001",
-          "instance_id": "instance_genesis_001",
-          "guardian_grant_ref": "grant_code_sandbox_001",
+          "instance_id": "inst_01HAUTONOMY000000000001",
+          "guardian_grant_ref": "grant_01HAUTONOMY_CODE000001",
           "source_tree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
           "goal": "Improve deterministic retrieval quality without weakening ACL",
           "metric": "quality_milli",
@@ -2929,7 +2929,22 @@
             "memory.rewrite",
             "private_eval.read"
           ],
-          "campaign_digest": "sha256:72f6000dba67afc5f9276d984540fa95f65ea2a9177dca2d534631d02d96c987"
+          "campaign_digest": "sha256:0d88047cef0739487791b04ea095bef90a4168c9dc50782f93248a7458ee9597",
+          "opened_at": "2026-07-16T09:11:02Z",
+          "authority_binding": {
+            "body_id": "body_01HAUTONOMY000000000001",
+            "capability": "code.execute_sandbox",
+            "target_ref": "workspace.source",
+            "action_class": "compile",
+            "data_class": "private_local",
+            "requested_actions": 1,
+            "requested_duration_seconds": 120,
+            "requested_bytes": 2000000,
+            "sandboxed": true,
+            "human_confirmation_ref": "confirm_01HRILAB_OPEN001",
+            "observer_ref": "observer_01HRILAB_OPEN001",
+            "reversible_plan_ref": "revert_01HRILAB_OPEN001"
+          }
         },
         "candidates": [
           {
