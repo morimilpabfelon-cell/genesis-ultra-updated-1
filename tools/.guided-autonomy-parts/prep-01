@@ -1,0 +1,82 @@
+"grants"][0],
+        ),
+        (
+            "guided-autonomy-projection-rejects-unexpected-field",
+            "guided_autonomy_projection.schema.json",
+            projection,
+        ),
+    ]
+    for case_id, schema, artifact in artifacts:
+        candidate = json.loads(json.dumps(artifact))
+        candidate["unexpected_core_field"] = True
+        cases.append(
+            {
+                "case_id": case_id,
+                "schema": schema,
+                "expected_error_keyword": "additionalProperties",
+                "artifact": candidate,
+            }
+        )
+    cases_doc["cases"] = cases
+    write_json("conformance/schema_invalid_cases.json", cases_doc)
+
+
+def update_observer() -> None:
+    system_map = load_json("observer/system-map.json")
+    component = {
+        "id": "guided_autonomy",
+        "name": "Autonomía guiada",
+        "layer": "cognition",
+        "maturity": "verified",
+        "description": "Propuestas, evaluación, grants firmados, niveles de autonomía, suspensión y revocación bajo autoridad exclusiva del guardián.",
+        "keywords": [
+            "guided_autonomy",
+            "capability_grant",
+            "capability_authority_event",
+            "autonomy_level",
+        ],
+        "required_evidence": ["spec", "schema", "conformance", "implementation"],
+    }
+    components = [item for item in system_map["components"] if item["id"] != "guided_autonomy"]
+    action_index = next(
+        (index for index, item in enumerate(components) if item["id"] == "action"), len(components)
+    )
+    components.insert(action_index, component)
+    system_map["components"] = components
+    flow = [item for item in system_map["flow"] if item != "guided_autonomy"]
+    action_index = flow.index("action") if "action" in flow else len(flow)
+    flow.insert(action_index, "guided_autonomy")
+    system_map["flow"] = flow
+    write_json("observer/system-map.json", system_map)
+
+
+def update_docs(pr_number: int) -> None:
+    append_section(
+        "README.md",
+        "## Autonomía guiada",
+        """
+## Autonomía guiada
+
+Génesis puede proponer y evaluar nuevas capacidades, pero únicamente un grant Ed25519 firmado por el guardián abre una puerta. Los grants fijan nivel, riesgo, alcance, presupuesto, controles, vigencia y revocación. Propuestas y evaluaciones nunca se autorizan a sí mismas.
+
+```powershell
+npm.cmd run validate:guided-autonomy
+npm.cmd run autonomy:decide -- conformance/guided_autonomy_vectors.json use_01HAUTONOMY_CODE_REVOKED
+```
+""",
+    )
+    append_section(
+        "START_HERE.md",
+        "## Autonomía guiada",
+        """
+## Autonomía guiada
+
+La instancia puede crecer dentro de capacidades concedidas. Para inspeccionar la proyección y una decisión de uso:
+
+```powershell
+npm.cmd run autonomy:build -- conformance/guided_autonomy_vectors.json runtime/guided-autonomy.json
+npm.cmd run autonomy:inspect -- runtime/guided-autonomy.json
+npm.cmd run autonomy:decide -- conformance/guided_autonomy_vectors.json use_01HAUTONOMY_CODE_ALLOW1
+```
+
+El laboratorio
