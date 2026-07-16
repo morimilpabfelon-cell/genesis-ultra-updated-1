@@ -1,0 +1,33 @@
+name: Diagnose Improvement Lab
+on:
+  pull_request:
+    types: [synchronize, reopened]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    if: github.head_ref == 'agent/recursive-improvement-lab'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.event.pull_request.head.ref }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '20', cache: npm}
+      - run: python -m pip install -r requirements.txt
+      - run: npm ci
+      - id: suite
+        continue-on-error: true
+        run: |
+          rm .github/workflows/diagnose-improvement-lab.yml
+          npm test > improvement-lab-suite.log 2>&1
+          status=$?
+          echo "exit_status=$status" >> improvement-lab-suite.log
+          cat improvement-lab-suite.log
+          exit $status
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: {name: improvement-lab-suite-diagnostic-clean, path: improvement-lab-suite.log, retention-days: 1}
+      - if: steps.suite.outcome == 'failure'
+        run: exit 1
