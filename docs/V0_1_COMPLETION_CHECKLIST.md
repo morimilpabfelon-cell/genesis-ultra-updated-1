@@ -91,6 +91,8 @@
       operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
       y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
+- [x] Registro autocontrolado de ejecución de herramientas con treinta candidatos: veintiséis entrypoints exigidos en el runner y cuatro bibliotecas importadas por consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
+
 ## Pendiente real
 
 - [ ] Adaptadores y pruebas de journal con almacenamiento real en Android, Apple y Windows.

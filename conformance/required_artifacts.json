@@ -32,7 +32,9 @@
     "conformance/sense_observation_vectors.json",
     "conformance/structured_versioned_memory_vectors.json",
     "conformance/temporal_memory_metadata_vectors.json",
+    "conformance/tool_execution_registry.json",
     "docs/ARCHITECTURE_DECISIONS.md",
+    "docs/AUDIT_TOOL_EXECUTION_REPORT.md",
     "docs/MEMVID_MEMORY_EXTRACTION_MAP.md",
     "docs/MORIMIL_SENSE_EXTRACTION_MAP.md",
     "docs/SOURCE_EXTRACTION_MAP.md",
@@ -168,6 +170,7 @@
     "tools/validate_sense_observations.py",
     "tools/validate_structured_versioned_memory.py",
     "tools/validate_temporal_memory_metadata.py",
+    "tools/validate_tool_execution_registry.py",
     "tools/validate_transaction_journal.py",
     "tools/validate_workspace.mjs",
     "tools/validate_workspace.py"
