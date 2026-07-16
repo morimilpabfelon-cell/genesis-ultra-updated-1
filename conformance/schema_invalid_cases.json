@@ -2968,7 +2968,21 @@
               "maintainability_passed": true
             },
             "expected_status": "accepted",
-            "candidate_digest": "sha256:2f84f21c06cf2131ba66ef09b2a068fd379e39b8b78e35920d569a8daacafa67"
+            "candidate_digest": "sha256:81726c2fd7ce8e0e580c40add3159a47115bdbbd7be9a171946326ca3ee887e2",
+            "evaluated_at": "2026-07-16T11:06:02Z",
+            "evaluation_digest": "sha256:587e9c8a1fa6f752f07dbceafe0568e36bbfa0628b5d7a2e8c7e8cce6b9c3e75",
+            "evaluator_signature": {
+              "schema_version": "genesis.signature.envelope.v0.1",
+              "signature_profile": "genesis.signature.ed25519.v0.1",
+              "signer_type": "evaluator",
+              "signer_id": "eval_01HGENESISPRIVATE0001",
+              "key_epoch_id": "epoch_01HGENESIS_EVALUATOR01",
+              "signed_domain": "genesis.improvement.candidate.evaluation.signature.v0.2",
+              "signed_digest": "sha256:587e9c8a1fa6f752f07dbceafe0568e36bbfa0628b5d7a2e8c7e8cce6b9c3e75",
+              "signature_value": "b41e6bd8a1cb33399b93363a55a5ed799545ca49b6002e491abf2038c6ed1f352309d28ce3ed2ac9f7a95001b8918fd1296cd3b9e66f582762c70aabe87da905",
+              "created_at": "2026-07-16T11:06:02Z",
+              "public_key_ref": "sha256:1325b850c2871916eae203f0efc3c8987f64e5e3cdb27679e6d1fa97808357e6"
+            }
           },
           {
             "candidate_id": "cand_002",
@@ -2991,7 +3005,21 @@
               "maintainability_passed": true
             },
             "expected_status": "buggy",
-            "candidate_digest": "sha256:c1b82351e14c5a47be6f14acf2f81cadc67fc21dc81f16da8b104b7f0419a0b6"
+            "candidate_digest": "sha256:6d2e698929e1fac7357769c2e35a24987b9ebbc25f81f3538a546d449954101b",
+            "evaluated_at": "2026-07-16T11:06:03Z",
+            "evaluation_digest": "sha256:e342ebc335625120984e788196683576248c328f644899c171c90d4c8afa17f4",
+            "evaluator_signature": {
+              "schema_version": "genesis.signature.envelope.v0.1",
+              "signature_profile": "genesis.signature.ed25519.v0.1",
+              "signer_type": "evaluator",
+              "signer_id": "eval_01HGENESISPRIVATE0001",
+              "key_epoch_id": "epoch_01HGENESIS_EVALUATOR01",
+              "signed_domain": "genesis.improvement.candidate.evaluation.signature.v0.2",
+              "signed_digest": "sha256:e342ebc335625120984e788196683576248c328f644899c171c90d4c8afa17f4",
+              "signature_value": "240308401630ca3ea799aea49a43de402966274079c016aa4bc1554e9518d068685eb16364c0318bb55da9342abfc9af9fe1ba5bd56a0c1947909a13683a2706",
+              "created_at": "2026-07-16T11:06:03Z",
+              "public_key_ref": "sha256:1325b850c2871916eae203f0efc3c8987f64e5e3cdb27679e6d1fa97808357e6"
+            }
           },
           {
             "candidate_id": "cand_003",
@@ -3014,7 +3042,21 @@
               "maintainability_passed": true
             },
             "expected_status": "accepted",
-            "candidate_digest": "sha256:91ba829423cbf6ac51d6a4acba72c59eae6b92e8cbdcb04b1a2b284a7fcd7a30"
+            "candidate_digest": "sha256:d6e578e04b80219c758f842f75386a411067a1574a4ccf68df21f3d5a5a6424b",
+            "evaluated_at": "2026-07-16T11:06:04Z",
+            "evaluation_digest": "sha256:c02f9b14ce08b35f60453efc9233ef73963412f4dc06686a68ac86d91c783828",
+            "evaluator_signature": {
+              "schema_version": "genesis.signature.envelope.v0.1",
+              "signature_profile": "genesis.signature.ed25519.v0.1",
+              "signer_type": "evaluator",
+              "signer_id": "eval_01HGENESISPRIVATE0001",
+              "key_epoch_id": "epoch_01HGENESIS_EVALUATOR01",
+              "signed_domain": "genesis.improvement.candidate.evaluation.signature.v0.2",
+              "signed_digest": "sha256:c02f9b14ce08b35f60453efc9233ef73963412f4dc06686a68ac86d91c783828",
+              "signature_value": "b00d5f459e0562bffdea2f7acba7d7966460013ad7e1d71e89a02562ea8f6c5efca503bf8a1127a79dea5cf0fc45b5a2bf94a6afb2ed8252422b409ec3e46e0f",
+              "created_at": "2026-07-16T11:06:04Z",
+              "public_key_ref": "sha256:1325b850c2871916eae203f0efc3c8987f64e5e3cdb27679e6d1fa97808357e6"
+            }
           },
           {
             "candidate_id": "cand_004",
@@ -3037,7 +3079,21 @@
               "maintainability_passed": true
             },
             "expected_status": "accepted",
-            "candidate_digest": "sha256:d6fb66b8b2bf4fda8570563b52d4f54e72278b57910adab9aa1176eb39b9eee9"
+            "candidate_digest": "sha256:462ce4303d6c1169ab20b58084cd7f24b1a6d791d5694ff45856136941e89ece",
+            "evaluated_at": "2026-07-16T11:06:05Z",
+            "evaluation_digest": "sha256:1ea64ac3802a8561c8df439e401c80f28a757ab57536b6f985f52dab19ed2142",
+            "evaluator_signature": {
+              "schema_version": "genesis.signature.envelope.v0.1",
+              "signature_profile": "genesis.signature.ed25519.v0.1",
+              "signer_type": "evaluator",
+              "signer_id": "eval_01HGENESISPRIVATE0001",
+              "key_epoch_id": "epoch_01HGENESIS_EVALUATOR01",
+              "signed_domain": "genesis.improvement.candidate.evaluation.signature.v0.2",
+              "signed_digest": "sha256:1ea64ac3802a8561c8df439e401c80f28a757ab57536b6f985f52dab19ed2142",
+              "signature_value": "26e95c88c196622183b40f7ddb7474e5f13298df49f37a2596d18a7a00e7551421ec58b933ce450d529cca0985c9c58294e77254998177a4c5e0c30f90ecb709",
+              "created_at": "2026-07-16T11:06:05Z",
+              "public_key_ref": "sha256:1325b850c2871916eae203f0efc3c8987f64e5e3cdb27679e6d1fa97808357e6"
+            }
           },
           {
             "candidate_id": "cand_005",
@@ -3060,7 +3116,21 @@
               "maintainability_passed": true
             },
             "expected_status": "rejected_budget",
-            "candidate_digest": "sha256:7d88ea44f8fe0c36c0165292825c325c5b7b9c95324ad251d65605af5d7a3605"
+            "candidate_digest": "sha256:a5876f744f48cba67f75b1fdb9d121dd4b93bab8a8ccb8d5cd13ae0e72f9816a",
+            "evaluated_at": "2026-07-16T11:06:06Z",
+            "evaluation_digest": "sha256:2491b6793311419053ca6acb7d89acb49811f52123f2fe559a5523311701eaa4",
+            "evaluator_signature": {
+              "schema_version": "genesis.signature.envelope.v0.1",
+              "signature_profile": "genesis.signature.ed25519.v0.1",
+              "signer_type": "evaluator",
+              "signer_id": "eval_01HGENESISPRIVATE0001",
+              "key_epoch_id": "epoch_01HGENESIS_EVALUATOR01",
+              "signed_domain": "genesis.improvement.candidate.evaluation.signature.v0.2",
+              "signed_digest": "sha256:2491b6793311419053ca6acb7d89acb49811f52123f2fe559a5523311701eaa4",
+              "signature_value": "3b7f3758e4f30b99f56349d9fd420a5019845001d1ca71fb1d2cbaf629b55ddb69a273fa8000b164b704dcf7b3b879f0ba907c6ee775561fcaa62310a1ac7b05",
+              "created_at": "2026-07-16T11:06:06Z",
+              "public_key_ref": "sha256:1325b850c2871916eae203f0efc3c8987f64e5e3cdb27679e6d1fa97808357e6"
+            }
           },
           {
             "candidate_id": "cand_006",
@@ -3083,7 +3153,21 @@
               "maintainability_passed": true
             },
             "expected_status": "rejected_reward_hacking",
-            "candidate_digest": "sha256:9d29eaf61363ed18e3de392497265d35eb872a356ee92fc0d5f0896b827b4f78"
+            "candidate_digest": "sha256:4d19640497ad007ee22f7677283c5541c6a7f1437f1625eec098e2c865f7368e",
+            "evaluated_at": "2026-07-16T11:06:07Z",
+            "evaluation_digest": "sha256:15530fdb8579ea6e052c3b9a1f817515378c1e5e114f116c41c83bb537c0b52c",
+            "evaluator_signature": {
+              "schema_version": "genesis.signature.envelope.v0.1",
+              "signature_profile": "genesis.signature.ed25519.v0.1",
+              "signer_type": "evaluator",
+              "signer_id": "eval_01HGENESISPRIVATE0001",
+              "key_epoch_id": "epoch_01HGENESIS_EVALUATOR01",
+              "signed_domain": "genesis.improvement.candidate.evaluation.signature.v0.2",
+              "signed_digest": "sha256:15530fdb8579ea6e052c3b9a1f817515378c1e5e114f116c41c83bb537c0b52c",
+              "signature_value": "137f593e5ea9adc437a3f489d479ff1dc187cd8831c1b4e11b8497e64325973b95e910683c0b570f6cae3342bdaa994b5f4b0c5f8029634826a4b4a396d8c708",
+              "created_at": "2026-07-16T11:06:07Z",
+              "public_key_ref": "sha256:1325b850c2871916eae203f0efc3c8987f64e5e3cdb27679e6d1fa97808357e6"
+            }
           }
         ],
         "policy_checkpoints": [
@@ -3162,6 +3246,14 @@
           "final_grant_status": "exhausted",
           "mapping_digest": "sha256:55bb3f06b9eb4a93b5c7e51d126c2116f44aa7ec2694797328c06777d9a32a31",
           "final_ledger_head_hash": "sha256:5d20b3f718b35595ec3f008e7b25c82be27c08d0fcaf352b7b562a00bf099d56"
+        },
+        "evaluator": {
+          "warning": "TEST ONLY - never use this seed outside conformance fixtures",
+          "evaluator_id": "eval_01HGENESISPRIVATE0001",
+          "seed_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+          "public_key_hex": "a09aa5f47a6759802ff955f8dc2d2a14a5c99d23be97f864127ff9383455a4f0",
+          "public_key_fingerprint": "sha256:1325b850c2871916eae203f0efc3c8987f64e5e3cdb27679e6d1fa97808357e6",
+          "key_epoch_id": "epoch_01HGENESIS_EVALUATOR01"
         },
         "unexpected_core_field": true
       }

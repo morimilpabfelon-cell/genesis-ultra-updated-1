@@ -6,6 +6,7 @@
   "additionalProperties": false,
   "required": [
     "campaign",
+    "evaluator",
     "candidates",
     "policy_checkpoints",
     "expected_projection",
@@ -95,6 +96,59 @@
         "reversible_plan_ref": {
           "type": "string",
           "minLength": 1
+        }
+      }
+    },
+    "signatureEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "signature_profile",
+        "signer_type",
+        "signer_id",
+        "key_epoch_id",
+        "signed_domain",
+        "signed_digest",
+        "signature_value",
+        "created_at",
+        "public_key_ref"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "genesis.signature.envelope.v0.1"
+        },
+        "signature_profile": {
+          "const": "genesis.signature.ed25519.v0.1"
+        },
+        "signer_type": {
+          "const": "evaluator"
+        },
+        "signer_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "key_epoch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signed_domain": {
+          "const": "genesis.improvement.candidate.evaluation.signature.v0.2"
+        },
+        "signed_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "signature_value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{128}$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+        },
+        "public_key_ref": {
+          "$ref": "#/$defs/digest"
         }
       }
     }
@@ -239,7 +293,10 @@
           "execution",
           "evaluation",
           "expected_status",
-          "candidate_digest"
+          "candidate_digest",
+          "evaluated_at",
+          "evaluation_digest",
+          "evaluator_signature"
         ],
         "properties": {
           "candidate_id": {
@@ -363,6 +420,17 @@
           },
           "candidate_digest": {
             "$ref": "#/$defs/digest"
+          },
+          "evaluated_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+          },
+          "evaluation_digest": {
+            "$ref": "#/$defs/digest"
+          },
+          "evaluator_signature": {
+            "$ref": "#/$defs/signatureEnvelope"
           }
         }
       }
@@ -487,6 +555,42 @@
         },
         "final_ledger_head_hash": {
           "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "warning",
+        "evaluator_id",
+        "seed_hex",
+        "public_key_hex",
+        "public_key_fingerprint",
+        "key_epoch_id"
+      ],
+      "properties": {
+        "warning": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluator_id": {
+          "const": "eval_01HGENESISPRIVATE0001"
+        },
+        "seed_hex": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "public_key_hex": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "public_key_fingerprint": {
+          "$ref": "#/$defs/digest"
+        },
+        "key_epoch_id": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }

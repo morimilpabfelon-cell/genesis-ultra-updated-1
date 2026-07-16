@@ -125,8 +125,8 @@
     },
     {
       "path": "conformance/recursive_improvement_lab_vectors.json",
-      "size_bytes": 9119,
-      "digest": "sha256:e3faab23487fc8d67c3d14e3950273bef3e0ec952e13d0f00efe697d7e6534c1"
+      "size_bytes": 15264,
+      "digest": "sha256:f090b22328e3488c70215b16eaab1b91f4e37e2839dffc0510296000f3ec6b8a"
     },
     {
       "path": "conformance/required_artifacts.json",
@@ -135,8 +135,8 @@
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 139075,
-      "digest": "sha256:b84888a23e3c385a11f629dec2e54db876d3db2019cf650cd1c1f24da0918062"
+      "size_bytes": 145772,
+      "digest": "sha256:51e2246748e7160b58d9b84d15b16042d9c4caf9546522c5e1eb14af18434ca1"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -200,8 +200,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 11373,
-      "digest": "sha256:24c594eb5f4911c9d4708623ad04cc0a1b60a18f52a9535bd9ef6a59609021e9"
+      "size_bytes": 11420,
+      "digest": "sha256:85d3cde809ccbf32e270ad002704ecd01204e11c100d0fd4c712afa55b769aca"
     },
     {
       "path": "observer/README.md",
@@ -430,8 +430,8 @@
     },
     {
       "path": "schemas/recursive_improvement_lab.schema.json",
-      "size_bytes": 12118,
-      "digest": "sha256:fde372d0ee45849435abb98fb9ecbb45d14cb5c202b6e6603fbcdb96b297d554"
+      "size_bytes": 14878,
+      "digest": "sha256:7bc4f85b9aca9c558792e5c80b63b9698d9aa7d425bc55cfb9106e62dabb55fe"
     },
     {
       "path": "schemas/seed_manifest.schema.json",
@@ -620,8 +620,8 @@
     },
     {
       "path": "spec/RECURSIVE_IMPROVEMENT_LAB.md",
-      "size_bytes": 7136,
-      "digest": "sha256:f6d18b4e7aebe9b118ca45e441c8b2f47839897f0c43e28647860d856d1ab06c"
+      "size_bytes": 7643,
+      "digest": "sha256:281927a32ab693455f099829742efe8725d09d03c4e46abab55c89276e9a4303"
     },
     {
       "path": "spec/SENSE_ADAPTER_CONTRACT.md",
@@ -915,13 +915,13 @@
     },
     {
       "path": "tools/validate_recursive_improvement_lab.mjs",
-      "size_bytes": 13213,
-      "digest": "sha256:b9be5d2b4253495b53baff2961ef59cbafcfff34dfe5688c2ad38db2bb2722a7"
+      "size_bytes": 16275,
+      "digest": "sha256:65ce53b1ed4faefeab2bafd54b0de9353691a90f4d6eeff5f233f2b41c2cd81b"
     },
     {
       "path": "tools/validate_recursive_improvement_lab.py",
-      "size_bytes": 13396,
-      "digest": "sha256:2797dd78ce9cad629fedb51f5138bbf7c7ee4de4b3eacfa142b4febded0c5073"
+      "size_bytes": 16598,
+      "digest": "sha256:5b56734abe1a25a4592912940a8d73f1a9aa5ca42749eb8da03044408fbb36b5"
     },
     {
       "path": "tools/validate_sense_adapters.mjs",
@@ -974,5 +974,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:8047e041567bcf666f00eb36230615ba2dbd6d87650d567e934e9b4fb270db51"
+  "root_digest": "sha256:b7aa00c3d3c447295eff312348f6c6c4ade3c46022cc6f732177632d8d03abbe"
 }

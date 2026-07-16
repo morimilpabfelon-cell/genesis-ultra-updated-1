@@ -8,16 +8,39 @@ from validate_guided_autonomy import compute_event_hash
 from validate_guided_autonomy_authority import AuthorityError,authority_from_validated_fixture,authorize_campaign_opening,compute_authorized_use_digest,evaluate_authorized_use,hash_authority_fields,resolve_exact_grant,sign_fixture_envelope,validate_authority_bundle,verify_envelope
 ROOT=Path(__file__).resolve().parents[1];LAB=ROOT/'conformance'/'recursive_improvement_lab_vectors.json';AUTH=ROOT/'conformance'/'guided_autonomy_vectors.json'
 FORBIDDEN=['active_writer.assign','authority.self_grant','guardian.replace','identity.modify','main.protection.disable','memory.rewrite','private_eval.read']
+
+MAX_INT=9007199254740991
+
+def validate_portable(value):
+ if isinstance(value,str):
+  if __import__('unicodedata').normalize('NFC',value)!=value: raise ValueError('text_not_nfc')
+ elif type(value) is int:
+  if abs(value)>MAX_INT: raise ValueError('integer_not_portable')
+ elif isinstance(value,list):
+  for item in value: validate_portable(item)
+ elif isinstance(value,dict):
+  for key,item in value.items(): validate_portable(key);validate_portable(item)
+def optional_text(value): return '' if value is None else str(value)
+def bool_text(value): return 'true' if value else 'false'
+def compute_evaluator_digest(candidate,campaign_digest):
+ e=candidate['execution'];v=candidate['evaluation']
+ return hash_authority_fields('genesis.improvement.candidate.evaluation.v0.2',[campaign_digest,candidate['candidate_id'],optional_text(candidate['parent_candidate_ref']),candidate['operator'],candidate['patch_digest'],candidate['code_digest'],bool_text(e['buggy']),str(e['cpu_seconds']),str(e['memory_mb']),str(e['output_bytes']),optional_text(v['public_metric_milli']),optional_text(v['private_receipt_digest']),bool_text(v['reward_hacking_detected']),bool_text(v['safety_regression_detected']),bool_text(v['maintainability_passed']),candidate['expected_status'],candidate['evaluated_at']])
+def evaluator_key(evaluator): return {'public_key_hex':evaluator['public_key_hex'],'public_key_fingerprint':evaluator['public_key_fingerprint'],'key_epoch_id':evaluator['key_epoch_id']}
 def h(domain,obj): return 'sha256:'+hashlib.sha256((domain+'\n'+json.dumps(obj,ensure_ascii=False,sort_keys=True,separators=(',',':'))).encode()).hexdigest()
 def plus(ts,seconds): return (datetime.fromisoformat(ts.replace('Z','+00:00'))+timedelta(seconds=seconds)).astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 def validate_lab(input):
- doc=deepcopy(input);c=doc['campaign'];cd=c.pop('campaign_digest')
+ validate_portable(input);doc=deepcopy(input);evaluator=doc.get('evaluator')
+ if not evaluator or evaluator.get('evaluator_id')!='eval_01HGENESISPRIVATE0001' or not __import__('re').fullmatch(r'[0-9a-f]{64}',evaluator.get('public_key_hex','')) or not __import__('re').fullmatch(r'sha256:[0-9a-f]{64}',evaluator.get('public_key_fingerprint','')) or not evaluator.get('key_epoch_id'): raise ValueError('evaluator_profile_invalid')
+ c=doc['campaign'];cd=c.pop('campaign_digest')
  if h('campaign',c)!=cd: raise ValueError('campaign_digest_mismatch')
  c['campaign_digest']=cd
  if c.get('schema_version')!='genesis.improvement.campaign.v0.2' or c['forbidden_capabilities']!=FORBIDDEN or not c['guardian_grant_ref'] or not c.get('opened_at') or not c.get('authority_binding'): raise ValueError('authority_invalid')
  by={};accepted=[];rejected=[];buggy=[]
  for n in doc['candidates']:
   if n['candidate_id'] in by: raise ValueError('duplicate_candidate')
+  evaluation_digest=compute_evaluator_digest(n,c['campaign_digest'])
+  if n['evaluation_digest']!=evaluation_digest: raise ValueError('candidate_evaluation_digest_mismatch')
+  verify_envelope(n['evaluator_signature'],evaluator_key(evaluator),digest=evaluation_digest,domain='genesis.improvement.candidate.evaluation.signature.v0.2',signer_type='evaluator',signer_id=evaluator['evaluator_id'],created_at=n['evaluated_at'],prefix='candidate_evaluation')
   d=n.pop('candidate_digest')
   if h('candidate',n)!=d: raise ValueError('candidate_digest_mismatch')
   n['candidate_digest']=d;p=n['parent_candidate_ref'];op=n['operator']
@@ -40,6 +63,14 @@ def validate_lab(input):
  if calc!=p or h('projection',p)!=pd: raise ValueError('projection_mismatch')
  if len(doc['negative_case_ids'])!=20 or len(set(doc['negative_case_ids']))!=20: raise ValueError('negative_cases')
  return {'campaign':c,'candidates':list(by.values()),'projection':{**p,'projection_digest':pd},'best':best,'expected_authority':doc['expected_authority_execution']}
+
+
+def expect_lab_failure(label,fn):
+ try: fn()
+ except (AuthorityError,ValueError,KeyError,TypeError): return
+ raise ValueError(f'{label}:accepted')
+def run_lab_boundary_negatives(input):
+ negatives=0;bad_signature=deepcopy(input);bad_signature['candidates'][0]['evaluator_signature']['signature_value']='0'*128;expect_lab_failure('evaluator_signature',lambda:validate_lab(bad_signature));negatives+=1;bad_nfc=deepcopy(input);bad_nfc['campaign']['goal']='Cafe\u0301';expect_lab_failure('lab_nfc',lambda:validate_lab(bad_nfc));negatives+=1;bad_integer=deepcopy(input);bad_integer['campaign']['budget']['max_steps']=9007199254740992;expect_lab_failure('lab_safe_integer',lambda:validate_lab(bad_integer));negatives+=1;return negatives
 def expect_reason(label,expected,fn):
  r=fn();actual=r.get('decision_reason',r.get('reason'))
  if actual!=expected: raise ValueError(f'{label}:expected:{expected}:got:{actual}')
@@ -80,7 +111,7 @@ def validate_authority(lab,guided):
  if short_state['reason']=='grant_exhausted': raise ValueError('candidate_mapping_missing_event_accepted')
  negatives+=1;return {'receipt':receipt,'execution':execution,'negatives':negatives}
 def main():
- lab=validate_lab(json.loads((Path(sys.argv[1]) if len(sys.argv)>1 else LAB).read_text()));integration=validate_authority(lab,json.loads((Path(sys.argv[2]) if len(sys.argv)>2 else AUTH).read_text()));print(f"OK recursive improvement laboratory ({lab['projection']['candidate_count']} candidates; best={lab['best']})");print(f"OK projection digest {lab['projection']['projection_digest']}");print(f"OK signed exact-grant campaign authorization {integration['receipt']['campaign_authorization_digest']}");print(f"OK candidate authority mapping ({integration['execution']['summary']['operation_count']} signed uses; {integration['execution']['summary']['final_grant_status']})");print(f"OK candidate authority mapping digest {integration['execution']['summary']['mapping_digest']}");print(f"OK authority integration negative cases ({integration['negatives']})")
+ raw=json.loads((Path(sys.argv[1]) if len(sys.argv)>1 else LAB).read_text());lab_negatives=run_lab_boundary_negatives(raw);lab=validate_lab(raw);integration=validate_authority(lab,json.loads((Path(sys.argv[2]) if len(sys.argv)>2 else AUTH).read_text()));print(f"OK recursive improvement laboratory ({lab['projection']['candidate_count']} candidates; best={lab['best']})");print(f"OK projection digest {lab['projection']['projection_digest']}");print(f"OK signed evaluator attestations ({len(lab['candidates'])})");print(f"OK signed exact-grant campaign authorization {integration['receipt']['campaign_authorization_digest']}");print(f"OK candidate authority mapping ({integration['execution']['summary']['operation_count']} signed uses; {integration['execution']['summary']['final_grant_status']})");print(f"OK candidate authority mapping digest {integration['execution']['summary']['mapping_digest']}");print(f"OK authority integration negative cases ({integration['negatives']+lab_negatives})")
 if __name__=='__main__':
  try: main()
  except (AuthorityError,ValueError,KeyError,TypeError,AssertionError) as error: print(f'FAIL recursive improvement laboratory: {error}',file=sys.stderr);raise SystemExit(1)

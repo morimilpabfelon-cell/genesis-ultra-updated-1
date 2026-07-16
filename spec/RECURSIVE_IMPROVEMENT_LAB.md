@@ -119,17 +119,22 @@ campaign.requested_bytes            <= grant.max_bytes_per_run
 
 Tokens, costo, cantidad de candidatos, cantidad de borradores y profundidad de depuración continúan como límites internos adicionales mientras el schema del grant no modele esas dimensiones.
 
+## Atestación del evaluador
+
+Cada candidato enlaza `evaluation_digest`, `evaluated_at` y una firma Ed25519 independiente del evaluador TEST ONLY. La firma cubre campaña, candidato, linaje, patch, código, ejecución, evaluación y estado esperado. Alterar la firma, el digest o cualquier campo enlazado produce rechazo.
+
 ## Conformidad implementada
 
 El perfil v0.2 verifica independientemente en Python y Node:
 
+- UTF-8/NFC y enteros portables en campaña, candidatos y evaluaciones;
 - digest determinista de campaña y candidatos;
 - enlace exacto campaña → grant firmado;
-- firma Ed25519 de atestación de campaña;
+- firma Ed25519 de atestación de campaña y firmas independientes del evaluador por candidato;
 - solicitud de uso v0.2 con `grant_ref` firmado;
 - autorización de apertura sin consumo;
 - reevaluación de uso contra ledger;
-- rechazo de grant sintético, instancia incorrecta, apertura prematura, expansión de bytes, firma alterada, `grant_ref` firmado alterado, suspensión y revocación;
+- rechazo de firma de evaluador alterada, texto no NFC, entero inseguro, grant sintético, instancia incorrecta, apertura prematura, expansión de bytes, firma alterada, `grant_ref` firmado alterado, suspensión y revocación;
 - schema de campaña v0.2 y regresión negativa de campo inesperado;
 - manifiesto de integridad y registro de ejecución de herramientas.
 
