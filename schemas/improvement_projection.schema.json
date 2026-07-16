@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesis.local/schemas/improvement_projection.schema.json",
+  "title": "Genesis recursive improvement projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "hash_profile", "campaign_ref", "campaign_digest", "ledger_id",
+    "source_tree_digest", "source_event_count", "source_last_event_hash", "candidate_count",
+    "accepted_count", "buggy_count", "rejected_count", "operator_counts", "lineages",
+    "best_candidate_ref", "best_score_milli", "next_decision", "promotion", "projection_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "genesis.improvement.projection.v0.1"},
+    "hash_profile": {"const": "genesis.hash.fields.v0.1"},
+    "campaign_ref": {"type": "string"},
+    "campaign_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "ledger_id": {"type": "string"},
+    "source_tree_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "source_event_count": {"type": "integer", "minimum": 0},
+    "source_last_event_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "candidate_count": {"type": "integer", "minimum": 0},
+    "accepted_count": {"type": "integer", "minimum": 0},
+    "buggy_count": {"type": "integer", "minimum": 0},
+    "rejected_count": {"type": "integer", "minimum": 0},
+    "operator_counts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["draft", "debug", "improve"],
+      "properties": {
+        "draft": {"type": "integer", "minimum": 0},
+        "debug": {"type": "integer", "minimum": 0},
+        "improve": {"type": "integer", "minimum": 0}
+      }
+    },
+    "lineages": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["lineage_id", "root_candidate_ref", "candidate_count", "accepted_count", "buggy_count", "rejected_count", "best_candidate_ref", "best_score_milli", "plateau_detected"],
+        "properties": {
+          "lineage_id": {"type": "string"},
+          "root_candidate_ref": {"type": "string"},
+          "candidate_count": {"type": "integer", "minimum": 1},
+          "accepted_count": {"type": "integer", "minimum": 0},
+          "buggy_count": {"type": "integer", "minimum": 0},
+          "rejected_count": {"type": "integer", "minimum": 0},
+          "best_candidate_ref": {"type": ["string", "null"]},
+          "best_score_milli": {"type": ["integer", "null"]},
+          "plateau_detected": {"type": "boolean"}
+        }
+      }
+    },
+    "best_candidate_ref": {"type": ["string", "null"]},
+    "best_score_milli": {"type": ["integer", "null"]},
+    "next_decision": {
+      "type": "object", "additionalProperties": false,
+      "required": ["operator", "parent_candidate_ref", "lineage_id", "reason"],
+      "properties": {
+        "operator": {"enum": ["draft", "debug", "improve"]},
+        "parent_candidate_ref": {"type": ["string", "null"]},
+        "lineage_id": {"type": "string"},
+        "reason": {"enum": ["draft_quota", "debug_buggy_leaf", "improve_best", "fork_plateau"]}
+      }
+    },
+    "promotion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "candidate_ref", "requires_guardian_approval", "required_capability", "direct_merge_forbidden"],
+      "properties": {
+        "status": {"enum": ["not_ready", "candidate_ready"]},
+        "candidate_ref": {"type": ["string", "null"]},
+        "requires_guardian_approval": {"const": true},
+        "required_capability": {"const": "code.propose_change"},
+        "direct_merge_forbidden": {"const": true}
+      }
+    },
+    "projection_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}
