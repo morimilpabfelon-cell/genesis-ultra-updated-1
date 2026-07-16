@@ -365,13 +365,13 @@
     },
     {
       "path": "schemas/improvement_campaign.schema.json",
-      "size_bytes": 3864,
-      "digest": "sha256:ed0e4fe6e60942a487dcb4206fb95f56d4f18f29372efed2ca6e6dc400fab62c"
+      "size_bytes": 3955,
+      "digest": "sha256:8e9e8760a20ea96cc5c3b421bbcbb24b9898a297cb323e88d2df82505525ad0e"
     },
     {
       "path": "schemas/improvement_candidate_event.schema.json",
-      "size_bytes": 4552,
-      "digest": "sha256:0e2c70717f725e55f1d75ecfbc4336dfd2d3c92ead2d5e2aa5be93f3b016199c"
+      "size_bytes": 4643,
+      "digest": "sha256:eb1d166ff178b45683126d15c5aa90c71436af0bb95a011e66d9ee7aa57e178d"
     },
     {
       "path": "schemas/improvement_projection.schema.json",
@@ -949,5 +949,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:07ada6d0ca50e75e2ea641a2bda4b4a625d841f6660288adb3f6273adadde50e"
+  "root_digest": "sha256:2d52651627f58261c2e45a09a8a8eeeb99e8d02b5678aaf47a37f576bfbce529"
 }
