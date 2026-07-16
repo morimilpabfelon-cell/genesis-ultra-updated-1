@@ -1,0 +1,137 @@
+        fail("use_sandbox_flag_invalid")
+    for field in ["human_confirmation_ref", "observer_ref", "reversible_plan_ref"]:
+        if item[field] is not None and (not isinstance(item[field], str) or not item[field]):
+            fail("use_control_reference_invalid")
+    parse_utc(item["requested_at"])
+    digest = compute_use_digest(item)
+    if item["use_digest"] != digest:
+        fail("use_digest_mismatch")
+    validate_signature(item["signature"], digest=digest, domain=document["domains"]["use_signature"], key=document["keys"]["body"], signer_type="body", signer_id=item["body_id"], created_at=item["requested_at"], prefix="use")
+
+def state_before(grant: dict, events: list[dict], at: datetime) -> dict:
+    status = "not_issued"
+    consumed: set[str] = set()
+    last_event_ref = None
+    for event in events:
+        if event["grant_ref"] != grant["grant_id"] or parse_utc(event["recorded_at"]) > at:
+            continue
+        kind = event["event_type"]
+        if kind == "grant.issued":
+            status = "active"
+        elif kind == "grant.suspended":
+            status = "suspended"
+        elif kind == "grant.resumed":
+            if status == "revoked":
+                fail("ledger_resume_after_revocation")
+            status = "active"
+        elif kind == "grant.revoked":
+            status = "revoked"
+        elif kind == "grant.consumed":
+            consumed.add(event["use_id"])
+        last_event_ref = event["event_id"]
+    if grant["use_limit"] is not None and len(consumed) >= grant["use_limit"] and status == "active":
+        status = "exhausted"
+    return {"status": status, "consumed": consumed, "last_event_ref": last_event_ref}
+
+def evaluate_use(item: dict, grants: list[dict], events: list[dict], registered: set[str]) -> dict:
+    at = parse_utc(item["requested_at"])
+    reason = "allowed"
+    chosen = None
+    remaining = None
+    if item["capability"] in FORBIDDEN_CAPABILITIES:
+        reason = "capability_forbidden"
+    elif item["capability"] not in CAPABILITIES:
+        reason = "capability_unknown"
+    else:
+        candidates = [grant for grant in grants if grant["capability"] == item["capability"]]
+        if not candidates:
+            reason = "grant_missing"
+        elif len(candidates) > 1:
+            fail("capability_multiple_grants")
+        else:
+            chosen = candidates[0]
+            state = state_before(chosen, events, at)
+            if at < parse_utc(chosen["not_before"]):
+                reason = "grant_not_yet_valid"
+            elif chosen["expires_at"] is not None and at >= parse_utc(chosen["expires_at"]):
+                reason = "grant_expired"
+            elif state["status"] == "not_issued":
+                reason = "grant_not_issued"
+            elif state["status"] == "suspended":
+                reason = "grant_suspended"
+            elif state["status"] == "revoked":
+                reason = "grant_revoked"
+            elif state["status"] == "exhausted":
+                reason = "grant_exhausted"
+            elif item["use_id"] in state["consumed"]:
+                reason = "use_already_consumed"
+            elif chosen["body_scope"] == "specific_bodies" and item["body_id"] not in chosen["body_ids"]:
+                reason = "body_not_authorized"
+            elif chosen["body_scope"] == "registered_guardian_devices" and item["body_id"] not in registered:
+                reason = "body_not_authorized"
+            elif item["target_ref"] not in chosen["scope"]["allowed_target_refs"]:
+                reason = "target_not_authorized"
+            elif item["action_class"] not in chosen["scope"]["allowed_action_classes"]:
+                reason = "action_not_authorized"
+            elif item["data_class"] not in chosen["scope"]["allowed_data_classes"]:
+                reason = "data_class_not_authorized"
+            elif item["requested_actions"] > chosen["budget"]["max_actions_per_run"]:
+                reason = "action_budget_exceeded"
+            elif item["requested_duration_seconds"] > chosen["budget"]["max_duration_seconds"]:
+                reason = "duration_budget_exceeded"
+            elif item["requested_bytes"] > chosen["budget"]["max_bytes_per_run"]:
+                reason = "byte_budget_exceeded"
+            elif chosen["controls"]["sandbox_required"] and not item["sandboxed"]:
+                reason = "sandbox_required"
+            elif chosen["controls"]["human_confirmation_required"] and item["human_confirmation_ref"] is None:
+                reason = "human_confirmation_required"
+            elif chosen["controls"]["observer_required"] and item["observer_ref"] is None:
+                reason = "observer_required"
+            elif chosen["controls"]["reversible_required"] and item["reversible_plan_ref"] is None:
+                reason = "reversibility_required"
+            if chosen["use_limit"] is not None:
+                remaining = max(0, chosen["use_limit"] - len(state["consumed"]) - (1 if reason == "allowed" else 0))
+    status = "allowed" if reason == "allowed" else "denied"
+    grant_ref = None if chosen is None else chosen["grant_id"]
+    digest = hash_fields("genesis.autonomy.capability.use.decision.v0.1", [item["use_id"], item["use_digest"], status, reason, optional_text(grant_ref), optional_text(remaining)])
+    return {"use_id": item["use_id"], "status": status, "reason": reason, "grant_ref": grant_ref, "remaining_uses": remaining, "decision_digest": digest}
+
+def validate_ledger(events: list[dict], grants: list[dict], uses: list[dict], document: dict) -> None:
+    if not isinstance(events, list) or not events:
+        fail("ledger_events_required")
+    grants_by_id = {grant["grant_id"]: grant for grant in grants}
+    uses_by_id = {use["use_id"]: use for use in uses}
+    previous = "GENESIS"
+    ledger_id = events[0].get("ledger_id")
+    seen_ids: set[str] = set()
+    seen_uses: set[str] = set()
+    issued: set[str] = set()
+    status: dict[str, str] = {}
+    previous_time: datetime | None = None
+    for index, event in enumerate(events):
+        validate_nfc(event)
+        exact_fields(event, EVENT_FIELDS, "ledger_event_fields_invalid")
+        if event["schema_version"] != document["domains"]["event"] or event["hash_profile"] != "genesis.hash.fields.v0.1":
+            fail("ledger_event_profile_invalid")
+        if event["ledger_id"] != ledger_id or event["guardian_id"] != document["guardian_id"] or event["instance_id"] != document["instance_id"] or event["authority_epoch"] != document["authority_epoch"]:
+            fail("ledger_identity_mismatch")
+        if event["sequence"] != index:
+            fail("ledger_sequence_invalid")
+        if event["previous_event_hash"] != previous:
+            fail("ledger_chain_broken")
+        if event["event_id"] in seen_ids:
+            fail("ledger_event_id_duplicate")
+        seen_ids.add(event["event_id"])
+        if event["event_type"] not in EVENT_TYPES:
+            fail("ledger_event_type_invalid")
+        grant = grants_by_id.get(event["grant_ref"])
+        if grant is None:
+            fail("ledger_grant_unknown")
+        recorded = parse_utc(event["recorded_at"])
+        if previous_time is not None and recorded < previous_time:
+            fail("ledger_time_regression")
+        digest = compute_event_hash(event)
+        if event["event_hash"] != digest:
+            fail("ledger_event_hash_mismatch")
+        kind = event["event_type"]
+        if kind == "grant.consumed":
