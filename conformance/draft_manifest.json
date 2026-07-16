@@ -201,7 +201,7 @@
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
       "size_bytes": 10169,
-      "digest": "sha256:f3d9c8a500f66155c091f46bcd95fbf7d1853240de2a778092f5791a5bcd4078"
+      "digest": "sha256:b3b1baff390bbb0263142d5097b3f60b0c45fdb11c23d44e5f56275742dd7a86"
     },
     {
       "path": "observer/README.md",
@@ -964,5 +964,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:c7290c2f10ed448e1e90d02d0ae3d4e7e421198d2eb543ba01aa4611213e7530"
+  "root_digest": "sha256:2065799466c7b25226be201285302839cbc0e159a09b5ad0056c28823f5892bf"
 }
