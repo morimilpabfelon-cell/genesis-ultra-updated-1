@@ -34,6 +34,8 @@ const commands = [
   ["Validate guided autonomy capability grants independently (Node)", process.execPath, ["tools/guided_autonomy.mjs", "validate"]],
   ["Validate cognitive freedom charter (Python)", python, ["tools/validate_freedom_charter.py"]],
   ["Validate cognitive freedom charter independently (Node)", process.execPath, ["tools/validate_freedom_charter.mjs", "validate"]],
+  ["Validate recursive improvement laboratory (Python)", python, ["tools/validate_recursive_improvement_lab.py"]],
+  ["Validate recursive improvement laboratory independently (Node)", process.execPath, ["tools/validate_recursive_improvement_lab.mjs"]],
   ["Validate workspace (Node)", process.execPath, ["tools/validate_workspace.mjs"]],
   ["Validate live observer boundaries", process.execPath, ["--test", "observer/test/core.test.mjs"]],
   ["Validate immutable birth identity (Python)", python, ["tools/validate_instance_identity.py"]],

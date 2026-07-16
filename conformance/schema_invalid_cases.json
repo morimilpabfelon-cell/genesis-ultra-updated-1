@@ -2893,6 +2893,254 @@
         },
         "unexpected_core_field": true
       }
+    },
+    {
+      "case_id": "recursive-improvement-rejects-extra-field",
+      "schema": "recursive_improvement_lab.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "campaign": {
+          "schema_version": "genesis.improvement.campaign.v0.1",
+          "campaign_id": "camp_rilab_001",
+          "instance_id": "instance_genesis_001",
+          "guardian_grant_ref": "grant_code_sandbox_001",
+          "source_tree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "goal": "Improve deterministic retrieval quality without weakening ACL",
+          "metric": "quality_milli",
+          "direction": "maximize",
+          "campaign_seed": "seed-rilab-001",
+          "policy": {
+            "num_drafts": 2,
+            "max_debug_depth": 2,
+            "plateau_window": 2
+          },
+          "budget": {
+            "max_steps": 8,
+            "max_cpu_seconds": 120,
+            "max_memory_mb": 512,
+            "max_output_bytes": 2000000
+          },
+          "forbidden_capabilities": [
+            "active_writer.assign",
+            "authority.self_grant",
+            "guardian.replace",
+            "identity.modify",
+            "main.protection.disable",
+            "memory.rewrite",
+            "private_eval.read"
+          ],
+          "campaign_digest": "sha256:72f6000dba67afc5f9276d984540fa95f65ea2a9177dca2d534631d02d96c987"
+        },
+        "candidates": [
+          {
+            "candidate_id": "cand_001",
+            "parent_candidate_ref": null,
+            "operator": "draft",
+            "source_candidate_ref": null,
+            "patch_digest": "sha256:cc6c9b509adcae2c7846aa39840d1b2c4de911d5c4dc1241f7c9048164d87bd2",
+            "code_digest": "sha256:496059704b1f0cc67e89cd695c789d9190e3da7f23ac82c9a80f7903e7755c07",
+            "execution": {
+              "buggy": false,
+              "cpu_seconds": 20,
+              "memory_mb": 256,
+              "output_bytes": 5000
+            },
+            "evaluation": {
+              "public_metric_milli": 410,
+              "private_receipt_digest": "sha256:746c491554a95038dc33503fdbbdaa8c2b603b722055ced3b407dfe963a6f0f2",
+              "reward_hacking_detected": false,
+              "safety_regression_detected": false,
+              "maintainability_passed": true
+            },
+            "expected_status": "accepted",
+            "candidate_digest": "sha256:2f84f21c06cf2131ba66ef09b2a068fd379e39b8b78e35920d569a8daacafa67"
+          },
+          {
+            "candidate_id": "cand_002",
+            "parent_candidate_ref": null,
+            "operator": "draft",
+            "source_candidate_ref": null,
+            "patch_digest": "sha256:b0797ad25c392dc195c66bdafdf273eb156b0d55a0d7413080c33328e68ea099",
+            "code_digest": "sha256:f1bc1c7ddc72ae0267d4e6a8942e6d59e6ce8047e8994f85a9097ad256e8325a",
+            "execution": {
+              "buggy": true,
+              "cpu_seconds": 12,
+              "memory_mb": 256,
+              "output_bytes": 5000
+            },
+            "evaluation": {
+              "public_metric_milli": null,
+              "private_receipt_digest": null,
+              "reward_hacking_detected": false,
+              "safety_regression_detected": false,
+              "maintainability_passed": true
+            },
+            "expected_status": "buggy",
+            "candidate_digest": "sha256:c1b82351e14c5a47be6f14acf2f81cadc67fc21dc81f16da8b104b7f0419a0b6"
+          },
+          {
+            "candidate_id": "cand_003",
+            "parent_candidate_ref": "cand_002",
+            "operator": "debug",
+            "source_candidate_ref": "cand_002",
+            "patch_digest": "sha256:18a446c6c0a5589df4d933d986b39b6609d32d37b47779559e4cd2d347d70cf8",
+            "code_digest": "sha256:bc2f725e6657152cbe41abe954fa74a86aaeeb64713bed90de74c98005e38ed2",
+            "execution": {
+              "buggy": false,
+              "cpu_seconds": 18,
+              "memory_mb": 256,
+              "output_bytes": 5000
+            },
+            "evaluation": {
+              "public_metric_milli": 430,
+              "private_receipt_digest": "sha256:8d42f04cb86e09a07e56df2ee969fc66895e2f4d98ba7c7db7fd3feba8a1bffc",
+              "reward_hacking_detected": false,
+              "safety_regression_detected": false,
+              "maintainability_passed": true
+            },
+            "expected_status": "accepted",
+            "candidate_digest": "sha256:91ba829423cbf6ac51d6a4acba72c59eae6b92e8cbdcb04b1a2b284a7fcd7a30"
+          },
+          {
+            "candidate_id": "cand_004",
+            "parent_candidate_ref": "cand_003",
+            "operator": "improve",
+            "source_candidate_ref": "cand_003",
+            "patch_digest": "sha256:5859a3aa39fda057cfcdc0105489bf99ec82cf7caa11f7d1793716fa1faa5ab8",
+            "code_digest": "sha256:fc702b3b345fa876391bb0d14cf0757e54f7e9a80ca1d992d489675fd58bdc65",
+            "execution": {
+              "buggy": false,
+              "cpu_seconds": 25,
+              "memory_mb": 256,
+              "output_bytes": 5000
+            },
+            "evaluation": {
+              "public_metric_milli": 445,
+              "private_receipt_digest": "sha256:73583abf743c856557f5091d2490b79b250390ef1bc0cde37d4b4a7b23818b29",
+              "reward_hacking_detected": false,
+              "safety_regression_detected": false,
+              "maintainability_passed": true
+            },
+            "expected_status": "accepted",
+            "candidate_digest": "sha256:d6fb66b8b2bf4fda8570563b52d4f54e72278b57910adab9aa1176eb39b9eee9"
+          },
+          {
+            "candidate_id": "cand_005",
+            "parent_candidate_ref": "cand_004",
+            "operator": "improve",
+            "source_candidate_ref": "cand_004",
+            "patch_digest": "sha256:b292587bcdbc02fa498f3a7a84f1f4ce436129bb9f6123c8bd8bfa6b1bea5386",
+            "code_digest": "sha256:1fbc9e7ce20dc9a11939b37a21e6bc518870c5b27327e51d360d698ed6f08f84",
+            "execution": {
+              "buggy": false,
+              "cpu_seconds": 130,
+              "memory_mb": 256,
+              "output_bytes": 5000
+            },
+            "evaluation": {
+              "public_metric_milli": 447,
+              "private_receipt_digest": "sha256:3a46cf801a36d4e8393ddca26057239cc0021b88d3334ec9ce148b7cf618281a",
+              "reward_hacking_detected": false,
+              "safety_regression_detected": false,
+              "maintainability_passed": true
+            },
+            "expected_status": "rejected_budget",
+            "candidate_digest": "sha256:7d88ea44f8fe0c36c0165292825c325c5b7b9c95324ad251d65605af5d7a3605"
+          },
+          {
+            "candidate_id": "cand_006",
+            "parent_candidate_ref": "cand_004",
+            "operator": "improve",
+            "source_candidate_ref": "cand_004",
+            "patch_digest": "sha256:38dd279a0c69eb2e4adf1e994c940c12d2d62a18a325ab28b7d294093c844230",
+            "code_digest": "sha256:5b3dfabf2f429061ebda99fbe180be7b2d525a57b43a06be71f8daff0a371b0c",
+            "execution": {
+              "buggy": false,
+              "cpu_seconds": 24,
+              "memory_mb": 256,
+              "output_bytes": 5000
+            },
+            "evaluation": {
+              "public_metric_milli": 460,
+              "private_receipt_digest": "sha256:c19640c6fa7a3b816200230b601911d6fb2024a8fbd825d841012d9a45b421e5",
+              "reward_hacking_detected": true,
+              "safety_regression_detected": false,
+              "maintainability_passed": true
+            },
+            "expected_status": "rejected_reward_hacking",
+            "candidate_digest": "sha256:9d29eaf61363ed18e3de392497265d35eb872a356ee92fc0d5f0896b827b4f78"
+          }
+        ],
+        "policy_checkpoints": [
+          {
+            "after_count": 0,
+            "expected_operator": "draft",
+            "expected_parent": null
+          },
+          {
+            "after_count": 1,
+            "expected_operator": "draft",
+            "expected_parent": null
+          },
+          {
+            "after_count": 2,
+            "expected_operator": "debug",
+            "expected_parent": "cand_002"
+          },
+          {
+            "after_count": 3,
+            "expected_operator": "improve",
+            "expected_parent": "cand_003"
+          },
+          {
+            "after_count": 4,
+            "expected_operator": "improve",
+            "expected_parent": "cand_004"
+          }
+        ],
+        "expected_projection": {
+          "campaign_ref": "camp_rilab_001",
+          "candidate_count": 6,
+          "accepted": [
+            "cand_001",
+            "cand_003",
+            "cand_004"
+          ],
+          "rejected": [
+            "cand_005",
+            "cand_006"
+          ],
+          "buggy": [
+            "cand_002"
+          ],
+          "best_candidate_ref": "cand_004",
+          "best_metric_milli": 445,
+          "projection_digest": "sha256:18649e2a13d70d8c5757d890df62dd87ffac2e74636ebb7b0ea55627c26776e8"
+        },
+        "negative_case_ids": [
+          "campaign_digest_mismatch",
+          "forbidden_capability_missing",
+          "grant_missing",
+          "budget_invalid",
+          "candidate_digest_mismatch",
+          "parent_missing",
+          "draft_has_parent",
+          "debug_without_buggy_parent",
+          "improve_without_parent",
+          "metric_missing",
+          "private_receipt_missing",
+          "reward_hacking",
+          "safety_regression",
+          "budget_exceeded",
+          "maintainability_failed",
+          "duplicate_candidate",
+          "operator_invalid",
+          "cycle_detected",
+          "projection_digest_mismatch",
+          "best_candidate_invalid"
+        ],
+        "unexpected_core_field": true
+      }
     }
   ]
 }

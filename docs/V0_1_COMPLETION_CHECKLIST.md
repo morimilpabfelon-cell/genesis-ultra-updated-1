@@ -19,6 +19,8 @@
 
 - [x] Suite completa verde para la carta de libertad cognitiva en el [PR #26](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/26).
 
+- [x] Suite completa verde para el laboratorio de mejora recursiva en el [PR #28](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/28).
+
 ## Implementado y verificado por la suite
 
 - [x] Canonicalización Python/Node con rechazo de texto no-NFC y rutas peligrosas.
@@ -100,6 +102,8 @@
 - [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados.
 
 - [x] Carta de libertad cognitiva reproducida por Python y Node: ocho libertades activas por nacimiento, ocho dominios operativos bajo grants, ocho garantías fundamentales, firma Ed25519 del guardián y veinte cruces de frontera rechazados.
+
+- [x] Laboratorio de mejora recursiva reproducido por Python y Node: seis candidatos append-only, operadores draft/debug/improve, presupuesto fijo, recibo privado opaco, tres aceptados, un bug y dos rechazos por presupuesto o reward hacking.
 
 ## Pendiente real
 

@@ -32,6 +32,8 @@
     "tools/validate_multimodal_memory_pipeline.py",
     "tools/validate_portable_memory_capsule.py",
     "tools/validate_protocol_vectors.mjs",
+    "tools/validate_recursive_improvement_lab.mjs",
+    "tools/validate_recursive_improvement_lab.py",
     "tools/validate_sense_adapters.mjs",
     "tools/validate_sense_adapters.py",
     "tools/validate_sense_observations.mjs",
