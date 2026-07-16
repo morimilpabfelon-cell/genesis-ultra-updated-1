@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesis.local/schemas/improvement_campaign.schema.json",
+  "title": "Genesis recursive improvement campaign",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "hash_profile", "campaign_id", "instance_id", "guardian_grant_ref",
+    "objective", "metric", "source_tree_digest", "campaign_seed", "policy_profile",
+    "fixed_budget", "sandbox_profile", "private_evaluation", "opened_at",
+    "guardian_public_key", "campaign_digest", "guardian_signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "genesis.improvement.campaign.v0.1"},
+    "hash_profile": {"const": "genesis.hash.fields.v0.1"},
+    "campaign_id": {"type": "string", "pattern": "^ric_[A-Z0-9_]{8,64}$"},
+    "instance_id": {"type": "string", "minLength": 8},
+    "guardian_grant_ref": {"type": "string", "minLength": 8},
+    "objective": {"type": "string", "minLength": 20},
+    "metric": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "direction", "unit"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "direction": {"enum": ["maximize", "minimize"]},
+        "unit": {"type": "string", "minLength": 1}
+      }
+    },
+    "source_tree_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "campaign_seed": {"type": "string", "pattern": "^seed256:[0-9a-f]{64}$"},
+    "policy_profile": {"const": "genesis.improvement.search.aide-adapted.v0.1"},
+    "fixed_budget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_candidates", "max_drafts", "max_debug_depth", "plateau_window", "max_actions", "max_duration_ms", "max_token_units", "max_bytes", "max_cost_microunits"],
+      "properties": {
+        "max_candidates": {"type": "integer", "minimum": 1},
+        "max_drafts": {"type": "integer", "minimum": 1},
+        "max_debug_depth": {"type": "integer", "minimum": 0},
+        "plateau_window": {"type": "integer", "minimum": 1},
+        "max_actions": {"type": "integer", "minimum": 1},
+        "max_duration_ms": {"type": "integer", "minimum": 1},
+        "max_token_units": {"type": "integer", "minimum": 1},
+        "max_bytes": {"type": "integer", "minimum": 0},
+        "max_cost_microunits": {"type": "integer", "minimum": 0}
+      }
+    },
+    "sandbox_profile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["network_mode", "filesystem_mode", "secrets_available", "process_isolation", "output_capture", "environment_reproducible"],
+      "properties": {
+        "network_mode": {"const": "denied"},
+        "filesystem_mode": {"const": "ephemeral_readonly_input"},
+        "secrets_available": {"const": false},
+        "process_isolation": {"const": true},
+        "output_capture": {"const": true},
+        "environment_reproducible": {"const": true}
+      }
+    },
+    "private_evaluation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["cases_visible_to_agent", "receipt_only", "evaluator_separate"],
+      "properties": {
+        "cases_visible_to_agent": {"const": false},
+        "receipt_only": {"const": true},
+        "evaluator_separate": {"const": true}
+      }
+    },
+    "opened_at": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "guardian_public_key": {"type": "string", "pattern": "^ed25519pk:[0-9a-f]{64}$"},
+    "campaign_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "guardian_signature": {"type": "string", "pattern": "^ed25519sig:[0-9a-f]{128}$"}
+  }
+}
