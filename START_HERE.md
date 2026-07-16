@@ -177,3 +177,14 @@ npm.cmd run autonomy:decide -- conformance/guided_autonomy_vectors.json use_01HA
 ```
 
 El laboratorio no concede autoridad, no modifica identidad y no fusiona código por sí mismo.
+
+## Carta de libertad cognitiva
+
+La carta separa libertad cognitiva de autoridad operativa:
+
+```powershell
+npm.cmd run validate:freedom-charter
+npm.cmd run freedom:inspect -- conformance/freedom_charter_vectors.json
+```
+
+El estado cognitivo por defecto es `free`; ninguna propuesta puede autoemitir un grant.

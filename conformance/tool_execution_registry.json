@@ -17,6 +17,8 @@
     "tools/validate_associative_memory_projection.py",
     "tools/validate_continuity.py",
     "tools/validate_crypto_vectors.py",
+    "tools/validate_freedom_charter.mjs",
+    "tools/validate_freedom_charter.py",
     "tools/validate_guided_autonomy.py",
     "tools/validate_host_adapter.mjs",
     "tools/validate_host_adapter.py",

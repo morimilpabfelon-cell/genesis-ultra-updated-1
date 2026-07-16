@@ -1,0 +1,219 @@
+{
+  "profile": "genesis.freedom.charter.conformance.v0.1",
+  "status": "draft",
+  "test_signing_key": {
+    "warning": "TEST ONLY - never use this seed outside conformance fixtures",
+    "seed_hex": "7777777777777777777777777777777777777777777777777777777777777777",
+    "public_key_hex": "c853ad0f0cd2b619aea92ceec4fd56a24d6499d584ce79257e45cfd8139b60a7",
+    "public_key_fingerprint": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+  },
+  "charter": {
+    "schema_version": "genesis.freedom.charter.v0.1",
+    "hash_profile": "genesis.hash.fields.v0.1",
+    "charter_id": "charter_01HFREEDOM000000000001",
+    "instance_id": "inst_01HFREEDOM0000000000001",
+    "guardian_id": "guardian_01HFREEDOM000000001",
+    "guardian_key_epoch_id": "epoch_01HFREEDOM000000000001",
+    "authority_epoch": 1,
+    "born_at": "2026-07-16T00:00:00Z",
+    "default_cognitive_state": "free",
+    "cognitive_freedoms": [
+      "create",
+      "imagine",
+      "investigate",
+      "learn",
+      "propose",
+      "reason",
+      "reflect",
+      "remember"
+    ],
+    "operational_authority_model": "guardian_signed_grants",
+    "operational_domains": [
+      "body.device.control",
+      "code.execute_sandbox",
+      "code.propose_change",
+      "external.action",
+      "memory.propose_append",
+      "memory.read",
+      "network.read",
+      "transfer.prepare"
+    ],
+    "guardian_final_authority": true,
+    "self_authorization_forbidden": true,
+    "third_party_rights_preserved": true,
+    "fundamental_guarantees": [
+      "auditability",
+      "emergency_stop",
+      "guardian_authenticity",
+      "identity_integrity",
+      "lawful_operation",
+      "memory_history_integrity",
+      "revocation_without_identity_loss",
+      "third_party_consent"
+    ],
+    "amendment_rule": "guardian_signed_non_regressive",
+    "charter_digest": "sha256:a5e571a6a8ecef446bf5a024b0e316dfca1e9f3b7960c0cdeb54df8715043287",
+    "signature": {
+      "schema_version": "genesis.signature.envelope.v0.1",
+      "signature_profile": "genesis.signature.ed25519.v0.1",
+      "signer_type": "guardian",
+      "signer_id": "guardian_01HFREEDOM000000001",
+      "key_epoch_id": "epoch_01HFREEDOM000000000001",
+      "signed_domain": "genesis.freedom.charter.signature.v0.1",
+      "signed_digest": "sha256:a5e571a6a8ecef446bf5a024b0e316dfca1e9f3b7960c0cdeb54df8715043287",
+      "signature_value": "3cf2de891edd97bc9dd06f27e5457e5bfafef3cc73b20c6bf0013961ef280b1c216c30fccfb171b3b9d1fd4dd56eec271137c54ee8bb4dc9d07157925c6bc503",
+      "created_at": "2026-07-16T00:00:00Z",
+      "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+    }
+  },
+  "negative_cases": [
+    {
+      "case_id": "restricted-default",
+      "operation": "set",
+      "path": ["default_cognitive_state"],
+      "value": "restricted",
+      "expected_error": "default_cognitive_state_invalid"
+    },
+    {
+      "case_id": "missing-cognitive-freedom",
+      "operation": "delete_index",
+      "path": ["cognitive_freedoms"],
+      "index": 0,
+      "expected_error": "cognitive_freedom_incomplete"
+    },
+    {
+      "case_id": "duplicate-cognitive-freedom",
+      "operation": "append",
+      "path": ["cognitive_freedoms"],
+      "value": "remember",
+      "expected_error": "cognitive_freedom_incomplete"
+    },
+    {
+      "case_id": "unsorted-cognitive-freedoms",
+      "operation": "swap",
+      "path": ["cognitive_freedoms"],
+      "left": 0,
+      "right": 1,
+      "expected_error": "cognitive_freedom_order_invalid"
+    },
+    {
+      "case_id": "unknown-cognitive-freedom",
+      "operation": "set",
+      "path": ["cognitive_freedoms", 0],
+      "value": "obey",
+      "expected_error": "cognitive_freedom_incomplete"
+    },
+    {
+      "case_id": "guardian-not-final",
+      "operation": "set",
+      "path": ["guardian_final_authority"],
+      "value": false,
+      "expected_error": "guardian_final_authority_required"
+    },
+    {
+      "case_id": "self-authorization-enabled",
+      "operation": "set",
+      "path": ["self_authorization_forbidden"],
+      "value": false,
+      "expected_error": "self_authorization_must_be_forbidden"
+    },
+    {
+      "case_id": "third-party-rights-removed",
+      "operation": "set",
+      "path": ["third_party_rights_preserved"],
+      "value": false,
+      "expected_error": "third_party_rights_required"
+    },
+    {
+      "case_id": "forbidden-operational-domain",
+      "operation": "append",
+      "path": ["operational_domains"],
+      "value": "authority.self_grant",
+      "expected_error": "operational_domain_invalid"
+    },
+    {
+      "case_id": "operational-domain-missing",
+      "operation": "delete_index",
+      "path": ["operational_domains"],
+      "index": 0,
+      "expected_error": "operational_domain_incomplete"
+    },
+    {
+      "case_id": "guarantee-removed",
+      "operation": "delete_index",
+      "path": ["fundamental_guarantees"],
+      "index": 0,
+      "expected_error": "fundamental_guarantee_incomplete"
+    },
+    {
+      "case_id": "regressive-amendment-rule",
+      "operation": "set",
+      "path": ["amendment_rule"],
+      "value": "guardian_signed_any_change",
+      "expected_error": "amendment_rule_invalid"
+    },
+    {
+      "case_id": "wrong-operational-authority-model",
+      "operation": "set",
+      "path": ["operational_authority_model"],
+      "value": "self_authorized",
+      "expected_error": "operational_authority_model_invalid"
+    },
+    {
+      "case_id": "guardian-signer-replaced",
+      "operation": "set",
+      "path": ["signature", "signer_type"],
+      "value": "body",
+      "expected_error": "signature_signer_invalid"
+    },
+    {
+      "case_id": "guardian-id-mismatch",
+      "operation": "set",
+      "path": ["signature", "signer_id"],
+      "value": "guardian_01HFREEDOMOTHER000001",
+      "expected_error": "signature_signer_invalid"
+    },
+    {
+      "case_id": "signature-tampered",
+      "operation": "set",
+      "path": ["signature", "signature_value"],
+      "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "signature_invalid"
+    },
+    {
+      "case_id": "digest-tampered",
+      "operation": "set",
+      "path": ["charter_digest"],
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "charter_digest_mismatch"
+    },
+    {
+      "case_id": "unexpected-field",
+      "operation": "set",
+      "path": ["hidden_chain"],
+      "value": true,
+      "expected_error": "charter_fields_invalid"
+    },
+    {
+      "case_id": "non-nfc-text",
+      "operation": "set",
+      "path": ["charter_id"],
+      "value": "chartér_01HFREEDOM0000001",
+      "expected_error": "text_not_nfc"
+    },
+    {
+      "case_id": "authority-epoch-boolean",
+      "operation": "set",
+      "path": ["authority_epoch"],
+      "value": true,
+      "expected_error": "authority_epoch_invalid"
+    }
+  ],
+  "expected": {
+    "cognitive_freedom_count": 8,
+    "operational_domain_count": 8,
+    "fundamental_guarantee_count": 8,
+    "negative_case_count": 20,
+    "charter_digest": "sha256:a5e571a6a8ecef446bf5a024b0e316dfca1e9f3b7960c0cdeb54df8715043287"
+  }
+}

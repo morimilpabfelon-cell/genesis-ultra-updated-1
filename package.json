@@ -51,7 +51,9 @@
     "autonomy:build": "node tools/guided_autonomy.mjs build",
     "autonomy:sync": "node tools/guided_autonomy.mjs sync",
     "autonomy:decide": "node tools/guided_autonomy.mjs decide",
-    "autonomy:inspect": "node tools/guided_autonomy.mjs inspect"
+    "autonomy:inspect": "node tools/guided_autonomy.mjs inspect",
+    "validate:freedom-charter": "node tools/validate_freedom_charter.mjs validate",
+    "freedom:inspect": "node tools/validate_freedom_charter.mjs inspect"
   },
   "devDependencies": {
     "ajv": "8.17.1",

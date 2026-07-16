@@ -292,6 +292,25 @@
       ]
     },
     {
+      "id": "cognitive_freedom",
+      "name": "Libertad cognitiva",
+      "layer": "cognition",
+      "maturity": "verified",
+      "description": "Libertades cognitivas activas por nacimiento, autoridad operativa mediante grants del guardián y garantías no regresivas.",
+      "keywords": [
+        "cognitive_freedom",
+        "freedom_charter",
+        "guardian_final_authority",
+        "fundamental_guarantees"
+      ],
+      "required_evidence": [
+        "spec",
+        "schema",
+        "conformance",
+        "implementation"
+      ]
+    },
+    {
       "id": "guided_autonomy",
       "name": "Autonomía guiada",
       "layer": "cognition",
@@ -429,6 +448,7 @@
     "portable_capsules",
     "temporal_memory",
     "reasoning",
+    "cognitive_freedom",
     "guided_autonomy",
     "action"
   ]

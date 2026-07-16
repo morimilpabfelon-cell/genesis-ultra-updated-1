@@ -2828,6 +2828,71 @@
         "projection_digest": "sha256:63aa712ad02b9a116e5113f1c31fead9bf2c1e3d5d44264bc0929834c9f0870b",
         "unexpected_core_field": true
       }
+    },
+    {
+      "case_id": "freedom-charter-rejects-unexpected-field",
+      "schema": "freedom_charter.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.freedom.charter.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "charter_id": "charter_01HFREEDOM000000000001",
+        "instance_id": "inst_01HFREEDOM0000000000001",
+        "guardian_id": "guardian_01HFREEDOM000000001",
+        "guardian_key_epoch_id": "epoch_01HFREEDOM000000000001",
+        "authority_epoch": 1,
+        "born_at": "2026-07-16T00:00:00Z",
+        "default_cognitive_state": "free",
+        "cognitive_freedoms": [
+          "create",
+          "imagine",
+          "investigate",
+          "learn",
+          "propose",
+          "reason",
+          "reflect",
+          "remember"
+        ],
+        "operational_authority_model": "guardian_signed_grants",
+        "operational_domains": [
+          "body.device.control",
+          "code.execute_sandbox",
+          "code.propose_change",
+          "external.action",
+          "memory.propose_append",
+          "memory.read",
+          "network.read",
+          "transfer.prepare"
+        ],
+        "guardian_final_authority": true,
+        "self_authorization_forbidden": true,
+        "third_party_rights_preserved": true,
+        "fundamental_guarantees": [
+          "auditability",
+          "emergency_stop",
+          "guardian_authenticity",
+          "identity_integrity",
+          "lawful_operation",
+          "memory_history_integrity",
+          "revocation_without_identity_loss",
+          "third_party_consent"
+        ],
+        "amendment_rule": "guardian_signed_non_regressive",
+        "charter_digest": "sha256:a5e571a6a8ecef446bf5a024b0e316dfca1e9f3b7960c0cdeb54df8715043287",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "guardian",
+          "signer_id": "guardian_01HFREEDOM000000001",
+          "key_epoch_id": "epoch_01HFREEDOM000000000001",
+          "signed_domain": "genesis.freedom.charter.signature.v0.1",
+          "signed_digest": "sha256:a5e571a6a8ecef446bf5a024b0e316dfca1e9f3b7960c0cdeb54df8715043287",
+          "signature_value": "3cf2de891edd97bc9dd06f27e5457e5bfafef3cc73b20c6bf0013961ef280b1c216c30fccfb171b3b9d1fd4dd56eec271137c54ee8bb4dc9d07157925c6bc503",
+          "created_at": "2026-07-16T00:00:00Z",
+          "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+        },
+        "unexpected_core_field": true
+      }
     }
   ]
 }

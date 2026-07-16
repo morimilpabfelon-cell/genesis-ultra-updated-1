@@ -263,3 +263,9 @@ No implementado todavía:
 - sustitución del criterio humano.
 
 Este contrato demuestra control de autoridad. No demuestra conciencia, seguridad de producción ni capacidad autónoma general.
+
+## 15. Libertad cognitiva de nacimiento
+
+La carta `COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md` define la libertad cognitiva como estado por defecto. Este contrato de autonomía guiada no se aplica a cada pensamiento: se aplica únicamente cuando una capacidad produce efectos operativos sobre memoria aceptada, red, código ejecutado, dispositivos, transferencia o sistemas externos.
+
+Una puerta operativa puede cerrarse o revocarse sin restringir las libertades cognitivas ni destruir identidad o memoria.

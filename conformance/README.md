@@ -170,3 +170,7 @@ las retractaciones conservan historia y una consulta con cobertura ACL incomplet
 ## Autonomía guiada
 
 `guided_autonomy_vectors.json` cubre propuestas firmadas, evaluación de presupuesto fijo, grants del guardián, ledger append-only, suspensión, reanudación, revocación y decisiones de uso. Python y Node deben reproducir dos puertas, siete eventos, once decisiones y el mismo digest de proyección.
+
+## Carta de libertad cognitiva
+
+`freedom_charter_vectors.json` liga una carta firmada por el guardián a una instancia. Python y Node deben reproducir ocho libertades cognitivas, ocho dominios operativos, ocho garantías fundamentales, el mismo digest y veinte rechazos de frontera.
