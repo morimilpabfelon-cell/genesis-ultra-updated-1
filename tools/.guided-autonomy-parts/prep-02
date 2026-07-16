@@ -1,0 +1,67 @@
+ no concede autoridad, no modifica identidad y no fusiona código por sí mismo.
+""",
+    )
+    append_section(
+        "conformance/README.md",
+        "## Autonomía guiada",
+        """
+## Autonomía guiada
+
+`guided_autonomy_vectors.json` cubre propuestas firmadas, evaluación de presupuesto fijo, grants del guardián, ledger append-only, suspensión, reanudación, revocación y decisiones de uso. Python y Node deben reproducir dos puertas, siete eventos, once decisiones y el mismo digest de proyección.
+""",
+    )
+    append_section(
+        "docs/ARCHITECTURE_DECISIONS.md",
+        "## ADR — La autonomía puede crecer; la autoridad no puede autoexpandirse",
+        """
+## ADR — La autonomía puede crecer; la autoridad no puede autoexpandirse
+
+**Decisión:** una instancia puede aprender, explorar y proponer mejoras sin pedir permiso para cada operación interna autorizada. Toda ampliación de capacidad externa requiere evidencia ligada por digest y un grant firmado por el guardián. Una evaluación aprobada no abre una puerta por sí misma.
+
+**Consecuencia:** el crecimiento es progresivo y revocable; identidad, memoria histórica, guardián, escritor activo, evaluaciones privadas y protección de `main` permanecen fuera de la autoconcesión.
+""",
+    )
+    checklist = ROOT / "docs" / "V0_1_COMPLETION_CHECKLIST.md"
+    text = checklist.read_text(encoding="utf-8")
+    evidence = f"- [x] Suite completa verde para autonomía guiada y grants progresivos en el [PR #{pr_number}](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/{pr_number})."
+    if evidence not in text:
+        anchor = "## Implementado y verificado por la suite"
+        text = text.replace(anchor, evidence + "\n\n" + anchor)
+    implemented = "- [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados."
+    if implemented not in text:
+        anchor = "## Pendiente real"
+        text = text.replace(anchor, implemented + "\n\n" + anchor)
+    checklist.write_text(text, encoding="utf-8")
+
+
+def cleanup() -> None:
+    for item in [TOOLS_PARTS, VECTOR_PARTS]:
+        shutil.rmtree(item, ignore_errors=True)
+    for item in [GENERATOR, TEMP_PROJECTION, WORKFLOW, SELF]:
+        try:
+            item.unlink()
+        except FileNotFoundError:
+            pass
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pr-number", type=int, required=True)
+    args = parser.parse_args()
+
+    prepare_sources()
+    update_package()
+    update_runner()
+    update_tool_registry()
+    update_required_artifacts()
+    update_schema_regressions()
+    update_observer()
+    update_docs(args.pr_number)
+    cleanup()
+    run(sys.executable, "tools/generate_draft_manifest.py", "--write")
+    run(sys.executable, "tools/generate_draft_manifest.py", "--check")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
