@@ -1,0 +1,167 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+TOOLS_PARTS = ROOT / "tools" / ".guided-autonomy-parts"
+VECTOR_PARTS = ROOT / "conformance" / ".guided-autonomy-parts"
+WORKFLOW = ROOT / ".github" / "workflows" / "finalize-guided-autonomy.yml"
+SELF = Path(__file__).resolve()
+GENERATOR = ROOT / ".tmp_generate_guided_autonomy_fixture.py"
+TEMP_PROJECTION = ROOT / ".tmp_guided_autonomy_projection.json"
+
+PRODUCT_FILES = [
+    "conformance/guided_autonomy_vectors.json",
+    "schemas/capability_authority_event.schema.json",
+    "schemas/capability_grant.schema.json",
+    "schemas/guided_autonomy_projection.schema.json",
+    "spec/GUIDED_AUTONOMY_AND_CAPABILITY_GRANTS.md",
+    "tools/guided_autonomy.mjs",
+    "tools/validate_guided_autonomy.py",
+]
+
+
+def run(*args: str) -> None:
+    print("+", " ".join(args), flush=True)
+    subprocess.run(args, cwd=ROOT, check=True)
+
+
+def load_json(relative: str) -> dict:
+    return json.loads((ROOT / relative).read_text(encoding="utf-8"))
+
+
+def write_json(relative: str, value: object) -> None:
+    (ROOT / relative).write_text(
+        json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+def concatenate(pattern: str, output: Path) -> None:
+    parts = sorted(TOOLS_PARTS.glob(pattern), key=lambda item: item.name.encode("utf-8"))
+    if not parts:
+        raise RuntimeError(f"missing staged parts: {pattern}")
+    output.write_bytes(b"".join(item.read_bytes() for item in parts))
+
+
+def append_section(relative: str, marker: str, section: str) -> None:
+    target = ROOT / relative
+    text = target.read_text(encoding="utf-8")
+    if marker not in text:
+        if not text.endswith("\n"):
+            text += "\n"
+        text += "\n" + section.strip() + "\n"
+        target.write_text(text, encoding="utf-8")
+
+
+def prepare_sources() -> None:
+    concatenate("py-*", ROOT / "tools" / "validate_guided_autonomy.py")
+    concatenate("js-*", ROOT / "tools" / "guided_autonomy.mjs")
+    concatenate("gen-*", GENERATOR)
+
+    js_path = ROOT / "tools" / "guided_autonomy.mjs"
+    js = js_path.read_text(encoding="utf-8")
+    js = js.replace(
+        'const temp = path.join(path.dirname(output), `.${path.basename(output)}.${process.pid}.${crypto.randomBytes(6).toString("hex")}.tmp`);',
+        'const temp = path.join(path.dirname(output), `.${path.basename(output)}.${process.pid}.tmp`);',
+    )
+    js_path.write_text(js, encoding="utf-8")
+
+    generator = GENERATOR.read_text(encoding="utf-8")
+    generator = generator.replace(
+        "Path('/tmp/autonomy/conformance/guided_autonomy_vectors.json')",
+        "Path(__file__).resolve().parent / 'conformance' / 'guided_autonomy_vectors.json'",
+    )
+    GENERATOR.write_text(generator, encoding="utf-8")
+
+    run(sys.executable, "-m", "py_compile", "tools/validate_guided_autonomy.py")
+    run("node", "--check", "tools/guided_autonomy.mjs")
+    run(sys.executable, str(GENERATOR))
+    run(sys.executable, "tools/validate_guided_autonomy.py")
+    run("node", "tools/guided_autonomy.mjs", "validate")
+    run(
+        "node",
+        "tools/guided_autonomy.mjs",
+        "build",
+        "conformance/guided_autonomy_vectors.json",
+        str(TEMP_PROJECTION),
+    )
+
+
+def update_package() -> None:
+    package = load_json("package.json")
+    scripts = package["scripts"]
+    scripts.update(
+        {
+            "validate:guided-autonomy": "node tools/guided_autonomy.mjs validate",
+            "autonomy:build": "node tools/guided_autonomy.mjs build",
+            "autonomy:sync": "node tools/guided_autonomy.mjs sync",
+            "autonomy:decide": "node tools/guided_autonomy.mjs decide",
+            "autonomy:inspect": "node tools/guided_autonomy.mjs inspect",
+        }
+    )
+    write_json("package.json", package)
+
+
+def update_runner() -> None:
+    path = ROOT / "tools" / "run_conformance.mjs"
+    text = path.read_text(encoding="utf-8")
+    anchor = '  ["Validate tool execution registry", python, ["tools/validate_tool_execution_registry.py"]],\n'
+    addition = (
+        '  ["Validate guided autonomy capability grants (Python)", python, ["tools/validate_guided_autonomy.py"]],\n'
+        '  ["Validate guided autonomy capability grants independently (Node)", process.execPath, ["tools/guided_autonomy.mjs", "validate"]],\n'
+    )
+    if addition not in text:
+        if anchor not in text:
+            raise RuntimeError("runner anchor missing")
+        text = text.replace(anchor, anchor + addition)
+    path.write_text(text, encoding="utf-8")
+
+
+def update_tool_registry() -> None:
+    registry = load_json("conformance/tool_execution_registry.json")
+    entrypoints = set(registry["entrypoints"])
+    entrypoints.add("tools/validate_guided_autonomy.py")
+    registry["entrypoints"] = sorted(entrypoints, key=lambda value: value.encode("utf-8"))
+    write_json("conformance/tool_execution_registry.json", registry)
+
+
+def update_required_artifacts() -> None:
+    inventory = load_json("conformance/required_artifacts.json")
+    inventory["required"] = sorted(
+        set(inventory["required"]) | set(PRODUCT_FILES),
+        key=lambda value: value.encode("utf-8"),
+    )
+    write_json("conformance/required_artifacts.json", inventory)
+
+
+def update_schema_regressions() -> None:
+    vectors = load_json("conformance/guided_autonomy_vectors.json")
+    projection = json.loads(TEMP_PROJECTION.read_text(encoding="utf-8"))
+    cases_doc = load_json("conformance/schema_invalid_cases.json")
+    cases = [
+        item
+        for item in cases_doc["cases"]
+        if item.get("schema")
+        not in {
+            "capability_authority_event.schema.json",
+            "capability_grant.schema.json",
+            "guided_autonomy_projection.schema.json",
+        }
+    ]
+    artifacts = [
+        (
+            "capability-authority-event-rejects-unexpected-field",
+            "capability_authority_event.schema.json",
+            vectors["ledger_events"][0],
+        ),
+        (
+            "capability-grant-rejects-unexpected-field",
+            "capability_grant.schema.json",
+            vectors[
