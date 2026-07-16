@@ -2,6 +2,7 @@
 
 **Repositorio:** `morimilpabfelon-cell/genesis-ultra-updated-1`  
 **HEAD de referencia:** `3d05c6ba5b9892145af460f5762b7c2481c50d9a`  
+**Implementación correctiva:** PR #24  
 **Objeto:** distinguir validadores ejecutables de bibliotecas compartidas y prevenir herramientas realmente desconectadas.
 
 ## 1. Conclusión
@@ -49,14 +50,35 @@ El script separado `npm run test:observer` se conserva para ejecución focalizad
 
 `tools/portable_capsule_builder.py` y `tools/portable_capsule_verify.py` son módulos importados por `tools/validate_portable_memory_capsule.py`. No son CLI independientes y no deben exponerse como scripts npm sin implementar antes argumentos, lectura/escritura, códigos de error y comportamiento atómico.
 
-### 2.4 Rama y repositorio anterior
+### 2.4 Rama fantasma y repositorio anterior
 
-Durante la verificación asociada a esta corrección:
+Un checkout fresco de GitHub Actions confirmó la existencia de:
 
-- no apareció la rama `agent/memory-access-scopes-acl`;
-- `morimilpabfelon-cell/genesis-ultra-updated` figuró como `archived: true`.
+```text
+origin/agent/memory-access-scopes-acl
+```
 
-La API disponible no expuso el valor de la opción de eliminación automática de ramas; por tanto, ese ajuste de interfaz no se declara verificado aquí.
+La comparación contra `main` mostró que la rama partía del commit anterior a ACL y solo añadía restos temporales de preparación:
+
+```text
+.github/workflows/prepare-memory-access.yml
+tools/.memory-access-parts/part-00
+tools/.memory-access-parts/part-01
+tools/.memory-access-parts/part-02
+tools/prepare_memory_access_phase.py
+```
+
+No contenía una implementación de producto ausente en `main`. El cierre del PR #24 elimina esa rama y verifica después que ya no exista.
+
+El repositorio anterior:
+
+```text
+morimilpabfelon-cell/genesis-ultra-updated
+```
+
+figuró como `archived: true`; por tanto, el hallazgo de dos repositorios activos ya estaba resuelto.
+
+La API disponible no expuso la opción **Automatically delete head branches**. Ese ajuste de interfaz continúa como acción manual del propietario y no se declara verificado.
 
 ## 3. Registro de ejecución
 
