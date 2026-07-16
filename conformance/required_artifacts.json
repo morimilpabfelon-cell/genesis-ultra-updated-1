@@ -171,6 +171,8 @@
     "tools/validate_freedom_charter.mjs",
     "tools/validate_freedom_charter.py",
     "tools/validate_guided_autonomy.py",
+    "tools/validate_guided_autonomy_authority.mjs",
+    "tools/validate_guided_autonomy_authority.py",
     "tools/validate_host_adapter.mjs",
     "tools/validate_host_adapter.py",
     "tools/validate_hybrid_memory_retrieval.py",
