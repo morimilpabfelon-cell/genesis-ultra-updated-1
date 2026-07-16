@@ -79,7 +79,7 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 35 JSON Schema, verifica en ambos
+La suite ejecuta los validadores Python y Node, compila los 44 JSON Schema, verifica en ambos
 lenguajes el nombre canónico, el digest de identidad, los adaptadores neutrales de los tres
 primeros sentidos, la compuerta firmada antes de memoria, el puente firmado hacia recuperación,
 la proyección asociativa, la recuperación determinista y la búsqueda híbrida neutral. También exige que los

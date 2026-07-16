@@ -117,15 +117,23 @@
       de limpieza, auditoría y build reproducible; la compilación o instalación no crea por sí sola
       una identidad de nacimiento ni asigna `active_writer`.
 
-## Pendiente real
+## Pendiente del Génesis neutral
+
+- [ ] Endurecimiento reproducible de CI y tooling sin alterar los contratos normativos.
+- [ ] Conteos documentales derivados automáticamente de los artefactos comprobados.
+- [ ] Reglas neutrales de evolución, compatibilidad y migración entre versiones del protocolo.
+- [ ] Modelo de amenazas unificado para identidad, memoria, autoridad, herramientas y supply chain.
+- [ ] Conformidad del workspace reproducida en Ubuntu, Windows y macOS.
+- [ ] Revisión criptográfica y de seguridad externa.
+- [ ] Decisiones definitivas de licencia, nombre, contribuciones, marca, certificación y publicación.
+
+## Trabajo posterior fuera del núcleo neutral
 
 - [ ] Limpieza total, auditoría del árbol, build reproducible e instalación de prueba de `Morimil-app` en el dispositivo Android real.
 - [ ] Adaptador y pruebas de journal con almacenamiento real primero en Android; Apple y Windows quedan como cuerpos posteriores.
-- [ ] Adaptador semántico real con modelo local neutral, digest versionado y evaluación
-      reproducible de calidad; el fixture actual prueba el protocolo, no un modelo entrenado.
+- [ ] Adaptador semántico real con modelo local neutral, digest versionado y evaluación reproducible de calidad.
 - [ ] Adaptadores productivos y evaluados de PDF/DOCX/XLSX, OCR, visión y transcripción local.
 - [ ] Orquestador operacional real, juez aislado, trampas ejecutadas contra modelos reales y evaluaciones con múltiples semillas.
-- [ ] Revisión criptográfica y de seguridad externa.
 
 ## Prohibido declarar
 
