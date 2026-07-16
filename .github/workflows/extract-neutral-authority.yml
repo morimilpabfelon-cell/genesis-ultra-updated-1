@@ -1,4 +1,4 @@
-name: Capture Neutral Laboratory Error
+name: Extract Neutral Authority Bundle
 
 on:
   pull_request:
@@ -8,10 +8,10 @@ permissions:
   contents: write
 
 jobs:
-  capture:
+  extract:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - name: Checkout PR branch
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
@@ -23,18 +23,65 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install Python dependencies
-        run: python -m pip install -r requirements.txt
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "20"
 
-      - name: Capture laboratory output after extraction
+      - name: Install dependencies
         run: |
+          python -m pip install -r requirements.txt
+          npm ci --ignore-scripts
+
+      - name: Normalize public API errors, extract, verify, and commit
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path("tools/_extract_neutral_authority.py")
+          text = path.read_text(encoding="utf-8")
+          replacements = [
+              (
+                  'import { ensureInt, ensureSortedUniqueStrings, validateDocument, validateEvaluation, validateGrant, validateLedger, validateNfc, validateProposal, validateUse } from "./guided_autonomy.mjs";',
+                  'import { ConformanceError, ensureInt, ensureSortedUniqueStrings, validateDocument, validateEvaluation, validateGrant, validateLedger, validateNfc, validateProposal, validateUse } from "./guided_autonomy.mjs";'
+              ),
+              (
+                  'export function validateAuthorityBundle(bundle, publicKeyResolver) {',
+                  'function validateAuthorityBundleInternal(bundle, publicKeyResolver) {'
+              ),
+              (
+                  '  return Object.freeze({ [MARK]: true, bundle, grants: grantMap, registered: new Set(registered), keyResolver: publicKeyResolver });\n}\n\n\'\'\'',
+                  '  return Object.freeze({ [MARK]: true, bundle, grants: grantMap, registered: new Set(registered), keyResolver: publicKeyResolver });\n}\n\nexport function validateAuthorityBundle(bundle, publicKeyResolver) {\n  try { return validateAuthorityBundleInternal(bundle, publicKeyResolver); }\n  catch (error) {\n    if (error instanceof AuthorityError) throw error;\n    if (error instanceof ConformanceError) throw new AuthorityError(error.message);\n    throw error;\n  }\n}\n\n\'\'\''
+              ),
+              (
+                  'from validate_guided_autonomy import ensure_int, ensure_sorted_unique_strings, validate_document, validate_evaluation, validate_grant, validate_ledger, validate_nfc, validate_proposal, validate_use',
+                  'from validate_guided_autonomy import ConformanceError, ensure_int, ensure_sorted_unique_strings, validate_document, validate_evaluation, validate_grant, validate_ledger, validate_nfc, validate_proposal, validate_use'
+              ),
+              (
+                  'def validate_authority_bundle(bundle,public_key_resolver):',
+                  'def _validate_authority_bundle(bundle,public_key_resolver):'
+              ),
+              (
+                  'validateAuthorityBundle=validate_authority_bundle\n\'\'\'',
+                  "def validate_authority_bundle(bundle,public_key_resolver):\n try: return _validate_authority_bundle(bundle,public_key_resolver)\n except AuthorityError: raise\n except ConformanceError as error: fail(str(error))\n\nvalidateAuthorityBundle=validate_authority_bundle\n'''"
+              ),
+          ]
+          for old, new in replacements:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"neutral_error_patch_anchor:{count}:{old[:60]}")
+              text = text.replace(old, new, 1)
+          path.write_text(text, encoding="utf-8", newline="\n")
+          PY
           python tools/_extract_neutral_authority.py
-          set +e
-          python tools/validate_recursive_improvement_lab.py > neutral-lab-error.log 2>&1
-          status=$?
-          echo "exit_status=$status" >> neutral-lab-error.log
+          python tools/generate_draft_manifest.py --write
+          python tools/validate_guided_autonomy.py
+          node tools/guided_autonomy.mjs validate
+          python tools/validate_recursive_improvement_lab.py
+          node tools/validate_recursive_improvement_lab.mjs
+          python tools/validate_tool_execution_registry.py
+          node tools/validate_protocol_vectors.mjs
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add neutral-lab-error.log
-          git commit -m "Capture neutral laboratory validation error"
+          git add tools/guided_autonomy.mjs tools/validate_guided_autonomy.py tools/validate_guided_autonomy_authority.mjs tools/validate_guided_autonomy_authority.py tools/validate_recursive_improvement_lab.mjs tools/validate_recursive_improvement_lab.py conformance/tool_execution_registry.json spec/GUIDED_AUTONOMY_AND_CAPABILITY_GRANTS.md spec/RECURSIVE_IMPROVEMENT_LAB.md docs/V0_1_COMPLETION_CHECKLIST.md conformance/draft_manifest.json
+          git commit -m "Extract neutral authority bundle validation"
           git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
