@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 185,
+  "file_count": 191,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -20,8 +20,8 @@
     },
     {
       "path": "NOTICE.md",
-      "size_bytes": 317,
-      "digest": "sha256:d2b866348f8d62e2858fee244c22273f3b1d557cf38818f0208a56df47e41ba8"
+      "size_bytes": 833,
+      "digest": "sha256:0dfaa643784e4b9db7affb1c7f6e554728bfa5c9ee19b667d1b786e7baca8dc3"
     },
     {
       "path": "README.md",
@@ -114,6 +114,11 @@
       "digest": "sha256:3d928c31fb6b289fd6ed74d87be96578fa9fd165edaf7b92c750cae44edf01c9"
     },
     {
+      "path": "conformance/operational_deliberation_proof_vectors.json",
+      "size_bytes": 9171,
+      "digest": "sha256:d1e865866667d40e0199569de7e39eeb7da489b953b51597e37dd116918b3ae7"
+    },
+    {
       "path": "conformance/portable_memory_capsule_vectors.json",
       "size_bytes": 15537,
       "digest": "sha256:b6eb040dd79ea15adf52d67e1a6be79f7abcd55524f1ed896101bcfa2547f1ad"
@@ -125,8 +130,8 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 8278,
-      "digest": "sha256:5c2d0333bf48e882b861f8a40fcfdc5d18fe72d634e13feb90091bcec1b97760"
+      "size_bytes": 8581,
+      "digest": "sha256:9c68b71a8ed4582ed5d85a30d4d144f2810690374d10b23c63daa19bddcf09aa"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
@@ -155,8 +160,13 @@
     },
     {
       "path": "conformance/tool_execution_registry.json",
-      "size_bytes": 2845,
-      "digest": "sha256:1a6a743511b36cb618ec450fa319f93d3abb603427766c4136547e92a837e947"
+      "size_bytes": 2946,
+      "digest": "sha256:f05d8a2be297ed04b9c26aa22ba6e007136f2c0422734c0915d3f2c65eb9485f"
+    },
+    {
+      "path": "docs/ANDROID_FIRST_RUNTIME_DECISION.md",
+      "size_bytes": 2069,
+      "digest": "sha256:0b93733e29acfa25aa659973b9f86851eb3a04c567b612eabd680c1a7035e62a"
     },
     {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
@@ -167,6 +177,11 @@
       "path": "docs/AUDIT_TOOL_EXECUTION_REPORT.md",
       "size_bytes": 6750,
       "digest": "sha256:8da77ea36a4b25899ddf588193d37325fe98483c8778ab287b762806031f5f39"
+    },
+    {
+      "path": "docs/FABLE_METHOD_EXTRACTION_MAP.md",
+      "size_bytes": 5229,
+      "digest": "sha256:a1d008ddbb1c890749eeda47380dd8cf9047060f5c7b6d8f060ee4bf45450391"
     },
     {
       "path": "docs/MEMVID_MEMORY_EXTRACTION_MAP.md",
@@ -185,8 +200,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 9087,
-      "digest": "sha256:509ada183117f50d7420235798c0fd75b17432b205d53c1584a25f137f952529"
+      "size_bytes": 10169,
+      "digest": "sha256:b3b1baff390bbb0263142d5097b3f60b0c45fdb11c23d44e5f56275742dd7a86"
     },
     {
       "path": "observer/README.md",
@@ -235,8 +250,8 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 4013,
-      "digest": "sha256:b2830f7c53127802c07e07da99103149327a5a9fc495278e45f2bd2a027d5ed5"
+      "size_bytes": 4107,
+      "digest": "sha256:917fa4f210fc6e84db571ab5002e341ba7d3a2009c26846336ee202db04af8e1"
     },
     {
       "path": "reference/README.md",
@@ -589,6 +604,11 @@
       "digest": "sha256:db24a758907693bbc7c1db76a7b5736aa291864b932ee8bbb758ed03b4b4c740"
     },
     {
+      "path": "spec/OPERATIONAL_DELIBERATION_AND_PROOF.md",
+      "size_bytes": 1342,
+      "digest": "sha256:fa5372d8f0fd0782cb002615c20b4d32fdd8b5cc62961e6fc5db9a7c07366357"
+    },
+    {
       "path": "spec/PORTABLE_MEMORY_CAPSULES.md",
       "size_bytes": 6581,
       "digest": "sha256:4b1aee106fe3da767dec379ce987bdb986d9b3dff7dd3b2e72610bce94b08b80"
@@ -715,8 +735,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 7289,
-      "digest": "sha256:83c0674ee1a9e1b6e3f42e374b3d40c016102e36b7803f14c3f1dd50c48ec564"
+      "size_bytes": 7544,
+      "digest": "sha256:101e755a85ed1676ae09aea5b6cef232e30759700e44c95a6a1dd79a2adf7c33"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -864,6 +884,16 @@
       "digest": "sha256:da14aabc0f4e2083a29c142246deec94652c9ca8b9ecd71c74e05bd2a2e9440e"
     },
     {
+      "path": "tools/validate_operational_deliberation.mjs",
+      "size_bytes": 4687,
+      "digest": "sha256:e8fe8e322e7fbdea16d6477ed8b299f2648e47a4d66467654b7e3e750055a8db"
+    },
+    {
+      "path": "tools/validate_operational_deliberation.py",
+      "size_bytes": 4733,
+      "digest": "sha256:57d5cbe28ab69a45837d8bb7ab66b2bcce40056dd9a4166761e6a2e4fbecbfe3"
+    },
+    {
       "path": "tools/validate_portable_memory_capsule.py",
       "size_bytes": 4985,
       "digest": "sha256:caa1dd73717b3aac1a227f0a328e6b1289d4df51198b9f205e631cf5267769b0"
@@ -934,5 +964,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:3e019dd6c9691a3cc5bb477a69badcbe4be8cbae5ac450a959eae827e1dc8739"
+  "root_digest": "sha256:2065799466c7b25226be201285302839cbc0e159a09b5ad0056c28823f5892bf"
 }

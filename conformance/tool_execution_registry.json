@@ -30,6 +30,8 @@
     "tools/validate_memory_retrieval.py",
     "tools/validate_memory_retrieval_acl.py",
     "tools/validate_multimodal_memory_pipeline.py",
+    "tools/validate_operational_deliberation.mjs",
+    "tools/validate_operational_deliberation.py",
     "tools/validate_portable_memory_capsule.py",
     "tools/validate_protocol_vectors.mjs",
     "tools/validate_recursive_improvement_lab.mjs",
