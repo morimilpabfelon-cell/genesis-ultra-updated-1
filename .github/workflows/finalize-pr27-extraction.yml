@@ -67,6 +67,7 @@ jobs:
           checklist_path.write_text(checklist, encoding="utf-8", newline="\n")
           PY
           python tools/generate_draft_manifest.py --write
+          rm .github/workflows/finalize-pr27-extraction.yml
           python tools/validate_workspace.py
           python tools/generate_draft_manifest.py --check
           python tools/validate_tool_execution_registry.py
