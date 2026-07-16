@@ -1,0 +1,86 @@
+name: Integrate Laboratory Authority Fixture
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Build integrated campaign and authority fixture
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timedelta, timezone
+          import hashlib
+          import json
+          from pathlib import Path
+          import re
+
+          lab_path = Path("conformance/recursive_improvement_lab_vectors.json")
+          guided_path = Path("conformance/guided_autonomy_vectors.json")
+          text = lab_path.read_text(encoding="utf-8")
+          lab = json.loads(text)
+          guided = json.loads(guided_path.read_text(encoding="utf-8"))
+          grant = next(item for item in guided["grants"] if item["capability"] == "code.execute_sandbox")
+          issued = next(item for item in guided["ledger_events"] if item["grant_ref"] == grant["grant_id"] and item["event_type"] == "grant.issued")
+          opened = (datetime.fromisoformat(issued["recorded_at"].replace("Z", "+00:00")) + timedelta(seconds=1)).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+          campaign = lab["campaign"]
+          campaign["schema_version"] = "genesis.improvement.campaign.v0.2"
+          campaign["instance_id"] = guided["instance_id"]
+          campaign["guardian_grant_ref"] = grant["grant_id"]
+          campaign["opened_at"] = opened
+          campaign["authority_binding"] = {
+              "body_id": grant["body_ids"][0],
+              "capability": grant["capability"],
+              "target_ref": "workspace.source",
+              "action_class": "compile",
+              "data_class": "private_local",
+              "requested_actions": 1,
+              "requested_duration_seconds": campaign["budget"]["max_cpu_seconds"],
+              "requested_bytes": campaign["budget"]["max_output_bytes"],
+              "sandboxed": True,
+              "human_confirmation_ref": "confirm_01HRILAB_OPEN001",
+              "observer_ref": "observer_01HRILAB_OPEN001",
+              "reversible_plan_ref": "revert_01HRILAB_OPEN001"
+          }
+          if campaign["authority_binding"]["requested_duration_seconds"] > grant["budget"]["max_duration_seconds"]:
+              raise SystemExit("campaign_duration_exceeds_grant")
+          if campaign["authority_binding"]["requested_bytes"] > grant["budget"]["max_bytes_per_run"]:
+              raise SystemExit("campaign_bytes_exceed_grant")
+          unsigned = dict(campaign)
+          unsigned.pop("campaign_digest", None)
+          payload = "campaign\n" + json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+          campaign["campaign_digest"] = "sha256:" + hashlib.sha256(payload.encode("utf-8")).hexdigest()
+          rendered = json.dumps(campaign, ensure_ascii=False, indent=2).replace("\n", "\n  ")
+          replacement = '  "campaign": ' + rendered + ',\n  "candidates":'
+          updated, count = re.subn(r'  "campaign": \{.*?\n  \},\n  "candidates":', replacement, text, count=1, flags=re.S)
+          if count != 1:
+              raise SystemExit("campaign_block_not_found")
+          lab_path.write_text(updated, encoding="utf-8", newline="\n")
+          PY
+          python tools/generate_draft_manifest.py --write
+          if git diff --quiet -- conformance/recursive_improvement_lab_vectors.json conformance/draft_manifest.json; then
+            echo "Integrated fixture already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add conformance/recursive_improvement_lab_vectors.json conformance/draft_manifest.json
+          git commit -m "Integrate recursive improvement authority fixture"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
