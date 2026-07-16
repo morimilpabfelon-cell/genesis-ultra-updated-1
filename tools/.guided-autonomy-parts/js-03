@@ -1,0 +1,108 @@
+  for (const field of ["requested_actions", "requested_duration_seconds", "requested_bytes"]) ensureInt(item[field], `use_${field}_invalid`, field === "requested_bytes" ? 0 : 1);
+  if (typeof item.sandboxed !== "boolean") fail("use_sandbox_flag_invalid");
+  for (const field of ["human_confirmation_ref", "observer_ref", "reversible_plan_ref"]) if (item[field] !== null && (typeof item[field] !== "string" || item[field].length === 0)) fail("use_control_reference_invalid");
+  parseUtc(item.requested_at);
+  const digest = computeUseDigest(item);
+  if (item.use_digest !== digest) fail("use_digest_mismatch");
+  validateSignature(item.signature, { digest, domain: document.domains.use_signature, key: document.keys.body, signerType: "body", signerId: item.body_id, createdAt: item.requested_at, prefix: "use" });
+}
+
+function stateBefore(grant, events, at) {
+  let status = "not_issued";
+  const consumed = new Set();
+  let lastEventRef = null;
+  for (const event of events) {
+    if (event.grant_ref !== grant.grant_id || parseUtc(event.recorded_at) > at) continue;
+    if (event.event_type === "grant.issued") status = "active";
+    else if (event.event_type === "grant.suspended") status = "suspended";
+    else if (event.event_type === "grant.resumed") {
+      if (status === "revoked") fail("ledger_resume_after_revocation");
+      status = "active";
+    } else if (event.event_type === "grant.revoked") status = "revoked";
+    else if (event.event_type === "grant.consumed") consumed.add(event.use_id);
+    lastEventRef = event.event_id;
+  }
+  if (grant.use_limit !== null && consumed.size >= grant.use_limit && status === "active") status = "exhausted";
+  return { status, consumed, last_event_ref: lastEventRef };
+}
+
+export function evaluateUse(item, grants, events, registered) {
+  const at = parseUtc(item.requested_at);
+  let reason = "allowed";
+  let chosen = null;
+  let remaining = null;
+  if (FORBIDDEN_CAPABILITIES.has(item.capability)) reason = "capability_forbidden";
+  else if (!CAPABILITIES.has(item.capability)) reason = "capability_unknown";
+  else {
+    const candidates = grants.filter((grant) => grant.capability === item.capability);
+    if (candidates.length === 0) reason = "grant_missing";
+    else if (candidates.length > 1) fail("capability_multiple_grants");
+    else {
+      [chosen] = candidates;
+      const state = stateBefore(chosen, events, at);
+      if (at < parseUtc(chosen.not_before)) reason = "grant_not_yet_valid";
+      else if (chosen.expires_at !== null && at >= parseUtc(chosen.expires_at)) reason = "grant_expired";
+      else if (state.status === "not_issued") reason = "grant_not_issued";
+      else if (state.status === "suspended") reason = "grant_suspended";
+      else if (state.status === "revoked") reason = "grant_revoked";
+      else if (state.status === "exhausted") reason = "grant_exhausted";
+      else if (state.consumed.has(item.use_id)) reason = "use_already_consumed";
+      else if (chosen.body_scope === "specific_bodies" && !chosen.body_ids.includes(item.body_id)) reason = "body_not_authorized";
+      else if (chosen.body_scope === "registered_guardian_devices" && !registered.has(item.body_id)) reason = "body_not_authorized";
+      else if (!chosen.scope.allowed_target_refs.includes(item.target_ref)) reason = "target_not_authorized";
+      else if (!chosen.scope.allowed_action_classes.includes(item.action_class)) reason = "action_not_authorized";
+      else if (!chosen.scope.allowed_data_classes.includes(item.data_class)) reason = "data_class_not_authorized";
+      else if (item.requested_actions > chosen.budget.max_actions_per_run) reason = "action_budget_exceeded";
+      else if (item.requested_duration_seconds > chosen.budget.max_duration_seconds) reason = "duration_budget_exceeded";
+      else if (item.requested_bytes > chosen.budget.max_bytes_per_run) reason = "byte_budget_exceeded";
+      else if (chosen.controls.sandbox_required && !item.sandboxed) reason = "sandbox_required";
+      else if (chosen.controls.human_confirmation_required && item.human_confirmation_ref === null) reason = "human_confirmation_required";
+      else if (chosen.controls.observer_required && item.observer_ref === null) reason = "observer_required";
+      else if (chosen.controls.reversible_required && item.reversible_plan_ref === null) reason = "reversibility_required";
+      if (chosen.use_limit !== null) remaining = Math.max(0, chosen.use_limit - state.consumed.size - (reason === "allowed" ? 1 : 0));
+    }
+  }
+  const status = reason === "allowed" ? "allowed" : "denied";
+  const grantRef = chosen === null ? null : chosen.grant_id;
+  const decisionDigest = hashFields("genesis.autonomy.capability.use.decision.v0.1", [item.use_id, item.use_digest, status, reason, optionalText(grantRef), optionalText(remaining)]);
+  return { use_id: item.use_id, status, reason, grant_ref: grantRef, remaining_uses: remaining, decision_digest: decisionDigest };
+}
+
+function validateLedger(events, grants, uses, document) {
+  if (!Array.isArray(events) || events.length === 0) fail("ledger_events_required");
+  const grantsById = new Map(grants.map((grant) => [grant.grant_id, grant]));
+  const usesById = new Map(uses.map((use) => [use.use_id, use]));
+  let previous = "GENESIS";
+  const ledgerId = events[0]?.ledger_id;
+  const seenIds = new Set();
+  const seenUses = new Set();
+  const issued = new Set();
+  const status = new Map();
+  let previousTime = null;
+  for (let index = 0; index < events.length; index += 1) {
+    const event = events[index];
+    validateNfc(event);
+    exactFields(event, EVENT_FIELDS, "ledger_event_fields_invalid");
+    if (event.schema_version !== document.domains.event || event.hash_profile !== "genesis.hash.fields.v0.1") fail("ledger_event_profile_invalid");
+    if (event.ledger_id !== ledgerId || event.guardian_id !== document.guardian_id || event.instance_id !== document.instance_id || event.authority_epoch !== document.authority_epoch) fail("ledger_identity_mismatch");
+    if (event.sequence !== index) fail("ledger_sequence_invalid");
+    if (event.previous_event_hash !== previous) fail("ledger_chain_broken");
+    if (seenIds.has(event.event_id)) fail("ledger_event_id_duplicate");
+    seenIds.add(event.event_id);
+    if (!EVENT_TYPES.has(event.event_type)) fail("ledger_event_type_invalid");
+    const grant = grantsById.get(event.grant_ref);
+    if (!grant) fail("ledger_grant_unknown");
+    const recorded = parseUtc(event.recorded_at);
+    if (previousTime !== null && recorded < previousTime) fail("ledger_time_regression");
+    const digest = computeEventHash(event);
+    if (event.event_hash !== digest) fail("ledger_event_hash_mismatch");
+    const kind = event.event_type;
+    if (kind === "grant.consumed") {
+      if (event.body_id === null || event.use_id === null) fail("ledger_consumption_subject_missing");
+      const use = usesById.get(event.use_id);
+      if (!use) fail("ledger_use_unknown");
+      if (seenUses.has(event.use_id)) fail("ledger_use_duplicate");
+      const decision = evaluateUse(use, grants, events.slice(0, index), new Set(document.registered_body_ids));
+      if (decision.status !== "allowed" || decision.grant_ref !== event.grant_ref) fail("ledger_consumed_use_not_authorized");
+      if (recorded < parseUtc(use.requested_at)) fail("ledger_consumption_time_invalid");
+      if (event.body_id !== use.body_id || event.subject_digest !== use.use_digest) fail("ledger_consumption_binding_invalid");
