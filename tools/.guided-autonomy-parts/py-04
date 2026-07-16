@@ -1,0 +1,86 @@
+            if event["body_id"] is None or event["use_id"] is None:
+                fail("ledger_consumption_subject_missing")
+            use = uses_by_id.get(event["use_id"])
+            if use is None:
+                fail("ledger_use_unknown")
+            if event["use_id"] in seen_uses:
+                fail("ledger_use_duplicate")
+            decision = evaluate_use(use, grants, events[:index], set(document["registered_body_ids"]))
+            if decision["status"] != "allowed" or decision["grant_ref"] != event["grant_ref"]:
+                fail("ledger_consumed_use_not_authorized")
+            if recorded < parse_utc(use["requested_at"]):
+                fail("ledger_consumption_time_invalid")
+            if event["body_id"] != use["body_id"] or event["subject_digest"] != use["use_digest"]:
+                fail("ledger_consumption_binding_invalid")
+            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=document["keys"]["body"], signer_type="body", signer_id=use["body_id"], created_at=event["recorded_at"], prefix="ledger")
+            seen_uses.add(event["use_id"])
+        else:
+            if event["body_id"] is not None or event["use_id"] is not None:
+                fail("ledger_guardian_event_subject_invalid")
+            if recorded < parse_utc(grant["issued_at"]):
+                fail("ledger_control_time_invalid")
+            if event["subject_digest"] != grant["grant_digest"]:
+                fail("ledger_grant_digest_binding_invalid")
+            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=document["keys"]["guardian"], signer_type="guardian", signer_id=document["guardian_id"], created_at=event["recorded_at"], prefix="ledger")
+            current = status.get(grant["grant_id"], "not_issued")
+            if kind == "grant.issued":
+                if current != "not_issued": fail("ledger_grant_issued_twice")
+                status[grant["grant_id"]] = "active"; issued.add(grant["grant_id"])
+            elif kind == "grant.suspended":
+                if current != "active": fail("ledger_suspend_transition_invalid")
+                status[grant["grant_id"]] = "suspended"
+            elif kind == "grant.resumed":
+                if current != "suspended": fail("ledger_resume_transition_invalid")
+                status[grant["grant_id"]] = "active"
+            elif kind == "grant.revoked":
+                if current not in {"active", "suspended"}: fail("ledger_revoke_transition_invalid")
+                status[grant["grant_id"]] = "revoked"
+        previous = event["event_hash"]
+        previous_time = recorded
+    if issued != set(grants_by_id):
+        fail("ledger_grant_not_issued")
+
+def scope_digest(grant: dict) -> str:
+    return hash_fields("genesis.autonomy.capability.scope.v0.1", flatten_body_scope(grant) + flatten_scope(grant["scope"]) + flatten_budget(grant["budget"]))
+
+def controls_digest(grant: dict) -> str:
+    return hash_fields("genesis.autonomy.capability.controls.v0.1", flatten_controls(grant["controls"]))
+
+def build_projection(document: dict, grants: list[dict], events: list[dict]) -> dict:
+    at = parse_utc(document["expected"]["projection_at"])
+    doors = []
+    for grant in sorted(grants, key=lambda item: utf8_key(item["capability"])):
+        state = state_before(grant, events, at)
+        status = state["status"]
+        if at < parse_utc(grant["not_before"]): status = "not_yet_valid"
+        elif grant["expires_at"] is not None and at >= parse_utc(grant["expires_at"]): status = "expired"
+        remaining = None if grant["use_limit"] is None else max(0, grant["use_limit"] - len(state["consumed"]))
+        door = {"capability": grant["capability"], "grant_id": grant["grant_id"], "autonomy_level": grant["autonomy_level"], "risk_tier": grant["risk_tier"], "status": status, "remaining_uses": remaining, "expires_at": grant["expires_at"], "scope_digest": scope_digest(grant), "controls_digest": controls_digest(grant), "last_event_ref": state["last_event_ref"]}
+        door["door_digest"] = hash_fields("genesis.autonomy.capability.door.v0.1", [door["capability"], door["grant_id"], str(door["autonomy_level"]), door["risk_tier"], door["status"], optional_text(door["remaining_uses"]), optional_text(door["expires_at"]), door["scope_digest"], door["controls_digest"], optional_text(door["last_event_ref"])])
+        doors.append(door)
+    projection = {"schema_version": "genesis.autonomy.capability.projection.v0.1", "hash_profile": "genesis.hash.fields.v0.1", "projection_profile": "genesis.autonomy.capability.algorithm.v0.1", "instance_id": document["instance_id"], "guardian_id": document["guardian_id"], "authority_epoch": document["authority_epoch"], "projected_at": document["expected"]["projection_at"], "source_event_count": len(events), "source_last_event_hash": events[-1]["event_hash"], "grant_count": len(grants), "active_count": sum(door["status"] == "active" for door in doors), "suspended_count": sum(door["status"] == "suspended" for door in doors), "revoked_count": sum(door["status"] == "revoked" for door in doors), "exhausted_count": sum(door["status"] == "exhausted" for door in doors), "doors": doors}
+    fields = [projection["schema_version"], projection["hash_profile"], projection["projection_profile"], projection["instance_id"], projection["guardian_id"], str(projection["authority_epoch"]), projection["projected_at"], str(projection["source_event_count"]), projection["source_last_event_hash"], str(projection["grant_count"]), str(projection["active_count"]), str(projection["suspended_count"]), str(projection["revoked_count"]), str(projection["exhausted_count"]), *[door["door_digest"] for door in doors]]
+    projection["projection_digest"] = hash_fields("genesis.autonomy.capability.projection.v0.1", fields)
+    return projection
+
+def validate_document(document: dict) -> tuple[dict, list[dict]]:
+    validate_nfc(document)
+    expected_top = {"profile", "status", "domains", "keys", "instance_id", "guardian_id", "authority_epoch", "registered_body_ids", "proposals", "evaluations", "grants", "ledger_events", "use_requests", "expected", "must_reject"}
+    exact_fields(document, expected_top, "document_fields_invalid")
+    if document["profile"] != "genesis.autonomy.guided.v0.1" or document["status"] != "draft":
+        fail("document_profile_invalid")
+    ensure_int(document["authority_epoch"], "document_authority_epoch_invalid", 0)
+    registered = ensure_sorted_unique_strings(document["registered_body_ids"], "registered_bodies_invalid")
+    for key_name, key in document["keys"].items():
+        if set(key) != {"warning", "seed_hex", "public_key_hex", "public_key_fingerprint", "signer_id", "key_epoch_id"}:
+            fail("test_key_fields_invalid")
+        if key["signer_id"] != (document["guardian_id"] if key_name == "guardian" else registered[0]):
+            fail("test_key_signer_mismatch")
+        if key["public_key_fingerprint"] != "sha256:" + hashlib.sha256(bytes.fromhex(key["public_key_hex"])).hexdigest():
+            fail("test_key_fingerprint_mismatch")
+        signing = SigningKey(bytes.fromhex(key["seed_hex"]))
+        if signing.verify_key.encode().hex() != key["public_key_hex"]:
+            fail("test_key_public_mismatch")
+    proposals: dict[str, dict] = {}
+    for item in document["proposals"]:
+        validate_proposal(item, document)
