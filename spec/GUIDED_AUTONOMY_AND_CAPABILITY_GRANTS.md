@@ -197,6 +197,14 @@ Antes de ejecutar una acción se comprueba:
 
 El resultado es `allowed` o `denied` con un código estable. La decisión no ejecuta la acción; solamente prueba si estaba autorizada.
 
+## 10.1 Selección exacta y usos v0.2
+
+El perfil permite varios grants para una misma capacidad. `grant_id` continúa siendo único; la coexistencia de grants con distinto alcance, presupuesto o cuerpo no es un error.
+
+Una solicitud `genesis.autonomy.capability.use.v0.2` incluye `grant_ref` dentro del digest firmado. La decisión resuelve primero ese ID exacto y luego exige coincidencia de capacidad, instancia, cuerpo, scope, presupuesto y controles. Los usos v0.1 sin `grant_ref` permanecen compatibles únicamente cuando existe un solo grant para su capacidad; si la selección sería ambigua, se rechazan.
+
+Las proyecciones ordenan puertas por `(capability, grant_id)` en bytes UTF-8.
+
 ## 11. Proyección de puertas
 
 `genesis.autonomy.capability.projection.v0.1` es una vista reconstruible. Muestra cada capacidad concedida, nivel, riesgo, estado, usos restantes, expiración y los digests del alcance y controles.

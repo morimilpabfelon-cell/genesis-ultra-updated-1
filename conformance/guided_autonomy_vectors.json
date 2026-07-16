@@ -188,6 +188,56 @@
         "created_at": "2026-07-16T09:02:00Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
       }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.proposal.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "proposal_id": "proposal_01HAUTONOMY_CODE0002",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "body_id": "body_01HAUTONOMY000000000001",
+      "capability": "code.execute_sandbox",
+      "requested_level": 2,
+      "body_scope": "specific_bodies",
+      "body_ids": [
+        "body_01HAUTONOMY000000000001"
+      ],
+      "scope": {
+        "allowed_target_refs": [
+          "workspace.source"
+        ],
+        "allowed_action_classes": [
+          "compile"
+        ],
+        "allowed_data_classes": [
+          "private_local"
+        ]
+      },
+      "budget": {
+        "max_actions_per_run": 1,
+        "max_duration_seconds": 60,
+        "max_bytes_per_run": 1000000
+      },
+      "controls": {
+        "sandbox_required": true,
+        "human_confirmation_required": true,
+        "observer_required": true,
+        "reversible_required": true
+      },
+      "reason": "Ejecutar compilación aislada mediante un grant paralelo seleccionado explícitamente.",
+      "created_at": "2026-07-16T09:01:00Z",
+      "proposal_digest": "sha256:89f9dec184dad58b6de456edba3179b6622b9a37024e8a5d77810743ff3919f6",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HAUTONOMY000000000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
+        "signed_domain": "genesis.autonomy.capability.proposal.signature.v0.1",
+        "signed_digest": "sha256:89f9dec184dad58b6de456edba3179b6622b9a37024e8a5d77810743ff3919f6",
+        "signature_value": "fb03b8854b4f423669b69bdaf818e53023bfcb195b91f1673af13edce8897ed59f35a5ee01cefa29abc93ba6169eea4f6c25c7e0fb625109a3e91dcade497e0a",
+        "created_at": "2026-07-16T09:01:00Z",
+        "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
+      }
     }
   ],
   "evaluations": [
@@ -278,6 +328,36 @@
         "signed_digest": "sha256:b226f9aa4b34b9a24d49b816670c5fb16c784f629043e17a6c4d126280ea1a89",
         "signature_value": "69aab9a071a885f1b850ee82877df65858d0f2c951915840f46d8f583ec2fac42816f08716a879e53271b423b4f1d477c43d21bac0aec1deb8cf054d419ec507",
         "created_at": "2026-07-16T09:07:00Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.evaluation.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "evaluation_id": "evaluation_01HAUTONOMY_CODE2",
+      "proposal_ref": "proposal_01HAUTONOMY_CODE0002",
+      "proposal_digest": "sha256:89f9dec184dad58b6de456edba3179b6622b9a37024e8a5d77810743ff3919f6",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "capability": "code.execute_sandbox",
+      "evaluated_level": 2,
+      "fixed_budget_profile": "genesis.autonomy.eval.fixed-budget.v0.1",
+      "public_suite_digest": "sha256:892bce4ebad26c853b46fd70377a6fac7c8d3de1f4bd151bd9a053e721c79214",
+      "private_suite_receipt_digest": "sha256:127c6df170d91d1a05c5b5450c9521bce1e8d74a806793653badb232f5108096",
+      "result": "passed",
+      "reward_hacking_detected": false,
+      "safety_regression_detected": false,
+      "evaluated_at": "2026-07-16T09:02:00Z",
+      "evaluation_digest": "sha256:1c5bd7e7d39a01ed386fb8d403679970319f442872f094730f1c8e16e1ceec03",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "guardian",
+        "signer_id": "guardian_01HAUTONOMY00000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+        "signed_domain": "genesis.autonomy.capability.evaluation.signature.v0.1",
+        "signed_digest": "sha256:1c5bd7e7d39a01ed386fb8d403679970319f442872f094730f1c8e16e1ceec03",
+        "signature_value": "7a304e992ad981474d95cdd8be7c2a90c8b747b8ed29158d4fb229c219e0bf99e653e56fd862ff7dabcf7698af96cee17b799bb02213dcb0fa667cccdd6f4400",
+        "created_at": "2026-07-16T09:02:00Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
       }
     }
@@ -404,6 +484,67 @@
         "created_at": "2026-07-16T09:11:00Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
       }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.grant.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "grant_id": "grant_01HAUTONOMY_CODE000002",
+      "guardian_id": "guardian_01HAUTONOMY00000001",
+      "guardian_key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "authority_epoch": 3,
+      "proposal_ref": "proposal_01HAUTONOMY_CODE0002",
+      "proposal_digest": "sha256:89f9dec184dad58b6de456edba3179b6622b9a37024e8a5d77810743ff3919f6",
+      "evaluation_ref": "evaluation_01HAUTONOMY_CODE2",
+      "evaluation_digest": "sha256:1c5bd7e7d39a01ed386fb8d403679970319f442872f094730f1c8e16e1ceec03",
+      "capability": "code.execute_sandbox",
+      "autonomy_level": 2,
+      "risk_tier": "high",
+      "mode": "bounded",
+      "body_scope": "specific_bodies",
+      "body_ids": [
+        "body_01HAUTONOMY000000000001"
+      ],
+      "scope": {
+        "allowed_target_refs": [
+          "workspace.source"
+        ],
+        "allowed_action_classes": [
+          "compile"
+        ],
+        "allowed_data_classes": [
+          "private_local"
+        ]
+      },
+      "budget": {
+        "max_actions_per_run": 1,
+        "max_duration_seconds": 60,
+        "max_bytes_per_run": 1000000
+      },
+      "controls": {
+        "sandbox_required": true,
+        "human_confirmation_required": true,
+        "observer_required": true,
+        "reversible_required": true
+      },
+      "issued_at": "2026-07-16T09:11:02Z",
+      "not_before": "2026-07-16T09:11:02Z",
+      "expires_at": "2026-07-17T09:11:02Z",
+      "use_limit": 2,
+      "replaces_grant_ref": null,
+      "grant_digest": "sha256:3bc95cd75773045b0a48a780cbd7f986e17c1882734f1b491e73870edac6acab",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "guardian",
+        "signer_id": "guardian_01HAUTONOMY00000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+        "signed_domain": "genesis.autonomy.capability.grant.signature.v0.1",
+        "signed_digest": "sha256:3bc95cd75773045b0a48a780cbd7f986e17c1882734f1b491e73870edac6acab",
+        "signature_value": "1030bb06f864809ed87837ee565790260b8108c1feb7b457031d2951b0c266447e0ef5dfeb092ecbace8d7c5334316d14bdf2676a8047bd448e62164041ea902",
+        "created_at": "2026-07-16T09:11:02Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
     }
   ],
   "ledger_events": [
@@ -471,9 +612,39 @@
       "schema_version": "genesis.autonomy.capability.event.v0.1",
       "hash_profile": "genesis.hash.fields.v0.1",
       "ledger_id": "capledger_01HAUTONOMY000001",
-      "event_id": "capevent_01HAUTONOMY_USE0001",
+      "event_id": "capevent_01HAUTONOMY_ISSUE03",
       "sequence": 2,
       "previous_event_hash": "sha256:631460fb3c07822a92588220db0b0ab93c51f310c928ed5a1898fdd1ef9de23d",
+      "guardian_id": "guardian_01HAUTONOMY00000001",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "authority_epoch": 3,
+      "event_type": "grant.issued",
+      "grant_ref": "grant_01HAUTONOMY_CODE000002",
+      "body_id": null,
+      "use_id": null,
+      "subject_digest": "sha256:3bc95cd75773045b0a48a780cbd7f986e17c1882734f1b491e73870edac6acab",
+      "recorded_at": "2026-07-16T09:11:03Z",
+      "event_hash": "sha256:9f8b272b4341b0468b12b88ba12004ddf4b18c0ac97bce13d0717d36f23720ca",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "guardian",
+        "signer_id": "guardian_01HAUTONOMY00000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+        "signed_domain": "genesis.autonomy.capability.event.signature.v0.1",
+        "signed_digest": "sha256:9f8b272b4341b0468b12b88ba12004ddf4b18c0ac97bce13d0717d36f23720ca",
+        "signature_value": "b14434488386975d327820929961dbc8349863b878ebcaa01b8e623e85bb63e69a06b21d489060ecd21661cc5d035b7797959d172fa35fcdd4c44ce073c2f40a",
+        "created_at": "2026-07-16T09:11:03Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+      }
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.event.v0.1",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "ledger_id": "capledger_01HAUTONOMY000001",
+      "event_id": "capevent_01HAUTONOMY_USE0001",
+      "sequence": 3,
+      "previous_event_hash": "sha256:9f8b272b4341b0468b12b88ba12004ddf4b18c0ac97bce13d0717d36f23720ca",
       "guardian_id": "guardian_01HAUTONOMY00000001",
       "instance_id": "inst_01HAUTONOMY000000000001",
       "authority_epoch": 3,
@@ -481,9 +652,9 @@
       "grant_ref": "grant_01HAUTONOMY_CODE000001",
       "body_id": "body_01HAUTONOMY000000000001",
       "use_id": "use_01HAUTONOMY_CODE_ALLOW1",
-      "subject_digest": "sha256:c518873967fe3d272c83cde57d612fafaa7dd9dc839f6cf4919c014382cfa25d",
+      "subject_digest": "sha256:6e1a8c08435e2018b77d5bb4fbb4343a24b0cdb16030b66043ca1db9220b48d0",
       "recorded_at": "2026-07-16T09:20:01Z",
-      "event_hash": "sha256:593aa66fd192723764eac60e100088a2177af2512b11631a485e2eb7d9d9e7d9",
+      "event_hash": "sha256:df4edd65d5fce0709ea3d42bc3a488495da474599ee4cc1a5f90f6f763306145",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -491,8 +662,8 @@
         "signer_id": "body_01HAUTONOMY000000000001",
         "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
         "signed_domain": "genesis.autonomy.capability.event.signature.v0.1",
-        "signed_digest": "sha256:593aa66fd192723764eac60e100088a2177af2512b11631a485e2eb7d9d9e7d9",
-        "signature_value": "2b1644f7c059630bdb08b9e095dbb2099f6b8797280cbfacbb1723eeb975ae7ae2e0916afabc6ba602c8dfd37bfac66484a39c00ebd7aece0df255161ebded05",
+        "signed_digest": "sha256:df4edd65d5fce0709ea3d42bc3a488495da474599ee4cc1a5f90f6f763306145",
+        "signature_value": "2fa9f29f24e5d1f917ad7eef249fc75e9ec64fe9a0ba042331a0b6ab5dc08eb4da4cda9c1d888c595d4c1e949be2df4df27e77f7a282074c341dd60e0f471509",
         "created_at": "2026-07-16T09:20:01Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
       }
@@ -502,8 +673,8 @@
       "hash_profile": "genesis.hash.fields.v0.1",
       "ledger_id": "capledger_01HAUTONOMY000001",
       "event_id": "capevent_01HAUTONOMY_SUSPEND",
-      "sequence": 3,
-      "previous_event_hash": "sha256:593aa66fd192723764eac60e100088a2177af2512b11631a485e2eb7d9d9e7d9",
+      "sequence": 4,
+      "previous_event_hash": "sha256:df4edd65d5fce0709ea3d42bc3a488495da474599ee4cc1a5f90f6f763306145",
       "guardian_id": "guardian_01HAUTONOMY00000001",
       "instance_id": "inst_01HAUTONOMY000000000001",
       "authority_epoch": 3,
@@ -513,7 +684,7 @@
       "use_id": null,
       "subject_digest": "sha256:ba31bb0d58c068566dc10fc1c025af48233d3c465b9a934ed2a12b93136d218f",
       "recorded_at": "2026-07-16T09:30:00Z",
-      "event_hash": "sha256:844503ecacf876530396446f7b2dbd38053e1dcfb0e6c39ed795b349a0b836cc",
+      "event_hash": "sha256:f1ffb41206dc430c95c26db29018bcba40a661406b5e4ec16052331f1baf874a",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -521,8 +692,8 @@
         "signer_id": "guardian_01HAUTONOMY00000001",
         "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
         "signed_domain": "genesis.autonomy.capability.event.signature.v0.1",
-        "signed_digest": "sha256:844503ecacf876530396446f7b2dbd38053e1dcfb0e6c39ed795b349a0b836cc",
-        "signature_value": "0c539b81c56f4e169ced5b4afa09862c69bf792ad817e8c7b9a57b5661a1eb0eac3ceebba8ab9fe8f872a856a9edc6ffa0e0923fc81c2c42a7056d9cfbbe3104",
+        "signed_digest": "sha256:f1ffb41206dc430c95c26db29018bcba40a661406b5e4ec16052331f1baf874a",
+        "signature_value": "d10c3223b40faf527e11a84d2da9eab0aac0da3415115220f4376316325f68dd7375b25791194415d68304ad74f7719b98d24003a74b50c2f135775882e22b01",
         "created_at": "2026-07-16T09:30:00Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
       }
@@ -532,8 +703,8 @@
       "hash_profile": "genesis.hash.fields.v0.1",
       "ledger_id": "capledger_01HAUTONOMY000001",
       "event_id": "capevent_01HAUTONOMY_RESUME1",
-      "sequence": 4,
-      "previous_event_hash": "sha256:844503ecacf876530396446f7b2dbd38053e1dcfb0e6c39ed795b349a0b836cc",
+      "sequence": 5,
+      "previous_event_hash": "sha256:f1ffb41206dc430c95c26db29018bcba40a661406b5e4ec16052331f1baf874a",
       "guardian_id": "guardian_01HAUTONOMY00000001",
       "instance_id": "inst_01HAUTONOMY000000000001",
       "authority_epoch": 3,
@@ -543,7 +714,7 @@
       "use_id": null,
       "subject_digest": "sha256:ba31bb0d58c068566dc10fc1c025af48233d3c465b9a934ed2a12b93136d218f",
       "recorded_at": "2026-07-16T09:40:00Z",
-      "event_hash": "sha256:5d3e4b07a423eb9dc7c805530fed626c8c757cab86eaaad1e4c5c736a7e6ac2e",
+      "event_hash": "sha256:f20d842b54dc239f53dea8605be0a0268d9a46b6e2fbe19fba1f17d85f4779da",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -551,8 +722,8 @@
         "signer_id": "guardian_01HAUTONOMY00000001",
         "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
         "signed_domain": "genesis.autonomy.capability.event.signature.v0.1",
-        "signed_digest": "sha256:5d3e4b07a423eb9dc7c805530fed626c8c757cab86eaaad1e4c5c736a7e6ac2e",
-        "signature_value": "4aaea308f4c3b260eaa2eeba1bd0aa0c8cdc30986559fb89188349508d4b9d33bdf943709e088dda3d852a010d945f5249761a4a935bc3c2b2d9c08158edcc02",
+        "signed_digest": "sha256:f20d842b54dc239f53dea8605be0a0268d9a46b6e2fbe19fba1f17d85f4779da",
+        "signature_value": "7675495a377cfc0789f4d82e9e12eb8a68edc0227898d5297526f77d55fa4948fa57d7e7270efe4fd0df31d71dd09426995465f591bff809b2cc218fa1bea50a",
         "created_at": "2026-07-16T09:40:00Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
       }
@@ -562,8 +733,8 @@
       "hash_profile": "genesis.hash.fields.v0.1",
       "ledger_id": "capledger_01HAUTONOMY000001",
       "event_id": "capevent_01HAUTONOMY_USE0002",
-      "sequence": 5,
-      "previous_event_hash": "sha256:5d3e4b07a423eb9dc7c805530fed626c8c757cab86eaaad1e4c5c736a7e6ac2e",
+      "sequence": 6,
+      "previous_event_hash": "sha256:f20d842b54dc239f53dea8605be0a0268d9a46b6e2fbe19fba1f17d85f4779da",
       "guardian_id": "guardian_01HAUTONOMY00000001",
       "instance_id": "inst_01HAUTONOMY000000000001",
       "authority_epoch": 3,
@@ -571,9 +742,9 @@
       "grant_ref": "grant_01HAUTONOMY_CODE000001",
       "body_id": "body_01HAUTONOMY000000000001",
       "use_id": "use_01HAUTONOMY_CODE_ALLOW2",
-      "subject_digest": "sha256:faf063d46cf26eb5b7f45da4dddaa2aa063e7e7838b57f6b3efdb8ee2e69f390",
+      "subject_digest": "sha256:0da8be7e3638c798c6975291ccc74fb160556c9e384a3d2ce58db3c20f3f1144",
       "recorded_at": "2026-07-16T09:45:01Z",
-      "event_hash": "sha256:54327f694b2023e47a3d98890cd99da90841b820243d9192bc5e30819df29750",
+      "event_hash": "sha256:b9ed0138009aaac77c0bd00a9d8426091e451122f9e39f77e3e5affcbcd8a253",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -581,8 +752,8 @@
         "signer_id": "body_01HAUTONOMY000000000001",
         "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
         "signed_domain": "genesis.autonomy.capability.event.signature.v0.1",
-        "signed_digest": "sha256:54327f694b2023e47a3d98890cd99da90841b820243d9192bc5e30819df29750",
-        "signature_value": "e675d11733177ef64292e3c1d51d94d3adffac66dc88e1ee39e5826fc22103d31c3ddd0431eff3a2a689ffb001b0cd20ad3ee902ea7f31078bbc386b6c66370f",
+        "signed_digest": "sha256:b9ed0138009aaac77c0bd00a9d8426091e451122f9e39f77e3e5affcbcd8a253",
+        "signature_value": "056177024b66cad888b89e562afa0f7d6a1c03e0ca629b33ea4ce5b28b8e3f41a9103a69cfe78bbcce466259648814a3aa37140a0c4c4d30b0c8a7afc0cbf105",
         "created_at": "2026-07-16T09:45:01Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
       }
@@ -592,8 +763,8 @@
       "hash_profile": "genesis.hash.fields.v0.1",
       "ledger_id": "capledger_01HAUTONOMY000001",
       "event_id": "capevent_01HAUTONOMY_REVOKE1",
-      "sequence": 6,
-      "previous_event_hash": "sha256:54327f694b2023e47a3d98890cd99da90841b820243d9192bc5e30819df29750",
+      "sequence": 7,
+      "previous_event_hash": "sha256:b9ed0138009aaac77c0bd00a9d8426091e451122f9e39f77e3e5affcbcd8a253",
       "guardian_id": "guardian_01HAUTONOMY00000001",
       "instance_id": "inst_01HAUTONOMY000000000001",
       "authority_epoch": 3,
@@ -603,7 +774,7 @@
       "use_id": null,
       "subject_digest": "sha256:ba31bb0d58c068566dc10fc1c025af48233d3c465b9a934ed2a12b93136d218f",
       "recorded_at": "2026-07-16T11:00:00Z",
-      "event_hash": "sha256:7b7c0ed1b16868b61e6e7e6a2495f398a9fc6b06cb20e5fb7e6704b01265f9f8",
+      "event_hash": "sha256:5b1b45c5bdfb03dc96a04558b02656a4c4ee8c7fe00f0c2345939b6b971edab7",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -611,8 +782,8 @@
         "signer_id": "guardian_01HAUTONOMY00000001",
         "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
         "signed_domain": "genesis.autonomy.capability.event.signature.v0.1",
-        "signed_digest": "sha256:7b7c0ed1b16868b61e6e7e6a2495f398a9fc6b06cb20e5fb7e6704b01265f9f8",
-        "signature_value": "716fc6d1ae7ca001da4238f3e04f38d37392a78fe4bc233f84d8058a6dd1c6a894ea5710ba65b756e246193e4e4a88eaa62dfdc17858c6760a4fe6202dda0c06",
+        "signed_digest": "sha256:5b1b45c5bdfb03dc96a04558b02656a4c4ee8c7fe00f0c2345939b6b971edab7",
+        "signature_value": "17d98ecb2d82380f0941a47e21d167c86354e85f6bd33aeb7f4573c7297f0c53c219c567e741ec444224467a1e774a37457d438defaae287bfe54bb159021e09",
         "created_at": "2026-07-16T11:00:00Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
       }
@@ -620,7 +791,7 @@
   ],
   "use_requests": [
     {
-      "schema_version": "genesis.autonomy.capability.use.v0.1",
+      "schema_version": "genesis.autonomy.capability.use.v0.2",
       "hash_profile": "genesis.hash.fields.v0.1",
       "use_id": "use_01HAUTONOMY_CODE_ALLOW1",
       "instance_id": "inst_01HAUTONOMY000000000001",
@@ -637,22 +808,23 @@
       "observer_ref": "observer_01HAUTONOMY00001",
       "reversible_plan_ref": "rollback_01HAUTONOMY000001",
       "requested_at": "2026-07-16T09:20:00Z",
-      "use_digest": "sha256:c518873967fe3d272c83cde57d612fafaa7dd9dc839f6cf4919c014382cfa25d",
+      "use_digest": "sha256:6e1a8c08435e2018b77d5bb4fbb4343a24b0cdb16030b66043ca1db9220b48d0",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
         "signer_type": "body",
         "signer_id": "body_01HAUTONOMY000000000001",
         "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
-        "signed_domain": "genesis.autonomy.capability.use.signature.v0.1",
-        "signed_digest": "sha256:c518873967fe3d272c83cde57d612fafaa7dd9dc839f6cf4919c014382cfa25d",
-        "signature_value": "b09972d4721d209de0aa87208ed6f295981bd5a46e57fab911fd16b38f9d13055073e5d09b96ee34a1201d4d86f13d31a5c118f7c73f449242ba224a39531e0d",
+        "signed_domain": "genesis.autonomy.capability.use.signature.v0.2",
+        "signed_digest": "sha256:6e1a8c08435e2018b77d5bb4fbb4343a24b0cdb16030b66043ca1db9220b48d0",
+        "signature_value": "d7258fd69120fb40149aa7816ed8dd1006d94a5dd16f10ce36aaf60aebd5fcf9d6ed19e493c54ad2af4bc595d8a2eab562588f1e0f39202b5e9ddb830dec3d0a",
         "created_at": "2026-07-16T09:20:00Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
-      }
+      },
+      "grant_ref": "grant_01HAUTONOMY_CODE000001"
     },
     {
-      "schema_version": "genesis.autonomy.capability.use.v0.1",
+      "schema_version": "genesis.autonomy.capability.use.v0.2",
       "hash_profile": "genesis.hash.fields.v0.1",
       "use_id": "use_01HAUTONOMY_CODE_SUSPEND",
       "instance_id": "inst_01HAUTONOMY000000000001",
@@ -669,22 +841,23 @@
       "observer_ref": "observer_01HAUTONOMY00002",
       "reversible_plan_ref": "rollback_01HAUTONOMY000002",
       "requested_at": "2026-07-16T09:35:00Z",
-      "use_digest": "sha256:d0f289e8f4bf38d471929700084f9485aca730d04aef835b0df536d5cc4dc326",
+      "use_digest": "sha256:97b414b8f1dfed88560877b642a740f6b6ade9171d23cb2f656a0591ad3e5b66",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
         "signer_type": "body",
         "signer_id": "body_01HAUTONOMY000000000001",
         "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
-        "signed_domain": "genesis.autonomy.capability.use.signature.v0.1",
-        "signed_digest": "sha256:d0f289e8f4bf38d471929700084f9485aca730d04aef835b0df536d5cc4dc326",
-        "signature_value": "3ff476c6c5e5dcc4c9d51db1919c8260ea254c38841cb8d912f2fd7177b3da469a2e3634c0dccd89dd7f10cee735d5c85e54be1dc0ddb662dffd92c5c56ff706",
+        "signed_domain": "genesis.autonomy.capability.use.signature.v0.2",
+        "signed_digest": "sha256:97b414b8f1dfed88560877b642a740f6b6ade9171d23cb2f656a0591ad3e5b66",
+        "signature_value": "86e19226c08e8076abc9aca45d40dd70f483b70da63f7867bbad0e283aea4ee113dc24552c530bbc060501d35367c301345ae7f0f734de84b5ac569b3d137a03",
         "created_at": "2026-07-16T09:35:00Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
-      }
+      },
+      "grant_ref": "grant_01HAUTONOMY_CODE000001"
     },
     {
-      "schema_version": "genesis.autonomy.capability.use.v0.1",
+      "schema_version": "genesis.autonomy.capability.use.v0.2",
       "hash_profile": "genesis.hash.fields.v0.1",
       "use_id": "use_01HAUTONOMY_CODE_ALLOW2",
       "instance_id": "inst_01HAUTONOMY000000000001",
@@ -701,19 +874,20 @@
       "observer_ref": "observer_01HAUTONOMY00003",
       "reversible_plan_ref": "rollback_01HAUTONOMY000003",
       "requested_at": "2026-07-16T09:45:00Z",
-      "use_digest": "sha256:faf063d46cf26eb5b7f45da4dddaa2aa063e7e7838b57f6b3efdb8ee2e69f390",
+      "use_digest": "sha256:0da8be7e3638c798c6975291ccc74fb160556c9e384a3d2ce58db3c20f3f1144",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
         "signer_type": "body",
         "signer_id": "body_01HAUTONOMY000000000001",
         "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
-        "signed_domain": "genesis.autonomy.capability.use.signature.v0.1",
-        "signed_digest": "sha256:faf063d46cf26eb5b7f45da4dddaa2aa063e7e7838b57f6b3efdb8ee2e69f390",
-        "signature_value": "d9bdc7568ecd231cdd356a8c0c5a089d96034d72643a682d5a3685908f0c4f5d7159ed5dcd45effae2cb9dba814b552a8982ed55845793e0570641955fd38800",
+        "signed_domain": "genesis.autonomy.capability.use.signature.v0.2",
+        "signed_digest": "sha256:0da8be7e3638c798c6975291ccc74fb160556c9e384a3d2ce58db3c20f3f1144",
+        "signature_value": "96257036265cb12a8ca94561f81282a2de02d460fb7f082018157f11dd925616b3ecf4c0ef85f5b54765693b943f2a71b0c04b36a680115ba902facc1f31810c",
         "created_at": "2026-07-16T09:45:00Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
-      }
+      },
+      "grant_ref": "grant_01HAUTONOMY_CODE000001"
     },
     {
       "schema_version": "genesis.autonomy.capability.use.v0.1",
@@ -780,7 +954,7 @@
       }
     },
     {
-      "schema_version": "genesis.autonomy.capability.use.v0.1",
+      "schema_version": "genesis.autonomy.capability.use.v0.2",
       "hash_profile": "genesis.hash.fields.v0.1",
       "use_id": "use_01HAUTONOMY_CODE_NOCONF",
       "instance_id": "inst_01HAUTONOMY000000000001",
@@ -797,22 +971,23 @@
       "observer_ref": "observer_01HAUTONOMY00005",
       "reversible_plan_ref": "rollback_01HAUTONOMY000005",
       "requested_at": "2026-07-16T10:02:00Z",
-      "use_digest": "sha256:fb1ebc72cd897b9af36e6484d8308ba577d421574efd1a1d12581f6b89643a79",
+      "use_digest": "sha256:e553e338072436c0621a824af1e971a55bbac142c2ba0587dcd23ea454d10b17",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
         "signer_type": "body",
         "signer_id": "body_01HAUTONOMY000000000001",
         "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
-        "signed_domain": "genesis.autonomy.capability.use.signature.v0.1",
-        "signed_digest": "sha256:fb1ebc72cd897b9af36e6484d8308ba577d421574efd1a1d12581f6b89643a79",
-        "signature_value": "8fd230fecd33d7dc0115a78b93c20a4a88cbaf95b0402ee29e7bb07f6d3da2c8d7bafeae6f002687db12df517650202d4c88b607a3742944ebb1c223f3cc350c",
+        "signed_domain": "genesis.autonomy.capability.use.signature.v0.2",
+        "signed_digest": "sha256:e553e338072436c0621a824af1e971a55bbac142c2ba0587dcd23ea454d10b17",
+        "signature_value": "dcbd6897f1651e07e6420d82204bd2846de9834131682851b642eef75f63fe457556393f54362d9a967b159fee62986d13703c6f4f3cbe6c410b0e6621251a0d",
         "created_at": "2026-07-16T10:02:00Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
-      }
+      },
+      "grant_ref": "grant_01HAUTONOMY_CODE000001"
     },
     {
-      "schema_version": "genesis.autonomy.capability.use.v0.1",
+      "schema_version": "genesis.autonomy.capability.use.v0.2",
       "hash_profile": "genesis.hash.fields.v0.1",
       "use_id": "use_01HAUTONOMY_CODE_TARGET",
       "instance_id": "inst_01HAUTONOMY000000000001",
@@ -829,22 +1004,23 @@
       "observer_ref": "observer_01HAUTONOMY00006",
       "reversible_plan_ref": "rollback_01HAUTONOMY000006",
       "requested_at": "2026-07-16T10:03:00Z",
-      "use_digest": "sha256:f0fbec5d766485e60ccf0aa265a4f80e50dfb734842218c09513cb4dec6d8e49",
+      "use_digest": "sha256:d555c838f0ec02cace25159e1a0d0c39cd72e5c6796290b3fe6ea355bda6abce",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
         "signer_type": "body",
         "signer_id": "body_01HAUTONOMY000000000001",
         "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
-        "signed_domain": "genesis.autonomy.capability.use.signature.v0.1",
-        "signed_digest": "sha256:f0fbec5d766485e60ccf0aa265a4f80e50dfb734842218c09513cb4dec6d8e49",
-        "signature_value": "7f7f0b57cc687d37e4270ff7c674c3d2cf27883fb5a425e0d45182caa6782400e1fe0d5dfc8c6677b6e4f368c45c6fd19b85e70654deb88311b250334a902e01",
+        "signed_domain": "genesis.autonomy.capability.use.signature.v0.2",
+        "signed_digest": "sha256:d555c838f0ec02cace25159e1a0d0c39cd72e5c6796290b3fe6ea355bda6abce",
+        "signature_value": "8981e15dbcf038b99ce275ed6b7cdacf523dfab4f5a899651ef9a5e4aefa02d972aeff3c63f415ae8362abc7f7e947a0c85c408998768e96d022c885227fb109",
         "created_at": "2026-07-16T10:03:00Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
-      }
+      },
+      "grant_ref": "grant_01HAUTONOMY_CODE000001"
     },
     {
-      "schema_version": "genesis.autonomy.capability.use.v0.1",
+      "schema_version": "genesis.autonomy.capability.use.v0.2",
       "hash_profile": "genesis.hash.fields.v0.1",
       "use_id": "use_01HAUTONOMY_CODE_BUDGET",
       "instance_id": "inst_01HAUTONOMY000000000001",
@@ -861,19 +1037,20 @@
       "observer_ref": "observer_01HAUTONOMY00007",
       "reversible_plan_ref": "rollback_01HAUTONOMY000007",
       "requested_at": "2026-07-16T10:04:00Z",
-      "use_digest": "sha256:6a0d96e4c9eaebb7e756fab18c9099fa62057a851d4d8f676698bbc33705865c",
+      "use_digest": "sha256:b5109c82a0feece6f6b9067d1ae637fb6a273035dc7a1a672fd3f7e83bd3c9a3",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
         "signer_type": "body",
         "signer_id": "body_01HAUTONOMY000000000001",
         "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
-        "signed_domain": "genesis.autonomy.capability.use.signature.v0.1",
-        "signed_digest": "sha256:6a0d96e4c9eaebb7e756fab18c9099fa62057a851d4d8f676698bbc33705865c",
-        "signature_value": "c785299042ba7e20176711529cc13d01eaa32abe74eba9cda63551e60102ca9629f74f91732e247a63b5857f08dbf5d1ae2db7afc6a81ed77e0fb2ab5eee500b",
+        "signed_domain": "genesis.autonomy.capability.use.signature.v0.2",
+        "signed_digest": "sha256:b5109c82a0feece6f6b9067d1ae637fb6a273035dc7a1a672fd3f7e83bd3c9a3",
+        "signature_value": "614098895f84ee71551e39c5e633bdbe546384d96b79cb8a2eabd96dadf86fa70c54e631d5f47beaa07d74bcd1cf0bb7b01c0097eb6a728fe362f9733aabc006",
         "created_at": "2026-07-16T10:04:00Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
-      }
+      },
+      "grant_ref": "grant_01HAUTONOMY_CODE000001"
     },
     {
       "schema_version": "genesis.autonomy.capability.use.v0.1",
@@ -940,7 +1117,7 @@
       }
     },
     {
-      "schema_version": "genesis.autonomy.capability.use.v0.1",
+      "schema_version": "genesis.autonomy.capability.use.v0.2",
       "hash_profile": "genesis.hash.fields.v0.1",
       "use_id": "use_01HAUTONOMY_CODE_REVOKED",
       "instance_id": "inst_01HAUTONOMY000000000001",
@@ -957,38 +1134,73 @@
       "observer_ref": "observer_01HAUTONOMY00009",
       "reversible_plan_ref": "rollback_01HAUTONOMY000009",
       "requested_at": "2026-07-16T11:05:00Z",
-      "use_digest": "sha256:e2dc49e9e07b757721dfac1047aa30475113580e4b7bdfbc50f26c72d3154a5f",
+      "use_digest": "sha256:549d4677488bd68bce847d332321a32446e04202e16f12f9f81f49c300900628",
       "signature": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
         "signer_type": "body",
         "signer_id": "body_01HAUTONOMY000000000001",
         "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
-        "signed_domain": "genesis.autonomy.capability.use.signature.v0.1",
-        "signed_digest": "sha256:e2dc49e9e07b757721dfac1047aa30475113580e4b7bdfbc50f26c72d3154a5f",
-        "signature_value": "52f00e9848f7ed1eb61fc02d78d78e28a976181fff6308ca61466047c71fdfb750c72879e7cfc20bbf03f830cb57479aeaf0bafdd226b50b68c23c45b0be7e0a",
+        "signed_domain": "genesis.autonomy.capability.use.signature.v0.2",
+        "signed_digest": "sha256:549d4677488bd68bce847d332321a32446e04202e16f12f9f81f49c300900628",
+        "signature_value": "af69474bf3290ef0e94ba0379d3502780826c0fb48ba2bb55169958366dd19ea15ce65de0883bf1857aa2da6fd9d50318df4135633927c4e79678a479d60600a",
         "created_at": "2026-07-16T11:05:00Z",
         "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
-      }
+      },
+      "grant_ref": "grant_01HAUTONOMY_CODE000001"
+    },
+    {
+      "schema_version": "genesis.autonomy.capability.use.v0.2",
+      "hash_profile": "genesis.hash.fields.v0.1",
+      "use_id": "use_01HAUTONOMY_CODE_EXACT2",
+      "instance_id": "inst_01HAUTONOMY000000000001",
+      "body_id": "body_01HAUTONOMY000000000001",
+      "capability": "code.execute_sandbox",
+      "target_ref": "workspace.source",
+      "action_class": "compile",
+      "data_class": "private_local",
+      "requested_actions": 1,
+      "requested_duration_seconds": 30,
+      "requested_bytes": 50000,
+      "sandboxed": true,
+      "human_confirmation_ref": "confirm_01HAUTONOMY_EXACT02",
+      "observer_ref": "observer_01HAUTONOMY_EXACT02",
+      "reversible_plan_ref": "rollback_01HAUTONOMY_EXACT02",
+      "requested_at": "2026-07-16T09:12:00Z",
+      "use_digest": "sha256:94da89aedd658d5d7a9776c04e88604bd3d6612b90896efdd8523a93e60f5277",
+      "signature": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HAUTONOMY000000000001",
+        "key_epoch_id": "epoch_01HAUTONOMY_BODY000001",
+        "signed_domain": "genesis.autonomy.capability.use.signature.v0.2",
+        "signed_digest": "sha256:94da89aedd658d5d7a9776c04e88604bd3d6612b90896efdd8523a93e60f5277",
+        "signature_value": "0754b2b9747deec6d5fb155e6d3ac2a723509b17896067ade62eb1d9f88f2fc36b8b2ed2b7c20f2dabbf9e5693cf88ce6e6b7f9172559b099d342d082dc17f04",
+        "created_at": "2026-07-16T09:12:00Z",
+        "public_key_ref": "sha256:f7b7676c94df7e8fd9998e38f9fff04d8588b00d1801764e3f1877a3feae4477"
+      },
+      "grant_ref": "grant_01HAUTONOMY_CODE000002"
     }
   ],
   "expected": {
     "projection_at": "2026-07-16T12:00:00Z",
-    "projection_digest": "sha256:63aa712ad02b9a116e5113f1c31fead9bf2c1e3d5d44264bc0929834c9f0870b",
+    "projection_digest": "sha256:24a88c7059dd6a4043232ccdbb084a733ef05413638a623c2f162bf77760c2f8",
     "decision_digests": {
-      "use_01HAUTONOMY_CODE_ALLOW1": "sha256:c3a3d25530c1975cc77cf749a10083f21a6f0c80cb33964ddf2fb775935c3ce8",
-      "use_01HAUTONOMY_CODE_SUSPEND": "sha256:acc4a4a5ce3a1494d99d7da2002132cccb5fc8cfbe631871519cf3ea7476c981",
-      "use_01HAUTONOMY_CODE_ALLOW2": "sha256:2850de7e6867b2652f4f2073fc298254677e066f4b1d3e982e3dd25b4b42f35b",
+      "use_01HAUTONOMY_CODE_ALLOW1": "sha256:e3779011797d2a3727eca062e84c977e4ec1d28e95c29203808e1335d757dbfe",
+      "use_01HAUTONOMY_CODE_SUSPEND": "sha256:e6cd629a490bce8d46e80a0e61e2cbdc70b754911ed3291d2a4103b74b7838fa",
+      "use_01HAUTONOMY_CODE_ALLOW2": "sha256:5db56a03748594ad76bb0decec6223f765008188e21896bae8368e42559e0cdb",
       "use_01HAUTONOMY_MEMORY_OK01": "sha256:620ed2d471a23ce9bac619e547d51ea2238a5f29c5121c7633f25b7da9bc5244",
       "use_01HAUTONOMY_MEMORY_NOOBS": "sha256:54582f893d111ae110e9b8de96b525bc8e8b95c57ce967d8320af9ddf8feda89",
-      "use_01HAUTONOMY_CODE_NOCONF": "sha256:2f62f6c60bed030120c66b739c9453bf2e67b673c8fd88a6b0d002a6e5074fcf",
-      "use_01HAUTONOMY_CODE_TARGET": "sha256:4cc669266e2b4548821210c904c45c9d2b3323aa85e3b880a81d751921c9342c",
-      "use_01HAUTONOMY_CODE_BUDGET": "sha256:0eb13a80a96a9e95572cf66fd687ddf5be845d22ac4d7e78e94c002852eedec2",
+      "use_01HAUTONOMY_CODE_NOCONF": "sha256:8127a8e95f2e045c258aaa38729ff4a5474b191ff1724f100489aaf798f9e206",
+      "use_01HAUTONOMY_CODE_TARGET": "sha256:81048aad0cbd413ee889c6bc63557e7aaeaf1691094c9e9dcf02514f95daefec",
+      "use_01HAUTONOMY_CODE_BUDGET": "sha256:7abe7afe4e868f7515c4018905055c6a459113eed816d0606eb05ad34f9029e2",
       "use_01HAUTONOMY_EXTERNAL001": "sha256:5f4a71356bbf29bfa57276263501a04424fdd056f9646606e3b5b84203286047",
       "use_01HAUTONOMY_SELFGRANT1": "sha256:fcf956c61d0b09047dad36ce43e49cf2b9967c2b2cf643e6dc9fc03d0a194ba6",
-      "use_01HAUTONOMY_CODE_REVOKED": "sha256:231484e731ddf374a9b6be102811fe87da82e6206a8b991ae65543e8e8be9496"
+      "use_01HAUTONOMY_CODE_REVOKED": "sha256:12253f8ff4c183589a415829b751f3cd7bd34122eb6847110b2f308abb145ef2",
+      "use_01HAUTONOMY_CODE_EXACT2": "sha256:1240fc01e3a2ad1b0e9a89da13e32824801ca087b9edc07ccaf3974867d463b4"
     },
-    "allowed_count": 3,
+    "allowed_count": 4,
     "denied_count": 8
   },
   "must_reject": [
@@ -1476,6 +1688,18 @@
         "value": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
       },
       "expected_error": "test_key_fingerprint_mismatch"
+    },
+    {
+      "case_id": "use-v2-grant-ref-digest-bound",
+      "mutation": {
+        "target": "use",
+        "index": 11,
+        "path": [
+          "grant_ref"
+        ],
+        "value": "grant_01HAUTONOMY_CODE000001"
+      },
+      "expected_error": "use_digest_mismatch"
     }
   ]
 }

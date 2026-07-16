@@ -70,8 +70,8 @@
     },
     {
       "path": "conformance/guided_autonomy_vectors.json",
-      "size_bytes": 60842,
-      "digest": "sha256:f7ced4e09dc88ed79a2a8949be337e286232e156ebbc77e008dca0b87b2aaae4"
+      "size_bytes": 71299,
+      "digest": "sha256:fc032f8e9c02aa2692734475e60379f41277a39ad0c93981376ed0685dec6d67"
     },
     {
       "path": "conformance/host_adapter_vectors.json",
@@ -200,8 +200,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 11153,
-      "digest": "sha256:e9916621c1645f24c59d9f4374b6f618b980674d80a386f97c527f6b36ff95cc"
+      "size_bytes": 11251,
+      "digest": "sha256:156c9d17f2e44e2cdb1cec1ea6bcdbe7e329de2860ceecb46608108f381ca665"
     },
     {
       "path": "observer/README.md",
@@ -560,8 +560,8 @@
     },
     {
       "path": "spec/GUIDED_AUTONOMY_AND_CAPABILITY_GRANTS.md",
-      "size_bytes": 9087,
-      "digest": "sha256:bba4f994ff1a3b1e52a3b62bfa19a5469baa3f70e5af274bfe920680310b0e0c"
+      "size_bytes": 9780,
+      "digest": "sha256:abec70609c1647da0000f4d6348e13c9d056fd9ced4cfc5eb03e90b9d6bc7a39"
     },
     {
       "path": "spec/HASHING_PROFILE_DRAFT.md",
@@ -660,8 +660,8 @@
     },
     {
       "path": "tools/guided_autonomy.mjs",
-      "size_bytes": 49051,
-      "digest": "sha256:8fed8b860d015af4b5da76016edfda5afc78c7d67dacdabd281377fc749cd675"
+      "size_bytes": 50410,
+      "digest": "sha256:de2979251b663981ba9d930334b96d9ecd38f788620db53cea5625bd80e524a9"
     },
     {
       "path": "tools/hybrid_memory_retrieval.mjs",
@@ -830,8 +830,8 @@
     },
     {
       "path": "tools/validate_guided_autonomy.py",
-      "size_bytes": 48027,
-      "digest": "sha256:38a87967a83b9d8652cea4a6c8097bb80f6a7a946e929cd5e5972c2eb197a04b"
+      "size_bytes": 49166,
+      "digest": "sha256:71c39d05d7f89f1d07a483c7e38b3685cf2e297a66c6de17ad0f4c1243c9a647"
     },
     {
       "path": "tools/validate_guided_autonomy_authority.mjs",
@@ -974,5 +974,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:090151e3a5ff7bb833fcd1f5c0a828590245cc7c7bc8679ab2b6d88f142e97ad"
+  "root_digest": "sha256:0657b22eb6c040fbfc107c7d93b7a3b32bbebcc454e9b775cb833aa22fde977b"
 }

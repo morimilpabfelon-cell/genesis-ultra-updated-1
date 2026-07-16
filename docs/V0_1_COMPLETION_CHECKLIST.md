@@ -103,7 +103,7 @@
       treinta y tres entrypoints exigidos en el runner y seis bibliotecas importadas por
       consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
 
-- [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados.
+- [x] Autonomía guiada reproducida por Python y Node: tres puertas, ocho eventos append-only, doce intentos de uso, cuatro permitidos, ocho denegados y treinta y ocho cruces de autoridad, integridad, selección exacta, alcance, presupuesto o controles rechazados; varios grants de una misma capacidad se ordenan por `(capability, grant_id)`.
 
 - [x] Carta de libertad cognitiva reproducida por Python y Node: ocho libertades activas por nacimiento, ocho dominios operativos bajo grants, ocho garantías fundamentales, firma Ed25519 del guardián y veinte cruces de frontera rechazados.
 
