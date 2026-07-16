@@ -166,3 +166,7 @@ proveedor, integridad, firma, compuerta y continuidad.
 Python y Node reconstruyen la misma proyección estructurada. Las versiones forman cadenas lineales,
 las retractaciones conservan historia y una consulta con cobertura ACL incompleta devuelve
 `redacted_chain` sin valores ni conteos históricos.
+
+## Autonomía guiada
+
+`guided_autonomy_vectors.json` cubre propuestas firmadas, evaluación de presupuesto fijo, grants del guardián, ledger append-only, suspensión, reanudación, revocación y decisiones de uso. Python y Node deben reproducir dos puertas, siete eventos, once decisiones y el mismo digest de proyección.

@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 168,
+  "file_count": 175,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,18 +25,18 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 12282,
-      "digest": "sha256:3c42d1f8bc97e83b00052066b80045f3c2affcaf16b4f9a3409ea82a0dee3af6"
+      "size_bytes": 12740,
+      "digest": "sha256:a58a4da3c76f55948bd0b59d1a98cd124e9744efe4e9109b2ee1f2c343546ccd"
     },
     {
       "path": "START_HERE.md",
-      "size_bytes": 6153,
-      "digest": "sha256:1bdd279184eadc44d2a98e70573a3698edc9887a6d02ca042a71b749350ddde8"
+      "size_bytes": 6669,
+      "digest": "sha256:13270572af484ed848f74bfcfafcbc2980b37877aeb2bd87f38d1e676636b246"
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 10430,
-      "digest": "sha256:138096a878f1eca7f17215889d9436eee7f854117a3a7ac934ffdf569f5aecc5"
+      "size_bytes": 10755,
+      "digest": "sha256:7720ecfceef1199313ac9e7834935ea78bc82c8b87430637700f99b2f72dbc48"
     },
     {
       "path": "conformance/associative_memory_projection_vectors.json",
@@ -62,6 +62,11 @@
       "path": "conformance/golden_vectors.json",
       "size_bytes": 2303,
       "digest": "sha256:003dc879bcf83dfc59cd3e512fd270becc79a2226047b1e3184b6db264e3239d"
+    },
+    {
+      "path": "conformance/guided_autonomy_vectors.json",
+      "size_bytes": 60842,
+      "digest": "sha256:f7ced4e09dc88ed79a2a8949be337e286232e156ebbc77e008dca0b87b2aaae4"
     },
     {
       "path": "conformance/host_adapter_vectors.json",
@@ -110,13 +115,13 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 7466,
-      "digest": "sha256:7b21b759427518a80589ea95ea9b61bf48ae9746a439256343550274a2bd82a0"
+      "size_bytes": 7793,
+      "digest": "sha256:c98d2dd9fc3cc3eab79ac93c1aea4fe6cc623ced7587fa2a5bb5eb88551fef17"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 118311,
-      "digest": "sha256:da977b514fe7c1f95fcf5664e236b25d784a5dbfde0b7d2a55c1416cbb5d4ed7"
+      "size_bytes": 125454,
+      "digest": "sha256:ab40b0ab00502636efb4c0c7a4c3c65ab6ee288e695c1ee08cf2f0e4dd39fe7f"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -140,13 +145,13 @@
     },
     {
       "path": "conformance/tool_execution_registry.json",
-      "size_bytes": 2618,
-      "digest": "sha256:9033fe0da6fc5498d482acc29180a4340eee3c7d0440e7795402a76f171f1956"
+      "size_bytes": 2659,
+      "digest": "sha256:c70fd7faa8a5273840cb28536f42c1672e0af378c17e0963df5cb1f7f3ad65b4"
     },
     {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
-      "size_bytes": 15776,
-      "digest": "sha256:34b5eeaeec8348535b76c150af6842cf5018da57c3ee404f041856db37f6de02"
+      "size_bytes": 16362,
+      "digest": "sha256:be99a46e7c906f9db55f3ca0559e88e88d05a57282d696905b614da48d1e2c8c"
     },
     {
       "path": "docs/AUDIT_TOOL_EXECUTION_REPORT.md",
@@ -170,8 +175,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 7877,
-      "digest": "sha256:31c9b1052be5481ba311b0516483c1a1baa272370493e20b3b0dddcef512a50f"
+      "size_bytes": 8289,
+      "digest": "sha256:1bf35ad7c9833eea9397bf40ba7273b66aa78501fde538c8f9bedc5754df3076"
     },
     {
       "path": "observer/README.md",
@@ -205,8 +210,8 @@
     },
     {
       "path": "observer/system-map.json",
-      "size_bytes": 10865,
-      "digest": "sha256:27ab1fb680549e33bd82d42be82aeec475160756909d90fba0d70f36ae752f20"
+      "size_bytes": 11446,
+      "digest": "sha256:7abcce4526589f676e770b73f9405c52a037babeaf8ebf865d4b95982d75132b"
     },
     {
       "path": "observer/test/core.test.mjs",
@@ -220,8 +225,8 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 3451,
-      "digest": "sha256:b06b652673c9741a5ea73b5844a8584ee3b4973ba86638a3f2a522041930561a"
+      "size_bytes": 3778,
+      "digest": "sha256:a3ba42f93e381916e4d7fdf4edba81b1307a0655f6093f678713f5e056cf6ba8"
     },
     {
       "path": "reference/README.md",
@@ -274,6 +279,16 @@
       "digest": "sha256:cf836d0142461c766263c20416ef6cef66f62696ccb9cc8cf91dcd0703e94d1e"
     },
     {
+      "path": "schemas/capability_authority_event.schema.json",
+      "size_bytes": 3085,
+      "digest": "sha256:e58e708b1aee24060e8454ac37393588e48304952295d81478bbeae34bc3b5cc"
+    },
+    {
+      "path": "schemas/capability_grant.schema.json",
+      "size_bytes": 6756,
+      "digest": "sha256:b0aad713c9913891bd8a57ad0bbb64746baf7fa44c76b585aeaef3bbabae2f50"
+    },
+    {
       "path": "schemas/checkpoint.schema.json",
       "size_bytes": 1853,
       "digest": "sha256:20d11a2f3f9e8237fa0b86eb6456aad139bf7f718ee2981e51ee50c7e678b580"
@@ -312,6 +327,11 @@
       "path": "schemas/guardian_recovery_policy.schema.json",
       "size_bytes": 1695,
       "digest": "sha256:fd8631a6364b2f29a976d4f51bda72fe6e173790e757f0ea005cd4c43dc1b7e2"
+    },
+    {
+      "path": "schemas/guided_autonomy_projection.schema.json",
+      "size_bytes": 3868,
+      "digest": "sha256:a17a521ad264a408917ea3f4c3a02e8059936a37710974ebbbab40fcc68dbebf"
     },
     {
       "path": "schemas/host_capability_manifest.schema.json",
@@ -499,6 +519,11 @@
       "digest": "sha256:365d6764f269b47d5c7d5f7797204e69ab6d317ef93f05231425bb18921f752f"
     },
     {
+      "path": "spec/GUIDED_AUTONOMY_AND_CAPABILITY_GRANTS.md",
+      "size_bytes": 8578,
+      "digest": "sha256:c491e74cbc2e4ddf15f9f1c77705debe559288c579c630fe3dce104888c038b3"
+    },
+    {
       "path": "spec/HASHING_PROFILE_DRAFT.md",
       "size_bytes": 340,
       "digest": "sha256:d58837a9761b24b096405d5f2fc6b575896fd68c09d00f72b4e8fde832c0e3b5"
@@ -584,6 +609,11 @@
       "digest": "sha256:32981569dd6254059f59688d834231e7a3a1d61a58486dcd8e1437784fae1cc5"
     },
     {
+      "path": "tools/guided_autonomy.mjs",
+      "size_bytes": 49051,
+      "digest": "sha256:8fed8b860d015af4b5da76016edfda5afc78c7d67dacdabd281377fc749cd675"
+    },
+    {
       "path": "tools/hybrid_memory_retrieval.mjs",
       "size_bytes": 29408,
       "digest": "sha256:d5aeeeb73b804d831dfe74f09a06756ef18f7b0d9fa5341d484866d2ff5b2314"
@@ -655,8 +685,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 6567,
-      "digest": "sha256:d043a97c98bc5ee1eb91fa6cc3ec0d3313ddb85b9124256502f872153a8d4f18"
+      "size_bytes": 6805,
+      "digest": "sha256:c6655518064805687360ed56267f4e8284d7e6b3890d3a9e403ede1e9beef20b"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -737,6 +767,11 @@
       "path": "tools/validate_crypto_vectors.py",
       "size_bytes": 6686,
       "digest": "sha256:c94f16bce58f2925c14e0bf551bfee3f2d701ab6e0544684f98173cec95cc1e2"
+    },
+    {
+      "path": "tools/validate_guided_autonomy.py",
+      "size_bytes": 48027,
+      "digest": "sha256:38a87967a83b9d8652cea4a6c8097bb80f6a7a946e929cd5e5972c2eb197a04b"
     },
     {
       "path": "tools/validate_host_adapter.mjs",
@@ -849,5 +884,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:88b472407d763602f9daf1752c171e11123750be71a5b57b6af3474571dc73ab"
+  "root_digest": "sha256:59b3f243cc87ccaccb069f099b07cb954ffb910f681882fa43d8771f4bbd6169"
 }

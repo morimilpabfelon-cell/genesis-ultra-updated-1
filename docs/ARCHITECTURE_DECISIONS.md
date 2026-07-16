@@ -208,3 +208,9 @@ ni permitir que una deducción reescriba la historia.
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con
 vectores y crítica independiente antes de cualquier declaración de estabilidad.
+
+## ADR — La autonomía puede crecer; la autoridad no puede autoexpandirse
+
+**Decisión:** una instancia puede aprender, explorar y proponer mejoras sin pedir permiso para cada operación interna autorizada. Toda ampliación de capacidad externa requiere evidencia ligada por digest y un grant firmado por el guardián. Una evaluación aprobada no abre una puerta por sí misma.
+
+**Consecuencia:** el crecimiento es progresivo y revocable; identidad, memoria histórica, guardián, escritor activo, evaluaciones privadas y protección de `main` permanecen fuera de la autoconcesión.

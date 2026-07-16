@@ -165,3 +165,15 @@ npm run memory:structured:query -- conformance/structured_versioned_memory_vecto
 La proyección es reconstruible. `sets`, `updates`, `extends` y `retracts` cambian el estado de
 lectura sin borrar la cadena append-only. Una consulta externa debe aportar referencias de eventos
 autorizadas por ACL.
+
+## Autonomía guiada
+
+La instancia puede crecer dentro de capacidades concedidas. Para inspeccionar la proyección y una decisión de uso:
+
+```powershell
+npm.cmd run autonomy:build -- conformance/guided_autonomy_vectors.json runtime/guided-autonomy.json
+npm.cmd run autonomy:inspect -- runtime/guided-autonomy.json
+npm.cmd run autonomy:decide -- conformance/guided_autonomy_vectors.json use_01HAUTONOMY_CODE_ALLOW1
+```
+
+El laboratorio no concede autoridad, no modifica identidad y no fusiona código por sí mismo.

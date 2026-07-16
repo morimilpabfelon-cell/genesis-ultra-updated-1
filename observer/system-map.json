@@ -292,6 +292,25 @@
       ]
     },
     {
+      "id": "guided_autonomy",
+      "name": "Autonomía guiada",
+      "layer": "cognition",
+      "maturity": "verified",
+      "description": "Propuestas, evaluación, grants firmados, niveles de autonomía, suspensión y revocación bajo autoridad exclusiva del guardián.",
+      "keywords": [
+        "guided_autonomy",
+        "capability_grant",
+        "capability_authority_event",
+        "autonomy_level"
+      ],
+      "required_evidence": [
+        "spec",
+        "schema",
+        "conformance",
+        "implementation"
+      ]
+    },
+    {
       "id": "action",
       "name": "Acción externa",
       "layer": "cognition",
@@ -410,6 +429,7 @@
     "portable_capsules",
     "temporal_memory",
     "reasoning",
+    "guided_autonomy",
     "action"
   ]
 }

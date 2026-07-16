@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:capability-grant:v0.1",
+  "title": "Genesis Guided Autonomy Capability Grant",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "grant_id",
+    "guardian_id",
+    "guardian_key_epoch_id",
+    "instance_id",
+    "authority_epoch",
+    "proposal_ref",
+    "proposal_digest",
+    "evaluation_ref",
+    "evaluation_digest",
+    "capability",
+    "autonomy_level",
+    "risk_tier",
+    "mode",
+    "body_scope",
+    "body_ids",
+    "scope",
+    "budget",
+    "controls",
+    "issued_at",
+    "not_before",
+    "expires_at",
+    "use_limit",
+    "replaces_grant_ref",
+    "grant_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.autonomy.capability.grant.v0.1" },
+    "hash_profile": { "const": "genesis.hash.fields.v0.1" },
+    "grant_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "guardian_key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "authority_epoch": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "proposal_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "proposal_digest": { "$ref": "#/$defs/sha256" },
+    "evaluation_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "evaluation_digest": { "$ref": "#/$defs/sha256" },
+    "capability": { "$ref": "#/$defs/capability" },
+    "autonomy_level": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "risk_tier": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+    "mode": { "type": "string", "enum": ["one_time", "bounded", "standing"] },
+    "body_scope": { "type": "string", "enum": ["specific_bodies", "registered_guardian_devices"] },
+    "body_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 16, "maxLength": 128 }
+    },
+    "scope": { "$ref": "#/$defs/scope" },
+    "budget": { "$ref": "#/$defs/budget" },
+    "controls": { "$ref": "#/$defs/controls" },
+    "issued_at": { "$ref": "#/$defs/timestamp" },
+    "not_before": { "$ref": "#/$defs/timestamp" },
+    "expires_at": {
+      "anyOf": [
+        { "$ref": "#/$defs/timestamp" },
+        { "type": "null" }
+      ]
+    },
+    "use_limit": { "type": ["integer", "null"], "minimum": 1, "maximum": 9007199254740991 },
+    "replaces_grant_ref": { "type": ["string", "null"], "minLength": 16, "maxLength": 128 },
+    "grant_digest": { "$ref": "#/$defs/sha256" },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "body_scope": { "const": "specific_bodies" } }, "required": ["body_scope"] },
+      "then": { "properties": { "body_ids": { "type": "array", "minItems": 1 } } }
+    },
+    {
+      "if": { "properties": { "body_scope": { "const": "registered_guardian_devices" } }, "required": ["body_scope"] },
+      "then": { "properties": { "body_ids": { "type": "array", "maxItems": 0 } } }
+    },
+    {
+      "if": { "properties": { "mode": { "const": "one_time" } }, "required": ["mode"] },
+      "then": {
+        "properties": {
+          "body_scope": { "const": "specific_bodies" },
+          "body_ids": { "type": "array", "minItems": 1, "maxItems": 1 },
+          "expires_at": { "$ref": "#/$defs/timestamp" },
+          "use_limit": { "const": 1 }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "mode": { "const": "bounded" } }, "required": ["mode"] },
+      "then": {
+        "properties": {
+          "expires_at": { "$ref": "#/$defs/timestamp" },
+          "use_limit": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "mode": { "const": "standing" } }, "required": ["mode"] },
+      "then": { "properties": { "use_limit": { "type": "null" } } }
+    },
+    {
+      "properties": {
+        "signature": {
+          "type": "object",
+          "properties": { "signer_type": { "const": "guardian" } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+    },
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "capability": {
+      "type": "string",
+      "enum": [
+        "memory.read",
+        "memory.propose_append",
+        "network.read",
+        "code.propose_change",
+        "code.execute_sandbox",
+        "external.action",
+        "body.device.control",
+        "transfer.prepare"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_target_refs", "allowed_action_classes", "allowed_data_classes"],
+      "properties": {
+        "allowed_target_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 256 }
+        },
+        "allowed_action_classes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+        },
+        "allowed_data_classes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["private_local", "guardian_shared", "export_approved", "public"]
+          }
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_actions_per_run", "max_duration_seconds", "max_bytes_per_run"],
+      "properties": {
+        "max_actions_per_run": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_duration_seconds": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_bytes_per_run": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      }
+    },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sandbox_required", "human_confirmation_required", "observer_required", "reversible_required"],
+      "properties": {
+        "sandbox_required": { "type": "boolean" },
+        "human_confirmation_required": { "type": "boolean" },
+        "observer_required": { "type": "boolean" },
+        "reversible_required": { "type": "boolean" }
+      }
+    }
+  }
+}

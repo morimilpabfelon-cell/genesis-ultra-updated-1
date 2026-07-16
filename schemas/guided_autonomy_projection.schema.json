@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:guided-autonomy-projection:v0.1",
+  "title": "Genesis Guided Autonomy Capability Projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "projection_profile",
+    "instance_id",
+    "guardian_id",
+    "authority_epoch",
+    "projected_at",
+    "source_event_count",
+    "source_last_event_hash",
+    "grant_count",
+    "active_count",
+    "suspended_count",
+    "revoked_count",
+    "exhausted_count",
+    "doors",
+    "projection_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.autonomy.capability.projection.v0.1" },
+    "hash_profile": { "const": "genesis.hash.fields.v0.1" },
+    "projection_profile": { "const": "genesis.autonomy.capability.algorithm.v0.1" },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "authority_epoch": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "projected_at": { "$ref": "#/$defs/timestamp" },
+    "source_event_count": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "source_last_event_hash": { "$ref": "#/$defs/sha256" },
+    "grant_count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "active_count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "suspended_count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "revoked_count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "exhausted_count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "doors": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/door" }
+    },
+    "projection_digest": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+    },
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "door": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability",
+        "grant_id",
+        "autonomy_level",
+        "risk_tier",
+        "status",
+        "remaining_uses",
+        "expires_at",
+        "scope_digest",
+        "controls_digest",
+        "last_event_ref",
+        "door_digest"
+      ],
+      "properties": {
+        "capability": {
+          "type": "string",
+          "enum": [
+            "memory.read",
+            "memory.propose_append",
+            "network.read",
+            "code.propose_change",
+            "code.execute_sandbox",
+            "external.action",
+            "body.device.control",
+            "transfer.prepare"
+          ]
+        },
+        "grant_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+        "autonomy_level": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "risk_tier": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "status": {
+          "type": "string",
+          "enum": ["not_issued", "not_yet_valid", "active", "suspended", "revoked", "expired", "exhausted"]
+        },
+        "remaining_uses": { "type": ["integer", "null"], "minimum": 0, "maximum": 9007199254740991 },
+        "expires_at": {
+          "anyOf": [
+            { "$ref": "#/$defs/timestamp" },
+            { "type": "null" }
+          ]
+        },
+        "scope_digest": { "$ref": "#/$defs/sha256" },
+        "controls_digest": { "$ref": "#/$defs/sha256" },
+        "last_event_ref": { "type": ["string", "null"], "minLength": 16, "maxLength": 128 },
+        "door_digest": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

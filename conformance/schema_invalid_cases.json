@@ -2675,6 +2675,159 @@
         "projection_digest": "svpsha256:4772b47468d9a1d38bcba52a4b62d38cf20f0a9da3bc1024ebf296c8441397f6",
         "unexpected_authority_field": true
       }
+    },
+    {
+      "case_id": "capability-authority-event-rejects-unexpected-field",
+      "schema": "capability_authority_event.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.autonomy.capability.event.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "ledger_id": "capledger_01HAUTONOMY000001",
+        "event_id": "capevent_01HAUTONOMY_ISSUE01",
+        "sequence": 0,
+        "previous_event_hash": "GENESIS",
+        "guardian_id": "guardian_01HAUTONOMY00000001",
+        "instance_id": "inst_01HAUTONOMY000000000001",
+        "authority_epoch": 3,
+        "event_type": "grant.issued",
+        "grant_ref": "grant_01HAUTONOMY_MEMORY0001",
+        "body_id": null,
+        "use_id": null,
+        "subject_digest": "sha256:bad0fb675f9194cf35a9eb6d35e404872ad391baab0dcb8c11e2c27e4e4141e1",
+        "recorded_at": "2026-07-16T09:10:01Z",
+        "event_hash": "sha256:3d4a7ca9f765b5c74c3b86ff126755bbc596303da0aa7de2dcb7bd71e01cd9a1",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "guardian",
+          "signer_id": "guardian_01HAUTONOMY00000001",
+          "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+          "signed_domain": "genesis.autonomy.capability.event.signature.v0.1",
+          "signed_digest": "sha256:3d4a7ca9f765b5c74c3b86ff126755bbc596303da0aa7de2dcb7bd71e01cd9a1",
+          "signature_value": "2d23ed2e16881f84a0f1776624b205ce1f64136b3594be4a455dc680f38b7c3963258ea776511e19ec85777cfeacb174f78b0e36a38eb998e434870c3eee7708",
+          "created_at": "2026-07-16T09:10:01Z",
+          "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+        },
+        "unexpected_core_field": true
+      }
+    },
+    {
+      "case_id": "capability-grant-rejects-unexpected-field",
+      "schema": "capability_grant.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.autonomy.capability.grant.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "grant_id": "grant_01HAUTONOMY_MEMORY0001",
+        "guardian_id": "guardian_01HAUTONOMY00000001",
+        "guardian_key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+        "instance_id": "inst_01HAUTONOMY000000000001",
+        "authority_epoch": 3,
+        "proposal_ref": "proposal_01HAUTONOMY_MEMORY001",
+        "proposal_digest": "sha256:c9b039164f968b8262afdc2fdab5cc935287f771e5f9f48f0d24b59c60da8e1a",
+        "evaluation_ref": "evaluation_01HAUTONOMY_MEM01",
+        "evaluation_digest": "sha256:d43e1a5b42780566f8d43c4cfff50740e92d0e73eeac214ac8c355d1117f66ef",
+        "capability": "memory.read",
+        "autonomy_level": 4,
+        "risk_tier": "low",
+        "mode": "standing",
+        "body_scope": "registered_guardian_devices",
+        "body_ids": [],
+        "scope": {
+          "allowed_target_refs": [
+            "memory.accepted"
+          ],
+          "allowed_action_classes": [
+            "read"
+          ],
+          "allowed_data_classes": [
+            "guardian_shared",
+            "private_local"
+          ]
+        },
+        "budget": {
+          "max_actions_per_run": 20,
+          "max_duration_seconds": 30,
+          "max_bytes_per_run": 1048576
+        },
+        "controls": {
+          "sandbox_required": false,
+          "human_confirmation_required": false,
+          "observer_required": true,
+          "reversible_required": false
+        },
+        "issued_at": "2026-07-16T09:10:00Z",
+        "not_before": "2026-07-16T09:10:00Z",
+        "expires_at": null,
+        "use_limit": null,
+        "replaces_grant_ref": null,
+        "grant_digest": "sha256:bad0fb675f9194cf35a9eb6d35e404872ad391baab0dcb8c11e2c27e4e4141e1",
+        "signature": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "guardian",
+          "signer_id": "guardian_01HAUTONOMY00000001",
+          "key_epoch_id": "epoch_01HAUTONOMY_GUARD001",
+          "signed_domain": "genesis.autonomy.capability.grant.signature.v0.1",
+          "signed_digest": "sha256:bad0fb675f9194cf35a9eb6d35e404872ad391baab0dcb8c11e2c27e4e4141e1",
+          "signature_value": "d7ba100ef11c0f8a1de2aed707e9215ced918b2c4e039ef1c965286741abff6a8c308f50222c0582687a23bbf63fd62b676fcdd00a08d8cf1f33c6868cbdaf0f",
+          "created_at": "2026-07-16T09:10:00Z",
+          "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
+        },
+        "unexpected_core_field": true
+      }
+    },
+    {
+      "case_id": "guided-autonomy-projection-rejects-unexpected-field",
+      "schema": "guided_autonomy_projection.schema.json",
+      "expected_error_keyword": "additionalProperties",
+      "artifact": {
+        "schema_version": "genesis.autonomy.capability.projection.v0.1",
+        "hash_profile": "genesis.hash.fields.v0.1",
+        "projection_profile": "genesis.autonomy.capability.algorithm.v0.1",
+        "instance_id": "inst_01HAUTONOMY000000000001",
+        "guardian_id": "guardian_01HAUTONOMY00000001",
+        "authority_epoch": 3,
+        "projected_at": "2026-07-16T12:00:00Z",
+        "source_event_count": 7,
+        "source_last_event_hash": "sha256:7b7c0ed1b16868b61e6e7e6a2495f398a9fc6b06cb20e5fb7e6704b01265f9f8",
+        "grant_count": 2,
+        "active_count": 1,
+        "suspended_count": 0,
+        "revoked_count": 1,
+        "exhausted_count": 0,
+        "doors": [
+          {
+            "capability": "code.execute_sandbox",
+            "grant_id": "grant_01HAUTONOMY_CODE000001",
+            "autonomy_level": 2,
+            "risk_tier": "high",
+            "status": "revoked",
+            "remaining_uses": 1,
+            "expires_at": "2026-07-17T09:11:00Z",
+            "scope_digest": "sha256:177a80f807c5230856a8e7bfe602917ba865643de204a9d62c23ebf84f47be11",
+            "controls_digest": "sha256:39b3cb2031fc9ea008ab122da4cad43b9e39fd2df2a720415270ebc4f76cfae3",
+            "last_event_ref": "capevent_01HAUTONOMY_REVOKE1",
+            "door_digest": "sha256:13ce7f3644cc9a78bd841088944fc7a841513ccb90ca36e885350ac26c74b8a8"
+          },
+          {
+            "capability": "memory.read",
+            "grant_id": "grant_01HAUTONOMY_MEMORY0001",
+            "autonomy_level": 4,
+            "risk_tier": "low",
+            "status": "active",
+            "remaining_uses": null,
+            "expires_at": null,
+            "scope_digest": "sha256:2ab74b40cb6be9c848be9b7dfdcf283e6323837ae129248cacf6d4c5f37d5036",
+            "controls_digest": "sha256:420cfb6e7575f8fc0b7e91ac159e6e1fe4221ecee49ce4361d0f9b25866add51",
+            "last_event_ref": "capevent_01HAUTONOMY_ISSUE01",
+            "door_digest": "sha256:af608a7527d63a88d3f1212d289829f319416273dfe6bb72a766ca0435c827bb"
+          }
+        ],
+        "projection_digest": "sha256:63aa712ad02b9a116e5113f1c31fead9bf2c1e3d5d44264bc0929834c9f0870b",
+        "unexpected_core_field": true
+      }
     }
   ]
 }
