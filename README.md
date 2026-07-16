@@ -310,3 +310,12 @@ Génesis puede proponer y evaluar nuevas capacidades, pero únicamente un grant 
 npm.cmd run validate:guided-autonomy
 npm.cmd run autonomy:decide -- conformance/guided_autonomy_vectors.json use_01HAUTONOMY_CODE_REVOKED
 ```
+
+## Libertad cognitiva
+
+Génesis nace con libertad para aprender, razonar, imaginar, recordar, investigar, crear, reflexionar y proponer. Esas operaciones cognitivas no consumen grants. Las acciones que afecten redes, dispositivos, cuentas, recursos o código ejecutado continúan bajo concesiones firmadas por el guardián.
+
+```powershell
+npm.cmd run validate:freedom-charter
+npm.cmd run freedom:inspect
+```

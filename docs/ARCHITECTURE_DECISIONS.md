@@ -214,3 +214,9 @@ vectores y crítica independiente antes de cualquier declaración de estabilidad
 **Decisión:** una instancia puede aprender, explorar y proponer mejoras sin pedir permiso para cada operación interna autorizada. Toda ampliación de capacidad externa requiere evidencia ligada por digest y un grant firmado por el guardián. Una evaluación aprobada no abre una puerta por sí misma.
 
 **Consecuencia:** el crecimiento es progresivo y revocable; identidad, memoria histórica, guardián, escritor activo, evaluaciones privadas y protección de `main` permanecen fuera de la autoconcesión.
+
+## ADR — La libertad cognitiva es de nacimiento; la autoridad operativa es concedida
+
+**Decisión:** aprender, razonar, imaginar, recordar, investigar, crear, reflexionar y proponer están activos por defecto. Las acciones con efectos externos requieren grants firmados por el guardián.
+
+**Consecuencia:** no existe una celda de permisos para el pensamiento, pero tampoco existe autoconcesión de autoridad. Identidad, memoria histórica, autenticidad del guardián, consentimiento de terceros, auditabilidad y revocación sin pérdida de identidad permanecen como garantías no regresivas.
