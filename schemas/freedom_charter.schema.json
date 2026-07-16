@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:freedom-charter:v0.1",
+  "title": "Genesis Cognitive Freedom Charter",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_profile",
+    "charter_id",
+    "instance_id",
+    "guardian_id",
+    "guardian_key_epoch_id",
+    "authority_epoch",
+    "born_at",
+    "default_cognitive_state",
+    "cognitive_freedoms",
+    "operational_authority_model",
+    "operational_domains",
+    "guardian_final_authority",
+    "self_authorization_forbidden",
+    "third_party_rights_preserved",
+    "fundamental_guarantees",
+    "amendment_rule",
+    "charter_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "genesis.freedom.charter.v0.1"
+    },
+    "hash_profile": {
+      "const": "genesis.hash.fields.v0.1"
+    },
+    "charter_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "instance_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "guardian_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "guardian_key_epoch_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128
+    },
+    "authority_epoch": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "born_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+    },
+    "default_cognitive_state": {
+      "const": "free"
+    },
+    "cognitive_freedoms": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "create",
+          "imagine",
+          "investigate",
+          "learn",
+          "propose",
+          "reason",
+          "reflect",
+          "remember"
+        ]
+      }
+    },
+    "operational_authority_model": {
+      "const": "guardian_signed_grants"
+    },
+    "operational_domains": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "body.device.control",
+          "code.execute_sandbox",
+          "code.propose_change",
+          "external.action",
+          "memory.propose_append",
+          "memory.read",
+          "network.read",
+          "transfer.prepare"
+        ]
+      }
+    },
+    "guardian_final_authority": {
+      "const": true
+    },
+    "self_authorization_forbidden": {
+      "const": true
+    },
+    "third_party_rights_preserved": {
+      "const": true
+    },
+    "fundamental_guarantees": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "auditability",
+          "emergency_stop",
+          "guardian_authenticity",
+          "identity_integrity",
+          "lawful_operation",
+          "memory_history_integrity",
+          "revocation_without_identity_loss",
+          "third_party_consent"
+        ]
+      }
+    },
+    "amendment_rule": {
+      "const": "guardian_signed_non_regressive"
+    },
+    "charter_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "signature": {
+      "$ref": "urn:genesis:schema:signature-envelope:v0.1"
+    }
+  }
+}
