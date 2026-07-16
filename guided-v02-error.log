@@ -1,0 +1,2 @@
+ledger-grant-binding-mismatch:expected:ledger_grant_digest_binding_invalid:got:ledger_consumption_binding_invalid
+exit_status=1
