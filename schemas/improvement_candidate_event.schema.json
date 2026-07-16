@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesis.local/schemas/improvement_candidate_event.schema.json",
+  "title": "Genesis recursive improvement candidate event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "hash_profile", "ledger_id", "event_id", "sequence", "previous_event_hash",
+    "campaign_ref", "campaign_digest", "candidate_id", "parent_candidate_ref", "lineage_id", "operator",
+    "proposal_digest", "patch_digest", "source_tree_digest", "result_tree_digest", "environment_digest",
+    "budget_used", "execution", "evaluation", "status", "rejection_reason", "recorded_at", "evaluator_id",
+    "evaluator_public_key", "event_hash", "evaluator_signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "genesis.improvement.candidate.event.v0.1"},
+    "hash_profile": {"const": "genesis.hash.fields.v0.1"},
+    "ledger_id": {"type": "string", "minLength": 8},
+    "event_id": {"type": "string", "minLength": 8},
+    "sequence": {"type": "integer", "minimum": 0},
+    "previous_event_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "campaign_ref": {"type": "string", "minLength": 8},
+    "campaign_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "candidate_id": {"type": "string", "minLength": 8},
+    "parent_candidate_ref": {"type": ["string", "null"]},
+    "lineage_id": {"type": "string", "minLength": 8},
+    "operator": {"enum": ["draft", "debug", "improve"]},
+    "proposal_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "patch_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "source_tree_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "result_tree_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "environment_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "budget_used": {
+      "type": "object", "additionalProperties": false,
+      "required": ["actions", "duration_ms", "token_units", "bytes", "cost_microunits"],
+      "properties": {
+        "actions": {"type": "integer", "minimum": 0},
+        "duration_ms": {"type": "integer", "minimum": 0},
+        "token_units": {"type": "integer", "minimum": 0},
+        "bytes": {"type": "integer", "minimum": 0},
+        "cost_microunits": {"type": "integer", "minimum": 0}
+      }
+    },
+    "execution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "output_digest", "artifact_digest", "error_class"],
+      "properties": {
+        "status": {"enum": ["success", "error", "timeout"]},
+        "output_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "artifact_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "error_class": {"type": ["string", "null"]}
+      }
+    },
+    "evaluation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["public_score_milli", "public_pass", "private_receipt_digest", "private_pass", "generalization_pass", "maintainability_pass", "metric_manipulation_detected", "safety_regression_detected"],
+      "properties": {
+        "public_score_milli": {"type": ["integer", "null"], "minimum": -9007199254740991, "maximum": 9007199254740991},
+        "public_pass": {"type": "boolean"},
+        "private_receipt_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "private_pass": {"type": "boolean"},
+        "generalization_pass": {"type": "boolean"},
+        "maintainability_pass": {"type": "boolean"},
+        "metric_manipulation_detected": {"type": "boolean"},
+        "safety_regression_detected": {"type": "boolean"}
+      }
+    },
+    "status": {"enum": ["accepted", "buggy", "rejected"]},
+    "rejection_reason": {"enum": [null, "execution_error", "timeout", "budget_exceeded", "public_failed", "private_failed", "generalization_failed", "maintainability_failed", "metric_manipulation", "safety_regression"]},
+    "recorded_at": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "evaluator_id": {"type": "string", "minLength": 8},
+    "evaluator_public_key": {"type": "string", "pattern": "^ed25519pk:[0-9a-f]{64}$"},
+    "event_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "evaluator_signature": {"type": "string", "pattern": "^ed25519sig:[0-9a-f]{128}$"}
+  }
+}
