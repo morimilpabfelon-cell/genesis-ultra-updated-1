@@ -21,7 +21,7 @@
 
 - [x] Suite completa verde para el laboratorio de mejora recursiva en el [PR #28](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/28).
 
-- [ ] Suite completa verde para deliberación operacional, prueba independiente y adaptación de Fable Method en el [PR #29](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/29).
+- [x] Suite completa verde para deliberación operacional, prueba independiente y adaptación de Fable Method en el [PR #29](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/29).
 
 ## Implementado y verificado por la suite
 
@@ -109,7 +109,7 @@
 
 - [x] Laboratorio de mejora recursiva reproducido por Python y Node: seis candidatos append-only, operadores draft/debug/improve, presupuesto fijo, recibo privado opaco, tres aceptados, un bug y dos rechazos por presupuesto o reward hacking.
 
-- [ ] Deliberación operacional y prueba adaptadas de Fable Method, reproducidas por Python y Node:
+- [x] Deliberación operacional y prueba adaptadas de Fable Method, reproducidas por Python y Node:
       ocho tareas, diez adaptadores de dominio, dieciocho modos de fallo, diez trampas,
       dos excepciones locales acotadas, una denegación constitucional y cuarenta cruces rechazados.
 
