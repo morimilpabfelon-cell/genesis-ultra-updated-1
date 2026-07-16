@@ -1,0 +1,2 @@
+FAIL schema conformance: negative_case_wrong_error:recursive-improvement-rejects-extra-field:/ must NOT have additional properties; /campaign must have required property 'opened_at'; /campaign must have required property 'authority_binding'; /campaign/schema_version must be equal to constant
+exit_status=1
