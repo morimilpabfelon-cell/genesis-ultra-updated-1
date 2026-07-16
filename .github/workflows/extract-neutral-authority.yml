@@ -1,36 +1,55 @@
-name: Capture Neutral Authority Extraction Error
+name: Verify Neutral Authority Extraction
 
 on:
   pull_request:
     branches: ["main"]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  capture:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
-      - name: Checkout PR branch
+      - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.12"
 
-      - name: Capture extraction output
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
         run: |
-          set +e
-          python tools/_extract_neutral_authority.py > neutral-authority-error.log 2>&1
-          status=$?
-          echo "exit_status=$status" >> neutral-authority-error.log
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add neutral-authority-error.log
-          git commit -m "Capture neutral authority extraction error"
-          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+          python -m pip install -r requirements.txt
+          npm ci --ignore-scripts
+
+      - name: Apply neutral extraction
+        run: python tools/_extract_neutral_authority.py
+
+      - name: Generate manifest
+        run: python tools/generate_draft_manifest.py --write
+
+      - name: Validate guided autonomy Python
+        run: python tools/validate_guided_autonomy.py
+
+      - name: Validate guided autonomy Node
+        run: node tools/guided_autonomy.mjs validate
+
+      - name: Validate laboratory Python
+        run: python tools/validate_recursive_improvement_lab.py
+
+      - name: Validate laboratory Node
+        run: node tools/validate_recursive_improvement_lab.mjs
+
+      - name: Validate tool registry
+        run: python tools/validate_tool_execution_registry.py
+
+      - name: Validate schemas and vectors
+        run: node tools/validate_protocol_vectors.mjs
