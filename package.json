@@ -53,14 +53,13 @@
     "autonomy:decide": "node tools/guided_autonomy.mjs decide",
     "autonomy:inspect": "node tools/guided_autonomy.mjs inspect",
     "validate:freedom-charter": "node tools/validate_freedom_charter.mjs validate",
-    "freedom:inspect": "node tools/validate_freedom_charter.mjs inspect"
+    "freedom:inspect": "node tools/validate_freedom_charter.mjs inspect",
+    "validate:improvement-lab": "node tools/validate_recursive_improvement_lab.mjs"
   },
   "devDependencies": {
     "ajv": "8.17.1",
     "ajv-formats": "3.0.1",
     "hash-wasm": "4.12.0"
   },
-  "engines": {
-    "node": ">=20"
-  }
+  "engines": {"node": ">=20"}
 }
