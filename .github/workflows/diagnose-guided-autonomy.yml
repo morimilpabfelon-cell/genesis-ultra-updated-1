@@ -1,19 +1,21 @@
 name: Diagnose Guided Autonomy Suite
 
 on:
-  push:
-    branches:
-      - agent/guided-autonomy-capability-grants
+  pull_request:
+    types: [synchronize, reopened]
 
 permissions:
   contents: read
 
 jobs:
   diagnose:
+    if: github.head_ref == 'agent/guided-autonomy-capability-grants'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
