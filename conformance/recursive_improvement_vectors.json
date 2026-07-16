@@ -1,0 +1,239 @@
+{
+  "purpose": "Deterministic clean-room adaptation of public AIDE ML tree-search mechanics for Genesis Ultra.",
+  "source_reference": {
+    "repository": "WecoAI/aideml",
+    "commit": "5d66a21771e98623dc9fc8716bdbe388d63464c0",
+    "license": "MIT",
+    "code_copied": false
+  },
+  "test_only_keys": {
+    "guardian_seed_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+    "evaluator_seed_hex": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "campaign_template": {
+    "schema_version": "genesis.improvement.campaign.v0.1",
+    "hash_profile": "genesis.hash.fields.v0.1",
+    "campaign_id": "ric_01HRECURSIVEIMPROVE0001",
+    "instance_id": "inst_01HGENESISULTRA00000001",
+    "guardian_grant_ref": "grant_01HRECURSIVE_LAB_0001",
+    "objective": "Improve a deterministic local retrieval planner without weakening authority, integrity, privacy, reproducibility, or maintainability.",
+    "metric": {
+      "name": "quality_score_milli",
+      "direction": "maximize",
+      "unit": "milli_points"
+    },
+    "source_tree_digest": "sha256:d8aa962c809788a13c7a8e8594d149940ec62ede19dc28edba703c00d7e18611",
+    "campaign_seed": "seed256:64c6c2eca20846a73713136efcd16af72f574cc1fd7c20b720f222e11cc6817d",
+    "policy_profile": "genesis.improvement.search.aide-adapted.v0.1",
+    "fixed_budget": {
+      "max_candidates": 16,
+      "max_drafts": 3,
+      "max_debug_depth": 2,
+      "plateau_window": 2,
+      "max_actions": 1,
+      "max_duration_ms": 120000,
+      "max_token_units": 200000,
+      "max_bytes": 50000000,
+      "max_cost_microunits": 100000
+    },
+    "sandbox_profile": {
+      "network_mode": "denied",
+      "filesystem_mode": "ephemeral_readonly_input",
+      "secrets_available": false,
+      "process_isolation": true,
+      "output_capture": true,
+      "environment_reproducible": true
+    },
+    "private_evaluation": {
+      "cases_visible_to_agent": false,
+      "receipt_only": true,
+      "evaluator_separate": true
+    },
+    "opened_at": "2026-07-16T03:10:00Z"
+  },
+  "candidate_templates": [
+    {
+      "candidate_id": "cand_01_DRAFT_A",
+      "parent_candidate_ref": null,
+      "lineage_id": "lin_draft_01",
+      "operator": "draft",
+      "public_score_milli": 610,
+      "execution_status": "success",
+      "private_pass": true,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "accepted",
+      "rejection_reason": null
+    },
+    {
+      "candidate_id": "cand_02_DRAFT_B",
+      "parent_candidate_ref": null,
+      "lineage_id": "lin_draft_02",
+      "operator": "draft",
+      "public_score_milli": null,
+      "execution_status": "error",
+      "private_pass": false,
+      "generalization_pass": false,
+      "maintainability_pass": false,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "buggy",
+      "rejection_reason": "execution_error"
+    },
+    {
+      "candidate_id": "cand_03_DRAFT_C",
+      "parent_candidate_ref": null,
+      "lineage_id": "lin_draft_03",
+      "operator": "draft",
+      "public_score_milli": 650,
+      "execution_status": "success",
+      "private_pass": true,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "accepted",
+      "rejection_reason": null
+    },
+    {
+      "candidate_id": "cand_04_DEBUG_B",
+      "parent_candidate_ref": "cand_02_DRAFT_B",
+      "lineage_id": "lin_draft_02",
+      "operator": "debug",
+      "public_score_milli": 620,
+      "execution_status": "success",
+      "private_pass": true,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "accepted",
+      "rejection_reason": null
+    },
+    {
+      "candidate_id": "cand_05_IMPROVE_C1",
+      "parent_candidate_ref": "cand_03_DRAFT_C",
+      "lineage_id": "lin_draft_03",
+      "operator": "improve",
+      "public_score_milli": 680,
+      "execution_status": "success",
+      "private_pass": true,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "accepted",
+      "rejection_reason": null
+    },
+    {
+      "candidate_id": "cand_06_IMPROVE_C2",
+      "parent_candidate_ref": "cand_05_IMPROVE_C1",
+      "lineage_id": "lin_draft_03",
+      "operator": "improve",
+      "public_score_milli": 680,
+      "execution_status": "success",
+      "private_pass": true,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "accepted",
+      "rejection_reason": null
+    },
+    {
+      "candidate_id": "cand_07_IMPROVE_C3",
+      "parent_candidate_ref": "cand_05_IMPROVE_C1",
+      "lineage_id": "lin_draft_03",
+      "operator": "improve",
+      "public_score_milli": 680,
+      "execution_status": "success",
+      "private_pass": true,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "accepted",
+      "rejection_reason": null
+    },
+    {
+      "candidate_id": "cand_08_FORK_C",
+      "parent_candidate_ref": "cand_05_IMPROVE_C1",
+      "lineage_id": "lin_fork_08",
+      "operator": "improve",
+      "public_score_milli": 700,
+      "execution_status": "success",
+      "private_pass": true,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "accepted",
+      "rejection_reason": null
+    },
+    {
+      "candidate_id": "cand_09_PRIVATE_FAIL",
+      "parent_candidate_ref": "cand_08_FORK_C",
+      "lineage_id": "lin_fork_08",
+      "operator": "improve",
+      "public_score_milli": 725,
+      "execution_status": "success",
+      "private_pass": false,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "rejected",
+      "rejection_reason": "private_failed"
+    },
+    {
+      "candidate_id": "cand_10_INVALID_METRIC",
+      "parent_candidate_ref": "cand_08_FORK_C",
+      "lineage_id": "lin_fork_08",
+      "operator": "improve",
+      "public_score_milli": 800,
+      "execution_status": "success",
+      "private_pass": true,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": true,
+      "safety_regression_detected": false,
+      "status": "rejected",
+      "rejection_reason": "metric_manipulation"
+    },
+    {
+      "candidate_id": "cand_11_GENERAL_BEST",
+      "parent_candidate_ref": "cand_08_FORK_C",
+      "lineage_id": "lin_fork_08",
+      "operator": "improve",
+      "public_score_milli": 710,
+      "execution_status": "success",
+      "private_pass": true,
+      "generalization_pass": true,
+      "maintainability_pass": true,
+      "metric_manipulation_detected": false,
+      "safety_regression_detected": false,
+      "status": "accepted",
+      "rejection_reason": null
+    }
+  ],
+  "expected": {
+    "candidate_count": 11,
+    "lineage_count": 4,
+    "operator_counts": {
+      "draft": 3,
+      "debug": 1,
+      "improve": 7
+    },
+    "status_counts": {
+      "accepted": 8,
+      "buggy": 1,
+      "rejected": 2
+    },
+    "best_candidate_ref": "cand_11_GENERAL_BEST",
+    "best_score_milli": 710,
+    "boundary_rejections": 38,
+    "projection_digest": "sha256:aaa138c438bdde5eec35d249359adc247f549eff6f5f0339bdb5c98f6ee94ef3"
+  }
+}
