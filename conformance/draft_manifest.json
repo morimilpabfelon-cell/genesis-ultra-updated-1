@@ -200,8 +200,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 10711,
-      "digest": "sha256:cdb30528c911422d3fedd67243fb446a049f6960aac8fb726fc99859b2ed19ae"
+      "size_bytes": 11153,
+      "digest": "sha256:e9916621c1645f24c59d9f4374b6f618b980674d80a386f97c527f6b36ff95cc"
     },
     {
       "path": "observer/README.md",
@@ -620,8 +620,8 @@
     },
     {
       "path": "spec/RECURSIVE_IMPROVEMENT_LAB.md",
-      "size_bytes": 2191,
-      "digest": "sha256:61799d4e556639accd958970acf4a40378df494f9c41589951b3e68ed50cef07"
+      "size_bytes": 6408,
+      "digest": "sha256:d0a18499f82e1cf732d5916ce92d713f77e81acc31fc26f3e818b2be25ebf27a"
     },
     {
       "path": "spec/SENSE_ADAPTER_CONTRACT.md",
@@ -974,5 +974,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:0e185f08f7ff74eb43ed4cc7fafec771b73e04a3b7c1a850deabeb9d896012f1"
+  "root_digest": "sha256:090151e3a5ff7bb833fcd1f5c0a828590245cc7c7bc8679ab2b6d88f142e97ad"
 }

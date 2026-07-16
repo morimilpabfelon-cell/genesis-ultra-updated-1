@@ -99,15 +99,18 @@
       operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
       y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
-- [x] Registro autocontrolado de ejecución de herramientas con treinta y siete candidatos:
-      treinta y tres entrypoints exigidos en el runner y cuatro bibliotecas importadas por
+- [x] Registro autocontrolado de ejecución de herramientas con treinta y nueve candidatos:
+      treinta y tres entrypoints exigidos en el runner y seis bibliotecas importadas por
       consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
 
 - [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados.
 
 - [x] Carta de libertad cognitiva reproducida por Python y Node: ocho libertades activas por nacimiento, ocho dominios operativos bajo grants, ocho garantías fundamentales, firma Ed25519 del guardián y veinte cruces de frontera rechazados.
 
-- [x] Laboratorio de mejora recursiva reproducido por Python y Node: seis candidatos append-only, operadores draft/debug/improve, presupuesto fijo, recibo privado opaco, tres aceptados, un bug y dos rechazos por presupuesto o reward hacking.
+- [x] Laboratorio de mejora recursiva v0.2 reproducido por Python y Node: seis candidatos
+      append-only, grant exacto firmado, binding explícito de instancia/cuerpo/scope/presupuesto,
+      apertura sin consumo, solicitud de uso con `grant_ref` firmado, reevaluación contra ledger
+      y ocho rechazos adicionales de autoridad, firma, tiempo, presupuesto, suspensión o revocación.
 
 - [x] Deliberación operacional y prueba adaptadas de Fable Method, reproducidas por Python y Node:
       ocho tareas, diez adaptadores de dominio, dieciocho modos de fallo, diez trampas,
@@ -123,6 +126,9 @@
 - [ ] Conteos documentales derivados automáticamente de los artefactos comprobados.
 - [ ] Reglas neutrales de evolución, compatibilidad y migración entre versiones del protocolo.
 - [ ] Modelo de amenazas unificado para identidad, memoria, autoridad, herramientas y supply chain.
+- [ ] Extraer una API neutral `validateAuthorityBundle` sin semillas ni expectativas TEST ONLY.
+- [ ] Permitir múltiples grants por capacidad con resolución y proyección canónica por `grant_ref`.
+- [ ] Definir y verificar el mapeo candidato→solicitudes firmadas→eventos `grant.consumed`.
 - [ ] Conformidad del workspace reproducida en Ubuntu, Windows y macOS.
 - [ ] Revisión criptográfica y de seguridad externa.
 - [ ] Decisiones definitivas de licencia, nombre, contribuciones, marca, certificación y publicación.
