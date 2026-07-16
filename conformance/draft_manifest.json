@@ -415,8 +415,8 @@
     },
     {
       "path": "schemas/recursive_improvement_lab.schema.json",
-      "size_bytes": 5379,
-      "digest": "sha256:31c710639c3a615bc3db2903be673f2596605070257edf87cb3d136d0a2afaa5"
+      "size_bytes": 5587,
+      "digest": "sha256:e982be37155c428636809937e50f2ea8d9c192dbe06c04b354911a28877d3a5c"
     },
     {
       "path": "schemas/seed_manifest.schema.json",
@@ -934,5 +934,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:8a4bd5b22a78d7b83ee05e0e16218e2fdd19756b8d1dcd66cbd994d52bb05d98"
+  "root_digest": "sha256:3e019dd6c9691a3cc5bb477a69badcbe4be8cbae5ac450a959eae827e1dc8739"
 }
