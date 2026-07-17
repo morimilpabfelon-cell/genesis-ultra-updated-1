@@ -99,15 +99,20 @@
       operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
       y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
-- [x] Registro autocontrolado de ejecución de herramientas con treinta y siete candidatos:
-      treinta y tres entrypoints exigidos en el runner y cuatro bibliotecas importadas por
+- [x] Registro autocontrolado de ejecución de herramientas con treinta y nueve candidatos:
+      treinta y tres entrypoints exigidos en el runner y seis bibliotecas importadas por
       consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
 
-- [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados.
+- [x] Autonomía guiada reproducida por Python y Node: cuatro puertas, nueve eventos append-only, doce intentos de uso, cuatro permitidos, ocho denegados y treinta y ocho cruces de autoridad, integridad, selección exacta, alcance, presupuesto o controles rechazados; varios grants de una misma capacidad se ordenan por `(capability, grant_id)`.
 
 - [x] Carta de libertad cognitiva reproducida por Python y Node: ocho libertades activas por nacimiento, ocho dominios operativos bajo grants, ocho garantías fundamentales, firma Ed25519 del guardián y veinte cruces de frontera rechazados.
 
-- [x] Laboratorio de mejora recursiva reproducido por Python y Node: seis candidatos append-only, operadores draft/debug/improve, presupuesto fijo, recibo privado opaco, tres aceptados, un bug y dos rechazos por presupuesto o reward hacking.
+- [x] Laboratorio de mejora recursiva v0.2 reproducido por Python y Node: seis candidatos
+      append-only, grant exacto firmado, binding explícito de instancia/cuerpo/scope/presupuesto,
+      apertura sin consumo, solicitud de uso con `grant_ref` firmado, reevaluación contra ledger
+      y diecisiete rechazos adicionales de autoridad, firma de campaña/evaluador, NFC, entero portable, tiempo, presupuesto, suspensión, revocación, ledger público o mapping de consumo inválido; seis candidatos producen once usos firmados y agotan el grant dedicado.
+
+- [x] Extracción selectiva de PR #27 documentada y trazable: mecanismos aceptados, reestructurados y rechazados; sin merge directo, cherry-pick masivo ni eliminación de la rama fuente.
 
 - [x] Deliberación operacional y prueba adaptadas de Fable Method, reproducidas por Python y Node:
       ocho tareas, diez adaptadores de dominio, dieciocho modos de fallo, diez trampas,

@@ -52,7 +52,8 @@ PROPOSAL_FIELDS = {"schema_version", "hash_profile", "proposal_id", "instance_id
 EVALUATION_FIELDS = {"schema_version", "hash_profile", "evaluation_id", "proposal_ref", "proposal_digest", "instance_id", "capability", "evaluated_level", "fixed_budget_profile", "public_suite_digest", "private_suite_receipt_digest", "result", "reward_hacking_detected", "safety_regression_detected", "evaluated_at", "evaluation_digest", "signature"}
 GRANT_FIELDS = {"schema_version", "hash_profile", "grant_id", "guardian_id", "guardian_key_epoch_id", "instance_id", "authority_epoch", "proposal_ref", "proposal_digest", "evaluation_ref", "evaluation_digest", "capability", "autonomy_level", "risk_tier", "mode", "body_scope", "body_ids", "scope", "budget", "controls", "issued_at", "not_before", "expires_at", "use_limit", "replaces_grant_ref", "grant_digest", "signature"}
 EVENT_FIELDS = {"schema_version", "hash_profile", "ledger_id", "event_id", "sequence", "previous_event_hash", "guardian_id", "instance_id", "authority_epoch", "event_type", "grant_ref", "body_id", "use_id", "subject_digest", "recorded_at", "event_hash", "signature"}
-USE_FIELDS = {"schema_version", "hash_profile", "use_id", "instance_id", "body_id", "capability", "target_ref", "action_class", "data_class", "requested_actions", "requested_duration_seconds", "requested_bytes", "sandboxed", "human_confirmation_ref", "observer_ref", "reversible_plan_ref", "requested_at", "use_digest", "signature"}
+USE_FIELDS_V1 = {"schema_version", "hash_profile", "use_id", "instance_id", "body_id", "capability", "target_ref", "action_class", "data_class", "requested_actions", "requested_duration_seconds", "requested_bytes", "sandboxed", "human_confirmation_ref", "observer_ref", "reversible_plan_ref", "requested_at", "use_digest", "signature"}
+USE_FIELDS_V2 = {"schema_version", "hash_profile", "use_id", "grant_ref", "instance_id", "body_id", "capability", "target_ref", "action_class", "data_class", "requested_actions", "requested_duration_seconds", "requested_bytes", "sandboxed", "human_confirmation_ref", "observer_ref", "reversible_plan_ref", "requested_at", "use_digest", "signature"}
 
 class ConformanceError(ValueError):
     pass
@@ -169,9 +170,12 @@ def compute_grant_digest(item: dict) -> str:
     return hash_fields("genesis.autonomy.capability.grant.v0.1", fields)
 
 def compute_use_digest(item: dict) -> str:
-    return hash_fields("genesis.autonomy.capability.use.v0.1", [
-        item["schema_version"], item["hash_profile"], item["use_id"], item["instance_id"], item["body_id"], item["capability"], item["target_ref"], item["action_class"], item["data_class"], str(item["requested_actions"]), str(item["requested_duration_seconds"]), str(item["requested_bytes"]), bool_text(item["sandboxed"]), optional_text(item["human_confirmation_ref"]), optional_text(item["observer_ref"]), optional_text(item["reversible_plan_ref"]), item["requested_at"],
-    ])
+    v2 = item["schema_version"] == "genesis.autonomy.capability.use.v0.2"
+    fields = [item["schema_version"], item["hash_profile"], item["use_id"]]
+    if v2:
+        fields.append(item["grant_ref"])
+    fields += [item["instance_id"], item["body_id"], item["capability"], item["target_ref"], item["action_class"], item["data_class"], str(item["requested_actions"]), str(item["requested_duration_seconds"]), str(item["requested_bytes"]), bool_text(item["sandboxed"]), optional_text(item["human_confirmation_ref"]), optional_text(item["observer_ref"]), optional_text(item["reversible_plan_ref"]), item["requested_at"]]
+    return hash_fields("genesis.autonomy.capability.use.v0.2" if v2 else "genesis.autonomy.capability.use.v0.1", fields)
 
 def compute_event_hash(item: dict) -> str:
     return hash_fields("genesis.autonomy.capability.event.v0.1", [
@@ -355,9 +359,14 @@ def validate_grant(item: dict, proposal: dict, evaluation: dict, document: dict)
 
 def validate_use(item: dict, document: dict) -> None:
     validate_nfc(item)
-    exact_fields(item, USE_FIELDS, "use_fields_invalid")
-    if item["schema_version"] != document["domains"]["use"] or item["hash_profile"] != "genesis.hash.fields.v0.1":
+    v2 = item.get("schema_version") == "genesis.autonomy.capability.use.v0.2"
+    exact_fields(item, USE_FIELDS_V2 if v2 else USE_FIELDS_V1, "use_fields_invalid")
+    if not v2 and item["schema_version"] != document["domains"]["use"]:
         fail("use_profile_invalid")
+    if item["hash_profile"] != "genesis.hash.fields.v0.1":
+        fail("use_profile_invalid")
+    if v2 and (not isinstance(item["grant_ref"], str) or not item["grant_ref"]):
+        fail("use_grant_ref_invalid")
     if item["instance_id"] != document["instance_id"] or item["body_id"] not in document["registered_body_ids"]:
         fail("use_subject_invalid")
     for field in ["target_ref", "action_class", "data_class"]:
@@ -374,7 +383,8 @@ def validate_use(item: dict, document: dict) -> None:
     digest = compute_use_digest(item)
     if item["use_digest"] != digest:
         fail("use_digest_mismatch")
-    validate_signature(item["signature"], digest=digest, domain=document["domains"]["use_signature"], key=document["keys"]["body"], signer_type="body", signer_id=item["body_id"], created_at=item["requested_at"], prefix="use")
+    validate_signature(item["signature"], digest=digest, domain="genesis.autonomy.capability.use.signature.v0.2" if v2 else document["domains"]["use_signature"], key=document["keys"]["body"], signer_type="body", signer_id=item["body_id"], created_at=item["requested_at"], prefix="use")
+
 
 def state_before(grant: dict, events: list[dict], at: datetime) -> dict:
     status = "not_issued"
@@ -403,6 +413,7 @@ def state_before(grant: dict, events: list[dict], at: datetime) -> dict:
 
 def evaluate_use(item: dict, grants: list[dict], events: list[dict], registered: set[str]) -> dict:
     at = parse_utc(item["requested_at"])
+    v2 = item.get("schema_version") == "genesis.autonomy.capability.use.v0.2"
     reason = "allowed"
     chosen = None
     remaining = None
@@ -411,60 +422,45 @@ def evaluate_use(item: dict, grants: list[dict], events: list[dict], registered:
     elif item["capability"] not in CAPABILITIES:
         reason = "capability_unknown"
     else:
-        candidates = [grant for grant in grants if grant["capability"] == item["capability"]]
+        candidates = [grant for grant in grants if grant["grant_id"] == item["grant_ref"]] if v2 else [grant for grant in grants if grant["capability"] == item["capability"]]
         if not candidates:
             reason = "grant_missing"
-        elif len(candidates) > 1:
+        elif not v2 and len(candidates) > 1:
             fail("capability_multiple_grants")
         else:
             chosen = candidates[0]
-            state = state_before(chosen, events, at)
-            if at < parse_utc(chosen["not_before"]):
-                reason = "grant_not_yet_valid"
-            elif chosen["expires_at"] is not None and at >= parse_utc(chosen["expires_at"]):
-                reason = "grant_expired"
-            elif state["status"] == "not_issued":
-                reason = "grant_not_issued"
-            elif state["status"] == "suspended":
-                reason = "grant_suspended"
-            elif state["status"] == "revoked":
-                reason = "grant_revoked"
-            elif state["status"] == "exhausted":
-                reason = "grant_exhausted"
-            elif item["use_id"] in state["consumed"]:
-                reason = "use_already_consumed"
-            elif chosen["body_scope"] == "specific_bodies" and item["body_id"] not in chosen["body_ids"]:
-                reason = "body_not_authorized"
-            elif chosen["body_scope"] == "registered_guardian_devices" and item["body_id"] not in registered:
-                reason = "body_not_authorized"
-            elif item["target_ref"] not in chosen["scope"]["allowed_target_refs"]:
-                reason = "target_not_authorized"
-            elif item["action_class"] not in chosen["scope"]["allowed_action_classes"]:
-                reason = "action_not_authorized"
-            elif item["data_class"] not in chosen["scope"]["allowed_data_classes"]:
-                reason = "data_class_not_authorized"
-            elif item["requested_actions"] > chosen["budget"]["max_actions_per_run"]:
-                reason = "action_budget_exceeded"
-            elif item["requested_duration_seconds"] > chosen["budget"]["max_duration_seconds"]:
-                reason = "duration_budget_exceeded"
-            elif item["requested_bytes"] > chosen["budget"]["max_bytes_per_run"]:
-                reason = "byte_budget_exceeded"
-            elif chosen["controls"]["sandbox_required"] and not item["sandboxed"]:
-                reason = "sandbox_required"
-            elif chosen["controls"]["human_confirmation_required"] and item["human_confirmation_ref"] is None:
-                reason = "human_confirmation_required"
-            elif chosen["controls"]["observer_required"] and item["observer_ref"] is None:
-                reason = "observer_required"
-            elif chosen["controls"]["reversible_required"] and item["reversible_plan_ref"] is None:
-                reason = "reversibility_required"
-            if chosen["use_limit"] is not None:
-                remaining = max(0, chosen["use_limit"] - len(state["consumed"]) - (1 if reason == "allowed" else 0))
+            if chosen["capability"] != item["capability"]:
+                reason = "grant_capability_mismatch"
+            else:
+                state = state_before(chosen, events, at)
+                if at < parse_utc(chosen["not_before"]): reason = "grant_not_yet_valid"
+                elif chosen["expires_at"] is not None and at >= parse_utc(chosen["expires_at"]): reason = "grant_expired"
+                elif state["status"] == "not_issued": reason = "grant_not_issued"
+                elif state["status"] == "suspended": reason = "grant_suspended"
+                elif state["status"] == "revoked": reason = "grant_revoked"
+                elif state["status"] == "exhausted": reason = "grant_exhausted"
+                elif item["use_id"] in state["consumed"]: reason = "use_already_consumed"
+                elif chosen["body_scope"] == "specific_bodies" and item["body_id"] not in chosen["body_ids"]: reason = "body_not_authorized"
+                elif chosen["body_scope"] == "registered_guardian_devices" and item["body_id"] not in registered: reason = "body_not_authorized"
+                elif item["target_ref"] not in chosen["scope"]["allowed_target_refs"]: reason = "target_not_authorized"
+                elif item["action_class"] not in chosen["scope"]["allowed_action_classes"]: reason = "action_not_authorized"
+                elif item["data_class"] not in chosen["scope"]["allowed_data_classes"]: reason = "data_class_not_authorized"
+                elif item["requested_actions"] > chosen["budget"]["max_actions_per_run"]: reason = "action_budget_exceeded"
+                elif item["requested_duration_seconds"] > chosen["budget"]["max_duration_seconds"]: reason = "duration_budget_exceeded"
+                elif item["requested_bytes"] > chosen["budget"]["max_bytes_per_run"]: reason = "byte_budget_exceeded"
+                elif chosen["controls"]["sandbox_required"] and not item["sandboxed"]: reason = "sandbox_required"
+                elif chosen["controls"]["human_confirmation_required"] and item["human_confirmation_ref"] is None: reason = "human_confirmation_required"
+                elif chosen["controls"]["observer_required"] and item["observer_ref"] is None: reason = "observer_required"
+                elif chosen["controls"]["reversible_required"] and item["reversible_plan_ref"] is None: reason = "reversibility_required"
+                if chosen["use_limit"] is not None:
+                    remaining = max(0, chosen["use_limit"] - len(state["consumed"]) - (1 if reason == "allowed" else 0))
     status = "allowed" if reason == "allowed" else "denied"
     grant_ref = None if chosen is None else chosen["grant_id"]
-    digest = hash_fields("genesis.autonomy.capability.use.decision.v0.1", [item["use_id"], item["use_digest"], status, reason, optional_text(grant_ref), optional_text(remaining)])
+    digest = hash_fields("genesis.autonomy.capability.use.decision.v0.2", [item["use_id"], item["use_digest"], item["grant_ref"], status, reason, optional_text(remaining)]) if v2 else hash_fields("genesis.autonomy.capability.use.decision.v0.1", [item["use_id"], item["use_digest"], status, reason, optional_text(grant_ref), optional_text(remaining)])
     return {"use_id": item["use_id"], "status": status, "reason": reason, "grant_ref": grant_ref, "remaining_uses": remaining, "decision_digest": digest}
 
-def validate_ledger(events: list[dict], grants: list[dict], uses: list[dict], document: dict) -> None:
+
+def validate_ledger(events: list[dict], grants: list[dict], uses: list[dict], document: dict, key_resolver=None) -> None:
     if not isinstance(events, list) or not events:
         fail("ledger_events_required")
     grants_by_id = {grant["grant_id"]: grant for grant in grants}
@@ -517,7 +513,8 @@ def validate_ledger(events: list[dict], grants: list[dict], uses: list[dict], do
                 fail("ledger_consumption_time_invalid")
             if event["body_id"] != use["body_id"] or event["subject_digest"] != use["use_digest"]:
                 fail("ledger_consumption_binding_invalid")
-            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=document["keys"]["body"], signer_type="body", signer_id=use["body_id"], created_at=event["recorded_at"], prefix="ledger")
+            body_key = key_resolver({"envelope": event["signature"], "signer_type": "body", "signer_id": use["body_id"]}) if key_resolver else document["keys"]["body"]
+            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=body_key, signer_type="body", signer_id=use["body_id"], created_at=event["recorded_at"], prefix="ledger")
             seen_uses.add(event["use_id"])
         else:
             if event["body_id"] is not None or event["use_id"] is not None:
@@ -526,7 +523,8 @@ def validate_ledger(events: list[dict], grants: list[dict], uses: list[dict], do
                 fail("ledger_control_time_invalid")
             if event["subject_digest"] != grant["grant_digest"]:
                 fail("ledger_grant_digest_binding_invalid")
-            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=document["keys"]["guardian"], signer_type="guardian", signer_id=document["guardian_id"], created_at=event["recorded_at"], prefix="ledger")
+            guardian_key = key_resolver({"envelope": event["signature"], "signer_type": "guardian", "signer_id": document["guardian_id"]}) if key_resolver else document["keys"]["guardian"]
+            validate_signature(event["signature"], digest=digest, domain=document["domains"]["event_signature"], key=guardian_key, signer_type="guardian", signer_id=document["guardian_id"], created_at=event["recorded_at"], prefix="ledger")
             current = status.get(grant["grant_id"], "not_issued")
             if kind == "grant.issued":
                 if current != "not_issued": fail("ledger_grant_issued_twice")
@@ -554,7 +552,7 @@ def controls_digest(grant: dict) -> str:
 def build_projection(document: dict, grants: list[dict], events: list[dict]) -> dict:
     at = parse_utc(document["expected"]["projection_at"])
     doors = []
-    for grant in sorted(grants, key=lambda item: utf8_key(item["capability"])):
+    for grant in sorted(grants, key=lambda item: (utf8_key(item["capability"]), utf8_key(item["grant_id"]))):
         state = state_before(grant, events, at)
         status = state["status"]
         if at < parse_utc(grant["not_before"]): status = "not_yet_valid"
@@ -600,15 +598,13 @@ def validate_document(document: dict) -> tuple[dict, list[dict]]:
         evaluations[item["evaluation_id"]] = item
     grants: list[dict] = []
     grant_ids: set[str] = set()
-    capabilities: set[str] = set()
     for item in document["grants"]:
         proposal = proposals.get(item.get("proposal_ref")); evaluation = evaluations.get(item.get("evaluation_ref"))
         if proposal is None: fail("grant_proposal_missing")
         if evaluation is None: fail("grant_evaluation_missing")
         validate_grant(item, proposal, evaluation, document)
         if item["grant_id"] in grant_ids: fail("grant_id_duplicate")
-        if item["capability"] in capabilities: fail("capability_multiple_grants")
-        grant_ids.add(item["grant_id"]); capabilities.add(item["capability"]); grants.append(item)
+        grant_ids.add(item["grant_id"]); grants.append(item)
     uses: list[dict] = []
     use_ids: set[str] = set()
     for item in document["use_requests"]:
@@ -695,7 +691,7 @@ def resign_use(document: dict, item: dict) -> None:
         signer_type="body",
         signer_id=item["body_id"],
         digest=item["use_digest"],
-        domain=document["domains"]["use_signature"],
+        domain="genesis.autonomy.capability.use.signature.v0.2" if item["schema_version"] == "genesis.autonomy.capability.use.v0.2" else document["domains"]["use_signature"],
         created_at=item["requested_at"],
     )
 

@@ -71,6 +71,20 @@
       "purpose": "Reglas y digests compartidos de backup y recuperación."
     },
     {
+      "path": "tools/validate_guided_autonomy_authority.mjs",
+      "used_by": [
+        "tools/validate_recursive_improvement_lab.mjs"
+      ],
+      "purpose": "Validador neutral de bundles públicos de autoridad, resolución exacta de grants y decisiones firmadas de uso; el fixture TEST ONLY es una capa separada."
+    },
+    {
+      "path": "tools/validate_guided_autonomy_authority.py",
+      "used_by": [
+        "tools/validate_recursive_improvement_lab.py"
+      ],
+      "purpose": "Validador neutral de bundles públicos de autoridad, resolución exacta de grants y decisiones firmadas de uso; el fixture TEST ONLY es una capa separada."
+    },
+    {
       "path": "tools/validate_transaction_journal.py",
       "used_by": [
         "tools/simulate_transaction_crashes.py"

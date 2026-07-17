@@ -197,6 +197,20 @@ Antes de ejecutar una acción se comprueba:
 
 El resultado es `allowed` o `denied` con un código estable. La decisión no ejecuta la acción; solamente prueba si estaba autorizada.
 
+## 10.0 Bundle neutral de autoridad
+
+`genesis.autonomy.authority.bundle.v0.1` contiene únicamente dominios, identidad, cuerpos registrados, propuestas, evaluaciones, grants, solicitudes firmadas y ledger. No contiene semillas privadas, expectativas doradas ni mutaciones negativas. `validateAuthorityBundle(bundle, publicKeyResolver)` resuelve cada clave mediante `signer_type`, `signer_id`, `key_epoch_id` y `public_key_ref`, y reutiliza las mismas reglas normativas del validador de conformidad.
+
+## 10.1 Selección exacta y usos v0.2
+
+El perfil permite varios grants para una misma capacidad. `grant_id` continúa siendo único; la coexistencia de grants con distinto alcance, presupuesto o cuerpo no es un error.
+
+Una solicitud `genesis.autonomy.capability.use.v0.2` incluye `grant_ref` dentro del digest firmado. La decisión resuelve primero ese ID exacto y luego exige coincidencia de capacidad, instancia, cuerpo, scope, presupuesto y controles. Los usos v0.1 sin `grant_ref` permanecen compatibles únicamente cuando existe un solo grant para su capacidad; si la selección sería ambigua, se rechazan.
+
+Las proyecciones ordenan puertas por `(capability, grant_id)` en bytes UTF-8.
+
+El vector integrado incluye un grant dedicado `code.execute_sandbox` para el laboratorio, con once usos limitados que demuestran el encadenamiento candidato→solicitud→consumo. Su ID es de conformidad, no normativo.
+
 ## 11. Proyección de puertas
 
 `genesis.autonomy.capability.projection.v0.1` es una vista reconstruible. Muestra cada capacidad concedida, nivel, riesgo, estado, usos restantes, expiración y los digests del alcance y controles.
