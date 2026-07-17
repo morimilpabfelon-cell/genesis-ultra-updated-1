@@ -60,8 +60,8 @@
     },
     {
       "path": "conformance/crypto_vectors.json",
-      "size_bytes": 4112,
-      "digest": "sha256:ffcddccbba390b3a388ee8da3aef399610493a3c3284674bee50f718f1bc961c"
+      "size_bytes": 4752,
+      "digest": "sha256:075eecca3f7957e8ba4a25dddf1176eb29c5bb2e0dab6ff3da9bf3126491ec01"
     },
     {
       "path": "conformance/freedom_charter_vectors.json",
@@ -570,8 +570,8 @@
     },
     {
       "path": "spec/CRYPTOGRAPHIC_PROFILE_DRAFT.md",
-      "size_bytes": 5612,
-      "digest": "sha256:a07f882745e5807f0e8ba95ddb798ecc09ea26de16e0817927c1dedd06142ebb"
+      "size_bytes": 6285,
+      "digest": "sha256:85a339a2bfb828859be5c67086a1ffae8aefc8dc2c40746ed52bf54a204586cb"
     },
     {
       "path": "spec/DETERMINISTIC_MEMORY_RETRIEVAL.md",
@@ -880,8 +880,8 @@
     },
     {
       "path": "tools/validate_crypto_vectors.py",
-      "size_bytes": 6676,
-      "digest": "sha256:c99a2b59b3ef96fd20189f1c83d7e09541a6b027f2496861167ecad19be71c76"
+      "size_bytes": 6984,
+      "digest": "sha256:1cbdc39f713be92d194f7ea38123ed29c47ce93a95a581bb6e7d191ff64cb74c"
     },
     {
       "path": "tools/validate_freedom_charter.mjs",
@@ -975,8 +975,8 @@
     },
     {
       "path": "tools/validate_protocol_vectors.mjs",
-      "size_bytes": 20526,
-      "digest": "sha256:45e6d1b16e43371a065ba341a803a4d1b362c7eeb3a2bde81212445f7d9ab45b"
+      "size_bytes": 20772,
+      "digest": "sha256:99640fe9fc24fc7b5551ca72a8acafa925e090d028e9cd51a46be61cee569635"
     },
     {
       "path": "tools/validate_recursive_improvement_lab.mjs",
@@ -1039,5 +1039,5 @@
       "digest": "sha256:c1e2b7594f5e1f438636b4ebb21b20ba0e613b5239abf2b0bb12840fbf75dd18"
     }
   ],
-  "root_digest": "sha256:1986361917b695bc681e6b021dfce4a02d5225cebb15dfffb3358d572bfa3ea7"
+  "root_digest": "sha256:aa727af5832e09c72cc72c586e15ab7b8c1870192936354c3ad03994245da4b4"
 }

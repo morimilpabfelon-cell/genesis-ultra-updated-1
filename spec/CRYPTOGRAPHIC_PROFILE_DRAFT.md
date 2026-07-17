@@ -56,6 +56,29 @@ Una implementación que necesite otro algoritmo debe declarar otro perfil y otro
 sobre versionados; no puede colocar un algoritmo distinto dentro del sobre v0.1 ni afirmar
 conformidad criptográfica plena hasta superar vectores equivalentes.
 
+### 3.1.1 Digest de época de clave
+
+El digest `genesis.key.epoch.v0.1` cubre exactamente, y en este orden, los diez campos
+siguientes. Los dos campos opcionales se codifican como texto vacío cuando son `null`; no
+se omiten de la preimagen:
+
+```text
+FRAME(schema_version)
+FRAME(key_epoch_id)
+FRAME(instance_id)
+FRAME(body_id)
+FRAME(epoch_number)
+FRAME(public_key_fingerprint)
+FRAME(created_at)
+FRAME(status)
+FRAME(previous_epoch_id || "")
+FRAME(rotation_authorization_ref || "")
+```
+
+Esto enlaza criptográficamente la cadena de rotación y su autorización. Una
+implementación que use la preimagen histórica de ocho campos no es conforme con esta
+versión del perfil.
+
 ### 3.2 Cifrado de backups
 
 Perfil recomendado inicial:

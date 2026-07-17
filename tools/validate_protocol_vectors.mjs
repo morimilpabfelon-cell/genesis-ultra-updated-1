@@ -428,6 +428,12 @@ async function verifyCryptoVectors() {
   }
 
   for (const vector of vectors.vectors) {
+    if (
+      vector.case_id.startsWith("key-epoch")
+      && (vector.domain !== "genesis.key.epoch.v0.1" || vector.fields.length !== 10)
+    ) {
+      throw new VectorError(`${vector.case_id}:key_epoch_preimage_must_bind_all_10_fields`);
+    }
     expectDigest(vector.case_id, hashFields(vector.domain, vector.fields), vector.expected_digest);
   }
   console.log(`OK Node protocol and possession digests (${vectors.vectors.length})`);
