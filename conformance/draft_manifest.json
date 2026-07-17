@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 194,
+  "file_count": 202,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,8 +25,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 13149,
-      "digest": "sha256:17af1d3adadcbe6b9c18dbf8795d2b34f58392cc91bf1ecf58ae8901666cc97a"
+      "size_bytes": 13331,
+      "digest": "sha256:7db566378a143fcac1aa866fa07074f600740b488d08b0dd239c1ad13a6b2147"
     },
     {
       "path": "START_HERE.md",
@@ -35,8 +35,8 @@
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 11039,
-      "digest": "sha256:9086a4b2fc5c28743c2e2e224a79a56be6be28e8d153e77f5f645d9cf2f835cc"
+      "size_bytes": 11540,
+      "digest": "sha256:789ea4a00438265275c323b79ebc8dd16fe5d100951d861807a3dc277b6649d4"
     },
     {
       "path": "conformance/associative_memory_projection_vectors.json",
@@ -47,6 +47,11 @@
       "path": "conformance/behavior_cases.json",
       "size_bytes": 1346,
       "digest": "sha256:b02205902ff792758cf23abc9394f86e00afff0db3c46d4ee6af93d9d90fa8b0"
+    },
+    {
+      "path": "conformance/birth_vectors.json",
+      "size_bytes": 31106,
+      "digest": "sha256:654d2c9bc4b2e4e8dbf1f9c2ac175ddc62c6f924ede6a0184841d7723523afab"
     },
     {
       "path": "conformance/continuity_vectors.json",
@@ -130,13 +135,13 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 8707,
-      "digest": "sha256:db37958035dfb8245a67acf1e3aa787079ed009b0b084e168d658142d05b964b"
+      "size_bytes": 9030,
+      "digest": "sha256:f438836c538997835d6ace06ad00e58f6415773756fe7a6625e9fb3fb94e532d"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 136303,
-      "digest": "sha256:c6e4048a19f576f67a331b0103b32d5dd7307ee4b5376ea0a57181297d0c8529"
+      "size_bytes": 136733,
+      "digest": "sha256:f6bf51af0eef67e5ee076da73f91962f9a7a5d444ed9bac56e56114e9daccfd9"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -160,8 +165,8 @@
     },
     {
       "path": "conformance/tool_execution_registry.json",
-      "size_bytes": 2959,
-      "digest": "sha256:46c626e0f306e321a77d382f78c966af738805258eb2aca6ea509161d9a2031e"
+      "size_bytes": 3089,
+      "digest": "sha256:7e7718d9e1947d6f199dd80b7c062adbf65e90f233cbcb9b662b3f1b9ba5d532"
     },
     {
       "path": "docs/ANDROID_FIRST_RUNTIME_DECISION.md",
@@ -170,8 +175,8 @@
     },
     {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
-      "size_bytes": 16799,
-      "digest": "sha256:d23527838aa8d368f546eb44150395f82566ebb68c383cda87d8ff430ed5e5c3"
+      "size_bytes": 17776,
+      "digest": "sha256:b34fd9a35b7e443d2d9347cda5df8489aa759d0825c9e00eb349b092316d37b7"
     },
     {
       "path": "docs/AUDIT_TOOL_EXECUTION_REPORT.md",
@@ -200,8 +205,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 10711,
-      "digest": "sha256:cdb30528c911422d3fedd67243fb446a049f6960aac8fb726fc99859b2ed19ae"
+      "size_bytes": 11195,
+      "digest": "sha256:49947849daf6492cc1a3e4852be6bc399246e3cd89f2b53bffaae7ece761abba"
     },
     {
       "path": "observer/README.md",
@@ -250,8 +255,8 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 4107,
-      "digest": "sha256:917fa4f210fc6e84db571ab5002e341ba7d3a2009c26846336ee202db04af8e1"
+      "size_bytes": 4174,
+      "digest": "sha256:7400f2873e5e97908d96356d58cfc73cf60f4c3e45d7c22b7be99d48edcc0311"
     },
     {
       "path": "reference/README.md",
@@ -282,6 +287,21 @@
       "path": "schemas/backup_manifest.schema.json",
       "size_bytes": 3000,
       "digest": "sha256:3e4d9bf01dd056fbe35f70c942d84fb8664cc28e6eaf064f44f7f68e1ebad4bd"
+    },
+    {
+      "path": "schemas/birth_receipt.schema.json",
+      "size_bytes": 2546,
+      "digest": "sha256:2aa05a747d809e6d88ec0b3a995661a68a4d43691cf7341db89b227c493753e8"
+    },
+    {
+      "path": "schemas/birth_recovery_state.schema.json",
+      "size_bytes": 1359,
+      "digest": "sha256:d94c720e28a434f90a6f7411f13e0d5aec2f456352d3f041d08aa2ec3af286a2"
+    },
+    {
+      "path": "schemas/birth_state.schema.json",
+      "size_bytes": 2005,
+      "digest": "sha256:92c1807a2a2abb5d3c0406226ab16572420d8b00a28ec65c8955381c2ad224bb"
     },
     {
       "path": "schemas/body_possession_proof.schema.json",
@@ -480,8 +500,8 @@
     },
     {
       "path": "schemas/transaction_journal.schema.json",
-      "size_bytes": 3978,
-      "digest": "sha256:e5f20484992026d403a61b3b535305c908bc9502144ec88094c6d41e16c6815a"
+      "size_bytes": 4570,
+      "digest": "sha256:881f61ec7c5dfd103ca4b1ab673d47aa12535d68ebbeb95f453e91ad5833ca6c"
     },
     {
       "path": "schemas/transfer_finalization.schema.json",
@@ -550,13 +570,13 @@
     },
     {
       "path": "spec/FREE_BIRTH_AND_CONTINUITY.md",
-      "size_bytes": 6971,
-      "digest": "sha256:9f15127d7de9d2377465908bcb1a047a1d697479156e409d884debd42e309a84"
+      "size_bytes": 7142,
+      "digest": "sha256:920472d7a246f4766a94fe5e6d1ecee0c068baeb362ec0e1cd44271b56aa740b"
     },
     {
       "path": "spec/GENESIS_PROTOCOL_DRAFT.md",
-      "size_bytes": 2245,
-      "digest": "sha256:86db091a4dd8c0ef6490be44a155e8f4595ac2cb3ce3d88f8ebc0c1a1562d7c5"
+      "size_bytes": 2679,
+      "digest": "sha256:b73cc6f2e14e45b9bed1f4acc955b787fa978d03df77d9a8f8cc7423a8272c3e"
     },
     {
       "path": "spec/GUARDIAN_AUTHORITY_AND_MOBILITY.md",
@@ -660,13 +680,18 @@
     },
     {
       "path": "spec/TRANSACTION_JOURNAL_AND_CRASH_RECOVERY.md",
-      "size_bytes": 5826,
-      "digest": "sha256:4eeda006fe1c8a808a28a9ef7dd98e4a57a3292be6cdd5bdb5d1b86b67843929"
+      "size_bytes": 7220,
+      "digest": "sha256:f0e3bf54a6b681f71d030d9e174855397dce0a6a170c8799064dbc655ad3153f"
     },
     {
       "path": "spec/TRANSFER_STATE_MACHINE.md",
       "size_bytes": 3913,
       "digest": "sha256:f3d2c1b2779d3de3255e8b3ee4b68448393825304a0c659c727bde087064daca"
+    },
+    {
+      "path": "tools/birth_protocol.py",
+      "size_bytes": 37034,
+      "digest": "sha256:4aa4d9004f9214c9f57288807a9f3103be5ea680fe8f2811d8f1405470c4baa1"
     },
     {
       "path": "tools/generate_draft_manifest.py",
@@ -750,8 +775,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 7544,
-      "digest": "sha256:101e755a85ed1676ae09aea5b6cef232e30759700e44c95a6a1dd79a2adf7c33"
+      "size_bytes": 8078,
+      "digest": "sha256:8bf149600922df862e7650fc5b1a875548048db76c66bc5375df0b66d6c32709"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -762,6 +787,11 @@
       "path": "tools/simulate_backup_recovery_negatives.py",
       "size_bytes": 6626,
       "digest": "sha256:7821eb640fe84fbf61807bb8354d249a5777e7e80b9d020ac7b3d44a524972ee"
+    },
+    {
+      "path": "tools/simulate_birth_crashes.py",
+      "size_bytes": 8618,
+      "digest": "sha256:e4ad68a2c6cdafac66d880eb6560b60b4f9549e620d556e6366799e2b20fd8f2"
     },
     {
       "path": "tools/simulate_negatives.py",
@@ -800,8 +830,8 @@
     },
     {
       "path": "tools/validate_artifacts.mjs",
-      "size_bytes": 52368,
-      "digest": "sha256:b3a23778c3fc379f06827fe98a501076e83c9d8d354c289ee002f31f2f10e27b"
+      "size_bytes": 56308,
+      "digest": "sha256:dad45730c3951ddae2756162fdac889cf87a6441ebce0c9201d4dd617847bed0"
     },
     {
       "path": "tools/validate_associative_memory_projection.mjs",
@@ -822,6 +852,16 @@
       "path": "tools/validate_backup_recovery.py",
       "size_bytes": 16685,
       "digest": "sha256:ab978f7d999b836072628c842228e08badb40937ba14b1cfcc62de308958668c"
+    },
+    {
+      "path": "tools/validate_birth_transaction.mjs",
+      "size_bytes": 18287,
+      "digest": "sha256:2435f47dd70038fc350e603ecae5e176b08fec192ad9d9abb524525cd08f38c0"
+    },
+    {
+      "path": "tools/validate_birth_transaction.py",
+      "size_bytes": 2440,
+      "digest": "sha256:071b55459c05fec1dfa54da8fef85d32ed766d23a60228ef12e2eda8b6ef94b7"
     },
     {
       "path": "tools/validate_continuity.py",
@@ -965,8 +1005,8 @@
     },
     {
       "path": "tools/validate_transaction_journal.py",
-      "size_bytes": 9465,
-      "digest": "sha256:b5c3ef7bf33565a84dae9ffc300a66e0f389c9e2439563d5558bbf0b3b21dd46"
+      "size_bytes": 10217,
+      "digest": "sha256:700f49c4b9b5d48873e966388dc5f3db3640a5dcaaa3375f7315b78bb151ded8"
     },
     {
       "path": "tools/validate_workspace.mjs",
@@ -979,5 +1019,5 @@
       "digest": "sha256:c1e2b7594f5e1f438636b4ebb21b20ba0e613b5239abf2b0bb12840fbf75dd18"
     }
   ],
-  "root_digest": "sha256:1b60f52853bac7b5f00fa67858e0576a17a8e2b06e0d2ef03f0bf9795f8c105f"
+  "root_digest": "sha256:9fd099a7ddd89685393881f263befad8a4e35db71db5649ae7c7e15a3c8553ca"
 }

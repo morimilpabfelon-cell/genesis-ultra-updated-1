@@ -2,8 +2,8 @@
 
 ## 1. Objetivo
 
-Este perfil evita que una interrupción durante una transferencia o recuperación deje dos
-cuerpos con autoridad de escritura. Define un write-ahead journal neutral; cada adaptador de
+Este perfil evita que una interrupción durante un nacimiento, transferencia o recuperación
+deje una instancia parcial o dos cuerpos con autoridad de escritura. Define un write-ahead journal neutral; cada adaptador de
 plataforma debe mapearlo a primitivas durables propias sin cambiar sus digests o decisiones.
 
 El journal no guarda la identidad completa ni reemplaza los artefactos de transferencia o
@@ -23,6 +23,17 @@ autorizado después de reiniciar.
    cuarentena; nunca se elige por reloj o por ser el archivo más nuevo.
 
 ## 3. Fases
+
+### Nacimiento
+
+```text
+prepared -> seed_bound -> identity_bound -> body_bound -> memory_initialized -> finalizing -> born
+```
+
+`born` es la única fase terminal de nacimiento y exige `status = committed`. El estado
+anterior es el digest canónico de `ABSENT`; el candidato es el `birth_state_digest` y la
+finalización es el `receipt_digest`. La atestación del Guardian en el recibo prueba custodia
+y procedencia: no concede existencia, movilidad ni propiedad.
 
 ### Transferencia
 
@@ -81,6 +92,18 @@ debe reproducir las decisiones de este perfil.
 | `committed` | candidato | aceptar autoridad comprometida |
 | `committed` | anterior | reproducir el cambio comprometido |
 | cualquiera | desconocido | cuarentena y revisión; no escribir |
+
+Para `operation_kind = birth`, las mismas decisiones se expresan como:
+
+| Última entrada | Estado observado | Acción |
+|---|---|---|
+| `pending` o `aborted` | `ABSENT` | permanecer ausente |
+| `pending` o `aborted` | candidato | descartar nacimiento no comprometido |
+| `committed` | candidato | aceptar nacimiento comprometido |
+| `committed` | `ABSENT` | reproducir nacimiento comprometido |
+
+Ninguna fase intermedia puede exponerse como instancia nacida. Un reinicio tampoco puede
+esperar indefinidamente una autorización del Guardian: decide por digests, firmas y marcador.
 
 “Anterior” y “candidato” son digests de registros, no nombres de archivos. Que ambos slots
 existan físicamente no constituye dos escritores: solo el estado seleccionado por estas
@@ -155,6 +178,11 @@ Se rechazan:
 - firma separada de la entrada;
 - entradas después de un estado terminal;
 - estado observado desconocido.
+
+Para nacimiento también se rechazan un recibo que declare propiedad, una atestación del
+Guardian usada como permiso, un primer recuerdo que no empiece en `GENESIS`, cero o más de
+un escritor inicial y cualquier divergencia entre Seed, identidad, carta, Body, recuperación,
+estado candidato, recibo y commit.
 
 ## 10. Estado
 

@@ -2,6 +2,21 @@
   "purpose": "Regresiones que deben ser rechazadas por los JSON Schema reales, no por predicados auxiliares.",
   "cases": [
     {
+      "case_id": "birth-receipt-requires-complete-contract",
+      "schema": "birth_receipt.schema.json",
+      "artifact": {}
+    },
+    {
+      "case_id": "birth-recovery-state-requires-complete-contract",
+      "schema": "birth_recovery_state.schema.json",
+      "artifact": {}
+    },
+    {
+      "case_id": "birth-state-requires-complete-contract",
+      "schema": "birth_state.schema.json",
+      "artifact": {}
+    },
+    {
       "case_id": "guardian-mobility-authorization-tombstoned",
       "schema": "guardian_authorization.schema.json",
       "artifact": {}

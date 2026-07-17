@@ -16,6 +16,7 @@ const INSTANCE_IDENTITY_VECTORS = path.join(
   ROOT,
   "conformance/instance_identity_vectors.json"
 );
+const BIRTH_VECTORS = path.join(ROOT, "conformance/birth_vectors.json");
 const SENSE_OBSERVATION_VECTORS = path.join(
   ROOT,
   "conformance/sense_observation_vectors.json"
@@ -971,10 +972,11 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
 }
 
 const JOURNAL_PHASES = {
+  birth: ["prepared", "seed_bound", "identity_bound", "body_bound", "memory_initialized", "finalizing", "born"],
   transfer: ["prepared", "frozen", "exported", "verified", "accepted", "finalizing", "completed"],
   recovery: ["discovered", "verified", "authorized", "restored", "finalizing", "finalized"]
 };
-const JOURNAL_TERMINAL_PHASE = { transfer: "completed", recovery: "finalized" };
+const JOURNAL_TERMINAL_PHASE = { birth: "born", transfer: "completed", recovery: "finalized" };
 
 function validateTransactionJournalChain(entries) {
   if (entries.length === 0) return "journal_empty";
@@ -1102,7 +1104,13 @@ function evaluateJournalRestart(entries, observed, previous, candidate, finaliza
 
   if (latest.status === "committed") {
     if (latest.commit_marker_digest !== finalization) throw new Error("journal_commit_untrusted");
+    if (latest.operation_kind === "birth") {
+      return observed === candidate ? "accept_committed_birth" : "replay_committed_birth";
+    }
     return observed === candidate ? "accept_committed_authority" : "replay_committed_authority";
+  }
+  if (latest.operation_kind === "birth") {
+    return observed === previous ? "remain_absent" : "discard_uncommitted_birth";
   }
   return observed === previous ? "retain_previous_authority" : "rollback_uncommitted_authority";
 }
@@ -1226,6 +1234,66 @@ function validateInstanceIdentityFixture(validators) {
   return vectors.continuity_cases.length;
 }
 
+function validateBirthFixtureSchemas(validators) {
+  const vectors = readJson(BIRTH_VECTORS);
+  const fixture = vectors.fixture;
+  const artifacts = [
+    ["seed_manifest.schema.json", fixture.seed_manifest, "birth.seed_manifest"],
+    ["instance_identity.schema.json", fixture.instance_identity, "birth.instance_identity"],
+    ["body_record.schema.json", fixture.initial_body_record, "birth.initial_body_record"],
+    ["body_registry.schema.json", fixture.initial_body_registry, "birth.initial_body_registry"],
+    ["key_epoch.schema.json", fixture.initial_body_key_epoch, "birth.initial_body_key_epoch"],
+    ["body_possession_proof.schema.json", fixture.initial_body_possession, "birth.initial_body_possession"],
+    ["memory_event.schema.json", fixture.first_memory_event, "birth.first_memory_event"],
+    ["birth_recovery_state.schema.json", fixture.birth_recovery_state, "birth.recovery_state"],
+    ["birth_state.schema.json", fixture.birth_state, "birth.state"],
+    ["birth_receipt.schema.json", fixture.birth_receipt, "birth.receipt"]
+  ];
+  for (const [schema, artifact, label] of artifacts) {
+    requireValid(validators, schema, artifact, label);
+  }
+  const envelopes = [
+    [fixture.first_memory_event.signature, "birth.first_memory_event.signature"],
+    [fixture.birth_receipt.body_acknowledgement, "birth.receipt.body_acknowledgement"],
+    [fixture.birth_receipt.guardian_witness, "birth.receipt.guardian_witness"]
+  ];
+  for (const [envelope, label] of envelopes) {
+    requireValid(validators, "signature_envelope.schema.json", envelope, label);
+  }
+  for (const [index, entry] of fixture.journal_entries.entries()) {
+    requireValid(validators, "transaction_journal.schema.json", entry, `birth.journal_entries[${index}]`);
+    requireValid(validators, "signature_envelope.schema.json", entry.signature, `birth.journal_entries[${index}].signature`);
+  }
+  return fixture.journal_entries.length;
+}
+
+function validateBirthCrashArtifacts(artifactPath) {
+  const generated = readJson(artifactPath);
+  const vectors = readJson(BIRTH_VECTORS);
+  if (
+    generated.schema_version !== "genesis.birth.crash.simulation.v0.1"
+    || generated.birth_id !== vectors.fixture.birth_state.birth_id
+    || generated.instance_id !== vectors.fixture.birth_state.instance_id
+    || generated.absent_state_digest !== vectors.fixture.absent_state_digest
+    || generated.birth_state_digest !== vectors.expected.birth_state_digest
+    || generated.receipt_digest !== vectors.expected.receipt_digest
+  ) {
+    throw new Error("birth_crash_bundle_link_invalid");
+  }
+  if (
+    generated.restart_cases.length !== vectors.expected.restart_case_count
+    || generated.negative_cases.length !== 13
+    || generated.restart_cases.some((testCase) => !testCase.passed)
+    || generated.negative_cases.some((testCase) => !testCase.detected)
+    || generated.guardian_release_required !== false
+    || generated.half_born_state_accepted !== false
+    || generated.active_writer_count_after_commit !== 1
+    || generated.all_passed !== true
+  ) {
+    throw new Error("birth_crash_simulation_summary_invalid");
+  }
+}
+
 function validateSenseObservationFixtures(validators) {
   const vectors = readJson(SENSE_OBSERVATION_VECTORS);
   for (const observation of vectors.sense_observations) {
@@ -1297,6 +1365,7 @@ function main() {
   const invalidCount = validateNegativeSchemaCases(validators);
   const hostAdapterCount = validateHostAdapterFixtures(validators);
   const identityPlatformCount = validateInstanceIdentityFixture(validators);
+  const birthPhaseCount = validateBirthFixtureSchemas(validators);
   const senseObservationCount = validateSenseObservationFixtures(validators);
   const senseAdapterCounts = validateSenseAdapterFixtures(validators);
   const associativeVectors = readJson(ASSOCIATIVE_MEMORY_PROJECTION_VECTORS);
@@ -1315,9 +1384,11 @@ function main() {
   const artifactPath = process.argv[2];
   const backupRecoveryPath = process.argv[3];
   const transactionCrashPath = process.argv[4];
+  const birthCrashPath = process.argv[5];
   if (artifactPath) validateGeneratedArtifacts(validators, path.resolve(artifactPath));
   if (backupRecoveryPath) validateBackupRecoveryArtifacts(validators, path.resolve(backupRecoveryPath));
   if (transactionCrashPath) validateTransactionCrashArtifacts(validators, path.resolve(transactionCrashPath));
+  if (birthCrashPath) validateBirthCrashArtifacts(path.resolve(birthCrashPath));
 
   console.log(`JSON Schema 2020-12: OK (${validators.size} schemas compiled).`);
   console.log(
@@ -1329,6 +1400,7 @@ function main() {
   console.log(
     `Immutable birth identity fixture: OK (${identityPlatformCount} platform declarations).`
   );
+  console.log(`Atomic birth schema fixtures: OK (${birthPhaseCount} journal phases).`);
   console.log(`Signed sense observation fixtures: OK (${senseObservationCount} senses).`);
   console.log(
     `Neutral sense adapter fixtures: OK (${senseAdapterCounts.adapterCount} adapters, ` +
@@ -1339,6 +1411,7 @@ function main() {
   if (artifactPath) console.log("Generated A -> B artifacts and cross-links: OK.");
   if (backupRecoveryPath) console.log("Generated backup -> recovery artifacts and cross-links: OK.");
   if (transactionCrashPath) console.log("Generated transaction journal and crash recovery decisions: OK.");
+  if (birthCrashPath) console.log("Generated atomic birth crash decisions: OK.");
 }
 
 try {

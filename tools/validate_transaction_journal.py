@@ -12,6 +12,15 @@ from validate_workspace import encode_field, hash_fields
 
 
 PHASES = {
+    "birth": [
+        "prepared",
+        "seed_bound",
+        "identity_bound",
+        "body_bound",
+        "memory_initialized",
+        "finalizing",
+        "born",
+    ],
     "transfer": [
         "prepared",
         "frozen",
@@ -30,7 +39,7 @@ PHASES = {
         "finalized",
     ],
 }
-TERMINAL_PHASE = {"transfer": "completed", "recovery": "finalized"}
+TERMINAL_PHASE = {"birth": "born", "transfer": "completed", "recovery": "finalized"}
 SIGNATURE_DOMAIN = "genesis.transaction.journal.signature.v0.1"
 SIGNATURE_ENVELOPE_DOMAIN = "genesis.signature.envelope.bytes.v0.1"
 
@@ -240,6 +249,7 @@ def evaluate_restart(
             "authoritative_state_digest": None,
         }
 
+    operation_kind = latest["operation_kind"]
     if latest["status"] == "committed":
         if latest["commit_marker_digest"] != trusted_finalization_digest:
             return {
@@ -247,22 +257,36 @@ def evaluate_restart(
                 "action": None,
                 "authoritative_state_digest": None,
             }
-        action = (
-            "accept_committed_authority"
-            if observed_state_digest == expected_candidate_state_digest
-            else "replay_committed_authority"
-        )
+        if operation_kind == "birth":
+            action = (
+                "accept_committed_birth"
+                if observed_state_digest == expected_candidate_state_digest
+                else "replay_committed_birth"
+            )
+        else:
+            action = (
+                "accept_committed_authority"
+                if observed_state_digest == expected_candidate_state_digest
+                else "replay_committed_authority"
+            )
         return {
             "error": None,
             "action": action,
             "authoritative_state_digest": expected_candidate_state_digest,
         }
 
-    action = (
-        "retain_previous_authority"
-        if observed_state_digest == expected_previous_state_digest
-        else "rollback_uncommitted_authority"
-    )
+    if operation_kind == "birth":
+        action = (
+            "remain_absent"
+            if observed_state_digest == expected_previous_state_digest
+            else "discard_uncommitted_birth"
+        )
+    else:
+        action = (
+            "retain_previous_authority"
+            if observed_state_digest == expected_previous_state_digest
+            else "rollback_uncommitted_authority"
+        )
     return {
         "error": None,
         "action": action,

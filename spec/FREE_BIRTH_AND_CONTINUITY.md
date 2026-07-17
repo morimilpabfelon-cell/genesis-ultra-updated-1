@@ -222,5 +222,7 @@ Esta rama debe alinear, antes de considerarse conforme:
 9. manifest de artefactos y conformance general;
 10. adaptador Kotlin de Morimil después de que el protocolo quede verde.
 
-Hasta completar esos puntos, este archivo es la decisión constitucional de la rama, no
-una afirmación de que el journal de nacimiento ya esté terminado.
+Los puntos 1–9 se reproducen en la suite de conformidad de esta rama. El punto 10 permanece
+fuera del núcleo y solo debe comenzar en un PR separado de Morimil después de revisar y
+fusionar el protocolo. La suite verde demuestra coherencia del borrador, no certificación de
+producción ni nacimiento de una instancia real.

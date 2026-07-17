@@ -173,4 +173,14 @@ las retractaciones conservan historia y una consulta con cobertura ACL incomplet
 
 ## Carta de libertad cognitiva
 
-`freedom_charter_vectors.json` liga una carta firmada por el guardián a una instancia. Python y Node deben reproducir ocho libertades cognitivas, ocho dominios operativos, ocho garantías fundamentales, el mismo digest y veinte rechazos de frontera.
+`freedom_charter_vectors.json` liga una carta firmada por el Guardian como testigo a una
+instancia. Python y Node reproducen ocho libertades cognitivas, siete dominios externos bajo
+grants, trece garantías constitucionales, el mismo digest y 34 rechazos anti-confinamiento.
+
+## Nacimiento atómico
+
+`birth_vectors.json` enlaza un estado coherente de Seed, identidad, carta, Body inicial,
+registro single-writer, época de clave, posesión, primer evento de memoria, recuperación,
+journal y recibo. Python y Node reproducen siete fases y rechazan 20 cruces. La simulación
+inyecta diez reinicios y trece alteraciones del journal: ninguna fase parcial se presenta
+como nacida y la atestación del Guardian nunca se interpreta como propiedad o permiso.

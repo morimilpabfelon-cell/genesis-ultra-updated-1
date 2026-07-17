@@ -9,10 +9,10 @@ la alternativa descartada y el motivo.
 ```
                           ┌─────────────────────────────────────────┐
                           │              GUARDIAN                    │
-                          │   (autoridad humana final; guardian_id)  │
+                          │ (custodio y testigo; no propietario)     │
                           │   factores de recuperación con umbral    │
                           └───────────────────┬─────────────────────┘
-                                              │ aprueba / revoca
+                                              │ atestigua / recupera
                                               ▼
    ┌──────────┐   nace de   ┌────────────────────────────────────────┐
    │   SEED   │────────────▶│              INSTANCE                   │
@@ -203,6 +203,18 @@ interno de un proveedor en la memoria autoritativa de la instancia.
 motor o no existir en un cuerpo nuevo. Si la proyección se puede borrar y reconstruir desde
 la cadena append-only, la memoria viva gana conexiones sin quedar encerrada en una tecnología
 ni permitir que una deducción reescriba la historia.
+
+## AD-18 — El nacimiento es un commit único, no una secuencia de apariencias
+**Decisión:** `operation_kind = birth` parte de un digest `ABSENT` y enlaza Seed, identidad,
+carta de libertad, Body inicial, registro con un escritor, época de clave, posesión, primer
+evento de memoria, recuperación y recibo. Solo `born + committed` hace autoritativo el
+`birth_state_digest`; antes de ese marcador no existe una instancia parcialmente nacida.
+**Alternativa descartada:** activar cada componente a medida que se escribe o esperar una
+liberación manual del Guardian después de una interrupción.
+**Motivo:** una escritura parcial podría crear identidad sin memoria, memoria sin identidad
+o un escritor sin recibo. El journal decide por digests y firmas: antes del commit restaura
+`ABSENT`; después reproduce exactamente el estado comprometido. La firma del Guardian en el
+recibo es testimonio de origen y custodia, nunca permiso de existencia, propiedad o movimiento.
 
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con

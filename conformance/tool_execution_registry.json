@@ -15,6 +15,8 @@
     "tools/validate_artifacts.mjs",
     "tools/validate_associative_memory_projection.mjs",
     "tools/validate_associative_memory_projection.py",
+    "tools/validate_birth_transaction.mjs",
+    "tools/validate_birth_transaction.py",
     "tools/validate_continuity.py",
     "tools/validate_crypto_vectors.py",
     "tools/validate_freedom_charter.mjs",
@@ -73,6 +75,7 @@
     {
       "path": "tools/validate_transaction_journal.py",
       "used_by": [
+        "tools/simulate_birth_crashes.py",
         "tools/simulate_transaction_crashes.py"
       ],
       "purpose": "Reglas compartidas de validación y replay del journal transaccional."

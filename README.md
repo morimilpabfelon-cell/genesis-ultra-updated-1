@@ -15,7 +15,7 @@ Seed        = origen verificable e inmutable
 Instance    = identidad continua
 Body        = dispositivo, aplicación o sistema temporal
 Engine      = motor de razonamiento intercambiable
-Guardian    = autoridad humana final
+Guardian    = custodio humano, testigo de nacimiento y apoyo de recuperación
 Protocol    = reglas neutrales
 Conformance = pruebas compartidas entre implementaciones
 ```
@@ -42,7 +42,7 @@ Una instancia puede pasar de un teléfono a una computadora, otro teléfono, un 
 - recuperación cuando un cuerpo se pierde o se destruye;
 - revocación de cuerpos perdidos o comprometidos;
 - prevención inicial de bifurcaciones mediante un escritor activo;
-- aprobación verificable del guardián;
+- atestación verificable del guardián como custodio, nunca como propietario;
 - sentidos neutrales que producen observaciones firmadas sin acceso directo a memoria;
 - adaptadores sustituibles de Vista, Propiocepción e Interocepción con fallos cerrados;
 - proyección asociativa reconstruible que conecta memoria aceptada sin reemplazarla ni
@@ -79,19 +79,21 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 44 JSON Schema, verifica en ambos
-lenguajes el nombre canónico, el digest de identidad, los adaptadores neutrales de los tres
-primeros sentidos, la compuerta firmada antes de memoria, el puente firmado hacia recuperación,
-la proyección asociativa, la recuperación determinista y la búsqueda híbrida neutral. También exige que los
-artefactos generados por la simulación A→B sean válidos y estén enlazados, verifica el permiso
-permanente, los dispositivos registrados y el ledger de autoridad, simula un backup cifrado
-comprometido seguido de pérdida y recuperación B→C, y ejecuta los vectores de continuidad,
-criptografía y casos negativos. Pasar la suite no constituye una certificación de seguridad ni
-convierte el borrador en producción.
+La suite ejecuta los validadores Python y Node, compila los 50 JSON Schema y verifica en ambos
+lenguajes identidad, libertad, nacimiento atómico, sentidos, compuerta de memoria, proyecciones
+y recuperación. También exige que los artefactos A→B enlacen intención de continuidad,
+consentimiento limitado del host, posesión, checkpoint, paquete, recibo y finalización sin un
+permiso de movimiento del Guardian. Simula backup cifrado, recuperación B→C, reinicios de
+nacimiento y recuperación, y ejecuta los vectores criptográficos y casos negativos. Pasar la
+suite no constituye una certificación de seguridad ni convierte el borrador en producción.
 
 También simula cierres en ocho puntos de una recuperación. El journal firmado decide si
 debe conservar, revertir, reproducir o aceptar el cambio de autoridad sin elegir por reloj
 ni permitir que un estado candidato no comprometido se convierta en escritor.
+
+El nacimiento se interrumpe en diez puntos adicionales. Antes del commit vuelve a `ABSENT` o
+descarta el candidato; después del commit reproduce exactamente el estado ligado al recibo.
+Ninguna decisión de reinicio espera una liberación manual del Guardian.
 
 El manifiesto reproducible `conformance/draft_manifest.json` registra tamaño y SHA-256 de
 cada artefacto requerido. Python y Node rechazan omisiones, archivos inesperados, cambios de
