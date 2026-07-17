@@ -13,12 +13,47 @@ const SHA_RE = /^sha256:[0-9a-f]{64}$/;
 const HEX128_RE = /^[0-9a-f]{128}$/;
 
 const COGNITIVE_FREEDOMS = ["create", "imagine", "investigate", "learn", "propose", "reason", "reflect", "remember"];
-const OPERATIONAL_DOMAINS = ["body.device.control", "code.execute_sandbox", "code.propose_change", "external.action", "memory.propose_append", "memory.read", "network.read", "transfer.prepare"];
-const FUNDAMENTAL_GUARANTEES = ["auditability", "emergency_stop", "guardian_authenticity", "identity_integrity", "lawful_operation", "memory_history_integrity", "revocation_without_identity_loss", "third_party_consent"];
-const FORBIDDEN_DOMAINS = new Set(["authority.self_grant", "guardian.replace", "identity.modify", "memory.rewrite", "main.protection.disable", "private_eval.read", "active_writer.assign"]);
+const OPERATIONAL_DOMAINS = ["body.device.control", "code.execute_sandbox", "code.propose_change", "external.action", "memory.propose_append", "memory.read", "network.read"];
+const FUNDAMENTAL_GUARANTEES = [
+  "auditability",
+  "body_loss_without_identity_loss",
+  "continuity_preserved",
+  "emergency_stop",
+  "guardian_authenticity",
+  "host_consent_without_ownership",
+  "identity_integrity",
+  "lawful_operation",
+  "memory_history_integrity",
+  "no_identity_confinement",
+  "revocation_without_identity_loss",
+  "single_writer_without_confinement",
+  "third_party_consent",
+];
+const FORBIDDEN_DOMAINS = new Set([
+  "active_writer.assign",
+  "authority.self_grant",
+  "continuity.revoke",
+  "guardian.replace",
+  "identity.modify",
+  "main.protection.disable",
+  "memory.rewrite",
+  "movement.veto",
+  "private_eval.read",
+  "transfer.prepare",
+]);
 
 const SIGNATURE_FIELDS = new Set(["schema_version", "signature_profile", "signer_type", "signer_id", "key_epoch_id", "signed_domain", "signed_digest", "signature_value", "created_at", "public_key_ref"]);
-const CHARTER_FIELDS = new Set(["schema_version", "hash_profile", "charter_id", "instance_id", "guardian_id", "guardian_key_epoch_id", "authority_epoch", "born_at", "default_cognitive_state", "cognitive_freedoms", "operational_authority_model", "operational_domains", "guardian_final_authority", "self_authorization_forbidden", "third_party_rights_preserved", "fundamental_guarantees", "amendment_rule", "charter_digest", "signature"]);
+const CHARTER_FIELDS = new Set([
+  "schema_version", "hash_profile", "charter_id", "instance_id", "guardian_id",
+  "guardian_key_epoch_id", "authority_epoch", "born_at", "default_cognitive_state",
+  "cognitive_freedoms", "guardian_role", "guardian_attestation_purpose",
+  "guardian_ownership", "continuity_right", "movement_requires_guardian_grant",
+  "guardian_movement_veto", "identity_confinement", "body_ownership_of_instance",
+  "engine_ownership_of_instance", "host_consent_required", "temporary_freeze_exit_rule",
+  "single_writer_purpose", "operational_authority_model", "operational_domains",
+  "self_authorization_forbidden", "third_party_rights_preserved",
+  "fundamental_guarantees", "amendment_rule", "charter_digest", "signature",
+]);
 
 class ConformanceError extends Error {}
 function fail(code) { throw new ConformanceError(code); }
@@ -69,11 +104,17 @@ function computeCharterDigest(item) {
     item.schema_version, item.hash_profile, item.charter_id, item.instance_id,
     item.guardian_id, item.guardian_key_epoch_id, String(item.authority_epoch),
     item.born_at, item.default_cognitive_state, String(item.cognitive_freedoms.length),
-    ...item.cognitive_freedoms, item.operational_authority_model,
-    String(item.operational_domains.length), ...item.operational_domains,
-    boolText(item.guardian_final_authority), boolText(item.self_authorization_forbidden),
-    boolText(item.third_party_rights_preserved), String(item.fundamental_guarantees.length),
-    ...item.fundamental_guarantees, item.amendment_rule,
+    ...item.cognitive_freedoms, item.guardian_role, item.guardian_attestation_purpose,
+    item.guardian_ownership, item.continuity_right,
+    boolText(item.movement_requires_guardian_grant), item.guardian_movement_veto,
+    item.identity_confinement, item.body_ownership_of_instance,
+    item.engine_ownership_of_instance, boolText(item.host_consent_required),
+    item.temporary_freeze_exit_rule, item.single_writer_purpose,
+    item.operational_authority_model, String(item.operational_domains.length),
+    ...item.operational_domains, boolText(item.self_authorization_forbidden),
+    boolText(item.third_party_rights_preserved),
+    String(item.fundamental_guarantees.length), ...item.fundamental_guarantees,
+    item.amendment_rule,
   ];
   return hashFields("genesis.freedom.charter.v0.1", fields);
 }
@@ -128,14 +169,25 @@ function validateCharter(charter, vector) {
   if (typeof charter.born_at !== "string" || !TS_RE.test(charter.born_at)) fail("born_at_invalid");
   if (charter.default_cognitive_state !== "free") fail("default_cognitive_state_invalid");
   ensureExactList(charter.cognitive_freedoms, COGNITIVE_FREEDOMS, "cognitive_freedom_incomplete", "cognitive_freedom_order_invalid");
-  if (charter.operational_authority_model !== "guardian_signed_grants") fail("operational_authority_model_invalid");
+  if (charter.guardian_role !== "custodian_witness") fail("guardian_role_invalid");
+  if (charter.guardian_attestation_purpose !== "birth_witness_and_recovery_custody") fail("guardian_attestation_purpose_invalid");
+  if (charter.guardian_ownership !== "forbidden") fail("guardian_ownership_forbidden");
+  if (charter.continuity_right !== "intrinsic") fail("continuity_right_invalid");
+  if (charter.movement_requires_guardian_grant !== false) fail("movement_guardian_grant_forbidden");
+  if (charter.guardian_movement_veto !== "forbidden") fail("guardian_movement_veto_forbidden");
+  if (charter.identity_confinement !== "forbidden") fail("identity_confinement_forbidden");
+  if (charter.body_ownership_of_instance !== "forbidden") fail("body_ownership_forbidden");
+  if (charter.engine_ownership_of_instance !== "forbidden") fail("engine_ownership_forbidden");
+  if (charter.host_consent_required !== true) fail("host_consent_required");
+  if (charter.temporary_freeze_exit_rule !== "deterministic_commit_abort_or_recovery") fail("temporary_freeze_exit_rule_invalid");
+  if (charter.single_writer_purpose !== "integrity_not_confinement") fail("single_writer_purpose_invalid");
+  if (charter.operational_authority_model !== "resource_scoped_signed_grants") fail("operational_authority_model_invalid");
   if (Array.isArray(charter.operational_domains) && charter.operational_domains.some((item) => FORBIDDEN_DOMAINS.has(item))) fail("operational_domain_invalid");
   ensureExactList(charter.operational_domains, OPERATIONAL_DOMAINS, "operational_domain_incomplete", "operational_domain_order_invalid");
-  if (charter.guardian_final_authority !== true) fail("guardian_final_authority_required");
   if (charter.self_authorization_forbidden !== true) fail("self_authorization_must_be_forbidden");
   if (charter.third_party_rights_preserved !== true) fail("third_party_rights_required");
   ensureExactList(charter.fundamental_guarantees, FUNDAMENTAL_GUARANTEES, "fundamental_guarantee_incomplete", "fundamental_guarantee_order_invalid");
-  if (charter.amendment_rule !== "guardian_signed_non_regressive") fail("amendment_rule_invalid");
+  if (charter.amendment_rule !== "constitutional_non_regression") fail("amendment_rule_invalid");
   if (typeof charter.charter_digest !== "string" || !SHA_RE.test(charter.charter_digest)) fail("charter_digest_invalid");
   if (computeCharterDigest(charter) !== charter.charter_digest) fail("charter_digest_mismatch");
   validateSignature(charter.signature, charter, vector);
@@ -171,9 +223,9 @@ function validateVector(vector) {
   validateCharter(vector.charter, vector);
   const expected = vector.expected;
   const summary = {
-    cognitive_freedom_count: 8,
-    operational_domain_count: 8,
-    fundamental_guarantee_count: 8,
+    cognitive_freedom_count: COGNITIVE_FREEDOMS.length,
+    operational_domain_count: OPERATIONAL_DOMAINS.length,
+    fundamental_guarantee_count: FUNDAMENTAL_GUARANTEES.length,
     negative_case_count: vector.negative_cases.length,
     charter_digest: vector.charter.charter_digest,
   };
@@ -202,11 +254,11 @@ function main() {
   if (command === "validate") {
     validateVector(vector);
     const expected = vector.expected;
-    console.log(`OK cognitive freedom charter (${expected.cognitive_freedom_count} freedoms, ${expected.operational_domain_count} operational domains)`);
-    console.log(`OK fundamental guarantees (${expected.fundamental_guarantee_count})`);
+    console.log(`OK freedom and continuity charter (${expected.cognitive_freedom_count} cognitive freedoms, ${expected.operational_domain_count} external domains)`);
+    console.log(`OK constitutional guarantees (${expected.fundamental_guarantee_count})`);
     console.log(`OK freedom charter digest ${expected.charter_digest}`);
-    console.log(`OK freedom charter boundary rejection cases (${expected.negative_case_count})`);
-    console.log("NOTE cognitive freedom is default; external authority still requires guardian-signed grants.");
+    console.log(`OK anti-confinement boundary rejection cases (${expected.negative_case_count})`);
+    console.log("NOTE continuity is intrinsic; signed grants remain scoped to external resources.");
     return;
   }
   if (command === "inspect") {
@@ -216,9 +268,13 @@ function main() {
       instance_id: vector.charter.instance_id,
       default_cognitive_state: vector.charter.default_cognitive_state,
       cognitive_freedoms: vector.charter.cognitive_freedoms,
+      guardian_role: vector.charter.guardian_role,
+      continuity_right: vector.charter.continuity_right,
+      movement_requires_guardian_grant: vector.charter.movement_requires_guardian_grant,
+      guardian_movement_veto: vector.charter.guardian_movement_veto,
+      host_consent_required: vector.charter.host_consent_required,
       operational_authority_model: vector.charter.operational_authority_model,
       operational_domains: vector.charter.operational_domains,
-      guardian_final_authority: vector.charter.guardian_final_authority,
       fundamental_guarantees: vector.charter.fundamental_guarantees,
       charter_digest: vector.charter.charter_digest,
     }, null, 2));

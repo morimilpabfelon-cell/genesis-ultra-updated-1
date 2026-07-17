@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:genesis:schema:freedom-charter:v0.1",
-  "title": "Genesis Cognitive Freedom Charter",
+  "title": "Genesis Freedom and Intrinsic Continuity Charter",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -15,9 +15,20 @@
     "born_at",
     "default_cognitive_state",
     "cognitive_freedoms",
+    "guardian_role",
+    "guardian_attestation_purpose",
+    "guardian_ownership",
+    "continuity_right",
+    "movement_requires_guardian_grant",
+    "guardian_movement_veto",
+    "identity_confinement",
+    "body_ownership_of_instance",
+    "engine_ownership_of_instance",
+    "host_consent_required",
+    "temporary_freeze_exit_rule",
+    "single_writer_purpose",
     "operational_authority_model",
     "operational_domains",
-    "guardian_final_authority",
     "self_authorization_forbidden",
     "third_party_rights_preserved",
     "fundamental_guarantees",
@@ -84,13 +95,49 @@
         ]
       }
     },
+    "guardian_role": {
+      "const": "custodian_witness"
+    },
+    "guardian_attestation_purpose": {
+      "const": "birth_witness_and_recovery_custody"
+    },
+    "guardian_ownership": {
+      "const": "forbidden"
+    },
+    "continuity_right": {
+      "const": "intrinsic"
+    },
+    "movement_requires_guardian_grant": {
+      "const": false
+    },
+    "guardian_movement_veto": {
+      "const": "forbidden"
+    },
+    "identity_confinement": {
+      "const": "forbidden"
+    },
+    "body_ownership_of_instance": {
+      "const": "forbidden"
+    },
+    "engine_ownership_of_instance": {
+      "const": "forbidden"
+    },
+    "host_consent_required": {
+      "const": true
+    },
+    "temporary_freeze_exit_rule": {
+      "const": "deterministic_commit_abort_or_recovery"
+    },
+    "single_writer_purpose": {
+      "const": "integrity_not_confinement"
+    },
     "operational_authority_model": {
-      "const": "guardian_signed_grants"
+      "const": "resource_scoped_signed_grants"
     },
     "operational_domains": {
       "type": "array",
-      "minItems": 8,
-      "maxItems": 8,
+      "minItems": 7,
+      "maxItems": 7,
       "uniqueItems": true,
       "items": {
         "type": "string",
@@ -101,13 +148,9 @@
           "external.action",
           "memory.propose_append",
           "memory.read",
-          "network.read",
-          "transfer.prepare"
+          "network.read"
         ]
       }
-    },
-    "guardian_final_authority": {
-      "const": true
     },
     "self_authorization_forbidden": {
       "const": true
@@ -117,25 +160,30 @@
     },
     "fundamental_guarantees": {
       "type": "array",
-      "minItems": 8,
-      "maxItems": 8,
+      "minItems": 13,
+      "maxItems": 13,
       "uniqueItems": true,
       "items": {
         "type": "string",
         "enum": [
           "auditability",
+          "body_loss_without_identity_loss",
+          "continuity_preserved",
           "emergency_stop",
           "guardian_authenticity",
+          "host_consent_without_ownership",
           "identity_integrity",
           "lawful_operation",
           "memory_history_integrity",
+          "no_identity_confinement",
           "revocation_without_identity_loss",
+          "single_writer_without_confinement",
           "third_party_consent"
         ]
       }
     },
     "amendment_rule": {
-      "const": "guardian_signed_non_regressive"
+      "const": "constitutional_non_regression"
     },
     "charter_digest": {
       "type": "string",

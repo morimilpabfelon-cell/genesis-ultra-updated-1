@@ -60,8 +60,8 @@
     },
     {
       "path": "conformance/freedom_charter_vectors.json",
-      "size_bytes": 7270,
-      "digest": "sha256:2346f5a2febbfa64fcc38ce0f6c2dc3380f87cc6b1dfb1ada8065dd4255fca1d"
+      "size_bytes": 11057,
+      "digest": "sha256:c27877ab697a556f4daaddf30c7ac2cc3b73f116322819074ebdbea6978f3d3b"
     },
     {
       "path": "conformance/golden_vectors.json",
@@ -135,8 +135,8 @@
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 137961,
-      "digest": "sha256:ff3f43644005d140754dac1bbcc6421b8de6d2f7f5f51ede6f95dd15ca8f7edb"
+      "size_bytes": 138738,
+      "digest": "sha256:f923893c1bd654fa705ecb708d645075574cd8bc0a6a7df67c29ce8c2d54c2af"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -330,8 +330,8 @@
     },
     {
       "path": "schemas/freedom_charter.schema.json",
-      "size_bytes": 3486,
-      "digest": "sha256:40a4d4de9385dfbe177d7a66a53e637761fee8004b4ecb953a255dd0b7a26642"
+      "size_bytes": 4824,
+      "digest": "sha256:50f3cdccacaf805f3631e1a16c1abf9d51cf220d68e1ab866aaf89ec8872e7d8"
     },
     {
       "path": "schemas/guardian_authority_event.schema.json",
@@ -505,8 +505,8 @@
     },
     {
       "path": "spec/COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md",
-      "size_bytes": 6736,
-      "digest": "sha256:b0af82ba4565047579d7141b4975281d882312d0af1b87ab72e029e65c0a9938"
+      "size_bytes": 5642,
+      "digest": "sha256:24ab1a719b8fb29b087cbe468326a8ff4bb2e6b4659e89def6ff52f0df885ed2"
     },
     {
       "path": "spec/CONFORMANCE_LEVELS.md",
@@ -825,13 +825,13 @@
     },
     {
       "path": "tools/validate_freedom_charter.mjs",
-      "size_bytes": 12041,
-      "digest": "sha256:c861efa4ff663262a49f4d2cde0b1180ea3e9af6a7f688780f44e93169261eb7"
+      "size_bytes": 14391,
+      "digest": "sha256:50e06e51252d4961b306b9c67628e65b319f61c534caf803215850d24497230e"
     },
     {
       "path": "tools/validate_freedom_charter.py",
-      "size_bytes": 11582,
-      "digest": "sha256:23c5b60fa15cec1c10f8877589608d79338cf2229ccd23003741c22d8b96ca71"
+      "size_bytes": 13925,
+      "digest": "sha256:181413cf4b82aa757257224235bf7186839e2e3ed142893e2ff86f0cbb825578"
     },
     {
       "path": "tools/validate_guided_autonomy.py",
@@ -969,5 +969,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:58a7dadc13460095cb1c1a2827243577ecfc6f711e9b26bc8487cd238ab24ca1"
+  "root_digest": "sha256:fee34e86e51679bff7f2f60b3420805b7f2337dad44eb2896606abbf3cac9ac6"
 }
