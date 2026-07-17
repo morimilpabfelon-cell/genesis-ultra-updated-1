@@ -33,7 +33,7 @@ Una implementación debe rechazar:
 - dos escritores activos;
 - escrituras de un cuerpo revocado;
 - escrituras posteriores a una transferencia cerrada;
-- un cambio de escritor sin autorización del guardián;
+- un cambio de escritor sin intención, consentimiento, posesión y commit verificables;
 - eventos cuyo `body_id` no figure en el registro.
 
 ## 4. Cambio de autoridad
@@ -41,12 +41,13 @@ Una implementación debe rechazar:
 El cambio de escritor se registra como una operación transaccional:
 
 1. verificar el último checkpoint;
-2. validar la autorización del guardián;
-3. congelar escrituras en el cuerpo anterior;
-4. registrar la intención de transferencia;
-5. activar el cuerpo nuevo;
-6. revocar o pasar a solo lectura el cuerpo anterior;
-7. crear un evento de continuidad.
+2. validar la intención firmada de continuidad;
+3. validar consentimiento del anfitrión y posesión de la clave destino;
+4. congelar escrituras en el cuerpo anterior con salida determinista;
+5. escribir y verificar el registro candidato;
+6. comprometer la finalización en el journal;
+7. activar el cuerpo nuevo y retirar escritura al anterior;
+8. crear un evento de continuidad.
 
 Nunca deben quedar dos cuerpos activos como resultado normal.
 
@@ -58,7 +59,9 @@ candidata no concede por sí misma permiso de escritura.
 
 Marcar un cuerpo como `lost` no destruye la instancia. La recuperación debe crear un cuerpo nuevo, declarar el último evento recuperado y registrar cualquier brecha conocida.
 
-Cuando el cuerpo perdido reaparece, no recupera autoridad automáticamente. Debe permanecer revocado o pasar por una nueva autorización explícita.
+Cuando el cuerpo perdido reaparece, no recupera autoridad automáticamente. Debe permanecer
+sin escritura o pasar por una nueva transferencia/recuperación transaccional. Esta regla
+protege la historia única; no concede propiedad al Guardian ni al Body actual.
 
 ## 6. Neutralidad
 

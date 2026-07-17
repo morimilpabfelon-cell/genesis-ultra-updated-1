@@ -192,58 +192,6 @@ function computeDeviceRegistrationDigest(registration) {
   ]);
 }
 
-function computeAuthorizationDigest(authorization) {
-  const destinations = [...authorization.destination_body_ids].sort((left, right) =>
-    Buffer.compare(Buffer.from(left, "utf8"), Buffer.from(right, "utf8"))
-  );
-  return hashFields("genesis.guardian.authorization.v0.1", [
-    authorization.schema_version,
-    authorization.authorization_id,
-    authorization.guardian_id,
-    authorization.guardian_key_epoch_id,
-    authorization.instance_id,
-    String(authorization.authority_epoch),
-    authorization.permission,
-    authorization.mode,
-    optionalText(authorization.source_body_id),
-    authorization.destination_scope,
-    String(destinations.length),
-    ...destinations,
-    authorization.issued_at,
-    authorization.not_before,
-    optionalText(authorization.expires_at),
-    optionalText(authorization.use_limit)
-  ]);
-}
-
-function computeAuthorityEventHash(event) {
-  return hashFields("genesis.guardian.authority.event.v0.1", [
-    event.schema_version,
-    event.ledger_id,
-    event.event_id,
-    String(event.sequence),
-    event.previous_event_hash,
-    event.guardian_id,
-    event.instance_id,
-    String(event.authority_epoch),
-    event.event_type,
-    optionalText(event.authorization_ref),
-    optionalText(event.body_id),
-    optionalText(event.transfer_id),
-    event.subject_digest,
-    event.recorded_at
-  ]);
-}
-
-function computeAuthorizationUseDigest(authorizationId, transferId, sourceBodyId, destinationBodyId) {
-  return hashFields("genesis.guardian.authorization.use.v0.1", [
-    authorizationId,
-    transferId,
-    sourceBodyId,
-    destinationBodyId
-  ]);
-}
-
 function boolText(value) {
   return value ? "true" : "false";
 }
@@ -392,6 +340,99 @@ function computeBodyPossessionDigest(proof) {
   ]);
 }
 
+function computeContinuityIntentDigest(intent) {
+  return hashFields("genesis.continuity.intent.v0.1", [
+    intent.schema_version,
+    intent.intent_id,
+    intent.transfer_id,
+    intent.instance_id,
+    intent.source_body_id,
+    intent.destination_body_id,
+    intent.checkpoint_hash,
+    intent.last_event_hash,
+    intent.decision_origin,
+    intent.created_at,
+    intent.expires_at
+  ]);
+}
+
+function computeHostConsentDigest(consent) {
+  return hashFields("genesis.host.consent.v0.1", [
+    consent.schema_version,
+    consent.consent_id,
+    consent.transfer_id,
+    consent.host_id,
+    consent.host_key_epoch_id,
+    consent.instance_id,
+    consent.destination_body_id,
+    consent.resource_scope,
+    consent.granted_at,
+    consent.expires_at,
+    consent.ownership_claim,
+    consent.mobility_veto
+  ]);
+}
+
+function computeTransferPackageDigest(pkg) {
+  const contents = [...pkg.contents].sort((left, right) =>
+    Buffer.compare(Buffer.from(left.path, "utf8"), Buffer.from(right.path, "utf8"))
+  );
+  return hashFields("genesis.transfer.package.v0.1", [
+    pkg.schema_version,
+    pkg.transfer_id,
+    pkg.instance_id,
+    pkg.source_body_id,
+    optionalText(pkg.destination_body_id),
+    pkg.mode,
+    pkg.created_at,
+    pkg.checkpoint_hash,
+    pkg.last_event_hash,
+    pkg.continuity_status,
+    pkg.continuity_intent_ref,
+    pkg.host_consent_ref,
+    pkg.destination_possession_ref,
+    String(contents.length),
+    ...contents.flatMap((item) => [item.kind, item.path, item.digest])
+  ]);
+}
+
+function computeTransferReceiptDigest(receipt) {
+  return hashFields("genesis.transfer.receipt.v0.1", [
+    receipt.schema_version,
+    receipt.transfer_id,
+    receipt.instance_id,
+    receipt.source_body_id,
+    receipt.destination_body_id,
+    receipt.accepted_package_digest,
+    receipt.accepted_checkpoint_hash,
+    receipt.accepted_last_event_hash,
+    String(receipt.accepted_last_sequence),
+    receipt.accepted_at,
+    receipt.continuity_status,
+    optionalText(receipt.continuity_gap_ref),
+    receipt.continuity_intent_ref,
+    receipt.host_consent_ref,
+    receipt.destination_possession_ref
+  ]);
+}
+
+function computeTransferFinalizationDigest(finalization) {
+  return hashFields("genesis.transfer.finalization.v0.1", [
+    finalization.schema_version,
+    finalization.transfer_id,
+    finalization.instance_id,
+    finalization.source_body_id,
+    finalization.destination_body_id,
+    finalization.receipt_digest,
+    finalization.source_final_status,
+    finalization.destination_final_status,
+    finalization.finalized_at,
+    finalization.continuity_intent_ref,
+    finalization.host_consent_ref,
+    finalization.destination_possession_ref
+  ]);
+}
+
 function computeRecoveryRecordDigest(record) {
   return hashFields("genesis.recovery.record.v0.1", [
     record.schema_version,
@@ -471,18 +512,9 @@ function requireValid(validators, schema, artifact, label) {
 function validateGeneratedArtifacts(validators, artifactPath) {
   const generated = readJson(artifactPath);
   verifyAllFixtureSignatures(generated, "transfer");
-  const forgedAuthorization = structuredClone(generated.guardian_authorization.signature);
-  forgedAuthorization.signature_value = "00".repeat(64);
-  try {
-    verifyFixtureSignature(forgedAuthorization, "transfer.forged_authorization");
-    throw new Error("forged_transfer_signature_accepted");
-  } catch (error) {
-    if (!error.message.startsWith("fixture_signature_invalid:")) throw error;
-  }
   const requiredTopLevel = [
-    "guardian_device_registrations",
-    "guardian_authorization",
-    "guardian_authority_events",
+    "continuity_intent",
+    "host_consent",
     "body_registry_before",
     "body_registry",
     "memory_events",
@@ -497,240 +529,118 @@ function validateGeneratedArtifacts(validators, artifactPath) {
     if (!(field in generated)) throw new Error(`missing_generated_artifact:${field}`);
   }
 
-  for (const [index, registration] of generated.guardian_device_registrations.entries()) {
-    requireValid(
-      validators,
-      "guardian_device_registration.schema.json",
-      registration,
-      `guardian_device_registrations[${index}]`
-    );
-    requireValid(
-      validators,
-      "signature_envelope.schema.json",
-      registration.signature,
-      `guardian_device_registrations[${index}].signature`
-    );
-    if (registration.registration_digest !== computeDeviceRegistrationDigest(registration)) {
-      throw new Error(`device_registration_digest_mismatch:${index}`);
-    }
-    if (
-      registration.signature.signed_digest !== registration.registration_digest
-      || registration.signature.signer_id !== registration.guardian_id
-      || registration.signature.key_epoch_id !== registration.guardian_key_epoch_id
-      || registration.signature.signed_domain !== "genesis.guardian.device.registration.signature.v0.1"
-    ) {
-      throw new Error(`device_registration_signature_unbound:${index}`);
-    }
-  }
-  requireValid(
-    validators,
-    "guardian_authorization.schema.json",
-    generated.guardian_authorization,
-    "guardian_authorization"
-  );
-  requireValid(
-    validators,
-    "signature_envelope.schema.json",
-    generated.guardian_authorization.signature,
-    "guardian_authorization.signature"
-  );
-  if (generated.guardian_authorization.authorization_digest !== computeAuthorizationDigest(generated.guardian_authorization)) {
-    throw new Error("guardian_authorization_digest_mismatch");
-  }
-  if (
-    generated.guardian_authorization.signature.signed_digest
-      !== generated.guardian_authorization.authorization_digest
-    || generated.guardian_authorization.signature.signer_id !== generated.guardian_authorization.guardian_id
-    || generated.guardian_authorization.signature.key_epoch_id
-      !== generated.guardian_authorization.guardian_key_epoch_id
-    || generated.guardian_authorization.signature.signed_domain
-      !== "genesis.guardian.authorization.signature.v0.1"
-  ) {
-    throw new Error("guardian_authorization_signature_unbound");
-  }
-  let previousAuthorityEpoch = -1;
-  for (const [index, event] of generated.guardian_authority_events.entries()) {
-    requireValid(validators, "guardian_authority_event.schema.json", event, `guardian_authority_events[${index}]`);
-    requireValid(
-      validators,
-      "signature_envelope.schema.json",
-      event.signature,
-      `guardian_authority_events[${index}].signature`
-    );
-    const expectedPrevious = index === 0 ? "GENESIS" : generated.guardian_authority_events[index - 1].event_hash;
-    if (event.sequence !== index) throw new Error(`authority_ledger_sequence_invalid:${index}`);
-    if (event.previous_event_hash !== expectedPrevious) throw new Error(`authority_ledger_chain_broken:${index}`);
-    if (event.event_hash !== computeAuthorityEventHash(event)) throw new Error(`authority_event_hash_mismatch:${index}`);
-    if (event.signature.signed_digest !== event.event_hash) throw new Error(`authority_event_signature_unbound:${index}`);
-    if (event.signature.signed_domain !== "genesis.guardian.authority.event.signature.v0.1") {
-      throw new Error(`authority_event_signature_domain_invalid:${index}`);
-    }
-    if (event.guardian_id !== generated.guardian_authorization.guardian_id) {
-      throw new Error(`authority_event_guardian_mismatch:${index}`);
-    }
-    if (event.instance_id !== generated.guardian_authorization.instance_id) {
-      throw new Error(`authority_event_instance_mismatch:${index}`);
-    }
-    if (event.authority_epoch < previousAuthorityEpoch) {
-      throw new Error(`authority_epoch_regression:${index}`);
-    }
-    if (previousAuthorityEpoch >= 0 && event.authority_epoch > previousAuthorityEpoch) {
-      if (event.event_type !== "authority.epoch.rotated" || event.authority_epoch !== previousAuthorityEpoch + 1) {
-        throw new Error(`authority_epoch_change_without_rotation:${index}`);
-      }
-    }
-    if (event.event_type === "authorization.consumed") {
-      if (event.signature.signer_id !== event.body_id) throw new Error(`authority_consumption_signer_invalid:${index}`);
-    } else if (event.signature.signer_id !== event.guardian_id) {
-      throw new Error(`authority_guardian_signer_invalid:${index}`);
-    }
-    previousAuthorityEpoch = event.authority_epoch;
-  }
-
-  requireValid(validators, "body_registry.schema.json", generated.body_registry_before, "body_registry_before");
-  requireValid(validators, "body_registry.schema.json", generated.body_registry, "body_registry");
-  for (const [index, event] of generated.memory_events.entries()) {
-    requireValid(validators, "memory_event.schema.json", event, `memory_events[${index}]`);
-    if (event.signature) {
-      requireValid(validators, "signature_envelope.schema.json", event.signature, `memory_events[${index}].signature`);
-    }
-  }
-  requireValid(validators, "checkpoint.schema.json", generated.checkpoint, "checkpoint");
-  if (generated.checkpoint.signature) {
-    requireValid(validators, "signature_envelope.schema.json", generated.checkpoint.signature, "checkpoint.signature");
-  }
-  requireValid(validators, "body_possession_proof.schema.json", generated.body_possession_proof, "body_possession_proof");
-  requireValid(
-    validators,
-    "signature_envelope.schema.json",
-    generated.body_possession_signature,
-    "body_possession_signature"
-  );
-  requireValid(validators, "transfer_package.schema.json", generated.transfer_package, "transfer_package");
-  requireValid(validators, "transfer_receipt.schema.json", generated.transfer_receipt, "transfer_receipt");
-  if (generated.transfer_receipt.signature) {
-    requireValid(validators, "signature_envelope.schema.json", generated.transfer_receipt.signature, "transfer_receipt.signature");
-  }
-  requireValid(validators, "transfer_finalization.schema.json", generated.transfer_finalization, "transfer_finalization");
-  for (const field of ["source_acknowledgement", "destination_acknowledgement"]) {
-    const acknowledgement = generated.transfer_finalization[field];
-    if (acknowledgement) {
-      requireValid(validators, "signature_envelope.schema.json", acknowledgement, `transfer_finalization.${field}`);
-    }
-  }
-
-  const events = generated.memory_events;
-  for (let index = 0; index < events.length; index += 1) {
-    const event = events[index];
-    if (event.sequence !== index) throw new Error(`non_contiguous_sequence:${index}`);
-    const expectedPrevious = index === 0 ? "GENESIS" : events[index - 1].event_hash;
-    if (event.previous_event_hash !== expectedPrevious) throw new Error(`broken_memory_chain:${index}`);
-  }
-
-  const preTransferTip = events.at(-2);
-  const completedEvent = events.at(-1);
+  const intent = generated.continuity_intent;
+  const consent = generated.host_consent;
+  const possession = generated.body_possession_proof;
   const pkg = generated.transfer_package;
   const receipt = generated.transfer_receipt;
   const finalization = generated.transfer_finalization;
   const checkpoint = generated.checkpoint;
   const registryBefore = generated.body_registry_before;
-  const authorization = generated.guardian_authorization;
-  const registrations = generated.guardian_device_registrations;
-  const authorityEvents = generated.guardian_authority_events;
 
+  requireValid(validators, "continuity_intent.schema.json", intent, "continuity_intent");
+  requireValid(validators, "host_consent.schema.json", consent, "host_consent");
+  requireValid(validators, "body_registry.schema.json", registryBefore, "body_registry_before");
+  requireValid(validators, "body_registry.schema.json", generated.body_registry, "body_registry");
+  requireValid(validators, "checkpoint.schema.json", checkpoint, "checkpoint");
+  requireValid(validators, "signature_envelope.schema.json", checkpoint.signature, "checkpoint.signature");
+  requireValid(validators, "body_possession_proof.schema.json", possession, "body_possession_proof");
+  requireValid(validators, "signature_envelope.schema.json", generated.body_possession_signature, "body_possession_signature");
+  requireValid(validators, "transfer_package.schema.json", pkg, "transfer_package");
+  requireValid(validators, "transfer_receipt.schema.json", receipt, "transfer_receipt");
+  requireValid(validators, "signature_envelope.schema.json", receipt.signature, "transfer_receipt.signature");
+  requireValid(validators, "transfer_finalization.schema.json", finalization, "transfer_finalization");
+  for (const field of ["source_acknowledgement", "destination_acknowledgement"]) {
+    requireValid(validators, "signature_envelope.schema.json", finalization[field], `transfer_finalization.${field}`);
+  }
+
+  const forgedIntent = structuredClone(intent.signature);
+  forgedIntent.signature_value = "00".repeat(64);
+  try {
+    verifyFixtureSignature(forgedIntent, "transfer.forged_intent");
+    throw new Error("forged_transfer_intent_accepted");
+  } catch (error) {
+    if (!error.message.startsWith("fixture_signature_invalid:")) throw error;
+  }
+
+  if (intent.intent_digest !== computeContinuityIntentDigest(intent)) throw new Error("continuity_intent_digest_mismatch");
   if (
-    pkg.authorization_ref !== authorization.authorization_id
-    || receipt.guardian_authorization_ref !== authorization.authorization_id
-    || finalization.guardian_authorization_ref !== authorization.authorization_id
-  ) {
-    throw new Error("transfer_authorization_ref_mismatch");
-  }
-  if (authorization.mode !== "standing" || authorization.destination_scope !== "registered_guardian_devices") {
-    throw new Error("generated_scenario_not_standing_mobility");
-  }
-  const activeAuthorityEpoch = Math.max(...authorityEvents.map((event) => event.authority_epoch));
-  if (authorization.authority_epoch !== activeAuthorityEpoch) {
-    throw new Error("authorization_epoch_inactive");
-  }
-  const destinationRegistration = registrations.find((item) => item.body_id === pkg.destination_body_id);
-  if (!destinationRegistration) throw new Error("destination_not_registered");
+    intent.signature.signed_digest !== intent.intent_digest
+    || intent.signature.signer_type !== "body"
+    || intent.signature.signer_id !== intent.source_body_id
+    || intent.signature.signed_domain !== "genesis.continuity.intent.signature.v0.1"
+  ) throw new Error("continuity_intent_signature_unbound");
+  if (consent.consent_digest !== computeHostConsentDigest(consent)) throw new Error("host_consent_digest_mismatch");
   if (
-    destinationRegistration.guardian_id !== authorization.guardian_id
-    || destinationRegistration.instance_id !== authorization.instance_id
-    || destinationRegistration.authority_epoch !== authorization.authority_epoch
-  ) {
-    throw new Error("destination_registration_authority_mismatch");
+    consent.signature.signed_digest !== consent.consent_digest
+    || consent.signature.signer_type !== "host"
+    || consent.signature.signer_id !== consent.host_id
+    || consent.signature.key_epoch_id !== consent.host_key_epoch_id
+    || consent.signature.signed_domain !== "genesis.host.consent.signature.v0.1"
+  ) throw new Error("host_consent_signature_unbound");
+  if (possession.proof_digest !== computeBodyPossessionDigest(possession)) throw new Error("destination_possession_digest_mismatch");
+  if (
+    generated.body_possession_signature.signed_digest !== possession.proof_digest
+    || generated.body_possession_signature.signer_id !== possession.body_id
+    || generated.body_possession_signature.signed_domain !== "genesis.body.possession.signature.v0.1"
+  ) throw new Error("destination_possession_signature_unbound");
+  if (!(Date.parse(intent.created_at) < Date.parse(intent.expires_at))) throw new Error("continuity_intent_window_invalid");
+  if (!(Date.parse(consent.granted_at) < Date.parse(consent.expires_at))) throw new Error("host_consent_window_invalid");
+
+  const transferArtifacts = [intent, consent, possession, pkg, receipt, finalization];
+  if (transferArtifacts.some((artifact) => artifact.instance_id !== pkg.instance_id)) {
+    throw new Error("transfer_instance_id_mismatch");
   }
-  const destinationBody = registryBefore.bodies.find((item) => item.body_id === pkg.destination_body_id);
-  if (!destinationBody) throw new Error("destination_missing_from_body_registry");
-  if (destinationRegistration.public_key_fingerprint !== destinationBody.public_key_fingerprint) {
-    throw new Error("destination_registration_key_mismatch");
-  }
-  if (destinationRegistration.public_key_fingerprint !== generated.body_possession_proof.public_key_fingerprint) {
-    throw new Error("destination_possession_key_mismatch");
+  if (
+    intent.transfer_id !== pkg.transfer_id
+    || consent.transfer_id !== pkg.transfer_id
+    || receipt.transfer_id !== pkg.transfer_id
+    || finalization.transfer_id !== pkg.transfer_id
+  ) throw new Error("transfer_id_mismatch");
+  if (
+    intent.source_body_id !== pkg.source_body_id
+    || intent.destination_body_id !== pkg.destination_body_id
+    || consent.destination_body_id !== pkg.destination_body_id
+    || possession.body_id !== pkg.destination_body_id
+  ) throw new Error("transfer_body_scope_mismatch");
+
+  for (const artifact of [pkg, receipt, finalization]) {
+    if (
+      artifact.continuity_intent_ref !== intent.intent_id
+      || artifact.host_consent_ref !== consent.consent_id
+      || artifact.destination_possession_ref !== possession.proof_id
+    ) throw new Error("transfer_evidence_ref_mismatch");
   }
   const packageContents = new Map(pkg.contents.map((item) => [item.path, item.digest]));
-  if (packageContents.get("authority/guardian-authorization.json") !== authorization.authorization_digest) {
-    throw new Error("package_missing_bound_authorization");
-  }
-  if (
-    packageContents.get("authority/destination-device-registration.json")
-      !== destinationRegistration.registration_digest
-  ) {
-    throw new Error("package_missing_bound_destination_registration");
-  }
-  if (packageContents.get("authority/ledger-tip.json") !== authorityEvents.at(-1).event_hash) {
-    throw new Error("package_missing_bound_authority_ledger_tip");
-  }
-  const registrationEvent = authorityEvents.find(
-    (event) => event.event_type === "device.registered"
-      && event.body_id === pkg.destination_body_id
-      && event.subject_digest === destinationRegistration.registration_digest
-  );
-  if (!registrationEvent) throw new Error("destination_registration_not_recorded");
-  if (authorityEvents.some((event) => event.event_type === "device.revoked" && event.body_id === pkg.destination_body_id)) {
-    throw new Error("destination_device_revoked");
-  }
-  const grant = authorityEvents.find(
-    (event) => event.event_type === "authorization.granted"
-      && event.authorization_ref === authorization.authorization_id
-      && event.subject_digest === authorization.authorization_digest
-  );
-  if (!grant) throw new Error("authorization_grant_not_recorded");
-  if (
-    authorityEvents.some(
-      (event) => event.event_type === "authorization.revoked"
-        && event.authorization_ref === authorization.authorization_id
-    )
-  ) {
-    throw new Error("authorization_revoked");
-  }
-  const consumptions = authorityEvents.filter(
-    (event) => event.event_type === "authorization.consumed"
-      && event.authorization_ref === authorization.authorization_id
-      && event.transfer_id === pkg.transfer_id
-  );
-  if (consumptions.length !== 1 || consumptions[0].body_id !== pkg.source_body_id) {
-    throw new Error("authorization_consumption_not_recorded");
-  }
-  const [consumption] = consumptions;
-  const expectedUseDigest = computeAuthorizationUseDigest(
-    authorization.authorization_id,
-    pkg.transfer_id,
-    pkg.source_body_id,
-    pkg.destination_body_id
-  );
-  if (consumption.subject_digest !== expectedUseDigest) throw new Error("authorization_use_digest_mismatch");
+  if (packageContents.get("continuity/intent.json") !== intent.intent_digest) throw new Error("package_missing_continuity_intent");
+  if (packageContents.get("host/destination-consent.json") !== consent.consent_digest) throw new Error("package_missing_host_consent");
+  if (packageContents.get("body/destination-possession.json") !== possession.proof_digest) throw new Error("package_missing_destination_possession");
+  if (pkg.package_digest !== computeTransferPackageDigest(pkg)) throw new Error("transfer_package_digest_mismatch");
+  if (receipt.receipt_digest !== computeTransferReceiptDigest(receipt)) throw new Error("transfer_receipt_digest_mismatch");
+  if (finalization.finalization_digest !== computeTransferFinalizationDigest(finalization)) throw new Error("transfer_finalization_digest_mismatch");
 
-  if (checkpoint.last_event_hash !== preTransferTip.event_hash || checkpoint.sequence !== preTransferTip.sequence) {
-    throw new Error("checkpoint_not_bound_to_pre_transfer_tip");
+  const events = generated.memory_events;
+  for (let index = 0; index < events.length; index += 1) {
+    const event = events[index];
+    requireValid(validators, "memory_event.schema.json", event, `memory_events[${index}]`);
+    requireValid(validators, "signature_envelope.schema.json", event.signature, `memory_events[${index}].signature`);
+    const expectedPrevious = index === 0 ? "GENESIS" : events[index - 1].event_hash;
+    if (event.sequence !== index) throw new Error(`non_contiguous_sequence:${index}`);
+    if (event.previous_event_hash !== expectedPrevious) throw new Error(`broken_memory_chain:${index}`);
   }
-  if (checkpoint.body_registry_digest !== registryBefore.registry_digest) {
-    throw new Error("checkpoint_not_bound_to_pre_transfer_registry");
-  }
-  if (pkg.checkpoint_hash !== checkpoint.checkpoint_hash || pkg.last_event_hash !== preTransferTip.event_hash) {
-    throw new Error("package_not_bound_to_checkpoint");
-  }
+  const preTransferTip = events.at(-2);
+  const completedEvent = events.at(-1);
+  if (
+    checkpoint.last_event_hash !== preTransferTip.event_hash
+    || checkpoint.sequence !== preTransferTip.sequence
+    || checkpoint.body_registry_digest !== registryBefore.registry_digest
+  ) throw new Error("checkpoint_not_bound_to_pre_transfer_state");
+  if (
+    intent.checkpoint_hash !== checkpoint.checkpoint_hash
+    || intent.last_event_hash !== preTransferTip.event_hash
+    || pkg.checkpoint_hash !== checkpoint.checkpoint_hash
+    || pkg.last_event_hash !== preTransferTip.event_hash
+  ) throw new Error("transfer_not_bound_to_checkpoint");
   if (receipt.accepted_package_digest !== pkg.package_digest) throw new Error("receipt_not_bound_to_package");
   if (receipt.accepted_checkpoint_hash !== checkpoint.checkpoint_hash) throw new Error("receipt_not_bound_to_checkpoint");
   if (finalization.receipt_digest !== receipt.receipt_digest) throw new Error("finalization_not_bound_to_receipt");

@@ -22,15 +22,12 @@ from simulate_transfer import (
     BODY_B,
     BODY_A_EPOCH,
     BODY_B_EPOCH,
-    GUARDIAN_ID,
-    GUARDIAN_KEY_EPOCH,
     HASH_PROFILE,
     INSTANCE_ID,
     SEED_ROOT,
     SIGNATURE_PROFILE,
     compute_checkpoint_hash,
     key_fingerprint,
-    make_device_registration,
     make_event,
     make_signature_envelope,
     verify_signature,
@@ -47,6 +44,7 @@ from validate_backup_recovery import (
     compute_recovery_record_digest,
     evaluate_recovery_transaction,
 )
+from validate_authority import compute_device_registration_digest
 from validate_continuity import compute_body_registry
 from validate_workspace import encode_field
 
@@ -56,6 +54,44 @@ BODY_C_EPOCH = "epoch_01HSIM_C00000000000001"
 BACKUP_ID = "backup_01HSIM000000000000001"
 RECOVERY_ID = "recovery_01HSIM0000000000001"
 RECOVERY_AUTH_ID = "rauth_01HSIM00000000000001"
+GUARDIAN_ID = "guardian_01HSIM_EIDON000000001"
+GUARDIAN_KEY_EPOCH = "guardian_epoch_01HSIM000000001"
+
+
+def make_device_registration(
+    *,
+    registration_id: str,
+    body_id: str,
+    platform_profile: str,
+    public_key_fingerprint: str,
+    registered_at: str,
+    guardian_key: SigningKey,
+) -> dict:
+    """Registra el Body de recuperación; no concede permiso de movimiento."""
+    registration = {
+        "schema_version": "genesis.guardian.device.registration.v0.1",
+        "registration_id": registration_id,
+        "guardian_id": GUARDIAN_ID,
+        "guardian_key_epoch_id": GUARDIAN_KEY_EPOCH,
+        "instance_id": INSTANCE_ID,
+        "authority_epoch": 1,
+        "body_id": body_id,
+        "platform_profile": platform_profile,
+        "public_key_fingerprint": public_key_fingerprint,
+        "registered_at": registered_at,
+    }
+    registration["registration_digest"] = compute_device_registration_digest(registration)
+    registration["signature"] = make_signature_envelope(
+        guardian_key,
+        registration["registration_digest"],
+        signer_type="guardian",
+        signer_id=GUARDIAN_ID,
+        key_epoch_id=GUARDIAN_KEY_EPOCH,
+        signed_domain="genesis.guardian.device.registration.signature.v0.1",
+        created_at=registered_at,
+    )
+    verify_signature(registration["signature"], guardian_key.verify_key)
+    return registration
 
 
 def sha256_bytes(value: bytes) -> str:

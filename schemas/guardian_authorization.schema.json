@@ -1,93 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:genesis:schema:guardian-authorization:v0.1",
-  "title": "Genesis Guardian Authorization",
+  "title": "Removed Genesis Guardian Mobility Authorization",
+  "description": "Tombstone: every guardian movement authorization is invalid. Recovery uses recovery_authorization.schema.json.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "authorization_id",
-    "guardian_id",
-    "guardian_key_epoch_id",
-    "instance_id",
-    "authority_epoch",
-    "permission",
-    "mode",
-    "source_body_id",
-    "destination_scope",
-    "destination_body_ids",
-    "issued_at",
-    "not_before",
-    "expires_at",
-    "use_limit",
-    "authorization_digest",
-    "signature"
-  ],
-  "properties": {
-    "schema_version": { "const": "genesis.guardian.authorization.v0.1" },
-    "authorization_id": { "type": "string", "minLength": 16, "maxLength": 128 },
-    "guardian_id": { "type": "string", "minLength": 1, "maxLength": 128 },
-    "guardian_key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
-    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
-    "authority_epoch": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
-    "permission": { "const": "mobility.transfer" },
-    "mode": { "type": "string", "enum": ["one_time", "standing"] },
-    "source_body_id": { "type": ["string", "null"], "minLength": 16, "maxLength": 128 },
-    "destination_scope": {
-      "type": "string",
-      "enum": ["specific_bodies", "registered_guardian_devices"]
-    },
-    "destination_body_ids": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": { "type": "string", "minLength": 16, "maxLength": 128 }
-    },
-    "issued_at": { "type": "string", "format": "date-time", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$" },
-    "not_before": { "type": "string", "format": "date-time", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$" },
-    "expires_at": { "type": ["string", "null"], "format": "date-time", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$" },
-    "use_limit": { "type": ["integer", "null"], "minimum": 1, "maximum": 9007199254740991 },
-    "authorization_digest": { "$ref": "#/$defs/sha256" },
-    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
-  },
-  "allOf": [
-    {
-      "if": { "properties": { "mode": { "const": "one_time" } }, "required": ["mode"] },
-      "then": {
-        "properties": {
-          "source_body_id": { "type": "string" },
-          "destination_scope": { "const": "specific_bodies" },
-          "destination_body_ids": { "type": "array", "minItems": 1, "maxItems": 1 },
-          "expires_at": { "type": "string" },
-          "use_limit": { "const": 1 }
-        }
-      }
-    },
-    {
-      "if": { "properties": { "mode": { "const": "standing" } }, "required": ["mode"] },
-      "then": {
-        "properties": {
-          "source_body_id": { "type": "null" },
-          "destination_scope": { "const": "registered_guardian_devices" },
-          "destination_body_ids": { "type": "array", "maxItems": 0 },
-          "use_limit": { "type": "null" }
-        }
-      }
-    },
-    {
-      "properties": {
-        "signature": {
-          "type": "object",
-          "properties": {
-            "signer_type": { "const": "guardian" }
-          }
-        }
-      }
-    }
-  ],
-  "$defs": {
-    "sha256": {
-      "type": "string",
-      "pattern": "^sha256:[a-f0-9]{64}$"
-    }
-  }
+  "not": {}
 }

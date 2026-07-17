@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:schema:continuity-intent:v0.1",
+  "title": "Genesis Continuity Intent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "intent_id",
+    "transfer_id",
+    "instance_id",
+    "source_body_id",
+    "destination_body_id",
+    "checkpoint_hash",
+    "last_event_hash",
+    "decision_origin",
+    "created_at",
+    "expires_at",
+    "intent_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.continuity.intent.v0.1" },
+    "intent_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "transfer_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "source_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "destination_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "checkpoint_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "last_event_hash": { "type": "string", "pattern": "^evsha256:[a-f0-9]{64}$" },
+    "decision_origin": { "const": "instance" },
+    "created_at": { "type": "string", "format": "date-time", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$" },
+    "expires_at": { "type": "string", "format": "date-time", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$" },
+    "intent_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "signature": {
+          "type": "object",
+          "properties": { "signer_type": { "const": "body" } }
+        }
+      }
+    }
+  ]
+}

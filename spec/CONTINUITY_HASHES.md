@@ -43,7 +43,50 @@ registry_digest = "sha256:" + hex_lower(SHA-256(preimage))
 
 Antes del hash deben rechazarse identificadores duplicados y más de un `active_writer`.
 
-## 3. Paquete de transferencia
+## 3. Intención de continuidad
+
+Dominio `genesis.continuity.intent.v0.1`, en este orden:
+
+```text
+schema_version
+intent_id
+transfer_id
+instance_id
+source_body_id
+destination_body_id
+checkpoint_hash
+last_event_hash
+decision_origin
+created_at
+expires_at
+```
+
+`decision_origin` debe ser `instance`. La firma del Body origen cubre el digest con
+`genesis.continuity.intent.signature.v0.1`.
+
+## 4. Consentimiento del anfitrión
+
+Dominio `genesis.host.consent.v0.1`, en este orden:
+
+```text
+schema_version
+consent_id
+transfer_id
+host_id
+host_key_epoch_id
+instance_id
+destination_body_id
+resource_scope
+granted_at
+expires_at
+ownership_claim
+mobility_veto
+```
+
+El perfil exige `resource_scope = destination_body_runtime`, `ownership_claim = none`
+y `mobility_veto = none`. La firma usa `genesis.host.consent.signature.v0.1`.
+
+## 5. Paquete de transferencia
 
 Dominio:
 
@@ -63,9 +106,11 @@ Campos, en orden:
 8. `checkpoint_hash`;
 9. `last_event_hash`;
 10. `continuity_status`;
-11. `authorization_ref`;
-12. cantidad de contenidos;
-13. por cada contenido, ordenado por bytes UTF-8 de `path`:
+11. `continuity_intent_ref`;
+12. `host_consent_ref`;
+13. `destination_possession_ref`;
+14. cantidad de contenidos;
+15. por cada contenido, ordenado por bytes UTF-8 de `path`:
     - `kind`;
     - `path`;
     - `digest`.
@@ -80,7 +125,7 @@ Antes del hash deben rechazarse rutas inválidas y rutas duplicadas. El digest e
 manifiesto canónico; cada `digest` de contenido debe verificarse contra los bytes reales
 antes de aceptar el paquete.
 
-## 4. Recibo de transferencia
+## 6. Recibo de transferencia
 
 Dominio:
 
@@ -102,7 +147,9 @@ Campos, en orden:
 10. `accepted_at`;
 11. `continuity_status`;
 12. `continuity_gap_ref` o cadena vacía;
-13. `guardian_authorization_ref` o cadena vacía.
+13. `continuity_intent_ref`;
+14. `host_consent_ref`;
+15. `destination_possession_ref`.
 
 Resultado:
 
@@ -113,7 +160,7 @@ receipt_digest = "sha256:" + hex_lower(SHA-256(preimage))
 `known_gap` exige `continuity_gap_ref`. El recibo debe vincular el digest exacto del
 paquete aceptado y no concede por sí mismo autoridad de escritura.
 
-## 5. Finalización de transferencia
+## 7. Finalización de transferencia
 
 Dominio:
 
@@ -132,7 +179,9 @@ Campos, en orden:
 7. `source_final_status`;
 8. `destination_final_status`;
 9. `finalized_at`;
-10. `guardian_authorization_ref`.
+10. `continuity_intent_ref`;
+11. `host_consent_ref`;
+12. `destination_possession_ref`.
 
 Resultado:
 
@@ -146,9 +195,10 @@ La finalización solo es válida cuando:
 - el origen queda `read_only`, `revoked` o `lost`;
 - los identificadores coinciden con el recibo;
 - el `receipt_digest` es verificable;
-- la autorización del guardián es válida.
+- la intención, el consentimiento del anfitrión y la posesión destino son verificables;
+- ninguna autorización del Guardian se usa como requisito de movimiento.
 
-## 6. Firmas
+## 8. Firmas
 
 Las firmas y reconocimientos quedan fuera de estas preimágenes. Deben firmar el digest
 terminado con un dominio criptográfico versionado. Los algoritmos concretos se definen

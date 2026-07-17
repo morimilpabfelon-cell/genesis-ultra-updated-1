@@ -97,24 +97,22 @@
       "expected_error": "undeclared_memory_gap"
     },
     {
-      "case_id": "expired-authorization-001",
-      "category": "guardian_authorization",
+      "case_id": "expired-continuity-intent-001",
+      "category": "continuity_intent",
       "input": {
         "evaluated_at": "2026-07-12T00:00:00Z",
-        "expires_at": "2026-07-11T00:00:00Z",
-        "revocation_event_present": false
+        "expires_at": "2026-07-11T00:00:00Z"
       },
-      "expected_error": "authorization_expired"
+      "expected_error": "continuity_intent_expired"
     },
     {
-      "case_id": "exhausted-authorization-001",
-      "category": "guardian_authorization",
+      "case_id": "host-ownership-claim-001",
+      "category": "host_consent",
       "input": {
-        "mode": "one_time",
-        "use_limit": 1,
-        "consumed_events": 1
+        "ownership_claim": "owner",
+        "mobility_veto": "none"
       },
-      "expected_error": "authorization_use_limit_reached"
+      "expected_error": "host_ownership_claim_forbidden"
     }
   ]
 }

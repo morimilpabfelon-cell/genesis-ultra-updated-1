@@ -60,7 +60,7 @@ def main() -> int:
             print("FAIL", failure)
         return 1
 
-    print("OK guardian authority digest vectors")
+    print("OK protocol digest vectors")
     print("OK body possession digest")
     print("OK key epoch digest")
     algo_rc = verify_algorithm_vectors(vectors)

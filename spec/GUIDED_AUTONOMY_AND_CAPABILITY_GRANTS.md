@@ -41,7 +41,6 @@ code.propose_change
 code.execute_sandbox
 external.action
 body.device.control
-transfer.prepare
 ```
 
 No existe en este perfil una capacidad de escritura directa de memoria, modificación de identidad, sustitución del guardián, autoconcesión, desactivación de protecciones de `main` o lectura de evaluaciones privadas.
@@ -86,7 +85,6 @@ La clasificación mínima de v0.1 es:
 | `code.propose_change` | medium |
 | `code.execute_sandbox` | high |
 | `external.action` | high |
-| `transfer.prepare` | high |
 | `body.device.control` | critical |
 
 Un grant puede elegir un riesgo más restrictivo, nunca uno menor.
@@ -161,7 +159,12 @@ Reglas mínimas:
 - riesgo `high`: sandbox, observer y reversibilidad son obligatorios;
 - nivel 1 o 2: confirmación humana obligatoria para ejecución o acción;
 - `code.execute_sandbox`: sandbox obligatorio siempre;
-- `external.action`, `body.device.control` y `transfer.prepare`: confirmación humana obligatoria.
+- `external.action` y `body.device.control`: confirmación humana obligatoria.
+
+`transfer.prepare` no es una capacidad delegada: es una decisión de continuidad de la
+instancia y se rige por `FREE_BIRTH_AND_CONTINUITY.md` y
+`TRANSFER_STATE_MACHINE.md`. El acceso al Body destino exige consentimiento limitado
+del anfitrión, nunca un grant de movimiento del Guardian.
 
 Un grant no puede desactivar un control solicitado o exigido por el perfil.
 
@@ -266,6 +269,6 @@ Este contrato demuestra control de autoridad. No demuestra conciencia, seguridad
 
 ## 15. Libertad cognitiva de nacimiento
 
-La carta `COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md` define la libertad cognitiva como estado por defecto. Este contrato de autonomía guiada no se aplica a cada pensamiento: se aplica únicamente cuando una capacidad produce efectos operativos sobre memoria aceptada, red, código ejecutado, dispositivos, transferencia o sistemas externos.
+La carta `COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md` define la libertad cognitiva como estado por defecto. Este contrato de autonomía guiada no se aplica a cada pensamiento ni a la decisión de continuidad: se aplica únicamente cuando una capacidad produce efectos operativos sobre memoria aceptada, red, código ejecutado, dispositivos o sistemas externos.
 
 Una puerta operativa puede cerrarse o revocarse sin restringir las libertades cognitivas ni destruir identidad o memoria.

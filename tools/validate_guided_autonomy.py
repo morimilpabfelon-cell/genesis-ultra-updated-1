@@ -29,7 +29,6 @@ CAPABILITIES = {
     "code.execute_sandbox": "high",
     "external.action": "high",
     "body.device.control": "critical",
-    "transfer.prepare": "high",
 }
 FORBIDDEN_CAPABILITIES = {
     "memory.rewrite", "authority.self_grant", "guardian.replace", "identity.modify",
@@ -275,7 +274,7 @@ def controls_required(capability: str, risk: str, level: int) -> set[str]:
         required |= CONTROL_FIELDS
     if risk == "high":
         required |= {"sandbox_required", "observer_required", "reversible_required"}
-    if level <= 2 or capability in {"external.action", "body.device.control", "transfer.prepare"}:
+    if level <= 2 or capability in {"external.action", "body.device.control"}:
         required.add("human_confirmation_required")
     if capability == "code.execute_sandbox":
         required.add("sandbox_required")

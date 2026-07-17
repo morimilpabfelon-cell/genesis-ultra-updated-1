@@ -57,10 +57,10 @@
     {
       "path": "tools/validate_authority.py",
       "used_by": [
-        "tools/simulate_negatives.py",
-        "tools/simulate_transfer.py"
+        "tools/simulate_backup_recovery.py",
+        "tools/validate_backup_recovery.py"
       ],
-      "purpose": "Reglas compartidas de autoridad y movilidad consumidas por simulaciones registradas."
+      "purpose": "Digest compartido para atestaciones de Body usadas exclusivamente por recuperación."
     },
     {
       "path": "tools/validate_backup_recovery.py",

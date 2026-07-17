@@ -129,8 +129,7 @@
         "code.propose_change",
         "code.execute_sandbox",
         "external.action",
-        "body.device.control",
-        "transfer.prepare"
+        "body.device.control"
       ]
     },
     "scope": {

@@ -78,6 +78,46 @@ function computeBodyRegistry(testCase) {
   return hashFields(testCase.domain, fields);
 }
 
+function computeContinuityIntent(testCase) {
+  const data = testCase.input;
+  if (data.decision_origin !== "instance") throw new VectorError("continuity_intent_origin_invalid");
+  return hashFields(testCase.domain, [
+    data.schema_version,
+    data.intent_id,
+    data.transfer_id,
+    data.instance_id,
+    data.source_body_id,
+    data.destination_body_id,
+    data.checkpoint_hash,
+    data.last_event_hash,
+    data.decision_origin,
+    data.created_at,
+    data.expires_at
+  ]);
+}
+
+function computeHostConsent(testCase) {
+  const data = testCase.input;
+  if (data.resource_scope !== "destination_body_runtime") throw new VectorError("host_consent_scope_invalid");
+  if (data.ownership_claim !== "none" || data.mobility_veto !== "none") {
+    throw new VectorError("host_consent_claim_invalid");
+  }
+  return hashFields(testCase.domain, [
+    data.schema_version,
+    data.consent_id,
+    data.transfer_id,
+    data.host_id,
+    data.host_key_epoch_id,
+    data.instance_id,
+    data.destination_body_id,
+    data.resource_scope,
+    data.granted_at,
+    data.expires_at,
+    data.ownership_claim,
+    data.mobility_veto
+  ]);
+}
+
 function computeTransferPackage(testCase) {
   const data = testCase.input;
   const paths = data.contents.map((item) => item.path);
@@ -95,7 +135,9 @@ function computeTransferPackage(testCase) {
     data.checkpoint_hash,
     data.last_event_hash,
     data.continuity_status,
-    data.authorization_ref,
+    data.continuity_intent_ref,
+    data.host_consent_ref,
+    data.destination_possession_ref,
     String(data.contents.length)
   ];
   for (const item of [...data.contents].sort((left, right) => compareUtf8(left.path, right.path))) {
@@ -122,7 +164,9 @@ function computeTransferReceipt(testCase) {
     data.accepted_at,
     data.continuity_status,
     optionalText(data.continuity_gap_ref),
-    optionalText(data.guardian_authorization_ref)
+    data.continuity_intent_ref,
+    data.host_consent_ref,
+    data.destination_possession_ref
   ]);
 }
 
@@ -147,7 +191,9 @@ function computeTransferFinalization(testCase) {
     data.source_final_status,
     data.destination_final_status,
     data.finalized_at,
-    data.guardian_authorization_ref
+    data.continuity_intent_ref,
+    data.host_consent_ref,
+    data.destination_possession_ref
   ]);
 }
 
@@ -177,10 +223,14 @@ function verifyContinuityVectors() {
     throw new VectorError(`continuity_profile_invalid:${vectors.profile}`);
   }
 
+  const intentDigest = computeContinuityIntent(vectors.continuity_intent);
+  const consentDigest = computeHostConsent(vectors.host_consent);
   const registryDigest = computeBodyRegistry(vectors.body_registry);
   const packageDigest = computeTransferPackage(vectors.transfer_package);
   const receiptDigest = computeTransferReceipt(vectors.transfer_receipt);
   const finalizationDigest = computeTransferFinalization(vectors.transfer_finalization);
+  expectDigest("continuity_intent", intentDigest, vectors.continuity_intent.expected_intent_digest);
+  expectDigest("host_consent", consentDigest, vectors.host_consent.expected_consent_digest);
   expectDigest("body_registry", registryDigest, vectors.body_registry.expected_registry_digest);
   expectDigest("transfer_package", packageDigest, vectors.transfer_package.expected_package_digest);
   expectDigest("transfer_receipt", receiptDigest, vectors.transfer_receipt.expected_receipt_digest);
@@ -194,6 +244,18 @@ function verifyContinuityVectors() {
   }
   if (vectors.transfer_finalization.input.receipt_digest !== receiptDigest) {
     throw new VectorError("finalization_not_linked_to_computed_receipt");
+  }
+  for (const artifact of [
+    vectors.transfer_package.input,
+    vectors.transfer_receipt.input,
+    vectors.transfer_finalization.input
+  ]) {
+    if (artifact.continuity_intent_ref !== vectors.continuity_intent.input.intent_id) {
+      throw new VectorError("continuity_intent_ref_mismatch");
+    }
+    if (artifact.host_consent_ref !== vectors.host_consent.input.consent_id) {
+      throw new VectorError("host_consent_ref_mismatch");
+    }
   }
 
   const duplicateBody = clone(vectors.body_registry);
@@ -368,7 +430,7 @@ async function verifyCryptoVectors() {
   for (const vector of vectors.vectors) {
     expectDigest(vector.case_id, hashFields(vector.domain, vector.fields), vector.expected_digest);
   }
-  console.log(`OK Node authority and possession digests (${vectors.vectors.length})`);
+  console.log(`OK Node protocol and possession digests (${vectors.vectors.length})`);
 
   const ed = vectors.algorithms.ed25519;
   const edMessage = signatureEnvelopeBytes(ed.envelope);

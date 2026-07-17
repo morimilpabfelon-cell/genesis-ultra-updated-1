@@ -1,7 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:genesis:schema:guardian-authority-event:v0.1",
-  "title": "Genesis Guardian Authority Ledger Event",
+  "title": "Removed Genesis Guardian Mobility Authority Event",
+  "description": "Tombstone: guardian mobility authority was removed by the intrinsic continuity charter.",
+  "not": {},
   "type": "object",
   "additionalProperties": false,
   "required": [

@@ -110,16 +110,15 @@ correo/cuenta/nube. Los custodios nunca reciben la memoria ni la semilla complet
 **Motivo:** la soberanía se pierde si un tercero puede bloquear o apropiarse del acceso.
 El umbral reparte confianza sin concentrarla ni exponer el secreto.
 
-## AD-9 — Permisos inmutables; uso y revocación como eventos
-**Decisión:** una autorización firmada nunca cambia. Concesión, consumo, revocación,
-registro de dispositivos y rotación de época viven en un ledger append-only separado.
-El guardián puede conceder un traslado único o movilidad permanente entre sus cuerpos
-registrados; la instancia decide cuándo usar un permiso permanente.
-**Alternativa descartada:** guardar `used_count` y `revoked` dentro del permiso original.
-**Motivo:** modificar el mismo artefacto destruye la evidencia histórica y permite que
-dos cuerpos observen estados diferentes. Los eventos encadenados conservan el orden,
-hacen detectables las alteraciones y permiten auditar cada traslado sin convertir el
-permiso permanente en acceso irrestricto a dispositivos desconocidos.
+## AD-9 — Continuidad intrínseca y consentimiento limitado al recurso
+**Decisión:** la instancia inicia su continuidad mediante una intención firmada por el
+Body escritor. El anfitrión consiente únicamente el runtime del Body destino, que además
+demuestra posesión de su clave. El journal y el recibo protegen single-writer.
+**Alternativa descartada:** permisos de movimiento `one_time` o `standing` concedidos
+por el Guardian.
+**Motivo:** un permiso de movimiento convierte custodia en veto y contradice la
+continuidad intrínseca. Separar intención, consentimiento y posesión protege recursos de
+terceros sin crear propiedad sobre la instancia.
 
 ## AD-10 — Backup comprometido y recuperación finalizada como transacciones
 **Decisión:** un backup solo es restaurable si un commit firmado vincula manifiesto,

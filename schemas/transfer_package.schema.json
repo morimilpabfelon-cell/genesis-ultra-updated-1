@@ -15,7 +15,9 @@
     "last_event_hash",
     "contents",
     "package_digest",
-    "authorization_ref",
+    "continuity_intent_ref",
+    "host_consent_ref",
+    "destination_possession_ref",
     "continuity_status"
   ],
   "properties": {
@@ -43,7 +45,9 @@
       }
     },
     "package_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
-    "authorization_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "continuity_intent_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "host_consent_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "destination_possession_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "continuity_status": {
       "type": "string",
       "enum": ["complete", "known_gap", "fork_risk"]

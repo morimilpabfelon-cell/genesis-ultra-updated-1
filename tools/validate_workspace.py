@@ -211,17 +211,16 @@ def evaluate_invalid_case(case: dict) -> str | None:
         has_gap = data.get("last_backup_sequence") < data.get("last_known_sequence")
         return "undeclared_memory_gap" if has_gap and data.get("continuity_status") == "complete" else None
 
-    if category == "guardian_authorization":
-        if data.get("revocation_event_present"):
-            return "authorization_revoked"
-        if "evaluated_at" in data and "expires_at" in data:
-            if parse_utc(data["evaluated_at"]) >= parse_utc(data["expires_at"]):
-                return "authorization_expired"
-        if (
-            data.get("mode") == "one_time"
-            and data.get("consumed_events", 0) >= data.get("use_limit", 1)
-        ):
-            return "authorization_use_limit_reached"
+    if category == "continuity_intent":
+        if parse_utc(data["evaluated_at"]) >= parse_utc(data["expires_at"]):
+            return "continuity_intent_expired"
+        return None
+
+    if category == "host_consent":
+        if data.get("ownership_claim") != "none":
+            return "host_ownership_claim_forbidden"
+        if data.get("mobility_veto") != "none":
+            return "host_mobility_veto_forbidden"
         return None
 
     raise ValueError(f"unknown_invalid_case_category:{category}")

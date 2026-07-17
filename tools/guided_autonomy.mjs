@@ -18,7 +18,6 @@ const CAPABILITIES = new Map([
   ["code.execute_sandbox", "high"],
   ["external.action", "high"],
   ["body.device.control", "critical"],
-  ["transfer.prepare", "high"],
 ]);
 const FORBIDDEN_CAPABILITIES = new Set([
   "memory.rewrite",
@@ -289,7 +288,7 @@ function controlsRequired(capability, risk, level) {
   const required = new Set(["observer_required"]);
   if (risk === "critical") for (const field of CONTROL_FIELDS) required.add(field);
   if (risk === "high") for (const field of ["sandbox_required", "observer_required", "reversible_required"]) required.add(field);
-  if (level <= 2 || new Set(["external.action", "body.device.control", "transfer.prepare"]).has(capability)) required.add("human_confirmation_required");
+  if (level <= 2 || new Set(["external.action", "body.device.control"]).has(capability)) required.add("human_confirmation_required");
   if (capability === "code.execute_sandbox") required.add("sandbox_required");
   return required;
 }
