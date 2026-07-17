@@ -961,7 +961,8 @@
         "last_known_sequence": 4,
         "continuity_status": "known_gap",
         "continuity_gap_ref": null,
-        "guardian_authorization_ref": "rauth_01HSCHEMA000000000001",
+        "recovery_authorization_ref": "rauth_01HSCHEMA000000000001",
+        "recovery_authorization_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "previous_body_revocation_ref": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
         "destination_registration_ref": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         "destination_possession_ref": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
@@ -997,22 +998,11 @@
         "final_body_registry_digest": "sha256:abababababababababababababababababababababababababababababababab",
         "previous_body_status": "lost",
         "destination_body_status": "active_writer",
-        "guardian_authorization_ref": "rauth_01HSCHEMA000000000001",
+        "recovery_authorization_ref": "rauth_01HSCHEMA000000000001",
+        "recovery_authorization_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "recovery_event_hash": "evsha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
         "finalized_at": "2026-07-14T00:00:00Z",
         "finalization_digest": "sha256:efefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
-        "guardian_acknowledgement": {
-          "schema_version": "genesis.signature.envelope.v0.1",
-          "signature_profile": "genesis.signature.ed25519.v0.1",
-          "signer_type": "guardian",
-          "signer_id": "guardian_01HSCHEMA00000000001",
-          "key_epoch_id": "guardian_epoch_01HSCHEMA000001",
-          "signed_domain": "genesis.recovery.finalization.signature.v0.1",
-          "signed_digest": "sha256:efefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
-          "signature_value": "12121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212",
-          "created_at": "2026-07-14T00:00:00Z",
-          "public_key_ref": "sha256:abababababababababababababababababababababababababababababababab"
-        },
         "destination_acknowledgement": {
           "schema_version": "genesis.signature.envelope.v0.1",
           "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -1572,7 +1562,8 @@
         "revoked_at": "2026-07-12T03:04:00Z",
         "reason": "lost",
         "last_trusted_event_hash": "evsha256:045bf1396579bbc3180ab1521105ea9c9692d7704d2e3263c2b9aa669355c1f6",
-        "guardian_authorization_ref": "rauth_01HSIM00000000000001",
+        "recovery_authorization_ref": "rauth_01HSIM00000000000001",
+        "recovery_authorization_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "revocation_digest": "sha256:8eae7f3ff662663d4419c99778bf7c4d8ac7dfa14413d67bf1e2135d77bcfe93",
         "unexpected_core_field": true
       }
@@ -1635,10 +1626,11 @@
         "schema_version": "genesis.recovery.authorization.v0.1",
         "authorization_id": "rauth_01HSIM00000000000001",
         "recovery_id": "recovery_01HSIM0000000000001",
-        "guardian_id": "guardian_01HSIM_EIDON000000001",
-        "guardian_key_epoch_id": "guardian_epoch_01HSIM000000001",
         "instance_id": "inst_01HSIMULATION0000000001",
-        "authority_epoch": 1,
+        "recovery_policy_id": "rpolicy_01HSIM0000000000001",
+        "recovery_policy_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policy_epoch": 1,
+        "authorization_path": "guardian_assisted",
         "source_backup_id": "backup_01HSIM000000000000001",
         "source_backup_commit_digest": "sha256:92d715c900b22c2f87ac253c9bc639629e247851a66a2efa8ce5186581dc0196",
         "previous_body_id": "body_01HSIM_B000000000000001",
@@ -1648,18 +1640,18 @@
         "not_before": "2026-07-12T03:01:00Z",
         "expires_at": "2026-07-12T03:31:00Z",
         "authorization_digest": "sha256:c745f4a5126f0311c5e3b5f103ab90c77b3854eefa05f1884e80c6b8ee0a8bb5",
-        "signature": {
+        "approvals": [{
           "schema_version": "genesis.signature.envelope.v0.1",
           "signature_profile": "genesis.signature.ed25519.v0.1",
           "signer_type": "guardian",
           "signer_id": "guardian_01HSIM_EIDON000000001",
           "key_epoch_id": "guardian_epoch_01HSIM000000001",
-          "signed_domain": "genesis.recovery.authorization.signature.v0.1",
+          "signed_domain": "genesis.recovery.authorization.approval.v0.1",
           "signed_digest": "sha256:c745f4a5126f0311c5e3b5f103ab90c77b3854eefa05f1884e80c6b8ee0a8bb5",
           "created_at": "2026-07-12T03:01:00Z",
           "public_key_ref": "sha256:24b03a0e3818a49e05631efc80768d08e32a81a944748730f14f613af9e909a6",
           "signature_value": "36656594dc2342a614bc9db1432863b42e232e3b2a78623c83068d08acb4de09a3fe92fe09b3d0d67bf6b10900a8fcc9c0bf2c04b352fd6f772cc1ec3b907102"
-        },
+        }],
         "unexpected_core_field": true
       }
     },
@@ -3246,6 +3238,20 @@
           "key_epoch_id": "epoch_01HGENESIS_EVALUATOR01"
         },
         "unexpected_core_field": true
+      }
+    },
+    {
+      "case_id": "instance-recovery-policy-requires-committed-structure",
+      "schema": "instance_recovery_policy.schema.json",
+      "artifact": {
+        "schema_version": "genesis.instance.recovery.policy.v0.1"
+      }
+    },
+    {
+      "case_id": "recovery-destination-registration-requires-authorization-binding",
+      "schema": "recovery_destination_registration.schema.json",
+      "artifact": {
+        "schema_version": "genesis.recovery.destination.registration.v0.1"
       }
     }
   ]

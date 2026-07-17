@@ -47,11 +47,12 @@ El cuerpo A registra `transfer.completed` y pasa a `read_only` o `revoked`.
 1. Cargar un backup con `backup_commit` firmado y estado `committed`.
 2. Verificar ciphertext, manifiesto, cifrado, checkpoint, semilla e identidad.
 3. Registrar el nuevo `body_id` y comprobar posesión de su clave.
-4. Obtener una autorización del guardián para el recovery, commit y destino exactos.
+4. Verificar la política comprometida al nacer y obtener una autorización exacta por
+   `guardian_assisted` o por umbral `policy_fallback` tras su espera.
 5. Restaurar sin conceder todavía autoridad de escritura.
 6. Declarar `complete`, `known_gap` o `fork_risk`.
 7. Marcar el cuerpo anterior como `lost` o `revoked`.
-8. Registrar `recovery.restored` y firmar la finalización con guardián y destino.
+8. Registrar `recovery.restored` y hacer que el destino firme la finalización.
 9. Cambiar el registro a un único `active_writer` como parte de la finalización atómica.
 
 Una recuperación con eventos ausentes sigue perteneciendo a la misma instancia, pero debe declarar la discontinuidad.

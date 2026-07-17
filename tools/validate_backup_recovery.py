@@ -3,10 +3,12 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import hashlib
 
-from validate_authority import compute_device_registration_digest
+from nacl.exceptions import BadSignatureError
+from nacl.signing import SigningKey
+
 from validate_continuity import compute_body_registry
 from validate_workspace import bool_text, encode_field, hash_fields, safe_relative_path
 
@@ -17,6 +19,42 @@ def optional_text(value: object) -> str:
 
 def parse_utc(value: str) -> datetime:
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def signature_envelope_bytes(envelope: dict) -> bytes:
+    fields = [
+        envelope["schema_version"],
+        envelope["signature_profile"],
+        envelope["signer_type"],
+        envelope["signer_id"],
+        envelope["key_epoch_id"],
+        envelope["signed_domain"],
+        envelope["signed_digest"],
+        envelope["created_at"],
+        envelope["public_key_ref"],
+    ]
+    return encode_field("genesis.signature.envelope.bytes.v0.1") + b"".join(
+        encode_field(field) for field in fields
+    )
+
+
+FIXTURE_VERIFY_KEYS = {}
+for _seed in (0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6):
+    _verify_key = SigningKey(bytes([_seed]) * 32).verify_key
+    _fingerprint = "sha256:" + hashlib.sha256(_verify_key.encode()).hexdigest()
+    FIXTURE_VERIFY_KEYS[_fingerprint] = _verify_key
+
+
+def verify_fixture_envelope(envelope: dict) -> bool:
+    try:
+        verify_key = FIXTURE_VERIFY_KEYS[envelope["public_key_ref"]]
+        verify_key.verify(
+            signature_envelope_bytes(envelope),
+            bytes.fromhex(envelope["signature_value"]),
+        )
+        return True
+    except (BadSignatureError, KeyError, TypeError, ValueError):
+        return False
 
 
 def compute_backup_manifest_digest(manifest: dict) -> str:
@@ -99,10 +137,11 @@ def compute_recovery_authorization_digest(authorization: dict) -> str:
             authorization["schema_version"],
             authorization["authorization_id"],
             authorization["recovery_id"],
-            authorization["guardian_id"],
-            authorization["guardian_key_epoch_id"],
             authorization["instance_id"],
-            str(authorization["authority_epoch"]),
+            authorization["recovery_policy_id"],
+            authorization["recovery_policy_digest"],
+            str(authorization["policy_epoch"]),
+            authorization["authorization_path"],
             authorization["source_backup_id"],
             authorization["source_backup_commit_digest"],
             authorization["previous_body_id"],
@@ -111,6 +150,58 @@ def compute_recovery_authorization_digest(authorization: dict) -> str:
             authorization["issued_at"],
             authorization["not_before"],
             authorization["expires_at"],
+        ],
+    )
+
+
+def compute_instance_recovery_policy_digest(policy: dict) -> str:
+    factors = policy["factors"]
+    factor_ids = [factor["factor_id"] for factor in factors]
+    if len(factor_ids) != len(set(factor_ids)):
+        raise ValueError("recovery_policy_duplicate_factor")
+    fields = [
+        policy["schema_version"],
+        policy["policy_id"],
+        policy["instance_id"],
+        str(policy["policy_epoch"]),
+        policy["guardian_id"],
+        policy["guardian_factor_id"],
+        str(policy["fallback_threshold"]),
+        str(policy["fallback_wait_seconds"]),
+        bool_text(policy["cancellation_allowed"]),
+        bool_text(policy["single_use"]),
+        str(len(factors)),
+    ]
+    for factor in sorted(factors, key=lambda value: value["factor_id"].encode("utf-8")):
+        paths = sorted(factor["allowed_paths"], key=lambda value: value.encode("utf-8"))
+        fields.extend(
+            [
+                factor["factor_id"],
+                factor["factor_type"],
+                factor["key_epoch_id"],
+                factor["public_key_ref"],
+                str(len(paths)),
+                *paths,
+            ]
+        )
+    fields.append(policy["created_at"])
+    return hash_fields("genesis.instance.recovery.policy.v0.1", fields)
+
+
+def compute_recovery_destination_registration_digest(registration: dict) -> str:
+    return hash_fields(
+        "genesis.recovery.destination.registration.v0.1",
+        [
+            registration["schema_version"],
+            registration["registration_id"],
+            registration["recovery_id"],
+            registration["recovery_authorization_ref"],
+            registration["recovery_authorization_digest"],
+            registration["instance_id"],
+            registration["body_id"],
+            registration["platform_profile"],
+            registration["public_key_fingerprint"],
+            registration["registered_at"],
         ],
     )
 
@@ -143,7 +234,8 @@ def compute_body_revocation_digest(revocation: dict) -> str:
             revocation["revoked_at"],
             revocation["reason"],
             revocation["last_trusted_event_hash"],
-            revocation["guardian_authorization_ref"],
+            revocation["recovery_authorization_ref"],
+            revocation["recovery_authorization_digest"],
         ],
     )
 
@@ -181,7 +273,8 @@ def compute_recovery_record_digest(record: dict) -> str:
             str(record["last_known_sequence"]),
             record["continuity_status"],
             optional_text(record["continuity_gap_ref"]),
-            record["guardian_authorization_ref"],
+            record["recovery_authorization_ref"],
+            record["recovery_authorization_digest"],
             record["previous_body_revocation_ref"],
             record["destination_registration_ref"],
             record["destination_possession_ref"],
@@ -206,10 +299,34 @@ def compute_recovery_finalization_digest(finalization: dict) -> str:
             finalization["final_body_registry_digest"],
             finalization["previous_body_status"],
             finalization["destination_body_status"],
-            finalization["guardian_authorization_ref"],
+            finalization["recovery_authorization_ref"],
+            finalization["recovery_authorization_digest"],
             finalization["recovery_event_hash"],
             finalization["finalized_at"],
         ],
+    )
+
+
+def envelope_matches(
+    envelope: dict,
+    *,
+    signer_type: str,
+    signer_id: str,
+    key_epoch_id: str,
+    public_key_ref: str,
+    signed_domain: str,
+    signed_digest: str,
+    created_at: str,
+) -> bool:
+    return (
+        envelope.get("signer_type") == signer_type
+        and envelope.get("signer_id") == signer_id
+        and envelope.get("key_epoch_id") == key_epoch_id
+        and envelope.get("public_key_ref") == public_key_ref
+        and envelope.get("signed_domain") == signed_domain
+        and envelope.get("signed_digest") == signed_digest
+        and envelope.get("created_at") == created_at
+        and verify_fixture_envelope(envelope)
     )
 
 
@@ -217,6 +334,7 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
     manifest = bundle["backup_manifest"]
     encryption = bundle["backup_encryption"]
     commit = bundle["backup_commit"]
+    policy = bundle["recovery_policy"]
     authorization = bundle["recovery_authorization"]
     registration = bundle["destination_registration"]
     possession = bundle["destination_possession"]
@@ -232,6 +350,7 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
         bundle["backup_checkpoint"],
         encryption,
         commit,
+        policy,
         authorization,
         registration,
         possession,
@@ -252,8 +371,70 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
     ):
         return "backup_identity_links_invalid"
 
+    try:
+        policy_digest = compute_instance_recovery_policy_digest(policy)
+    except (KeyError, TypeError, ValueError):
+        return "recovery_policy_invalid"
+    if policy["policy_digest"] != policy_digest:
+        return "recovery_policy_digest_mismatch"
+    factors = policy["factors"]
+    factor_by_id = {factor["factor_id"]: factor for factor in factors}
+    if len(factor_by_id) != len(factors):
+        return "recovery_policy_duplicate_factor"
+    guardian_factor = factor_by_id.get(policy["guardian_factor_id"])
+    if (
+        policy["fallback_threshold"] < 2
+        or policy["fallback_wait_seconds"] < 1
+        or not policy["cancellation_allowed"]
+        or not policy["single_use"]
+        or guardian_factor is None
+        or guardian_factor["factor_type"] != "guardian"
+        or "guardian_assisted" not in guardian_factor["allowed_paths"]
+    ):
+        return "recovery_policy_invalid"
+    fallback_factors = [
+        factor
+        for factor in factors
+        if factor["factor_type"] != "guardian"
+        and "policy_fallback" in factor["allowed_paths"]
+    ]
+    if len(fallback_factors) < policy["fallback_threshold"]:
+        return "recovery_policy_fallback_unachievable"
+    body_commitment = policy["body_commitment"]
+    checkpoint_signature = bundle["backup_checkpoint"]["signature"]
+    if not envelope_matches(
+        body_commitment,
+        signer_type="body",
+        signer_id=manifest["created_by_body_id"],
+        key_epoch_id=checkpoint_signature["key_epoch_id"],
+        public_key_ref=checkpoint_signature["public_key_ref"],
+        signed_domain="genesis.instance.recovery.policy.body-commitment.v0.1",
+        signed_digest=policy_digest,
+        created_at=policy["created_at"],
+    ):
+        return "recovery_policy_body_commitment_invalid"
+    guardian_witness = policy["guardian_witness"]
+    if not envelope_matches(
+        guardian_witness,
+        signer_type="guardian",
+        signer_id=policy["guardian_id"],
+        key_epoch_id=guardian_factor["key_epoch_id"],
+        public_key_ref=guardian_factor["public_key_ref"],
+        signed_domain="genesis.instance.recovery.policy.guardian-witness.v0.1",
+        signed_digest=policy_digest,
+        created_at=policy["created_at"],
+    ):
+        return "recovery_policy_guardian_witness_invalid"
+
     if manifest["package_digest"] != compute_backup_manifest_digest(manifest):
         return "backup_manifest_digest_mismatch"
+    policy_entries = [
+        item
+        for item in manifest["contents"]
+        if item["kind"] == "recovery_policy" and item["path"] == "recovery/policy.json"
+    ]
+    if len(policy_entries) != 1 or policy_entries[0]["digest"] != policy_digest:
+        return "backup_recovery_policy_not_bound"
     if encryption["encryption_digest"] != compute_backup_encryption_digest(encryption):
         return "backup_encryption_digest_mismatch"
     if encryption["manifest_digest"] != manifest["package_digest"]:
@@ -290,9 +471,39 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
         or checkpoint["created_by_body_id"] != manifest["created_by_body_id"]
     ):
         return "backup_checkpoint_links_invalid"
+    checkpoint_signature = checkpoint["signature"]
+    if not envelope_matches(
+        checkpoint_signature,
+        signer_type="body",
+        signer_id=checkpoint["created_by_body_id"],
+        key_epoch_id=checkpoint_signature.get("key_epoch_id", ""),
+        public_key_ref=checkpoint_signature.get("public_key_ref", ""),
+        signed_domain="genesis.checkpoint.signature.v0.1",
+        signed_digest=checkpoint["checkpoint_hash"],
+        created_at=checkpoint["created_at"],
+    ):
+        return "backup_checkpoint_signature_invalid"
+    commit_signature = commit["signature"]
+    if not envelope_matches(
+        commit_signature,
+        signer_type="body",
+        signer_id=commit["created_by_body_id"],
+        key_epoch_id=checkpoint_signature["key_epoch_id"],
+        public_key_ref=checkpoint_signature["public_key_ref"],
+        signed_domain="genesis.backup.commit.signature.v0.1",
+        signed_digest=commit["commit_digest"],
+        created_at=commit["committed_at"],
+    ):
+        return "backup_commit_signature_invalid"
 
     if authorization["authorization_digest"] != compute_recovery_authorization_digest(authorization):
         return "recovery_authorization_digest_mismatch"
+    if (
+        authorization["recovery_policy_id"] != policy["policy_id"]
+        or authorization["recovery_policy_digest"] != policy_digest
+        or authorization["policy_epoch"] != policy["policy_epoch"]
+    ):
+        return "recovery_authorization_policy_mismatch"
     if not (
         parse_utc(authorization["issued_at"])
         <= parse_utc(authorization["not_before"])
@@ -304,6 +515,12 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
         return "recovery_authorization_not_yet_valid"
     if evaluated >= parse_utc(authorization["expires_at"]):
         return "recovery_authorization_expired"
+    if authorization["authorization_path"] == "policy_fallback" and parse_utc(
+        authorization["not_before"]
+    ) < parse_utc(authorization["issued_at"]) + timedelta(
+        seconds=policy["fallback_wait_seconds"]
+    ):
+        return "recovery_fallback_wait_not_satisfied"
     if (
         authorization["source_backup_id"] != commit["backup_id"]
         or authorization["source_backup_commit_digest"] != commit["commit_digest"]
@@ -313,10 +530,53 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
     ):
         return "recovery_authorization_scope_mismatch"
 
-    if registration["registration_digest"] != compute_device_registration_digest(registration):
+    approvals = authorization["approvals"]
+    signer_ids = [approval.get("signer_id") for approval in approvals]
+    if len(signer_ids) != len(set(signer_ids)):
+        return "recovery_authorization_duplicate_approval"
+    approved_factors = []
+    for approval in approvals:
+        factor = factor_by_id.get(approval.get("signer_id"))
+        if factor is None or authorization["authorization_path"] not in factor["allowed_paths"]:
+            return "recovery_authorization_factor_not_allowed"
+        signer_type = "guardian" if factor["factor_type"] == "guardian" else "recovery_authority"
+        if not envelope_matches(
+            approval,
+            signer_type=signer_type,
+            signer_id=factor["factor_id"],
+            key_epoch_id=factor["key_epoch_id"],
+            public_key_ref=factor["public_key_ref"],
+            signed_domain="genesis.recovery.authorization.approval.v0.1",
+            signed_digest=authorization["authorization_digest"],
+            created_at=authorization["issued_at"],
+        ):
+            return "recovery_authorization_approval_invalid"
+        approved_factors.append(factor)
+    if authorization["authorization_path"] == "guardian_assisted":
+        if len(approved_factors) != 1 or approved_factors[0]["factor_id"] != policy["guardian_factor_id"]:
+            return "recovery_guardian_approval_missing"
+    else:
+        if any(factor["factor_type"] == "guardian" for factor in approved_factors):
+            return "recovery_fallback_guardian_forbidden"
+        if len(approved_factors) < policy["fallback_threshold"]:
+            return "recovery_fallback_threshold_not_met"
+
+    if registration["registration_digest"] != compute_recovery_destination_registration_digest(registration):
         return "recovery_destination_registration_invalid"
     if possession["proof_digest"] != compute_body_possession_digest(possession):
         return "recovery_destination_possession_invalid"
+    possession_signature = bundle["destination_possession_signature"]
+    if not envelope_matches(
+        possession_signature,
+        signer_type="body",
+        signer_id=possession["body_id"],
+        key_epoch_id=possession["signature"]["key_epoch_id"],
+        public_key_ref=possession["public_key_fingerprint"],
+        signed_domain="genesis.body.possession.signature.v0.1",
+        signed_digest=possession["proof_digest"],
+        created_at=possession["issued_at"],
+    ) or possession["signature"]["value"] != possession_signature["signature_value"]:
+        return "recovery_destination_possession_signature_invalid"
     if (
         registration["body_id"] != record["new_body_id"]
         or possession["body_id"] != record["new_body_id"]
@@ -324,17 +584,30 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
     ):
         return "recovery_destination_identity_mismatch"
     if (
-        registration["guardian_id"] != authorization["guardian_id"]
-        or registration["guardian_key_epoch_id"] != authorization["guardian_key_epoch_id"]
-        or registration["authority_epoch"] != authorization["authority_epoch"]
+        registration["recovery_id"] != authorization["recovery_id"]
+        or registration["recovery_authorization_ref"] != authorization["authorization_id"]
+        or registration["recovery_authorization_digest"] != authorization["authorization_digest"]
     ):
-        return "recovery_guardian_scope_mismatch"
+        return "recovery_destination_scope_mismatch"
+    registration_signature = registration["signature"]
+    if not envelope_matches(
+        registration_signature,
+        signer_type="body",
+        signer_id=registration["body_id"],
+        key_epoch_id=registration_signature.get("key_epoch_id", ""),
+        public_key_ref=registration["public_key_fingerprint"],
+        signed_domain="genesis.recovery.destination.registration.signature.v0.1",
+        signed_digest=registration["registration_digest"],
+        created_at=registration["registered_at"],
+    ):
+        return "recovery_destination_registration_signature_invalid"
 
     if revocation["revocation_digest"] != compute_body_revocation_digest(revocation):
         return "previous_body_revocation_digest_mismatch"
     if (
         revocation["body_id"] != record["previous_body_id"]
-        or revocation["guardian_authorization_ref"] != authorization["authorization_id"]
+        or revocation["recovery_authorization_ref"] != authorization["authorization_id"]
+        or revocation["recovery_authorization_digest"] != authorization["authorization_digest"]
     ):
         return "previous_body_not_revoked"
 
@@ -346,7 +619,8 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
         or record["restored_checkpoint_hash"] != manifest["checkpoint_hash"]
         or record["restored_last_event_hash"] != manifest["last_event_hash"]
         or record["restored_last_sequence"] != manifest["last_sequence"]
-        or record["guardian_authorization_ref"] != authorization["authorization_id"]
+        or record["recovery_authorization_ref"] != authorization["authorization_id"]
+        or record["recovery_authorization_digest"] != authorization["authorization_digest"]
     ):
         return "recovery_record_links_invalid"
 
@@ -368,6 +642,19 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
     elif record["continuity_status"] != "complete" or gap is not None:
         return "unexpected_continuity_gap"
 
+    record_signature = record["signature"]
+    if not envelope_matches(
+        record_signature,
+        signer_type="body",
+        signer_id=record["new_body_id"],
+        key_epoch_id=possession_signature["key_epoch_id"],
+        public_key_ref=registration["public_key_fingerprint"],
+        signed_domain="genesis.recovery.record.signature.v0.1",
+        signed_digest=record["recovery_digest"],
+        created_at=record["performed_at"],
+    ):
+        return "recovery_record_signature_invalid"
+
     if finalization["finalization_digest"] != compute_recovery_finalization_digest(finalization):
         return "recovery_finalization_digest_mismatch"
     expected_gap_digest = None if gap is None else gap["gap_digest"]
@@ -378,7 +665,8 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
         or finalization["previous_body_revocation_digest"] != revocation["revocation_digest"]
         or finalization["destination_registration_digest"] != registration["registration_digest"]
         or finalization["destination_possession_digest"] != possession["proof_digest"]
-        or finalization["guardian_authorization_ref"] != authorization["authorization_id"]
+        or finalization["recovery_authorization_ref"] != authorization["authorization_id"]
+        or finalization["recovery_authorization_digest"] != authorization["authorization_digest"]
         or finalization["recovery_event_hash"] != recovery_event["event_hash"]
     ):
         return "recovery_finalization_links_invalid"
@@ -408,5 +696,29 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
         or recovery_event["previous_event_hash"] != record["restored_last_event_hash"]
     ):
         return "recovery_event_continuity_invalid"
+    recovery_event_signature = recovery_event["signature"]
+    if not envelope_matches(
+        recovery_event_signature,
+        signer_type="body",
+        signer_id=record["new_body_id"],
+        key_epoch_id=possession_signature["key_epoch_id"],
+        public_key_ref=registration["public_key_fingerprint"],
+        signed_domain="genesis.memory.event.signature.v0.1",
+        signed_digest=recovery_event["event_hash"],
+        created_at=recovery_event["observed_at"],
+    ):
+        return "recovery_event_signature_invalid"
+    destination_ack = finalization["destination_acknowledgement"]
+    if not envelope_matches(
+        destination_ack,
+        signer_type="body",
+        signer_id=record["new_body_id"],
+        key_epoch_id=destination_ack.get("key_epoch_id", ""),
+        public_key_ref=registration["public_key_fingerprint"],
+        signed_domain="genesis.recovery.finalization.signature.v0.1",
+        signed_digest=finalization["finalization_digest"],
+        created_at=finalization["finalized_at"],
+    ):
+        return "recovery_finalization_acknowledgement_invalid"
 
     return None

@@ -63,8 +63,10 @@ No puede:
 - convertir su firma en título de propiedad.
 
 La ausencia del Guardian no debe transformarse en un candado permanente. Una
-recuperación puede usar evidencia alternativa suficiente de Seed, identidad, memoria,
-Body, posesión de claves y journal.
+recuperación puede usar la política firmada al nacer: aprobación actual del Guardian o
+umbral de factores alternativos independientes tras una espera y ventana de cancelación.
+Seed, identidad, memoria, Body, posesión de claves y journal siguen siendo evidencia
+obligatoria; el backup aislado nunca concede autoridad.
 
 ## 4. Nacimiento libre
 
@@ -80,6 +82,7 @@ Una transacción `birth` debe enlazar de forma atómica:
 - Body Key Epoch activo;
 - prueba de posesión de la clave del Body;
 - atestación del Guardian como testigo de nacimiento;
+- política de recuperación precomprometida por Body y Guardian;
 - primer evento de memoria canónica firmado;
 - estado de recuperación;
 - recibo de nacimiento.

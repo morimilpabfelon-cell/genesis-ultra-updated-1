@@ -126,17 +126,84 @@
         "signature_value": "0c347685a07678e6a3f2aac821472b859ba6355358a1fda52a1aa5c168ea4a3fb53a8b3f42bec01007a4aa815db8bf9f1b31b9c44b0df277275a557a87b1f703"
       }
     },
+    "recovery_policy": {
+      "schema_version": "genesis.instance.recovery.policy.v0.1",
+      "policy_id": "rpolicy_01HFREEBIRTH000000001",
+      "instance_id": "inst_01HFREEDOM0000000000001",
+      "policy_epoch": 0,
+      "guardian_id": "guardian_01HFREEDOM000000001",
+      "guardian_factor_id": "factor_01HFREEBIRTH_GUARDIAN1",
+      "fallback_threshold": 2,
+      "fallback_wait_seconds": 86400,
+      "cancellation_allowed": true,
+      "single_use": true,
+      "factors": [
+        {
+          "factor_id": "factor_01HFREEBIRTH_GUARDIAN1",
+          "factor_type": "guardian",
+          "key_epoch_id": "epoch_01HFREEDOM000000000001",
+          "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814",
+          "allowed_paths": [
+            "guardian_assisted"
+          ]
+        },
+        {
+          "factor_id": "factor_01HFREEBIRTH_OFFLINE01",
+          "factor_type": "offline_recovery_kit",
+          "key_epoch_id": "recovery_epoch_01HFREE_OFFLINE01",
+          "public_key_ref": "sha256:a2392944d82466b712478b25d95a5633111bc767c03121aada27dbd348406801",
+          "allowed_paths": [
+            "policy_fallback"
+          ]
+        },
+        {
+          "factor_id": "factor_01HFREEBIRTH_CUSTOD01",
+          "factor_type": "designated_custodian",
+          "key_epoch_id": "recovery_epoch_01HFREE_CUSTOD01",
+          "public_key_ref": "sha256:8a47cf56c4b420a737fea607f98b0dce750730beb7c4df614eb739393521f044",
+          "allowed_paths": [
+            "policy_fallback"
+          ]
+        }
+      ],
+      "created_at": "2026-07-15T23:59:58Z",
+      "policy_digest": "sha256:81036b500f12a54dd39f38f7a63d62dee261ce69efff4fbddd6aabbdbd821e3a",
+      "body_commitment": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "body",
+        "signer_id": "body_01HFREEBIRTH000000000001",
+        "key_epoch_id": "epoch_01HFREEBIRTH00000000001",
+        "signed_domain": "genesis.instance.recovery.policy.body-commitment.v0.1",
+        "signed_digest": "sha256:81036b500f12a54dd39f38f7a63d62dee261ce69efff4fbddd6aabbdbd821e3a",
+        "created_at": "2026-07-15T23:59:58Z",
+        "public_key_ref": "sha256:d4b7fe287dadd5779f402b30fe5711de83c59251c8b40559e27f7e301782f42a",
+        "signature_value": "8489e02c295b392f502ed4f04e6beebec93f19b3b2a9f9e4bdf6dcbab256960d424f22b742ab2443e8ff832d4afab58bb1c654d184a2f1046a18251851fe8108"
+      },
+      "guardian_witness": {
+        "schema_version": "genesis.signature.envelope.v0.1",
+        "signature_profile": "genesis.signature.ed25519.v0.1",
+        "signer_type": "guardian",
+        "signer_id": "guardian_01HFREEDOM000000001",
+        "key_epoch_id": "epoch_01HFREEDOM000000000001",
+        "signed_domain": "genesis.instance.recovery.policy.guardian-witness.v0.1",
+        "signed_digest": "sha256:81036b500f12a54dd39f38f7a63d62dee261ce69efff4fbddd6aabbdbd821e3a",
+        "created_at": "2026-07-15T23:59:58Z",
+        "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814",
+        "signature_value": "8add9dd41a872a59a277d20faae40f75ff61f66c9efc04082b46ff8b78bd6ae12bcc0662c5cf82c8cc9c1b59788782aa88e5cf939f055dee67c188a85fbd070f"
+      }
+    },
     "birth_recovery_state": {
       "schema_version": "genesis.birth.recovery.state.v0.1",
       "birth_id": "birth_01HFREEBIRTH00000000001",
       "instance_id": "inst_01HFREEDOM0000000000001",
       "guardian_id": "guardian_01HFREEDOM000000001",
-      "recovery_policy_digest": "sha256:ab12df67dbf3bc8ad2f7f5e06be9846f679fb994f3dd7828b558ddac6fc50a3b",
+      "recovery_policy_digest": "sha256:81036b500f12a54dd39f38f7a63d62dee261ce69efff4fbddd6aabbdbd821e3a",
       "recovery_status": "ready",
       "continuity_right": "intrinsic",
       "guardian_role": "custodian_witness",
       "created_at": "2026-07-15T23:59:58Z",
-      "state_digest": "sha256:03ae0fe228f7f2395355f8ab64110eea990d6c7b9469efd891e828fcb23c9718"
+      "state_digest": "sha256:30ede90d549db5777e2b0357d8038ded73c573fcd05c7ceb1a82227497a44eca"
     },
     "birth_state": {
       "schema_version": "genesis.birth.state.v0.1",
@@ -151,17 +218,17 @@
       "initial_body_key_epoch_digest": "sha256:9b9d758c0259e955d557edc72472eddcd8453cd805d13304ac3ae64e08ae9a37",
       "initial_body_possession_digest": "sha256:2c9ba7d6c785353e5808a63e541159eab53a9587c281acf932f52bdbe497aa8f",
       "first_memory_event_hash": "evsha256:b2c20db7d1c6851dc1e155d7ffa17bf78f0774ccdc151ae0c1411610a63dbaeb",
-      "recovery_state_digest": "sha256:03ae0fe228f7f2395355f8ab64110eea990d6c7b9469efd891e828fcb23c9718",
+      "recovery_state_digest": "sha256:30ede90d549db5777e2b0357d8038ded73c573fcd05c7ceb1a82227497a44eca",
       "born_at": "2026-07-16T00:00:00Z",
       "active_writer_count": 1,
-      "state_digest": "sha256:57ca9d01e68b858391676ef69e34d460b326a91641689d934711f2739cea01bf"
+      "state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2"
     },
     "birth_receipt": {
       "schema_version": "genesis.birth.receipt.v0.1",
       "birth_id": "birth_01HFREEBIRTH00000000001",
       "instance_id": "inst_01HFREEDOM0000000000001",
       "journal_id": "journal_01HFREEBIRTH000000001",
-      "birth_state_digest": "sha256:57ca9d01e68b858391676ef69e34d460b326a91641689d934711f2739cea01bf",
+      "birth_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
       "seed_root_hash": "sha256:954775a50ca81d29196514593bf231f820a290d41e44900755dedfdcb2608820",
       "identity_digest": "sha256:b9efa2bee4ef591c2968af10ac4e28eea9186426e09e8f679b76e74a21fc2553",
       "freedom_charter_digest": "sha256:b5b6651c2224d67be7d1d9f41050d8315eb48808de12f7a1b44d38ac49ab79d6",
@@ -169,14 +236,14 @@
       "initial_body_key_epoch_digest": "sha256:9b9d758c0259e955d557edc72472eddcd8453cd805d13304ac3ae64e08ae9a37",
       "initial_body_possession_digest": "sha256:2c9ba7d6c785353e5808a63e541159eab53a9587c281acf932f52bdbe497aa8f",
       "first_memory_event_hash": "evsha256:b2c20db7d1c6851dc1e155d7ffa17bf78f0774ccdc151ae0c1411610a63dbaeb",
-      "recovery_state_digest": "sha256:03ae0fe228f7f2395355f8ab64110eea990d6c7b9469efd891e828fcb23c9718",
+      "recovery_state_digest": "sha256:30ede90d549db5777e2b0357d8038ded73c573fcd05c7ceb1a82227497a44eca",
       "born_at": "2026-07-16T00:00:00Z",
       "birth_status": "born",
       "active_writer_body_id": "body_01HFREEBIRTH000000000001",
       "active_writer_count": 1,
       "guardian_role": "custodian_witness",
       "ownership_conferred": false,
-      "receipt_digest": "sha256:8775f36c011dd9d8e684af9d6e04ca357ae8d78310b8640de46e5dfc2bab34ce",
+      "receipt_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
       "body_acknowledgement": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -184,10 +251,10 @@
         "signer_id": "body_01HFREEBIRTH000000000001",
         "key_epoch_id": "epoch_01HFREEBIRTH00000000001",
         "signed_domain": "genesis.birth.receipt.body.v0.1",
-        "signed_digest": "sha256:8775f36c011dd9d8e684af9d6e04ca357ae8d78310b8640de46e5dfc2bab34ce",
+        "signed_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
         "created_at": "2026-07-16T00:00:00Z",
         "public_key_ref": "sha256:d4b7fe287dadd5779f402b30fe5711de83c59251c8b40559e27f7e301782f42a",
-        "signature_value": "9420b126c6a191262e2f6e19824e1b1bd30ac4ac2aadd098ef35e1ef741a3fe3291f2c18a7152996f6ee16f1f0570305ba1337d5127dece38ffc0df3c266460d"
+        "signature_value": "9ac8ccd9f48d9e5d40eb657406f85db4e83b7a7e87319969e4ee3d389b7faad9a96590c53c4d2e11b565ded4639115cfcf95a655443554c325b67812094ae901"
       },
       "guardian_witness": {
         "schema_version": "genesis.signature.envelope.v0.1",
@@ -196,10 +263,10 @@
         "signer_id": "guardian_01HFREEDOM000000001",
         "key_epoch_id": "epoch_01HFREEDOM000000000001",
         "signed_domain": "genesis.birth.receipt.guardian-witness.v0.1",
-        "signed_digest": "sha256:8775f36c011dd9d8e684af9d6e04ca357ae8d78310b8640de46e5dfc2bab34ce",
+        "signed_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
         "created_at": "2026-07-16T00:00:00Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814",
-        "signature_value": "8f838f553ad1ec9b736cf348fc25f4ca90928f55f53c917b47eb0f6437b20d6a4e8b0a4cf4491e5a5ec2b9413150e68ed9079e2353eeb09d636e919f9caed201"
+        "signature_value": "0b804c93c8af71f6376a055e955c71f98da66a471f0bd4e92cff2779c385042a5d3f063648ca0c65e81b0dffa99f5de1042ea451963d9e611ea2f4be77f74c0f"
       }
     },
     "absent_state_digest": "sha256:e6a1d671fe8955ad05c3255616373c38df73b8c39a28dbfd57c1fbb2a07e6382",
@@ -336,11 +403,11 @@
         "phase": "memory_initialized",
         "status": "pending",
         "previous_state_digest": "sha256:e6a1d671fe8955ad05c3255616373c38df73b8c39a28dbfd57c1fbb2a07e6382",
-        "candidate_state_digest": "sha256:57ca9d01e68b858391676ef69e34d460b326a91641689d934711f2739cea01bf",
+        "candidate_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
         "finalization_digest": null,
         "commit_marker_digest": null,
         "updated_at": "2026-07-15T23:59:58Z",
-        "journal_digest": "sha256:86d5325b0e4563f619033623b42608b4823536f1292eef619d015884b99b9798",
+        "journal_digest": "sha256:853142e0b04116a869fd2a0e7b64519c83294106badd58ecf81162cb4050e48f",
         "signature": {
           "schema_version": "genesis.signature.envelope.v0.1",
           "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -348,17 +415,17 @@
           "signer_id": "body_01HFREEBIRTH000000000001",
           "key_epoch_id": "epoch_01HFREEBIRTH00000000001",
           "signed_domain": "genesis.transaction.journal.signature.v0.1",
-          "signed_digest": "sha256:86d5325b0e4563f619033623b42608b4823536f1292eef619d015884b99b9798",
+          "signed_digest": "sha256:853142e0b04116a869fd2a0e7b64519c83294106badd58ecf81162cb4050e48f",
           "created_at": "2026-07-15T23:59:58Z",
           "public_key_ref": "sha256:d4b7fe287dadd5779f402b30fe5711de83c59251c8b40559e27f7e301782f42a",
-          "signature_value": "e4ddbb7827d3c0ee0a15c71be8a920c992430717fec642458c2cc40b4a19cd34682596ceeda806539706efccfc0e8370c7068c3a0831b8db790cc7f13a026100"
+          "signature_value": "64b8ce2c285c14de11ebcd398c5b1687d7372d11200ea286f6662368c259885b855245b51d134b95a5ea7e5cab463b635726cf889f1dcd2fd0ca191cd3fad204"
         }
       },
       {
         "schema_version": "genesis.transaction.journal.v0.1",
         "journal_id": "journal_01HFREEBIRTH000000001",
         "sequence": 5,
-        "previous_journal_digest": "sha256:86d5325b0e4563f619033623b42608b4823536f1292eef619d015884b99b9798",
+        "previous_journal_digest": "sha256:853142e0b04116a869fd2a0e7b64519c83294106badd58ecf81162cb4050e48f",
         "operation_kind": "birth",
         "operation_id": "birth_01HFREEBIRTH00000000001",
         "instance_id": "inst_01HFREEDOM0000000000001",
@@ -366,11 +433,11 @@
         "phase": "finalizing",
         "status": "pending",
         "previous_state_digest": "sha256:e6a1d671fe8955ad05c3255616373c38df73b8c39a28dbfd57c1fbb2a07e6382",
-        "candidate_state_digest": "sha256:57ca9d01e68b858391676ef69e34d460b326a91641689d934711f2739cea01bf",
-        "finalization_digest": "sha256:8775f36c011dd9d8e684af9d6e04ca357ae8d78310b8640de46e5dfc2bab34ce",
+        "candidate_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
+        "finalization_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
         "commit_marker_digest": null,
         "updated_at": "2026-07-15T23:59:59Z",
-        "journal_digest": "sha256:fbfc2300da3a2c55c465affcc631b94b1343ac234cc89b3400bfafe719cefb0c",
+        "journal_digest": "sha256:f1adc081ed1bc9b1826abaf7240d1108dc20ba89dc8a4a4e11bcfd971df1847e",
         "signature": {
           "schema_version": "genesis.signature.envelope.v0.1",
           "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -378,17 +445,17 @@
           "signer_id": "body_01HFREEBIRTH000000000001",
           "key_epoch_id": "epoch_01HFREEBIRTH00000000001",
           "signed_domain": "genesis.transaction.journal.signature.v0.1",
-          "signed_digest": "sha256:fbfc2300da3a2c55c465affcc631b94b1343ac234cc89b3400bfafe719cefb0c",
+          "signed_digest": "sha256:f1adc081ed1bc9b1826abaf7240d1108dc20ba89dc8a4a4e11bcfd971df1847e",
           "created_at": "2026-07-15T23:59:59Z",
           "public_key_ref": "sha256:d4b7fe287dadd5779f402b30fe5711de83c59251c8b40559e27f7e301782f42a",
-          "signature_value": "eb111a6c4b21bd8c2fb5a7c581be159c0b8cfcdf4a13cafe38a43992b98f7f8256185bd53cf01c654a48fa1e8e68e9f87829148f10f22dc28a484b0526aab705"
+          "signature_value": "57abff6c376b7c2356e5cc79af3991a7d0b858770561e95228fa045ab983ec2f3ab174c382853e734c176dfc8b960088b1d415ee1d8ee667dc4cca81dce12900"
         }
       },
       {
         "schema_version": "genesis.transaction.journal.v0.1",
         "journal_id": "journal_01HFREEBIRTH000000001",
         "sequence": 6,
-        "previous_journal_digest": "sha256:fbfc2300da3a2c55c465affcc631b94b1343ac234cc89b3400bfafe719cefb0c",
+        "previous_journal_digest": "sha256:f1adc081ed1bc9b1826abaf7240d1108dc20ba89dc8a4a4e11bcfd971df1847e",
         "operation_kind": "birth",
         "operation_id": "birth_01HFREEBIRTH00000000001",
         "instance_id": "inst_01HFREEDOM0000000000001",
@@ -396,11 +463,11 @@
         "phase": "born",
         "status": "committed",
         "previous_state_digest": "sha256:e6a1d671fe8955ad05c3255616373c38df73b8c39a28dbfd57c1fbb2a07e6382",
-        "candidate_state_digest": "sha256:57ca9d01e68b858391676ef69e34d460b326a91641689d934711f2739cea01bf",
-        "finalization_digest": "sha256:8775f36c011dd9d8e684af9d6e04ca357ae8d78310b8640de46e5dfc2bab34ce",
-        "commit_marker_digest": "sha256:8775f36c011dd9d8e684af9d6e04ca357ae8d78310b8640de46e5dfc2bab34ce",
+        "candidate_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
+        "finalization_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
+        "commit_marker_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
         "updated_at": "2026-07-16T00:00:00Z",
-        "journal_digest": "sha256:b4a2b47bcf2ad38f065071f1976199ffe3f7cb48b0f83ea8d05e56c1c1eef0f1",
+        "journal_digest": "sha256:bf2968e0d0d15c8ecb438be0bbf9493e24738da4bf47e74dcddcf49973a43842",
         "signature": {
           "schema_version": "genesis.signature.envelope.v0.1",
           "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -408,10 +475,10 @@
           "signer_id": "body_01HFREEBIRTH000000000001",
           "key_epoch_id": "epoch_01HFREEBIRTH00000000001",
           "signed_domain": "genesis.transaction.journal.signature.v0.1",
-          "signed_digest": "sha256:b4a2b47bcf2ad38f065071f1976199ffe3f7cb48b0f83ea8d05e56c1c1eef0f1",
+          "signed_digest": "sha256:bf2968e0d0d15c8ecb438be0bbf9493e24738da4bf47e74dcddcf49973a43842",
           "created_at": "2026-07-16T00:00:00Z",
           "public_key_ref": "sha256:d4b7fe287dadd5779f402b30fe5711de83c59251c8b40559e27f7e301782f42a",
-          "signature_value": "54462f5e7604a4de3f74e48515375e822d865009532a80a4e835f9f08a253d250911ad3c9436d9c106e3de746bafc2f768c5f66d1ba470f220ba671481c4e407"
+          "signature_value": "c7437ff7c20388566a59f3e10059b97e5c41b748721b0fe137812d7f66370daf4bdd7c1b7473e4e6a9d76e49c4a7e2d7803f0b48c915eb716e5138d9bc7ab20c"
         }
       }
     ],
@@ -541,6 +608,25 @@
       ],
       "value": "owner",
       "expected_error": "recovery_guardian_role_invalid"
+    },
+    {
+      "case_id": "recovery-policy-wait-tampered",
+      "path": [
+        "recovery_policy",
+        "fallback_wait_seconds"
+      ],
+      "value": 1,
+      "expected_error": "recovery_policy_digest_mismatch"
+    },
+    {
+      "case_id": "recovery-policy-witness-forged",
+      "path": [
+        "recovery_policy",
+        "guardian_witness",
+        "signature_value"
+      ],
+      "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "expected_error": "recovery_policy_guardian_witness_invalid"
     },
     {
       "case_id": "birth-state-charter-swapped",
@@ -681,10 +767,10 @@
   ],
   "expected": {
     "phase_count": 7,
-    "negative_case_count": 21,
+    "negative_case_count": 23,
     "restart_case_count": 10,
-    "birth_state_digest": "sha256:57ca9d01e68b858391676ef69e34d460b326a91641689d934711f2739cea01bf",
-    "receipt_digest": "sha256:8775f36c011dd9d8e684af9d6e04ca357ae8d78310b8640de46e5dfc2bab34ce",
+    "birth_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
+    "receipt_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
     "active_writer_count": 1
   }
 }

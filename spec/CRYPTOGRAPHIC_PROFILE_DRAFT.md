@@ -157,7 +157,12 @@ de claves del guardián. Sus digests y firmas emplean los dominios versionados:
 
 ```text
 genesis.recovery.authorization.v0.1
-genesis.recovery.authorization.signature.v0.1
+genesis.recovery.authorization.approval.v0.1
+genesis.instance.recovery.policy.v0.1
+genesis.instance.recovery.policy.body-commitment.v0.1
+genesis.instance.recovery.policy.guardian-witness.v0.1
+genesis.recovery.destination.registration.v0.1
+genesis.recovery.destination.registration.signature.v0.1
 genesis.recovery.record.v0.1
 genesis.recovery.record.signature.v0.1
 genesis.recovery.finalization.v0.1

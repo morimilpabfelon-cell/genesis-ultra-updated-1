@@ -13,6 +13,7 @@ from nacl.exceptions import BadSignatureError
 from nacl.signing import SigningKey, VerifyKey
 
 from validate_continuity import compute_body_registry
+from validate_backup_recovery import compute_instance_recovery_policy_digest
 from validate_freedom_charter import validate_charter
 from validate_instance_identity import compute_identity_digest
 from validate_transaction_journal import (
@@ -42,11 +43,17 @@ ABSENT_STATE_DOMAIN = "genesis.birth.absent.state.v0.1"
 # Claves deterministas exclusivas de conformidad. Nunca se usan en una instancia real.
 BODY_SEED = bytes([0xB1]) * 32
 GUARDIAN_SEED = bytes([0x77]) * 32
+OFFLINE_RECOVERY_SEED = bytes([0x88]) * 32
+CUSTODIAN_RECOVERY_SEED = bytes([0x99]) * 32
 BODY_ID = "body_01HFREEBIRTH000000000001"
 BODY_EPOCH_ID = "epoch_01HFREEBIRTH00000000001"
 BIRTH_ID = "birth_01HFREEBIRTH00000000001"
 JOURNAL_ID = "journal_01HFREEBIRTH000000001"
 PLATFORM_PROFILE = "neutral-reference"
+RECOVERY_POLICY_ID = "rpolicy_01HFREEBIRTH000000001"
+GUARDIAN_FACTOR_ID = "factor_01HFREEBIRTH_GUARDIAN1"
+OFFLINE_FACTOR_ID = "factor_01HFREEBIRTH_OFFLINE01"
+CUSTODIAN_FACTOR_ID = "factor_01HFREEBIRTH_CUSTOD01"
 
 
 class BirthError(ValueError):
@@ -347,6 +354,8 @@ def build_vector() -> dict:
     born_at = charter["born_at"]
     body_key = SigningKey(BODY_SEED)
     guardian_key = SigningKey(GUARDIAN_SEED)
+    offline_recovery_key = SigningKey(OFFLINE_RECOVERY_SEED)
+    custodian_recovery_key = SigningKey(CUSTODIAN_RECOVERY_SEED)
     body_fingerprint = key_fingerprint(body_key)
 
     seed_manifest = {
@@ -492,12 +501,68 @@ def build_vector() -> dict:
         created_at=born_at,
     )
 
+    recovery_policy = {
+        "schema_version": "genesis.instance.recovery.policy.v0.1",
+        "policy_id": RECOVERY_POLICY_ID,
+        "instance_id": instance_id,
+        "policy_epoch": 0,
+        "guardian_id": guardian_id,
+        "guardian_factor_id": GUARDIAN_FACTOR_ID,
+        "fallback_threshold": 2,
+        "fallback_wait_seconds": 86400,
+        "cancellation_allowed": True,
+        "single_use": True,
+        "factors": [
+            {
+                "factor_id": GUARDIAN_FACTOR_ID,
+                "factor_type": "guardian",
+                "key_epoch_id": charter["guardian_key_epoch_id"],
+                "public_key_ref": key_fingerprint(guardian_key),
+                "allowed_paths": ["guardian_assisted"],
+            },
+            {
+                "factor_id": OFFLINE_FACTOR_ID,
+                "factor_type": "offline_recovery_kit",
+                "key_epoch_id": "recovery_epoch_01HFREE_OFFLINE01",
+                "public_key_ref": key_fingerprint(offline_recovery_key),
+                "allowed_paths": ["policy_fallback"],
+            },
+            {
+                "factor_id": CUSTODIAN_FACTOR_ID,
+                "factor_type": "designated_custodian",
+                "key_epoch_id": "recovery_epoch_01HFREE_CUSTOD01",
+                "public_key_ref": key_fingerprint(custodian_recovery_key),
+                "allowed_paths": ["policy_fallback"],
+            },
+        ],
+        "created_at": "2026-07-15T23:59:58Z",
+    }
+    recovery_policy["policy_digest"] = compute_instance_recovery_policy_digest(recovery_policy)
+    recovery_policy["body_commitment"] = make_signature(
+        body_key,
+        recovery_policy["policy_digest"],
+        signer_type="body",
+        signer_id=BODY_ID,
+        key_epoch_id=BODY_EPOCH_ID,
+        domain="genesis.instance.recovery.policy.body-commitment.v0.1",
+        created_at=recovery_policy["created_at"],
+    )
+    recovery_policy["guardian_witness"] = make_signature(
+        guardian_key,
+        recovery_policy["policy_digest"],
+        signer_type="guardian",
+        signer_id=guardian_id,
+        key_epoch_id=charter["guardian_key_epoch_id"],
+        domain="genesis.instance.recovery.policy.guardian-witness.v0.1",
+        created_at=recovery_policy["created_at"],
+    )
+
     recovery_state = {
         "schema_version": "genesis.birth.recovery.state.v0.1",
         "birth_id": BIRTH_ID,
         "instance_id": instance_id,
         "guardian_id": guardian_id,
-        "recovery_policy_digest": "sha256:" + hashlib.sha256(b"free birth recovery policy").hexdigest(),
+        "recovery_policy_digest": recovery_policy["policy_digest"],
         "recovery_status": "ready",
         "continuity_right": "intrinsic",
         "guardian_role": "custodian_witness",
@@ -604,6 +669,7 @@ def build_vector() -> dict:
         "initial_body_key_epoch": key_epoch,
         "initial_body_possession": possession,
         "first_memory_event": first_memory_event,
+        "recovery_policy": recovery_policy,
         "birth_recovery_state": recovery_state,
         "birth_state": birth_state,
         "birth_receipt": receipt,
@@ -628,6 +694,8 @@ def build_vector() -> dict:
         {"case_id": "first-memory-signature-forged", "path": ["first_memory_event", "signature", "signature_value"], "value": "00" * 64, "expected_error": "first_memory_signature_invalid"},
         {"case_id": "recovery-continuity-revocable", "path": ["birth_recovery_state", "continuity_right"], "value": "guardian_revocable", "expected_error": "recovery_continuity_invalid"},
         {"case_id": "recovery-guardian-owner", "path": ["birth_recovery_state", "guardian_role"], "value": "owner", "expected_error": "recovery_guardian_role_invalid"},
+        {"case_id": "recovery-policy-wait-tampered", "path": ["recovery_policy", "fallback_wait_seconds"], "value": 1, "expected_error": "recovery_policy_digest_mismatch"},
+        {"case_id": "recovery-policy-witness-forged", "path": ["recovery_policy", "guardian_witness", "signature_value"], "value": "00" * 64, "expected_error": "recovery_policy_guardian_witness_invalid"},
         {"case_id": "birth-state-charter-swapped", "path": ["birth_state", "freedom_charter_digest"], "value": "sha256:" + "03" * 32, "expected_error": "birth_state_link_mismatch"},
         {"case_id": "birth-state-zero-writers", "path": ["birth_state", "active_writer_count"], "value": 0, "expected_error": "birth_state_active_writer_count_invalid"},
         {"case_id": "receipt-claims-ownership", "path": ["birth_receipt", "ownership_conferred"], "value": True, "expected_error": "receipt_ownership_forbidden"},
@@ -685,6 +753,7 @@ def validate_fixture(fixture: dict) -> None:
     epoch = fixture["initial_body_key_epoch"]
     possession = fixture["initial_body_possession"]
     event = fixture["first_memory_event"]
+    recovery_policy = fixture["recovery_policy"]
     recovery = fixture["birth_recovery_state"]
     state = fixture["birth_state"]
     receipt = fixture["birth_receipt"]
@@ -791,6 +860,49 @@ def validate_fixture(fixture: dict) -> None:
         error="first_memory_signature_invalid",
     )
 
+    try:
+        policy_digest = compute_instance_recovery_policy_digest(recovery_policy)
+    except (KeyError, TypeError, ValueError):
+        fail("recovery_policy_invalid")
+    if recovery_policy["policy_digest"] != policy_digest:
+        fail("recovery_policy_digest_mismatch")
+    factors = {factor["factor_id"]: factor for factor in recovery_policy["factors"]}
+    guardian_factor = factors.get(recovery_policy["guardian_factor_id"])
+    fallback_factors = [
+        factor for factor in recovery_policy["factors"]
+        if factor["factor_type"] != "guardian"
+        and "policy_fallback" in factor["allowed_paths"]
+    ]
+    if (
+        recovery_policy["instance_id"] != instance_id
+        or recovery_policy["guardian_id"] != charter["guardian_id"]
+        or recovery_policy["fallback_threshold"] < 2
+        or recovery_policy["fallback_wait_seconds"] < 1
+        or recovery_policy["cancellation_allowed"] is not True
+        or recovery_policy["single_use"] is not True
+        or guardian_factor is None
+        or guardian_factor["factor_type"] != "guardian"
+        or "guardian_assisted" not in guardian_factor["allowed_paths"]
+        or len(fallback_factors) < recovery_policy["fallback_threshold"]
+    ):
+        fail("recovery_policy_invalid")
+    verify_envelope(
+        recovery_policy["body_commitment"], body_key,
+        digest=policy_digest, signer_type="body", signer_id=BODY_ID,
+        key_epoch_id=BODY_EPOCH_ID,
+        domain="genesis.instance.recovery.policy.body-commitment.v0.1",
+        created_at=recovery_policy["created_at"],
+        error="recovery_policy_body_commitment_invalid",
+    )
+    verify_envelope(
+        recovery_policy["guardian_witness"], guardian_key,
+        digest=policy_digest, signer_type="guardian", signer_id=charter["guardian_id"],
+        key_epoch_id=charter["guardian_key_epoch_id"],
+        domain="genesis.instance.recovery.policy.guardian-witness.v0.1",
+        created_at=recovery_policy["created_at"],
+        error="recovery_policy_guardian_witness_invalid",
+    )
+
     if recovery["instance_id"] != instance_id or recovery["birth_id"] != BIRTH_ID:
         fail("recovery_state_link_invalid")
     if recovery["continuity_right"] != "intrinsic":
@@ -799,6 +911,8 @@ def validate_fixture(fixture: dict) -> None:
         fail("recovery_guardian_role_invalid")
     if recovery["guardian_id"] != charter["guardian_id"] or recovery["recovery_status"] != "ready":
         fail("recovery_state_invalid")
+    if recovery["recovery_policy_digest"] != policy_digest:
+        fail("recovery_state_policy_mismatch")
     if compute_recovery_state_digest(recovery) != recovery["state_digest"]:
         fail("recovery_state_digest_mismatch")
 

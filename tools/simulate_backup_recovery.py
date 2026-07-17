@@ -39,12 +39,13 @@ from validate_backup_recovery import (
     compute_body_possession_digest,
     compute_body_revocation_digest,
     compute_continuity_gap_digest,
+    compute_instance_recovery_policy_digest,
     compute_recovery_authorization_digest,
+    compute_recovery_destination_registration_digest,
     compute_recovery_finalization_digest,
     compute_recovery_record_digest,
     evaluate_recovery_transaction,
 )
-from validate_authority import compute_device_registration_digest
 from validate_continuity import compute_body_registry
 from validate_workspace import encode_field
 
@@ -56,42 +57,116 @@ RECOVERY_ID = "recovery_01HSIM0000000000001"
 RECOVERY_AUTH_ID = "rauth_01HSIM00000000000001"
 GUARDIAN_ID = "guardian_01HSIM_EIDON000000001"
 GUARDIAN_KEY_EPOCH = "guardian_epoch_01HSIM000000001"
+RECOVERY_POLICY_ID = "rpolicy_01HSIM0000000000001"
+GUARDIAN_FACTOR_ID = "factor_01HSIM_GUARDIAN000001"
+OFFLINE_FACTOR_ID = "factor_01HSIM_OFFLINE0000001"
+CUSTODIAN_FACTOR_ID = "factor_01HSIM_CUSTODIAN00001"
+OFFLINE_FACTOR_EPOCH = "recovery_epoch_01HSIM_OFFLINE1"
+CUSTODIAN_FACTOR_EPOCH = "recovery_epoch_01HSIM_CUSTOD1"
 
 
-def make_device_registration(
+def make_recovery_destination_registration(
     *,
     registration_id: str,
+    recovery_authorization: dict,
     body_id: str,
     platform_profile: str,
     public_key_fingerprint: str,
     registered_at: str,
-    guardian_key: SigningKey,
+    body_key: SigningKey,
 ) -> dict:
-    """Registra el Body de recuperación; no concede permiso de movimiento."""
+    """Vincula la clave del nuevo Body a una autorización exacta."""
     registration = {
-        "schema_version": "genesis.guardian.device.registration.v0.1",
+        "schema_version": "genesis.recovery.destination.registration.v0.1",
         "registration_id": registration_id,
-        "guardian_id": GUARDIAN_ID,
-        "guardian_key_epoch_id": GUARDIAN_KEY_EPOCH,
+        "recovery_id": recovery_authorization["recovery_id"],
+        "recovery_authorization_ref": recovery_authorization["authorization_id"],
+        "recovery_authorization_digest": recovery_authorization["authorization_digest"],
         "instance_id": INSTANCE_ID,
-        "authority_epoch": 1,
         "body_id": body_id,
         "platform_profile": platform_profile,
         "public_key_fingerprint": public_key_fingerprint,
         "registered_at": registered_at,
     }
-    registration["registration_digest"] = compute_device_registration_digest(registration)
+    registration["registration_digest"] = compute_recovery_destination_registration_digest(
+        registration
+    )
     registration["signature"] = make_signature_envelope(
-        guardian_key,
+        body_key,
         registration["registration_digest"],
+        signer_type="body",
+        signer_id=body_id,
+        key_epoch_id=BODY_C_EPOCH,
+        signed_domain="genesis.recovery.destination.registration.signature.v0.1",
+        created_at=registered_at,
+    )
+    verify_signature(registration["signature"], body_key.verify_key)
+    return registration
+
+
+def make_recovery_policy(
+    *,
+    body_key: SigningKey,
+    guardian_key: SigningKey,
+    offline_key: SigningKey,
+    custodian_key: SigningKey,
+) -> dict:
+    policy = {
+        "schema_version": "genesis.instance.recovery.policy.v0.1",
+        "policy_id": RECOVERY_POLICY_ID,
+        "instance_id": INSTANCE_ID,
+        "policy_epoch": 1,
+        "guardian_id": GUARDIAN_ID,
+        "guardian_factor_id": GUARDIAN_FACTOR_ID,
+        "fallback_threshold": 2,
+        "fallback_wait_seconds": 3600,
+        "cancellation_allowed": True,
+        "single_use": True,
+        "factors": [
+            {
+                "factor_id": GUARDIAN_FACTOR_ID,
+                "factor_type": "guardian",
+                "key_epoch_id": GUARDIAN_KEY_EPOCH,
+                "public_key_ref": key_fingerprint(guardian_key),
+                "allowed_paths": ["guardian_assisted"],
+            },
+            {
+                "factor_id": OFFLINE_FACTOR_ID,
+                "factor_type": "offline_recovery_kit",
+                "key_epoch_id": OFFLINE_FACTOR_EPOCH,
+                "public_key_ref": key_fingerprint(offline_key),
+                "allowed_paths": ["policy_fallback"],
+            },
+            {
+                "factor_id": CUSTODIAN_FACTOR_ID,
+                "factor_type": "designated_custodian",
+                "key_epoch_id": CUSTODIAN_FACTOR_EPOCH,
+                "public_key_ref": key_fingerprint(custodian_key),
+                "allowed_paths": ["policy_fallback"],
+            },
+        ],
+        "created_at": "2026-07-12T01:50:00Z",
+    }
+    policy["policy_digest"] = compute_instance_recovery_policy_digest(policy)
+    policy["body_commitment"] = make_signature_envelope(
+        body_key,
+        policy["policy_digest"],
+        signer_type="body",
+        signer_id=BODY_B,
+        key_epoch_id=BODY_B_EPOCH,
+        signed_domain="genesis.instance.recovery.policy.body-commitment.v0.1",
+        created_at=policy["created_at"],
+    )
+    policy["guardian_witness"] = make_signature_envelope(
+        guardian_key,
+        policy["policy_digest"],
         signer_type="guardian",
         signer_id=GUARDIAN_ID,
         key_epoch_id=GUARDIAN_KEY_EPOCH,
-        signed_domain="genesis.guardian.device.registration.signature.v0.1",
-        created_at=registered_at,
+        signed_domain="genesis.instance.recovery.policy.guardian-witness.v0.1",
+        created_at=policy["created_at"],
     )
-    verify_signature(registration["signature"], guardian_key.verify_key)
-    return registration
+    return policy
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -163,6 +238,8 @@ def main() -> int:
     signing_key_b = SigningKey(bytes([0xB2]) * 32)
     guardian_key = SigningKey(bytes([0xC3]) * 32)
     signing_key_c = SigningKey(bytes([0xD4]) * 32)
+    offline_recovery_key = SigningKey(bytes([0xE5]) * 32)
+    custodian_recovery_key = SigningKey(bytes([0xF6]) * 32)
 
     memory_events = source["memory_events"]
     tip = memory_events[-1]
@@ -195,11 +272,19 @@ def main() -> int:
     )
     verify_signature(checkpoint["signature"], signing_key_b.verify_key)
 
+    recovery_policy = make_recovery_policy(
+        body_key=signing_key_b,
+        guardian_key=guardian_key,
+        offline_key=offline_recovery_key,
+        custodian_key=custodian_recovery_key,
+    )
+
     archive = {
         "seed_root_hash": SEED_ROOT,
         "memory_events": memory_events,
         "checkpoint": checkpoint,
         "body_registry": registry_at_backup,
+        "recovery_policy": recovery_policy,
     }
     plaintext = canonical_json(archive)
     manifest = {
@@ -214,12 +299,13 @@ def main() -> int:
         "created_at": "2026-07-12T02:01:00Z",
         "created_by_body_id": BODY_B,
         "encryption_profile": "genesis.backup.xchacha20poly1305.v0.1",
-        "key_recovery_profile": "guardian-recovery-secret-v0.1",
+        "key_recovery_profile": "genesis.instance.recovery.policy.v0.1",
         "contents": [
             {"kind": "seed", "path": "seed/root.txt", "digest": SEED_ROOT, "encrypted": True},
             {"kind": "memory", "path": "memory/events.json", "digest": sha256_bytes(state_bytes), "encrypted": True},
             {"kind": "checkpoint", "path": "continuity/checkpoint.json", "digest": checkpoint["checkpoint_hash"], "encrypted": True},
             {"kind": "body_registry", "path": "continuity/body-registry.json", "digest": registry_at_backup["registry_digest"], "encrypted": True},
+            {"kind": "recovery_policy", "path": "recovery/policy.json", "digest": recovery_policy["policy_digest"], "encrypted": True},
         ],
     }
     manifest["package_digest"] = compute_backup_manifest_digest(manifest)
@@ -289,44 +375,56 @@ def main() -> int:
     )
     verify_signature(backup_commit["signature"], signing_key_b.verify_key)
 
-    destination_registration = make_device_registration(
-        registration_id="device_reg_01HSIM_C00000000001",
-        body_id=BODY_C,
-        platform_profile="windows-dotnet",
-        public_key_fingerprint=key_fingerprint(signing_key_c),
-        registered_at="2026-07-12T03:00:00Z",
-        guardian_key=guardian_key,
-    )
     recovery_authorization = {
         "schema_version": "genesis.recovery.authorization.v0.1",
         "authorization_id": RECOVERY_AUTH_ID,
         "recovery_id": RECOVERY_ID,
-        "guardian_id": GUARDIAN_ID,
-        "guardian_key_epoch_id": GUARDIAN_KEY_EPOCH,
         "instance_id": INSTANCE_ID,
-        "authority_epoch": 1,
+        "recovery_policy_id": recovery_policy["policy_id"],
+        "recovery_policy_digest": recovery_policy["policy_digest"],
+        "policy_epoch": recovery_policy["policy_epoch"],
+        "authorization_path": "policy_fallback",
         "source_backup_id": BACKUP_ID,
         "source_backup_commit_digest": backup_commit["commit_digest"],
         "previous_body_id": BODY_B,
         "new_body_id": BODY_C,
         "reason": "lost",
-        "issued_at": "2026-07-12T03:01:00Z",
+        "issued_at": "2026-07-12T02:01:00Z",
         "not_before": "2026-07-12T03:01:00Z",
         "expires_at": "2026-07-12T03:31:00Z",
     }
     recovery_authorization["authorization_digest"] = compute_recovery_authorization_digest(
         recovery_authorization
     )
-    recovery_authorization["signature"] = make_signature_envelope(
-        guardian_key,
-        recovery_authorization["authorization_digest"],
-        signer_type="guardian",
-        signer_id=GUARDIAN_ID,
-        key_epoch_id=GUARDIAN_KEY_EPOCH,
-        signed_domain="genesis.recovery.authorization.signature.v0.1",
-        created_at=recovery_authorization["issued_at"],
+    recovery_authorization["approvals"] = [
+        make_signature_envelope(
+            offline_recovery_key,
+            recovery_authorization["authorization_digest"],
+            signer_type="recovery_authority",
+            signer_id=OFFLINE_FACTOR_ID,
+            key_epoch_id=OFFLINE_FACTOR_EPOCH,
+            signed_domain="genesis.recovery.authorization.approval.v0.1",
+            created_at=recovery_authorization["issued_at"],
+        ),
+        make_signature_envelope(
+            custodian_recovery_key,
+            recovery_authorization["authorization_digest"],
+            signer_type="recovery_authority",
+            signer_id=CUSTODIAN_FACTOR_ID,
+            key_epoch_id=CUSTODIAN_FACTOR_EPOCH,
+            signed_domain="genesis.recovery.authorization.approval.v0.1",
+            created_at=recovery_authorization["issued_at"],
+        ),
+    ]
+    destination_registration = make_recovery_destination_registration(
+        registration_id="recovery_reg_01HSIM_C00000001",
+        recovery_authorization=recovery_authorization,
+        body_id=BODY_C,
+        platform_profile="windows-dotnet",
+        public_key_fingerprint=key_fingerprint(signing_key_c),
+        registered_at="2026-07-12T03:02:00Z",
+        body_key=signing_key_c,
     )
-    verify_signature(recovery_authorization["signature"], guardian_key.verify_key)
 
     possession_input = {
         "schema_version": "genesis.body.possession.v0.1",
@@ -379,7 +477,8 @@ def main() -> int:
         "revoked_at": "2026-07-12T03:04:00Z",
         "reason": "lost",
         "last_trusted_event_hash": tip["event_hash"],
-        "guardian_authorization_ref": RECOVERY_AUTH_ID,
+        "recovery_authorization_ref": RECOVERY_AUTH_ID,
+        "recovery_authorization_digest": recovery_authorization["authorization_digest"],
     }
     previous_body_revocation["revocation_digest"] = compute_body_revocation_digest(
         previous_body_revocation
@@ -399,7 +498,8 @@ def main() -> int:
         "last_known_sequence": 4,
         "continuity_status": "known_gap",
         "continuity_gap_ref": continuity_gap["gap_id"],
-        "guardian_authorization_ref": RECOVERY_AUTH_ID,
+        "recovery_authorization_ref": RECOVERY_AUTH_ID,
+        "recovery_authorization_digest": recovery_authorization["authorization_digest"],
         "previous_body_revocation_ref": previous_body_revocation["revocation_digest"],
         "destination_registration_ref": destination_registration["registration_digest"],
         "destination_possession_ref": destination_possession["proof_digest"],
@@ -444,21 +544,13 @@ def main() -> int:
         "final_body_registry_digest": registry_after["registry_digest"],
         "previous_body_status": "lost",
         "destination_body_status": "active_writer",
-        "guardian_authorization_ref": RECOVERY_AUTH_ID,
+        "recovery_authorization_ref": RECOVERY_AUTH_ID,
+        "recovery_authorization_digest": recovery_authorization["authorization_digest"],
         "recovery_event_hash": recovery_event["event_hash"],
         "finalized_at": "2026-07-12T03:06:00Z",
     }
     recovery_finalization["finalization_digest"] = compute_recovery_finalization_digest(
         recovery_finalization
-    )
-    recovery_finalization["guardian_acknowledgement"] = make_signature_envelope(
-        guardian_key,
-        recovery_finalization["finalization_digest"],
-        signer_type="guardian",
-        signer_id=GUARDIAN_ID,
-        key_epoch_id=GUARDIAN_KEY_EPOCH,
-        signed_domain="genesis.recovery.finalization.signature.v0.1",
-        created_at=recovery_finalization["finalized_at"],
     )
     recovery_finalization["destination_acknowledgement"] = make_signature_envelope(
         signing_key_c,
@@ -469,7 +561,6 @@ def main() -> int:
         signed_domain="genesis.recovery.finalization.signature.v0.1",
         created_at=recovery_finalization["finalized_at"],
     )
-    verify_signature(recovery_finalization["guardian_acknowledgement"], guardian_key.verify_key)
     verify_signature(recovery_finalization["destination_acknowledgement"], signing_key_c.verify_key)
 
     bundle = {
@@ -478,6 +569,7 @@ def main() -> int:
         "backup_encryption": encryption,
         "backup_ciphertext_hex": ciphertext.hex(),
         "backup_commit": backup_commit,
+        "recovery_policy": recovery_policy,
         "recovery_authorization": recovery_authorization,
         "destination_registration": destination_registration,
         "destination_possession": destination_possession,
@@ -511,6 +603,9 @@ def main() -> int:
                 "first_recovery_sequence": 5,
                 "previous_body_status": "lost",
                 "destination_body_status": "active_writer",
+                "authorization_path": "policy_fallback",
+                "guardian_signature_at_recovery": False,
+                "fallback_approvals": len(recovery_authorization["approvals"]),
                 "ciphertext_tamper_rejected": True,
             },
             indent=2,

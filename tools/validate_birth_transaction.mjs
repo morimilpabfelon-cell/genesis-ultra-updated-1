@@ -124,6 +124,26 @@ function computeRecoveryDigest(state) {
     state.guardian_role, state.created_at
   ]);
 }
+function computeRecoveryPolicyDigest(policy) {
+  const factors = [...policy.factors].sort((a, b) =>
+    Buffer.compare(Buffer.from(a.factor_id), Buffer.from(b.factor_id))
+  );
+  if (new Set(factors.map((factor) => factor.factor_id)).size !== factors.length) {
+    fail("recovery_policy_duplicate_factor");
+  }
+  return hashFields("genesis.instance.recovery.policy.v0.1", [
+    policy.schema_version, policy.policy_id, policy.instance_id, String(policy.policy_epoch),
+    policy.guardian_id, policy.guardian_factor_id, String(policy.fallback_threshold),
+    String(policy.fallback_wait_seconds), boolText(policy.cancellation_allowed),
+    boolText(policy.single_use), String(factors.length),
+    ...factors.flatMap((factor) => {
+      const paths = [...factor.allowed_paths].sort((a, b) => Buffer.compare(Buffer.from(a), Buffer.from(b)));
+      return [factor.factor_id, factor.factor_type, factor.key_epoch_id,
+        factor.public_key_ref, String(paths.length), ...paths];
+    }),
+    policy.created_at
+  ]);
+}
 function computeBirthStateDigest(state) {
   return hashFields("genesis.birth.state.v0.1", [
     state.schema_version, state.birth_id, state.instance_id, state.seed_id,
@@ -169,6 +189,7 @@ function validateFixture(fixture) {
   const epoch = fixture.initial_body_key_epoch;
   const possession = fixture.initial_body_possession;
   const event = fixture.first_memory_event;
+  const recoveryPolicy = fixture.recovery_policy;
   const recovery = fixture.birth_recovery_state;
   const state = fixture.birth_state;
   const receipt = fixture.birth_receipt;
@@ -241,10 +262,42 @@ function validateFixture(fixture) {
     createdAt: event.observed_at
   }, "first_memory_signature_invalid");
 
+  const policyDigest = computeRecoveryPolicyDigest(recoveryPolicy);
+  if (recoveryPolicy.policy_digest !== policyDigest) fail("recovery_policy_digest_mismatch");
+  const factors = new Map(recoveryPolicy.factors.map((factor) => [factor.factor_id, factor]));
+  const guardianFactor = factors.get(recoveryPolicy.guardian_factor_id);
+  const fallbackFactors = recoveryPolicy.factors.filter((factor) =>
+    factor.factor_type !== "guardian" && factor.allowed_paths.includes("policy_fallback")
+  );
+  if (
+    recoveryPolicy.instance_id !== instanceId
+    || recoveryPolicy.guardian_id !== charter.guardian_id
+    || recoveryPolicy.fallback_threshold < 2
+    || recoveryPolicy.fallback_wait_seconds < 1
+    || recoveryPolicy.cancellation_allowed !== true
+    || recoveryPolicy.single_use !== true
+    || guardianFactor?.factor_type !== "guardian"
+    || !guardianFactor.allowed_paths.includes("guardian_assisted")
+    || fallbackFactors.length < recoveryPolicy.fallback_threshold
+  ) fail("recovery_policy_invalid");
+  verifyEnvelope(recoveryPolicy.body_commitment, bodyKey, {
+    digest: policyDigest, signerType: "body", signerId: BODY_ID,
+    keyEpochId: BODY_EPOCH_ID,
+    domain: "genesis.instance.recovery.policy.body-commitment.v0.1",
+    createdAt: recoveryPolicy.created_at
+  }, "recovery_policy_body_commitment_invalid");
+  verifyEnvelope(recoveryPolicy.guardian_witness, guardianKey, {
+    digest: policyDigest, signerType: "guardian", signerId: charter.guardian_id,
+    keyEpochId: charter.guardian_key_epoch_id,
+    domain: "genesis.instance.recovery.policy.guardian-witness.v0.1",
+    createdAt: recoveryPolicy.created_at
+  }, "recovery_policy_guardian_witness_invalid");
+
   if (recovery.instance_id !== instanceId || recovery.birth_id !== BIRTH_ID) fail("recovery_state_link_invalid");
   if (recovery.continuity_right !== "intrinsic") fail("recovery_continuity_invalid");
   if (recovery.guardian_role !== "custodian_witness") fail("recovery_guardian_role_invalid");
   if (recovery.guardian_id !== charter.guardian_id || recovery.recovery_status !== "ready") fail("recovery_state_invalid");
+  if (recovery.recovery_policy_digest !== policyDigest) fail("recovery_state_policy_mismatch");
   if (computeRecoveryDigest(recovery) !== recovery.state_digest) fail("recovery_state_digest_mismatch");
 
   const stateLinks = {

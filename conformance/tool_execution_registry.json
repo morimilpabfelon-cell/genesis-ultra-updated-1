@@ -57,14 +57,6 @@
       "purpose": "Módulo de conformidad importado por el entrypoint Node de cápsulas."
     },
     {
-      "path": "tools/validate_authority.py",
-      "used_by": [
-        "tools/simulate_backup_recovery.py",
-        "tools/validate_backup_recovery.py"
-      ],
-      "purpose": "Digest compartido para atestaciones de Body usadas exclusivamente por recuperación."
-    },
-    {
       "path": "tools/validate_backup_recovery.py",
       "used_by": [
         "tools/simulate_backup_recovery.py",

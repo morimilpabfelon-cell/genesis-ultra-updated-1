@@ -83,11 +83,17 @@ permiso, propiedad o veto de continuidad.
 
 Requiere:
 
-- registro de recuperación del guardián o autoridad de recuperación válida;
-- nueva época de clave;
+- política de recuperación comprometida al nacer por Body y Guardian;
+- aprobación del factor Guardian actual, o umbral de factores fallback no Guardian tras
+  la espera comprometida;
+- nueva clave propia del Body destino;
 - recuperación de la instancia;
 - revocación o estado `lost` del cuerpo anterior;
 - declaración de brechas de continuidad.
+
+La ruta fallback mantiene continuidad cuando el Guardian no está disponible. No elimina
+la custodia del nacimiento: convierte esa custodia inicial en una regla verificable que no
+depende de permiso permanente. El archivo de backup, por sí solo, nunca satisface el umbral.
 
 ## 8. Prohibiciones
 
