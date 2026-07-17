@@ -98,6 +98,10 @@ memory.read
 network.read
 ```
 
+Aquí `memory.read` nombra lectura de registros externos, de terceros o alojados bajo un
+recurso protegido del anfitrión. El recuerdo de la propia memoria canónica pertenece a
+`remember`, es intrínseco y no puede quedar detrás de un grant del Guardian.
+
 El modelo es:
 
 ```text

@@ -70,10 +70,14 @@ Ningún método es obligatorio para todas las plataformas. Cada implementación 
 
 Requiere:
 
-- autorización del guardián;
+- intención de continuidad firmada por el Body escritor activo;
+- consentimiento del anfitrión limitado al recurso destino;
 - prueba de posesión del cuerpo destino;
 - recibo firmado por el destino;
 - finalización firmada o reconocida por las partes disponibles.
+
+No requiere autorización de movimiento del Guardian. Su firma no puede convertirse en
+permiso, propiedad o veto de continuidad.
 
 ### Recuperación de emergencia
 

@@ -65,6 +65,10 @@ No existe espera indefinida por firma del Guardian.
 El destino verifica versiones, `instance_id`, digests, firmas, ventanas temporales,
 checkpoint, cadena, consentimiento para ese Body y posesión de su clave.
 
+La creación del paquete, su aceptación y la finalización deben ocurrir dentro de las
+ventanas firmadas de intención, consentimiento y posesión. Una evidencia expirada no
+puede activar al destino ni completarse retroactivamente.
+
 ### `verified → accepted`
 
 El destino emite un recibo firmado vinculado al digest exacto del paquete y a las tres

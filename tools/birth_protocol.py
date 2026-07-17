@@ -619,6 +619,7 @@ def build_vector() -> dict:
         {"case_id": "identity-instance-changed", "path": ["instance_identity", "instance_id"], "value": "inst_01HOTHERBIRTH000000000001", "expected_error": "birth_instance_mismatch"},
         {"case_id": "identity-name-rehashed-not-allowed", "path": ["instance_identity", "companion_name"], "value": "Renamed", "expected_error": "identity_digest_mismatch"},
         {"case_id": "initial-body-not-writer", "path": ["initial_body_record", "status"], "value": "candidate", "expected_error": "initial_body_status_invalid"},
+        {"case_id": "initial-body-registry-platform-mismatch", "path": ["initial_body_record", "platform_profile"], "value": "tampered-platform", "expected_error": "initial_body_registry_mismatch"},
         {"case_id": "registry-has-no-writer", "path": ["initial_body_registry", "bodies", 0, "status"], "value": "candidate", "expected_error": "active_writer_count_invalid"},
         {"case_id": "key-epoch-cross-body", "path": ["initial_body_key_epoch", "body_id"], "value": "body_01HOTHERBIRTH00000000001", "expected_error": "key_epoch_body_mismatch"},
         {"case_id": "possession-cross-body", "path": ["initial_body_possession", "body_id"], "value": "body_01HOTHERBIRTH00000000001", "expected_error": "possession_body_mismatch"},
@@ -720,6 +721,16 @@ def validate_fixture(fixture: dict) -> None:
         fail("active_writer_count_invalid")
     if active[0]["body_id"] != BODY_ID or registry["instance_id"] != instance_id:
         fail("registry_body_link_mismatch")
+    if (
+        body["status"] != active[0]["status"]
+        or body["created_at"] != active[0]["created_at"]
+        or body["platform_profile"] != active[0]["platform_profile"]
+        or body["public_key_fingerprint"] != active[0]["public_key_fingerprint"]
+        or body.get("revoked_at") is not None
+        or body.get("revocation_reason") is not None
+        or active[0].get("revocation_ref") is not None
+    ):
+        fail("initial_body_registry_mismatch")
     try:
         registry_digest = compute_body_registry(
             {"domain": "genesis.body.registry.v0.1", "input": registry}

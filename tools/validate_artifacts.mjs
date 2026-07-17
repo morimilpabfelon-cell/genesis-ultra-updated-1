@@ -201,6 +201,16 @@ function sha256Bytes(value) {
   return `sha256:${crypto.createHash("sha256").update(value).digest("hex")}`;
 }
 
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value).sort().map((key) =>
+      `${JSON.stringify(key)}:${canonicalJson(value[key])}`
+    ).join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
+
 function computeBackupManifestDigest(manifest) {
   const contents = [...manifest.contents].sort((left, right) =>
     Buffer.compare(Buffer.from(left.path, "utf8"), Buffer.from(right.path, "utf8"))
@@ -339,6 +349,70 @@ function computeBodyPossessionDigest(proof) {
     proof.expires_at,
     proof.public_key_fingerprint
   ]);
+}
+
+function computeBodyRegistryDigest(registry) {
+  const bodies = [...registry.bodies].sort((left, right) =>
+    Buffer.compare(Buffer.from(left.body_id, "utf8"), Buffer.from(right.body_id, "utf8"))
+  );
+  if (new Set(bodies.map((body) => body.body_id)).size !== bodies.length) {
+    throw new Error("duplicate_body_id");
+  }
+  if (bodies.filter((body) => body.status === "active_writer").length > 1) {
+    throw new Error("multiple_active_writers");
+  }
+  return hashFields("genesis.body.registry.v0.1", [
+    registry.schema_version,
+    registry.instance_id,
+    String(registry.registry_epoch),
+    String(bodies.length),
+    ...bodies.flatMap((body) => [
+      body.body_id,
+      body.status,
+      body.platform_profile,
+      body.public_key_fingerprint,
+      body.created_at,
+      optionalText(body.last_seen_at),
+      optionalText(body.revocation_ref)
+    ]),
+    registry.updated_at
+  ]);
+}
+
+function computeCheckpointHash(checkpoint) {
+  return hashFields("genesis.checkpoint.v0.1", [
+    checkpoint.schema_version,
+    checkpoint.hash_profile,
+    checkpoint.checkpoint_id,
+    checkpoint.instance_id,
+    checkpoint.created_by_body_id,
+    String(checkpoint.sequence),
+    checkpoint.last_event_hash,
+    checkpoint.seed_root_hash,
+    checkpoint.body_registry_digest,
+    checkpoint.state_digest,
+    checkpoint.created_at
+  ]);
+}
+
+function computeMemoryEventHash(event) {
+  const digest = hashFields("genesis.memory.event.v0.1", [
+    event.schema_version,
+    event.hash_profile,
+    event.event_id,
+    event.instance_id,
+    event.body_id,
+    String(event.sequence),
+    event.previous_event_hash,
+    event.event_type,
+    event.actor,
+    event.content_digest,
+    event.content_type,
+    event.observed_at,
+    event.provenance_digest,
+    event.privacy
+  ]);
+  return `evsha256:${digest.slice("sha256:".length)}`;
 }
 
 function computeContinuityIntentDigest(intent) {
@@ -538,6 +612,7 @@ function validateGeneratedArtifacts(validators, artifactPath) {
   const finalization = generated.transfer_finalization;
   const checkpoint = generated.checkpoint;
   const registryBefore = generated.body_registry_before;
+  const registryAfter = generated.body_registry;
 
   requireValid(validators, "continuity_intent.schema.json", intent, "continuity_intent");
   requireValid(validators, "host_consent.schema.json", consent, "host_consent");
@@ -565,11 +640,29 @@ function validateGeneratedArtifacts(validators, artifactPath) {
   }
 
   if (intent.intent_digest !== computeContinuityIntentDigest(intent)) throw new Error("continuity_intent_digest_mismatch");
+  if (registryBefore.registry_digest !== computeBodyRegistryDigest(registryBefore)) {
+    throw new Error("body_registry_before_digest_mismatch");
+  }
+  if (registryAfter.registry_digest !== computeBodyRegistryDigest(registryAfter)) {
+    throw new Error("final_body_registry_digest_mismatch");
+  }
+  const sourceBefore = registryBefore.bodies.find((body) => body.body_id === intent.source_body_id);
+  const destinationBefore = registryBefore.bodies.find((body) => body.body_id === intent.destination_body_id);
+  const activeBefore = registryBefore.bodies.filter((body) => body.status === "active_writer");
+  if (
+    registryBefore.instance_id !== intent.instance_id
+    || activeBefore.length !== 1
+    || activeBefore[0].body_id !== intent.source_body_id
+    || !sourceBefore
+    || !destinationBefore
+  ) throw new Error("pre_transfer_registry_authority_invalid");
   if (
     intent.signature.signed_digest !== intent.intent_digest
     || intent.signature.signer_type !== "body"
     || intent.signature.signer_id !== intent.source_body_id
     || intent.signature.signed_domain !== "genesis.continuity.intent.signature.v0.1"
+    || intent.signature.created_at !== intent.created_at
+    || intent.signature.public_key_ref !== sourceBefore.public_key_fingerprint
   ) throw new Error("continuity_intent_signature_unbound");
   if (consent.consent_digest !== computeHostConsentDigest(consent)) throw new Error("host_consent_digest_mismatch");
   if (
@@ -578,20 +671,37 @@ function validateGeneratedArtifacts(validators, artifactPath) {
     || consent.signature.signer_id !== consent.host_id
     || consent.signature.key_epoch_id !== consent.host_key_epoch_id
     || consent.signature.signed_domain !== "genesis.host.consent.signature.v0.1"
+    || consent.signature.created_at !== consent.granted_at
   ) throw new Error("host_consent_signature_unbound");
   if (possession.proof_digest !== computeBodyPossessionDigest(possession)) throw new Error("destination_possession_digest_mismatch");
   if (
     generated.body_possession_signature.signed_digest !== possession.proof_digest
+    || generated.body_possession_signature.signer_type !== "body"
     || generated.body_possession_signature.signer_id !== possession.body_id
     || generated.body_possession_signature.signed_domain !== "genesis.body.possession.signature.v0.1"
+    || generated.body_possession_signature.key_epoch_id !== possession.signature.key_epoch_id
+    || generated.body_possession_signature.created_at !== possession.issued_at
+    || generated.body_possession_signature.public_key_ref !== possession.public_key_fingerprint
+    || generated.body_possession_signature.signature_value !== possession.signature.value
+    || possession.public_key_fingerprint !== destinationBefore.public_key_fingerprint
   ) throw new Error("destination_possession_signature_unbound");
   if (!(Date.parse(intent.created_at) < Date.parse(intent.expires_at))) throw new Error("continuity_intent_window_invalid");
   if (!(Date.parse(consent.granted_at) < Date.parse(consent.expires_at))) throw new Error("host_consent_window_invalid");
+  if (!(Date.parse(possession.issued_at) < Date.parse(possession.expires_at))) throw new Error("destination_possession_window_invalid");
 
   const transferArtifacts = [intent, consent, possession, pkg, receipt, finalization];
   if (transferArtifacts.some((artifact) => artifact.instance_id !== pkg.instance_id)) {
     throw new Error("transfer_instance_id_mismatch");
   }
+  if (
+    checkpoint.checkpoint_hash !== computeCheckpointHash(checkpoint)
+    || checkpoint.signature.signed_digest !== checkpoint.checkpoint_hash
+    || checkpoint.signature.signer_type !== "body"
+    || checkpoint.signature.signer_id !== checkpoint.created_by_body_id
+    || checkpoint.signature.signed_domain !== "genesis.checkpoint.signature.v0.1"
+    || checkpoint.signature.created_at !== checkpoint.created_at
+    || checkpoint.signature.public_key_ref !== sourceBefore.public_key_fingerprint
+  ) throw new Error("checkpoint_signature_or_digest_invalid");
   if (
     intent.transfer_id !== pkg.transfer_id
     || consent.transfer_id !== pkg.transfer_id
@@ -613,9 +723,13 @@ function validateGeneratedArtifacts(validators, artifactPath) {
     ) throw new Error("transfer_evidence_ref_mismatch");
   }
   const packageContents = new Map(pkg.contents.map((item) => [item.path, item.digest]));
+  if (packageContents.size !== pkg.contents.length) throw new Error("package_content_path_duplicate");
   if (packageContents.get("continuity/intent.json") !== intent.intent_digest) throw new Error("package_missing_continuity_intent");
   if (packageContents.get("host/destination-consent.json") !== consent.consent_digest) throw new Error("package_missing_host_consent");
   if (packageContents.get("body/destination-possession.json") !== possession.proof_digest) throw new Error("package_missing_destination_possession");
+  if (packageContents.get("continuity/checkpoint.json") !== checkpoint.checkpoint_hash) throw new Error("package_missing_checkpoint");
+  if (packageContents.get("continuity/body-registry.json") !== registryBefore.registry_digest) throw new Error("package_missing_body_registry");
+  if (packageContents.get("seed/manifest.json") !== checkpoint.seed_root_hash) throw new Error("package_seed_root_mismatch");
   if (pkg.package_digest !== computeTransferPackageDigest(pkg)) throw new Error("transfer_package_digest_mismatch");
   if (receipt.receipt_digest !== computeTransferReceiptDigest(receipt)) throw new Error("transfer_receipt_digest_mismatch");
   if (finalization.finalization_digest !== computeTransferFinalizationDigest(finalization)) throw new Error("transfer_finalization_digest_mismatch");
@@ -628,9 +742,25 @@ function validateGeneratedArtifacts(validators, artifactPath) {
     const expectedPrevious = index === 0 ? "GENESIS" : events[index - 1].event_hash;
     if (event.sequence !== index) throw new Error(`non_contiguous_sequence:${index}`);
     if (event.previous_event_hash !== expectedPrevious) throw new Error(`broken_memory_chain:${index}`);
+    if (event.event_hash !== computeMemoryEventHash(event)) throw new Error(`memory_event_digest_mismatch:${index}`);
+    const body = registryBefore.bodies.find((record) => record.body_id === event.body_id)
+      ?? registryAfter.bodies.find((record) => record.body_id === event.body_id);
+    if (
+      !body
+      || event.signature.signed_digest !== event.event_hash
+      || event.signature.signer_type !== "body"
+      || event.signature.signer_id !== event.body_id
+      || event.signature.signed_domain !== "genesis.memory.event.signature.v0.1"
+      || event.signature.created_at !== event.observed_at
+      || event.signature.public_key_ref !== body.public_key_fingerprint
+    ) throw new Error(`memory_event_signature_unbound:${index}`);
   }
   const preTransferTip = events.at(-2);
   const completedEvent = events.at(-1);
+  const preTransferBytes = Buffer.from(canonicalJson(events.slice(0, -1)), "utf8");
+  if (packageContents.get("memory/events.json") !== sha256Bytes(preTransferBytes)) {
+    throw new Error("package_memory_digest_mismatch");
+  }
   if (
     checkpoint.last_event_hash !== preTransferTip.event_hash
     || checkpoint.sequence !== preTransferTip.sequence
@@ -644,14 +774,73 @@ function validateGeneratedArtifacts(validators, artifactPath) {
   ) throw new Error("transfer_not_bound_to_checkpoint");
   if (receipt.accepted_package_digest !== pkg.package_digest) throw new Error("receipt_not_bound_to_package");
   if (receipt.accepted_checkpoint_hash !== checkpoint.checkpoint_hash) throw new Error("receipt_not_bound_to_checkpoint");
+  if (
+    receipt.source_body_id !== intent.source_body_id
+    || receipt.destination_body_id !== intent.destination_body_id
+    || receipt.accepted_last_event_hash !== preTransferTip.event_hash
+    || receipt.accepted_last_sequence !== preTransferTip.sequence
+  ) throw new Error("receipt_transfer_scope_invalid");
+  if (
+    receipt.signature.signed_digest !== receipt.receipt_digest
+    || receipt.signature.signer_type !== "body"
+    || receipt.signature.signer_id !== receipt.destination_body_id
+    || receipt.signature.signed_domain !== "genesis.transfer.receipt.signature.v0.1"
+    || receipt.signature.created_at !== receipt.accepted_at
+    || receipt.signature.public_key_ref !== destinationBefore.public_key_fingerprint
+  ) throw new Error("transfer_receipt_signature_unbound");
   if (finalization.receipt_digest !== receipt.receipt_digest) throw new Error("finalization_not_bound_to_receipt");
-  if (completedEvent.body_id !== finalization.destination_body_id) throw new Error("completion_event_wrong_body");
+  if (
+    finalization.source_body_id !== intent.source_body_id
+    || finalization.destination_body_id !== intent.destination_body_id
+  ) throw new Error("finalization_transfer_scope_invalid");
+  for (const [field, body, keyRef] of [
+    ["source_acknowledgement", finalization.source_body_id, sourceBefore.public_key_fingerprint],
+    ["destination_acknowledgement", finalization.destination_body_id, destinationBefore.public_key_fingerprint]
+  ]) {
+    const acknowledgement = finalization[field];
+    if (
+      acknowledgement.signed_digest !== finalization.finalization_digest
+      || acknowledgement.signer_type !== "body"
+      || acknowledgement.signer_id !== body
+      || acknowledgement.signed_domain !== "genesis.transfer.finalization.signature.v0.1"
+      || acknowledgement.created_at !== finalization.finalized_at
+      || acknowledgement.public_key_ref !== keyRef
+    ) throw new Error(`transfer_finalization_signature_unbound:${field}`);
+  }
+  const packageTime = Date.parse(pkg.created_at);
+  const acceptedTime = Date.parse(receipt.accepted_at);
+  const finalizedTime = Date.parse(finalization.finalized_at);
+  const windows = [
+    [Date.parse(intent.created_at), Date.parse(intent.expires_at), "continuity_intent_expired"],
+    [Date.parse(consent.granted_at), Date.parse(consent.expires_at), "host_consent_expired"],
+    [Date.parse(possession.issued_at), Date.parse(possession.expires_at), "destination_possession_expired"]
+  ];
+  for (const [start, end, error] of windows) {
+    if (packageTime < start || packageTime >= end || acceptedTime < start || acceptedTime >= end || finalizedTime < start || finalizedTime >= end) {
+      throw new Error(error);
+    }
+  }
+  if (acceptedTime > finalizedTime) throw new Error("transfer_finalization_time_invalid");
+  if (
+    completedEvent.body_id !== finalization.destination_body_id
+    || completedEvent.event_type !== "transfer.completed"
+    || completedEvent.actor !== "instance"
+    || Date.parse(completedEvent.observed_at) < finalizedTime
+  ) throw new Error("completion_event_invalid");
   if (completedEvent.previous_event_hash !== preTransferTip.event_hash) throw new Error("completion_event_wrong_parent");
 
-  const activeWriters = generated.body_registry.bodies.filter((body) => body.status === "active_writer");
+  const activeWriters = registryAfter.bodies.filter((body) => body.status === "active_writer");
   if (activeWriters.length !== 1 || activeWriters[0].body_id !== finalization.destination_body_id) {
     throw new Error("final_registry_authority_invalid");
   }
+  const sourceAfter = registryAfter.bodies.find((body) => body.body_id === finalization.source_body_id);
+  const destinationAfter = registryAfter.bodies.find((body) => body.body_id === finalization.destination_body_id);
+  if (
+    registryAfter.instance_id !== intent.instance_id
+    || registryAfter.registry_epoch !== registryBefore.registry_epoch + 1
+    || sourceAfter?.status !== finalization.source_final_status
+    || destinationAfter?.status !== finalization.destination_final_status
+  ) throw new Error("final_registry_state_mismatch");
 }
 
 function validateBackupRecoveryArtifacts(validators, artifactPath) {
@@ -1360,6 +1549,13 @@ function validateSenseAdapterFixtures(validators) {
 }
 
 function main() {
+  if (process.argv[2] === "--transfer-only") {
+    const artifactPath = process.argv[3];
+    if (!artifactPath) throw new Error("transfer_artifact_path_missing");
+    validateGeneratedArtifacts(loadValidators(), path.resolve(artifactPath));
+    console.log("Generated A -> B artifacts and cross-links: OK.");
+    return;
+  }
   const scalarCounts = validatePortableSchemaScalars();
   const validators = loadValidators();
   const invalidCount = validateNegativeSchemaCases(validators);

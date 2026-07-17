@@ -5,7 +5,7 @@
   "source_chain_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "events": [
     {"event_id":"evt_01HACL000000000000001","body_id":"body_01HACL00000000000001A","sequence":0,"event_type":"sense.vision.observation","privacy":"private_local"},
-    {"event_id":"evt_01HACL000000000000002","body_id":"body_01HACL00000000000001A","sequence":1,"event_type":"guardian.transfer.authorized","privacy":"guardian_shared"},
+    {"event_id":"evt_01HACL000000000000002","body_id":"body_01HACL00000000000001A","sequence":1,"event_type":"instance.continuity.intended","privacy":"guardian_shared"},
     {"event_id":"evt_01HACL000000000000003","body_id":"body_01HACL00000000000001A","sequence":2,"event_type":"knowledge.requirement.recorded","privacy":"export_approved"},
     {"event_id":"evt_01HACL000000000000004","body_id":"body_01HACL00000000000001B","sequence":3,"event_type":"recovery.continuity.verified","privacy":"private_local"},
     {"event_id":"evt_01HACL000000000000005","body_id":"body_01HACL00000000000001A","sequence":4,"event_type":"security.suspicious.input","privacy":"quarantined"},

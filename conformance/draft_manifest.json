@@ -50,8 +50,8 @@
     },
     {
       "path": "conformance/birth_vectors.json",
-      "size_bytes": 31106,
-      "digest": "sha256:654d2c9bc4b2e4e8dbf1f9c2ac175ddc62c6f924ede6a0184841d7723523afab"
+      "size_bytes": 31355,
+      "digest": "sha256:a018e206e064929b1a736d2aca56a8b13a04c6ac65e53b13451720328591395c"
     },
     {
       "path": "conformance/continuity_vectors.json",
@@ -85,8 +85,8 @@
     },
     {
       "path": "conformance/hybrid_memory_retrieval_vectors.json",
-      "size_bytes": 26839,
-      "digest": "sha256:efd19814453e2783b4c5241a9e8e54a1d12e2a7872c2b2f72adf4d32a9997997"
+      "size_bytes": 26840,
+      "digest": "sha256:4a3d66caa72bed842c6722f8c7d72b5cd0efb601aae31f1149ef978eadab4c72"
     },
     {
       "path": "conformance/instance_identity_vectors.json",
@@ -106,12 +106,12 @@
     {
       "path": "conformance/memory_retrieval_acl_vectors.json",
       "size_bytes": 7569,
-      "digest": "sha256:c8ab565d7a291a2520df2564f450fd8518918e33ee71d9c86e93aaae931f4b9c"
+      "digest": "sha256:9aa09dcf8fe21e1ff17d3bc02956e6e1cff3498cfd5e294c6af5219e8e9fead9"
     },
     {
       "path": "conformance/memory_retrieval_vectors.json",
-      "size_bytes": 35073,
-      "digest": "sha256:5a70ea9ec9c964920c7b5f35e096ece4e6f084c55af4bf6dcd442fba73f84629"
+      "size_bytes": 34400,
+      "digest": "sha256:595d4c4a42a7d5916a21c56128ecd71959825fd11cc44dccfdfb2f9f3fe4ca01"
     },
     {
       "path": "conformance/multimodal_memory_pipeline_vectors.json",
@@ -365,8 +365,8 @@
     },
     {
       "path": "schemas/guardian_authority_event.schema.json",
-      "size_bytes": 4198,
-      "digest": "sha256:887da2c03b085cb8de48a484d3d2b7ba675b99df22530a2209f9428c65123b86"
+      "size_bytes": 365,
+      "digest": "sha256:be3a108fe34d5dca6978e45db6d33d24d80dd0b8eb01eaac8304f321724d21f8"
     },
     {
       "path": "schemas/guardian_authorization.schema.json",
@@ -540,8 +540,8 @@
     },
     {
       "path": "spec/COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md",
-      "size_bytes": 5642,
-      "digest": "sha256:24ab1a719b8fb29b087cbe468326a8ff4bb2e6b4659e89def6ff52f0df885ed2"
+      "size_bytes": 5900,
+      "digest": "sha256:954c04cfa677fcd1bd88341dff2afd4f00d1992551bbeb5f9719546839dab18c"
     },
     {
       "path": "spec/CONFORMANCE_LEVELS.md",
@@ -575,8 +575,8 @@
     },
     {
       "path": "spec/FREE_BIRTH_AND_CONTINUITY.md",
-      "size_bytes": 7142,
-      "digest": "sha256:920472d7a246f4766a94fe5e6d1ecee0c068baeb362ec0e1cd44271b56aa740b"
+      "size_bytes": 7357,
+      "digest": "sha256:b84f4cfc45f3771e0af9f9f314ec9171c5a74e543414ab908359de43843a9ac7"
     },
     {
       "path": "spec/GENESIS_PROTOCOL_DRAFT.md",
@@ -595,13 +595,13 @@
     },
     {
       "path": "spec/GUARDIAN_RECOVERY_AND_SIGNATURES.md",
-      "size_bytes": 3286,
-      "digest": "sha256:365d6764f269b47d5c7d5f7797204e69ab6d317ef93f05231425bb18921f752f"
+      "size_bytes": 3511,
+      "digest": "sha256:bafa40d2692a1f9025de53427c983a4386912e4e41e9995455d03640d3e21899"
     },
     {
       "path": "spec/GUIDED_AUTONOMY_AND_CAPABILITY_GRANTS.md",
-      "size_bytes": 11173,
-      "digest": "sha256:a93b6b1ff9ac1bf9d1f87ebee8962369465d6017810b1ecab38428815721954c"
+      "size_bytes": 11365,
+      "digest": "sha256:2a013230c6bdfd32239db80704e26657c23673cab1e4ef44d73b9679add16f48"
     },
     {
       "path": "spec/HASHING_PROFILE_DRAFT.md",
@@ -690,13 +690,13 @@
     },
     {
       "path": "spec/TRANSFER_STATE_MACHINE.md",
-      "size_bytes": 3913,
-      "digest": "sha256:f3d2c1b2779d3de3255e8b3ee4b68448393825304a0c659c727bde087064daca"
+      "size_bytes": 4147,
+      "digest": "sha256:3d16ebc773cdd5791a3abca17b7b34c10825ddb6122d232bf0896539c22cdc21"
     },
     {
       "path": "tools/birth_protocol.py",
-      "size_bytes": 37034,
-      "digest": "sha256:4aa4d9004f9214c9f57288807a9f3103be5ea680fe8f2811d8f1405470c4baa1"
+      "size_bytes": 37703,
+      "digest": "sha256:8722cab25346f6e11c1bb6d7d77f11c8a3dd82741e22c247ddf487b751ed53d5"
     },
     {
       "path": "tools/generate_draft_manifest.py",
@@ -780,8 +780,8 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 8078,
-      "digest": "sha256:8bf149600922df862e7650fc5b1a875548048db76c66bc5375df0b66d6c32709"
+      "size_bytes": 8109,
+      "digest": "sha256:a013b68bc42d78a6638fdf8b3573b9eac2b97558aef4bd1b823a50d7abab6dd1"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
@@ -790,8 +790,8 @@
     },
     {
       "path": "tools/simulate_backup_recovery_negatives.py",
-      "size_bytes": 6626,
-      "digest": "sha256:7821eb640fe84fbf61807bb8354d249a5777e7e80b9d020ac7b3d44a524972ee"
+      "size_bytes": 6887,
+      "digest": "sha256:4a8db4460fdf05e2bda7f4a43691026df0b344f1c22ddd53eb99ad68a81a9fc8"
     },
     {
       "path": "tools/simulate_birth_crashes.py",
@@ -800,8 +800,8 @@
     },
     {
       "path": "tools/simulate_negatives.py",
-      "size_bytes": 5314,
-      "digest": "sha256:3ebacefb8434cb536e95f55054d3b53538adedce816370e17d5990433897c2ca"
+      "size_bytes": 9352,
+      "digest": "sha256:4ca0d92004aa46bb4a052b133ee8d4d92d75fc41848a590f14d2982ee627545d"
     },
     {
       "path": "tools/simulate_transaction_crashes.py",
@@ -810,8 +810,8 @@
     },
     {
       "path": "tools/simulate_transfer.py",
-      "size_bytes": 21403,
-      "digest": "sha256:ae27ebf90e0c04c50c8b2c6decabcdcdceb9d13085b382ed60932778a6ec6db1"
+      "size_bytes": 21568,
+      "digest": "sha256:d6ef9758b2f8e3ca08bf6d61b0aba63f8f7f6795707364fecd3672e228cf0609"
     },
     {
       "path": "tools/structured_versioned_memory.mjs",
@@ -835,8 +835,8 @@
     },
     {
       "path": "tools/validate_artifacts.mjs",
-      "size_bytes": 56308,
-      "digest": "sha256:dad45730c3951ddae2756162fdac889cf87a6441ebce0c9201d4dd617847bed0"
+      "size_bytes": 65891,
+      "digest": "sha256:a4bf36b0c745af13f88c45b230b6a0dc8245fa27cabb193fe91449dc7b84d81a"
     },
     {
       "path": "tools/validate_associative_memory_projection.mjs",
@@ -855,13 +855,13 @@
     },
     {
       "path": "tools/validate_backup_recovery.py",
-      "size_bytes": 16685,
-      "digest": "sha256:ab978f7d999b836072628c842228e08badb40937ba14b1cfcc62de308958668c"
+      "size_bytes": 17071,
+      "digest": "sha256:1ab4b4bcf25e40d231b2292751bf456afdf0f30109da439d3ab95e15ffa5bc19"
     },
     {
       "path": "tools/validate_birth_transaction.mjs",
-      "size_bytes": 18287,
-      "digest": "sha256:2435f47dd70038fc350e603ecae5e176b08fec192ad9d9abb524525cd08f38c0"
+      "size_bytes": 18697,
+      "digest": "sha256:468521563562170f955ece304f8bd995feec8aa15c4d835fa3c49ce2932ccf84"
     },
     {
       "path": "tools/validate_birth_transaction.py",
@@ -1034,5 +1034,5 @@
       "digest": "sha256:c1e2b7594f5e1f438636b4ebb21b20ba0e613b5239abf2b0bb12840fbf75dd18"
     }
   ],
-  "root_digest": "sha256:1f7f889ecb62878b351f99e7dc8be90e72aea7dec63760e950e1f1d9f87e06ea"
+  "root_digest": "sha256:0563063b668ca05d0034d198c2c7f47b21dd54c1108e79afff43be91cb6a4501"
 }

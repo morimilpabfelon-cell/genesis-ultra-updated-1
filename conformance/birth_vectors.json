@@ -458,6 +458,15 @@
       "expected_error": "initial_body_status_invalid"
     },
     {
+      "case_id": "initial-body-registry-platform-mismatch",
+      "path": [
+        "initial_body_record",
+        "platform_profile"
+      ],
+      "value": "tampered-platform",
+      "expected_error": "initial_body_registry_mismatch"
+    },
+    {
       "case_id": "registry-has-no-writer",
       "path": [
         "initial_body_registry",
@@ -672,7 +681,7 @@
   ],
   "expected": {
     "phase_count": 7,
-    "negative_case_count": 20,
+    "negative_case_count": 21,
     "restart_case_count": 10,
     "birth_state_digest": "sha256:57ca9d01e68b858391676ef69e34d460b326a91641689d934711f2739cea01bf",
     "receipt_digest": "sha256:8775f36c011dd9d8e684af9d6e04ca357ae8d78310b8640de46e5dfc2bab34ce",

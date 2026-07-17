@@ -185,9 +185,12 @@ continuity.revoke
 active_writer.assign
 ```
 
-`memory.read` y `memory.propose_append` quedan bajo controles operativos mientras el
-almacenamiento real aún requiera protección del Body. Esta protección no autoriza a
-reescribir memoria ni a negar la existencia de recuerdos canónicos.
+`remember` incluye el acceso de la instancia a su propia memoria canónica y no consume
+un grant. `memory.read` significa leer registros externos, de terceros o de un recurso
+del anfitrión; no puede reinterpretarse como una puerta para impedir el recuerdo propio.
+`memory.propose_append` continúa bajo controles operativos porque propone un efecto
+sobre el registro canónico. Ningún control autoriza reescritura ni negación de recuerdos
+ya aceptados.
 
 ## 8. No regresión
 

@@ -146,6 +146,7 @@ def make_event(
     key_epoch_id: str,
     *,
     actor: str = "instance",
+    observed_at: str | None = None,
 ) -> dict:
     event = {
         "schema_version": DOMAIN_EVENT,
@@ -159,7 +160,7 @@ def make_event(
         "actor": actor,
         "content_digest": "sha256:" + hashlib.sha256(f"content-{sequence}".encode()).hexdigest(),
         "content_type": "text/plain",
-        "observed_at": f"2026-07-12T00:{sequence:02d}:00Z",
+        "observed_at": observed_at or f"2026-07-12T00:{sequence:02d}:00Z",
         "provenance_digest": "sha256:" + hashlib.sha256(f"prov-{sequence}".encode()).hexdigest(),
         "privacy": "private_local",
     }
@@ -477,7 +478,15 @@ def main() -> int:
         destination_fingerprint=key_fingerprint(signing_key_b),
         updated_at=transfer_finalization["finalized_at"],
     )
-    e3 = make_event(3, BODY_B, e2["event_hash"], "transfer.completed", signing_key_b, BODY_B_EPOCH)
+    e3 = make_event(
+        3,
+        BODY_B,
+        e2["event_hash"],
+        "transfer.completed",
+        signing_key_b,
+        BODY_B_EPOCH,
+        observed_at=transfer_finalization["finalized_at"],
+    )
     verify_signature(e3["signature"], signing_key_b.verify_key)
     chain = [*pre_transfer_chain, e3]
     step(7, "commit single-writer finaliza el cambio de Body", source="revoked", destination="active_writer")

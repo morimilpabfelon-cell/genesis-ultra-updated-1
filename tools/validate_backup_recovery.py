@@ -7,6 +7,7 @@ from datetime import datetime
 import hashlib
 
 from validate_authority import compute_device_registration_digest
+from validate_continuity import compute_body_registry
 from validate_workspace import bool_text, encode_field, hash_fields, safe_relative_path
 
 
@@ -390,7 +391,16 @@ def evaluate_recovery_transaction(bundle: dict, *, evaluated_at: str) -> str | N
         return "recovery_previous_body_still_authoritative"
     if previous["status"] != finalization["previous_body_status"]:
         return "recovery_finalization_status_mismatch"
-    if finalization["final_body_registry_digest"] != registry["registry_digest"]:
+    try:
+        computed_registry_digest = compute_body_registry(
+            {"domain": "genesis.body.registry.v0.1", "input": registry}
+        )
+    except (KeyError, TypeError, ValueError):
+        return "recovery_final_registry_digest_mismatch"
+    if (
+        registry["registry_digest"] != computed_registry_digest
+        or finalization["final_body_registry_digest"] != computed_registry_digest
+    ):
         return "recovery_final_registry_digest_mismatch"
     if (
         recovery_event["body_id"] != record["new_body_id"]

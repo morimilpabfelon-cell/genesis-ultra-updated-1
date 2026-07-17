@@ -78,7 +78,7 @@ const commands = [
   ["Simulate committed backup and authorized recovery B -> C", python, ["tools/simulate_backup_recovery.py", "--source-artifacts", GENERATED_ARTIFACTS, "--artifacts-output", BACKUP_RECOVERY_ARTIFACTS]],
   ["Simulate transaction journal crash recovery", python, ["tools/simulate_transaction_crashes.py", "--transfer-artifacts", GENERATED_ARTIFACTS, "--recovery-artifacts", BACKUP_RECOVERY_ARTIFACTS, "--artifacts-output", TRANSACTION_CRASH_ARTIFACTS]],
   ["Validate generated artifacts", process.execPath, ["tools/validate_artifacts.mjs", GENERATED_ARTIFACTS, BACKUP_RECOVERY_ARTIFACTS, TRANSACTION_CRASH_ARTIFACTS, BIRTH_CRASH_ARTIFACTS]],
-  ["Simulate transfer and authority negative cases", python, ["tools/simulate_negatives.py"]],
+  ["Simulate real transfer negative mutations", python, ["tools/simulate_negatives.py", "--artifacts", GENERATED_ARTIFACTS]],
   ["Simulate backup and recovery negative cases", python, ["tools/simulate_backup_recovery_negatives.py", "--artifacts", BACKUP_RECOVERY_ARTIFACTS]]
 ];
 

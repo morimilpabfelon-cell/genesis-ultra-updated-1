@@ -193,6 +193,15 @@ function validateFixture(fixture) {
   const active = registry.bodies.filter((record) => record.status === "active_writer");
   if (active.length !== 1) fail("active_writer_count_invalid");
   if (active[0].body_id !== BODY_ID || registry.instance_id !== instanceId) fail("registry_body_link_mismatch");
+  if (
+    body.status !== active[0].status
+    || body.created_at !== active[0].created_at
+    || body.platform_profile !== active[0].platform_profile
+    || body.public_key_fingerprint !== active[0].public_key_fingerprint
+    || (body.revoked_at ?? null) !== null
+    || (body.revocation_reason ?? null) !== null
+    || (active[0].revocation_ref ?? null) !== null
+  ) fail("initial_body_registry_mismatch");
   if (computeRegistryDigest(registry) !== registry.registry_digest) fail("body_registry_digest_mismatch");
 
   if (epoch.instance_id !== instanceId) fail("key_epoch_instance_mismatch");

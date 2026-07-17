@@ -1,194 +1,270 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Ataques y fallos que la transferencia libre debe rechazar.
+"""Mutaciones reales que el validador A -> B debe rechazar.
 
-La movilidad no depende de un grant del Guardian. Los límites verificables son la
-intención de continuidad, el consentimiento del anfitrión para su recurso, la posesión
-de la clave destino, la integridad del paquete y el commit single-writer.
+Cada caso parte del artefacto positivo generado por ``simulate_transfer.py``, lo
+modifica y ejecuta ``validate_artifacts.mjs --transfer-only``. La suite no acepta
+predicados simulados: el error observado debe provenir del validador normativo.
 """
 
 from __future__ import annotations
 
-import hashlib
+import argparse
+from copy import deepcopy
 import json
+from pathlib import Path
+import shutil
+import subprocess
 import sys
+from tempfile import TemporaryDirectory
 
-from validate_workspace import encode_field
+from nacl.signing import SigningKey
+
+from simulate_transfer import (
+    BODY_A,
+    BODY_A_EPOCH,
+    BODY_B,
+    BODY_B_EPOCH,
+    event_hash,
+    make_signature_envelope,
+)
+from validate_continuity import (
+    compute_transfer_finalization,
+    compute_transfer_package,
+    compute_transfer_receipt,
+)
+
+ROOT = Path(__file__).resolve().parent.parent
+VALIDATOR = ROOT / "tools" / "validate_artifacts.mjs"
+BODY_A_KEY = SigningKey(bytes([0xA1]) * 32)
+BODY_B_KEY = SigningKey(bytes([0xB2]) * 32)
 
 
-def digest(domain: str, fields: list[str]) -> str:
-    preimage = encode_field(domain) + b"".join(encode_field(field) for field in fields)
-    return "sha256:" + hashlib.sha256(preimage).hexdigest()
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--artifacts", type=Path, required=True)
+    return parser.parse_args()
 
 
-results: list[dict] = []
-
-
-def expect_rejection(case_id: str, description: str, detected: bool, error_code: str) -> None:
-    results.append(
-        {
-            "case_id": case_id,
-            "description": description,
-            "detected": bool(detected),
-            "error_code": error_code if detected else "NOT_DETECTED",
-        }
+def resign_receipt(bundle: dict) -> None:
+    receipt = bundle["transfer_receipt"]
+    receipt["receipt_digest"] = compute_transfer_receipt(
+        {"domain": "genesis.transfer.receipt.v0.1", "input": receipt}
+    )
+    receipt["signature"] = make_signature_envelope(
+        BODY_B_KEY,
+        receipt["receipt_digest"],
+        signer_type="body",
+        signer_id=BODY_B,
+        key_epoch_id=BODY_B_EPOCH,
+        signed_domain="genesis.transfer.receipt.signature.v0.1",
+        created_at=receipt["accepted_at"],
     )
 
 
-def two_active_writers(statuses: list[str]) -> bool:
-    return statuses.count("active_writer") > 1
-
-
-expect_rejection(
-    "multiple-writers",
-    "dos Bodies active_writer a la vez",
-    two_active_writers(["active_writer", "active_writer"]),
-    "multiple_active_writers",
-)
-
-expect_rejection(
-    "revoked-writer",
-    "Body retirado intenta añadir memoria",
-    "revoked" in {"revoked", "lost", "suspended"},
-    "body_not_authorized",
-)
-
-expect_rejection(
-    "fork",
-    "dos eventos distintos comparten el mismo padre",
-    len({"evsha256:child-a", "evsha256:child-b"}) > 1,
-    "fork_detected",
-)
-
-expect_rejection(
-    "hidden-gap",
-    "una brecha real se declara completa",
-    100 > 80 and "complete" == "complete",
-    "undeclared_memory_gap",
-)
-
-expect_rejection(
-    "cross-instance",
-    "el paquete pertenece a otra instancia",
-    "instance_a" != "instance_b",
-    "instance_id_mismatch",
-)
-
-expect_rejection(
-    "missing-continuity-intent",
-    "falta la intención firmada de continuidad",
-    None is None,
-    "continuity_intent_missing",
-)
-
-intent_fields = ["intent", "transfer", "instance", "body-a", "body-b", "checkpoint", "tip", "instance"]
-expect_rejection(
-    "tampered-continuity-intent",
-    "la intención fue alterada después de firmarse",
-    digest("genesis.continuity.intent.v0.1", intent_fields)
-    != digest("genesis.continuity.intent.v0.1", [*intent_fields[:-1], "guardian"]),
-    "continuity_intent_digest_mismatch",
-)
-
-expect_rejection(
-    "intent-source-mismatch",
-    "la intención no proviene del Body escritor",
-    "body-read-only" != "body-active-writer",
-    "continuity_intent_source_invalid",
-)
-
-expect_rejection(
-    "expired-intent",
-    "la ventana de intención terminó antes de aceptar",
-    "2026-07-12T01:11:00Z" > "2026-07-12T01:10:00Z",
-    "continuity_intent_expired",
-)
-
-expect_rejection(
-    "missing-host-consent",
-    "el anfitrión del Body destino no consintió su recurso",
-    None is None,
-    "host_consent_missing",
-)
-
-expect_rejection(
-    "host-consent-wrong-body",
-    "el consentimiento corresponde a otro Body",
-    "body-c" != "body-b",
-    "host_consent_scope_mismatch",
-)
-
-expect_rejection(
-    "host-claims-ownership",
-    "el consentimiento intenta reclamar propiedad de la instancia",
-    "owner" != "none",
-    "host_ownership_claim_forbidden",
-)
-
-expect_rejection(
-    "host-claims-global-veto",
-    "el anfitrión intenta convertir un rechazo local en veto de movilidad",
-    "global" != "none",
-    "host_mobility_veto_forbidden",
-)
-
-expect_rejection(
-    "missing-destination-possession",
-    "el Body destino no prueba posesión de su clave",
-    None is None,
-    "destination_possession_missing",
-)
-
-expect_rejection(
-    "destination-key-mismatch",
-    "la clave demostrada no coincide con el Body destino",
-    "sha256:key-a" != "sha256:key-b",
-    "destination_possession_key_mismatch",
-)
-
-expect_rejection(
-    "tampered-package",
-    "el paquete fue alterado en tránsito",
-    digest("genesis.transfer.package.v0.1", ["a", "b", "c"])
-    != digest("genesis.transfer.package.v0.1", ["a", "b", "X"]),
-    "package_digest_mismatch",
-)
-
-expect_rejection(
-    "tampered-checkpoint",
-    "el checkpoint no coincide con el tip firmado",
-    digest("genesis.checkpoint.v0.1", ["instance", "body-a", "2", "real"])
-    != digest("genesis.checkpoint.v0.1", ["instance", "body-a", "2", "fake"]),
-    "checkpoint_digest_mismatch",
-)
-
-expect_rejection(
-    "recovery-threshold-not-met",
-    "la recuperación no reúne evidencia suficiente",
-    1 < 2,
-    "recovery_threshold_not_met",
-)
-
-passed = all(result["detected"] for result in results)
-print(
-    json.dumps(
-        {
-            "suite": "genesis.free_transfer.negative_simulations.v0.1",
-            "total": len(results),
-            "all_detected": passed,
-            "cases": results,
-        },
-        indent=2,
-        ensure_ascii=False,
+def resign_finalization(bundle: dict) -> None:
+    finalization = bundle["transfer_finalization"]
+    finalization["receipt_digest"] = bundle["transfer_receipt"]["receipt_digest"]
+    finalization["finalization_digest"] = compute_transfer_finalization(
+        {"domain": "genesis.transfer.finalization.v0.1", "input": finalization}
     )
-)
+    finalization["source_acknowledgement"] = make_signature_envelope(
+        BODY_A_KEY,
+        finalization["finalization_digest"],
+        signer_type="body",
+        signer_id=BODY_A,
+        key_epoch_id=BODY_A_EPOCH,
+        signed_domain="genesis.transfer.finalization.signature.v0.1",
+        created_at=finalization["finalized_at"],
+    )
+    finalization["destination_acknowledgement"] = make_signature_envelope(
+        BODY_B_KEY,
+        finalization["finalization_digest"],
+        signer_type="body",
+        signer_id=BODY_B,
+        key_epoch_id=BODY_B_EPOCH,
+        signed_domain="genesis.transfer.finalization.signature.v0.1",
+        created_at=finalization["finalized_at"],
+    )
 
-for result in results:
-    mark = "ok  " if result["detected"] else "FAIL"
-    print(f"{mark}: {result['case_id']} — {result['description']}", file=sys.stderr)
 
-if not passed:
-    print("\nALGÚN FALLO NO FUE DETECTADO.", file=sys.stderr)
-    raise SystemExit(1)
-print(f"\n{len(results)} SIMULACIONES NEGATIVAS: todas detectadas", file=sys.stderr)
-raise SystemExit(0)
+def resign_completed_event(bundle: dict) -> None:
+    event = bundle["memory_events"][-1]
+    event["event_hash"] = event_hash(event)
+    event["signature"] = make_signature_envelope(
+        BODY_B_KEY,
+        event["event_hash"],
+        signer_type="body",
+        signer_id=BODY_B,
+        key_epoch_id=BODY_B_EPOCH,
+        signed_domain="genesis.memory.event.signature.v0.1",
+        created_at=event["observed_at"],
+    )
+
+
+def recompute_package(bundle: dict) -> None:
+    package = bundle["transfer_package"]
+    package["package_digest"] = compute_transfer_package(
+        {"domain": "genesis.transfer.package.v0.1", "input": package}
+    )
+
+
+def run_validator(node: str, candidate: dict, directory: Path, case_id: str) -> str | None:
+    candidate_path = directory / f"{case_id}.json"
+    candidate_path.write_text(
+        json.dumps(candidate, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        [node, str(VALIDATOR), "--transfer-only", str(candidate_path)],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode == 0:
+        return None
+    marker = "FAIL schema conformance: "
+    for line in result.stderr.splitlines():
+        if line.startswith(marker):
+            return line[len(marker):]
+    return f"validator_process_failed:{result.returncode}"
+
+
+def main() -> int:
+    args = parse_args()
+    node = shutil.which("node")
+    if node is None:
+        print("ERROR: Node.js no encontrado.", file=sys.stderr)
+        return 1
+    valid = json.loads(args.artifacts.read_text(encoding="utf-8"))
+    results: list[dict] = []
+
+    with TemporaryDirectory(prefix="genesis-transfer-negatives-") as temp:
+        directory = Path(temp)
+
+        def expect(case_id: str, expected_prefix: str, mutate) -> None:
+            candidate = deepcopy(valid)
+            mutate(candidate)
+            actual = run_validator(node, candidate, directory, case_id)
+            results.append(
+                {
+                    "case_id": case_id,
+                    "expected_error_prefix": expected_prefix,
+                    "actual_error": actual,
+                    "detected": actual is not None and actual.startswith(expected_prefix),
+                }
+            )
+
+        expect(
+            "missing-continuity-intent",
+            "missing_generated_artifact:continuity_intent",
+            lambda item: item.pop("continuity_intent"),
+        )
+        expect(
+            "forged-continuity-intent-signature",
+            "fixture_signature_invalid:transfer.continuity_intent.signature",
+            lambda item: item["continuity_intent"]["signature"].__setitem__(
+                "signature_value", "00" * 64
+            ),
+        )
+        expect(
+            "tampered-pre-transfer-registry",
+            "body_registry_before_digest_mismatch",
+            lambda item: item["body_registry_before"]["bodies"][0].__setitem__(
+                "platform_profile", "tampered-platform"
+            ),
+        )
+        expect(
+            "tampered-final-registry",
+            "final_body_registry_digest_mismatch",
+            lambda item: item["body_registry"]["bodies"][1].__setitem__(
+                "platform_profile", "tampered-platform"
+            ),
+        )
+        expect(
+            "multiple-final-writers",
+            "multiple_active_writers",
+            lambda item: item["body_registry"]["bodies"][0].__setitem__(
+                "status", "active_writer"
+            ),
+        )
+        expect(
+            "tampered-checkpoint-state",
+            "checkpoint_signature_or_digest_invalid",
+            lambda item: item["checkpoint"].__setitem__("state_digest", "sha256:" + "99" * 32),
+        )
+        expect(
+            "tampered-memory-event",
+            "memory_event_digest_mismatch:1",
+            lambda item: item["memory_events"][1].__setitem__(
+                "content_digest", "sha256:" + "98" * 32
+            ),
+        )
+        expect(
+            "broken-memory-chain",
+            "broken_memory_chain:2",
+            lambda item: item["memory_events"][2].__setitem__(
+                "previous_event_hash", "evsha256:" + "97" * 32
+            ),
+        )
+
+        def corrupt_packaged_memory(item: dict) -> None:
+            content = next(
+                entry
+                for entry in item["transfer_package"]["contents"]
+                if entry["path"] == "memory/events.json"
+            )
+            content["digest"] = "sha256:" + "96" * 32
+            recompute_package(item)
+            item["transfer_receipt"]["accepted_package_digest"] = item["transfer_package"]["package_digest"]
+            resign_receipt(item)
+            resign_finalization(item)
+
+        expect("packaged-memory-does-not-match-chain", "package_memory_digest_mismatch", corrupt_packaged_memory)
+
+        def expire_destination_proof(item: dict) -> None:
+            item["transfer_receipt"]["accepted_at"] = "2026-07-12T01:08:00Z"
+            resign_receipt(item)
+            item["transfer_finalization"]["finalized_at"] = "2026-07-12T01:08:30Z"
+            resign_finalization(item)
+            event = item["memory_events"][-1]
+            event["observed_at"] = "2026-07-12T01:08:30Z"
+            resign_completed_event(item)
+
+        expect("expired-destination-possession", "destination_possession_expired", expire_destination_proof)
+
+        def change_completion_type(item: dict) -> None:
+            item["memory_events"][-1]["event_type"] = "transfer.pending"
+            resign_completed_event(item)
+
+        expect("wrong-completion-event", "completion_event_invalid", change_completion_type)
+
+    passed = all(result["detected"] for result in results)
+    print(
+        json.dumps(
+            {
+                "suite": "genesis.free_transfer.real_negative_mutations.v0.1",
+                "total": len(results),
+                "all_detected": passed,
+                "cases": results,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
+    )
+    for result in results:
+        mark = "ok" if result["detected"] else "FAIL"
+        print(
+            f"{mark}: {result['case_id']} — esperado={result['expected_error_prefix']} "
+            f"actual={result['actual_error']}",
+            file=sys.stderr,
+        )
+    if not passed:
+        return 1
+    print(f"\n{len(results)} MUTACIONES REALES DE TRANSFERENCIA: todas rechazadas", file=sys.stderr)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

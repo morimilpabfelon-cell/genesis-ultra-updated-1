@@ -142,6 +142,14 @@ def main() -> int:
 
     expect("recovery-creates-second-writer", "recovery_final_registry_authority_invalid", create_second_writer)
 
+    expect(
+        "recovery-final-registry-content-tampered",
+        "recovery_final_registry_digest_mismatch",
+        lambda item: item["body_registry_after"]["bodies"][-1].__setitem__(
+            "platform_profile", "tampered-platform"
+        ),
+    )
+
     def skip_recovery_sequence(item: dict) -> None:
         item["recovery_event"]["sequence"] = 6
 

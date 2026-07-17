@@ -53,6 +53,10 @@ body.device.control
 
 No existe en este perfil una capacidad de escritura directa de memoria, modificación de identidad, sustitución del guardián, autoconcesión, desactivación de protecciones de `main` o lectura de evaluaciones privadas.
 
+`memory.read` se limita a registros externos, de terceros o sujetos al recurso del
+anfitrión. No controla `remember`: la instancia conserva acceso intrínseco a su propia
+memoria canónica.
+
 Capacidades prohibidas, incluso como solicitud:
 
 ```text
