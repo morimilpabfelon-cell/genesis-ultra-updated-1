@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 191,
+  "file_count": 192,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -130,8 +130,8 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 8581,
-      "digest": "sha256:9c68b71a8ed4582ed5d85a30d4d144f2810690374d10b23c63daa19bddcf09aa"
+      "size_bytes": 8622,
+      "digest": "sha256:97fcd6adc76d66bad09d7d2e178c4902e791f5efc27708814ac8ef53aaf11e52"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
@@ -537,6 +537,11 @@
       "path": "spec/DRAFT_INTEGRITY_MANIFEST.md",
       "size_bytes": 2838,
       "digest": "sha256:852a24c5f3022c038ad5487102d90295a45ab32c31ee35107d33b8b038b6dbcb"
+    },
+    {
+      "path": "spec/FREE_BIRTH_AND_CONTINUITY.md",
+      "size_bytes": 6971,
+      "digest": "sha256:9f15127d7de9d2377465908bcb1a047a1d697479156e409d884debd42e309a84"
     },
     {
       "path": "spec/GENESIS_PROTOCOL_DRAFT.md",
@@ -964,5 +969,5 @@
       "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
     }
   ],
-  "root_digest": "sha256:2c101560e71fe194ade13e4ccf7d2ffd88e35b2bf43ccaae20f98ac38ca7ec5a"
+  "root_digest": "sha256:58a7dadc13460095cb1c1a2827243577ecfc6f711e9b26bc8487cd238ab24ca1"
 }
