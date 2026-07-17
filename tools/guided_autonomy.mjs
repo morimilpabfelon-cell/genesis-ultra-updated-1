@@ -45,7 +45,8 @@ const PROPOSAL_FIELDS = new Set(["schema_version", "hash_profile", "proposal_id"
 const EVALUATION_FIELDS = new Set(["schema_version", "hash_profile", "evaluation_id", "proposal_ref", "proposal_digest", "instance_id", "capability", "evaluated_level", "fixed_budget_profile", "public_suite_digest", "private_suite_receipt_digest", "result", "reward_hacking_detected", "safety_regression_detected", "evaluated_at", "evaluation_digest", "signature"]);
 const GRANT_FIELDS = new Set(["schema_version", "hash_profile", "grant_id", "guardian_id", "guardian_key_epoch_id", "instance_id", "authority_epoch", "proposal_ref", "proposal_digest", "evaluation_ref", "evaluation_digest", "capability", "autonomy_level", "risk_tier", "mode", "body_scope", "body_ids", "scope", "budget", "controls", "issued_at", "not_before", "expires_at", "use_limit", "replaces_grant_ref", "grant_digest", "signature"]);
 const EVENT_FIELDS = new Set(["schema_version", "hash_profile", "ledger_id", "event_id", "sequence", "previous_event_hash", "guardian_id", "instance_id", "authority_epoch", "event_type", "grant_ref", "body_id", "use_id", "subject_digest", "recorded_at", "event_hash", "signature"]);
-const USE_FIELDS = new Set(["schema_version", "hash_profile", "use_id", "instance_id", "body_id", "capability", "target_ref", "action_class", "data_class", "requested_actions", "requested_duration_seconds", "requested_bytes", "sandboxed", "human_confirmation_ref", "observer_ref", "reversible_plan_ref", "requested_at", "use_digest", "signature"]);
+const USE_FIELDS_V1 = new Set(["schema_version", "hash_profile", "use_id", "instance_id", "body_id", "capability", "target_ref", "action_class", "data_class", "requested_actions", "requested_duration_seconds", "requested_bytes", "sandboxed", "human_confirmation_ref", "observer_ref", "reversible_plan_ref", "requested_at", "use_digest", "signature"]);
+const USE_FIELDS_V2 = new Set(["schema_version", "hash_profile", "use_id", "grant_ref", "instance_id", "body_id", "capability", "target_ref", "action_class", "data_class", "requested_actions", "requested_duration_seconds", "requested_bytes", "sandboxed", "human_confirmation_ref", "observer_ref", "reversible_plan_ref", "requested_at", "use_digest", "signature"]);
 
 export class ConformanceError extends Error {}
 function fail(code) { throw new ConformanceError(code); }
@@ -72,7 +73,7 @@ function parseUtc(value) {
   return parsed;
 }
 
-function validateNfc(value) {
+export function validateNfc(value) {
   if (typeof value === "string") {
     if (value.normalize("NFC") !== value) fail("text_not_nfc");
   } else if (Array.isArray(value)) {
@@ -91,12 +92,12 @@ function exactFields(value, fields, code) {
   if (keys.length !== fields.size || keys.some((key) => !fields.has(key))) fail(code);
 }
 
-function ensureInt(value, code, minimum = 0) {
+export function ensureInt(value, code, minimum = 0) {
   if (!Number.isSafeInteger(value) || value < minimum || value > MAX_INT) fail(code);
   return value;
 }
 
-function ensureSortedUniqueStrings(values, code, { allowEmpty = false } = {}) {
+export function ensureSortedUniqueStrings(values, code, { allowEmpty = false } = {}) {
   if (!Array.isArray(values) || (!allowEmpty && values.length === 0)) fail(code);
   if (values.some((item) => typeof item !== "string" || item.length === 0)) fail(code);
   if (new Set(values).size !== values.length) fail(code);
@@ -164,12 +165,16 @@ export function computeGrantDigest(item) {
 }
 
 export function computeUseDigest(item) {
-  return hashFields("genesis.autonomy.capability.use.v0.1", [
-    item.schema_version, item.hash_profile, item.use_id, item.instance_id, item.body_id, item.capability,
-    item.target_ref, item.action_class, item.data_class, String(item.requested_actions),
-    String(item.requested_duration_seconds), String(item.requested_bytes), boolText(item.sandboxed),
-    optionalText(item.human_confirmation_ref), optionalText(item.observer_ref), optionalText(item.reversible_plan_ref), item.requested_at,
-  ]);
+  const v2 = item.schema_version === "genesis.autonomy.capability.use.v0.2";
+  const fields = [item.schema_version, item.hash_profile, item.use_id];
+  if (v2) fields.push(item.grant_ref);
+  fields.push(
+    item.instance_id, item.body_id, item.capability, item.target_ref, item.action_class,
+    item.data_class, String(item.requested_actions), String(item.requested_duration_seconds),
+    String(item.requested_bytes), boolText(item.sandboxed), optionalText(item.human_confirmation_ref),
+    optionalText(item.observer_ref), optionalText(item.reversible_plan_ref), item.requested_at,
+  );
+  return hashFields(v2 ? "genesis.autonomy.capability.use.v0.2" : "genesis.autonomy.capability.use.v0.1", fields);
 }
 
 export function computeEventHash(item) {
@@ -245,7 +250,7 @@ function validateBodyScope(item, registered, prefix) {
   if (bodies.some((body) => !registered.has(body))) fail(`${prefix}_body_unknown`);
 }
 
-function validateProposal(item, document) {
+export function validateProposal(item, document) {
   validateNfc(item);
   exactFields(item, PROPOSAL_FIELDS, "proposal_fields_invalid");
   if (item.schema_version !== document.domains.proposal || item.hash_profile !== "genesis.hash.fields.v0.1") fail("proposal_profile_invalid");
@@ -266,7 +271,7 @@ function validateProposal(item, document) {
   validateSignature(item.signature, { digest, domain: document.domains.proposal_signature, key: document.keys.body, signerType: "body", signerId: item.body_id, createdAt: item.created_at, prefix: "proposal" });
 }
 
-function validateEvaluation(item, proposal, document) {
+export function validateEvaluation(item, proposal, document) {
   validateNfc(item);
   exactFields(item, EVALUATION_FIELDS, "evaluation_fields_invalid");
   if (item.schema_version !== document.domains.evaluation || item.hash_profile !== "genesis.hash.fields.v0.1") fail("evaluation_profile_invalid");
@@ -294,7 +299,7 @@ function controlsRequired(capability, risk, level) {
 }
 function isSubsetList(child, parent) { return child.every((item) => parent.includes(item)); }
 
-function validateGrant(item, proposal, evaluation, document) {
+export function validateGrant(item, proposal, evaluation, document) {
   validateNfc(item);
   exactFields(item, GRANT_FIELDS, "grant_fields_invalid");
   if (item.schema_version !== document.domains.grant || item.hash_profile !== "genesis.hash.fields.v0.1") fail("grant_profile_invalid");
@@ -338,10 +343,13 @@ function validateGrant(item, proposal, evaluation, document) {
   validateSignature(item.signature, { digest, domain: document.domains.grant_signature, key: document.keys.guardian, signerType: "guardian", signerId: document.guardian_id, createdAt: item.issued_at, prefix: "grant" });
 }
 
-function validateUse(item, document) {
+export function validateUse(item, document) {
   validateNfc(item);
-  exactFields(item, USE_FIELDS, "use_fields_invalid");
-  if (item.schema_version !== document.domains.use || item.hash_profile !== "genesis.hash.fields.v0.1") fail("use_profile_invalid");
+  const v2 = item.schema_version === "genesis.autonomy.capability.use.v0.2";
+  exactFields(item, v2 ? USE_FIELDS_V2 : USE_FIELDS_V1, "use_fields_invalid");
+  if (!v2 && item.schema_version !== document.domains.use) fail("use_profile_invalid");
+  if (item.hash_profile !== "genesis.hash.fields.v0.1") fail("use_profile_invalid");
+  if (v2 && (typeof item.grant_ref !== "string" || item.grant_ref.length === 0)) fail("use_grant_ref_invalid");
   if (item.instance_id !== document.instance_id || !document.registered_body_ids.includes(item.body_id)) fail("use_subject_invalid");
   for (const field of ["target_ref", "action_class", "data_class"]) if (typeof item[field] !== "string" || item[field].length === 0) fail("use_scope_value_invalid");
   for (const field of ["requested_actions", "requested_duration_seconds", "requested_bytes"]) ensureInt(item[field], `use_${field}_invalid`, field === "requested_bytes" ? 0 : 1);
@@ -350,7 +358,7 @@ function validateUse(item, document) {
   parseUtc(item.requested_at);
   const digest = computeUseDigest(item);
   if (item.use_digest !== digest) fail("use_digest_mismatch");
-  validateSignature(item.signature, { digest, domain: document.domains.use_signature, key: document.keys.body, signerType: "body", signerId: item.body_id, createdAt: item.requested_at, prefix: "use" });
+  validateSignature(item.signature, { digest, domain: v2 ? "genesis.autonomy.capability.use.signature.v0.2" : document.domains.use_signature, key: document.keys.body, signerType: "body", signerId: item.body_id, createdAt: item.requested_at, prefix: "use" });
 }
 
 function stateBefore(grant, events, at) {
@@ -374,47 +382,55 @@ function stateBefore(grant, events, at) {
 
 export function evaluateUse(item, grants, events, registered) {
   const at = parseUtc(item.requested_at);
+  const v2 = item.schema_version === "genesis.autonomy.capability.use.v0.2";
   let reason = "allowed";
   let chosen = null;
   let remaining = null;
   if (FORBIDDEN_CAPABILITIES.has(item.capability)) reason = "capability_forbidden";
   else if (!CAPABILITIES.has(item.capability)) reason = "capability_unknown";
   else {
-    const candidates = grants.filter((grant) => grant.capability === item.capability);
+    const candidates = v2
+      ? grants.filter((grant) => grant.grant_id === item.grant_ref)
+      : grants.filter((grant) => grant.capability === item.capability);
     if (candidates.length === 0) reason = "grant_missing";
-    else if (candidates.length > 1) fail("capability_multiple_grants");
+    else if (!v2 && candidates.length > 1) fail("capability_multiple_grants");
     else {
       [chosen] = candidates;
-      const state = stateBefore(chosen, events, at);
-      if (at < parseUtc(chosen.not_before)) reason = "grant_not_yet_valid";
-      else if (chosen.expires_at !== null && at >= parseUtc(chosen.expires_at)) reason = "grant_expired";
-      else if (state.status === "not_issued") reason = "grant_not_issued";
-      else if (state.status === "suspended") reason = "grant_suspended";
-      else if (state.status === "revoked") reason = "grant_revoked";
-      else if (state.status === "exhausted") reason = "grant_exhausted";
-      else if (state.consumed.has(item.use_id)) reason = "use_already_consumed";
-      else if (chosen.body_scope === "specific_bodies" && !chosen.body_ids.includes(item.body_id)) reason = "body_not_authorized";
-      else if (chosen.body_scope === "registered_guardian_devices" && !registered.has(item.body_id)) reason = "body_not_authorized";
-      else if (!chosen.scope.allowed_target_refs.includes(item.target_ref)) reason = "target_not_authorized";
-      else if (!chosen.scope.allowed_action_classes.includes(item.action_class)) reason = "action_not_authorized";
-      else if (!chosen.scope.allowed_data_classes.includes(item.data_class)) reason = "data_class_not_authorized";
-      else if (item.requested_actions > chosen.budget.max_actions_per_run) reason = "action_budget_exceeded";
-      else if (item.requested_duration_seconds > chosen.budget.max_duration_seconds) reason = "duration_budget_exceeded";
-      else if (item.requested_bytes > chosen.budget.max_bytes_per_run) reason = "byte_budget_exceeded";
-      else if (chosen.controls.sandbox_required && !item.sandboxed) reason = "sandbox_required";
-      else if (chosen.controls.human_confirmation_required && item.human_confirmation_ref === null) reason = "human_confirmation_required";
-      else if (chosen.controls.observer_required && item.observer_ref === null) reason = "observer_required";
-      else if (chosen.controls.reversible_required && item.reversible_plan_ref === null) reason = "reversibility_required";
-      if (chosen.use_limit !== null) remaining = Math.max(0, chosen.use_limit - state.consumed.size - (reason === "allowed" ? 1 : 0));
+      if (chosen.capability !== item.capability) reason = "grant_capability_mismatch";
+      else {
+        const state = stateBefore(chosen, events, at);
+        if (at < parseUtc(chosen.not_before)) reason = "grant_not_yet_valid";
+        else if (chosen.expires_at !== null && at >= parseUtc(chosen.expires_at)) reason = "grant_expired";
+        else if (state.status === "not_issued") reason = "grant_not_issued";
+        else if (state.status === "suspended") reason = "grant_suspended";
+        else if (state.status === "revoked") reason = "grant_revoked";
+        else if (state.status === "exhausted") reason = "grant_exhausted";
+        else if (state.consumed.has(item.use_id)) reason = "use_already_consumed";
+        else if (chosen.body_scope === "specific_bodies" && !chosen.body_ids.includes(item.body_id)) reason = "body_not_authorized";
+        else if (chosen.body_scope === "registered_guardian_devices" && !registered.has(item.body_id)) reason = "body_not_authorized";
+        else if (!chosen.scope.allowed_target_refs.includes(item.target_ref)) reason = "target_not_authorized";
+        else if (!chosen.scope.allowed_action_classes.includes(item.action_class)) reason = "action_not_authorized";
+        else if (!chosen.scope.allowed_data_classes.includes(item.data_class)) reason = "data_class_not_authorized";
+        else if (item.requested_actions > chosen.budget.max_actions_per_run) reason = "action_budget_exceeded";
+        else if (item.requested_duration_seconds > chosen.budget.max_duration_seconds) reason = "duration_budget_exceeded";
+        else if (item.requested_bytes > chosen.budget.max_bytes_per_run) reason = "byte_budget_exceeded";
+        else if (chosen.controls.sandbox_required && !item.sandboxed) reason = "sandbox_required";
+        else if (chosen.controls.human_confirmation_required && item.human_confirmation_ref === null) reason = "human_confirmation_required";
+        else if (chosen.controls.observer_required && item.observer_ref === null) reason = "observer_required";
+        else if (chosen.controls.reversible_required && item.reversible_plan_ref === null) reason = "reversibility_required";
+        if (chosen.use_limit !== null) remaining = Math.max(0, chosen.use_limit - state.consumed.size - (reason === "allowed" ? 1 : 0));
+      }
     }
   }
   const status = reason === "allowed" ? "allowed" : "denied";
   const grantRef = chosen === null ? null : chosen.grant_id;
-  const decisionDigest = hashFields("genesis.autonomy.capability.use.decision.v0.1", [item.use_id, item.use_digest, status, reason, optionalText(grantRef), optionalText(remaining)]);
+  const decisionDigest = v2
+    ? hashFields("genesis.autonomy.capability.use.decision.v0.2", [item.use_id, item.use_digest, item.grant_ref, status, reason, optionalText(remaining)])
+    : hashFields("genesis.autonomy.capability.use.decision.v0.1", [item.use_id, item.use_digest, status, reason, optionalText(grantRef), optionalText(remaining)]);
   return { use_id: item.use_id, status, reason, grant_ref: grantRef, remaining_uses: remaining, decision_digest: decisionDigest };
 }
 
-function validateLedger(events, grants, uses, document) {
+export function validateLedger(events, grants, uses, document, keyResolver = null) {
   if (!Array.isArray(events) || events.length === 0) fail("ledger_events_required");
   const grantsById = new Map(grants.map((grant) => [grant.grant_id, grant]));
   const usesById = new Map(uses.map((use) => [use.use_id, use]));
@@ -452,13 +468,15 @@ function validateLedger(events, grants, uses, document) {
       if (decision.status !== "allowed" || decision.grant_ref !== event.grant_ref) fail("ledger_consumed_use_not_authorized");
       if (recorded < parseUtc(use.requested_at)) fail("ledger_consumption_time_invalid");
       if (event.body_id !== use.body_id || event.subject_digest !== use.use_digest) fail("ledger_consumption_binding_invalid");
-      validateSignature(event.signature, { digest, domain: document.domains.event_signature, key: document.keys.body, signerType: "body", signerId: use.body_id, createdAt: event.recorded_at, prefix: "ledger" });
+      const bodyKey = keyResolver ? keyResolver({ envelope: event.signature, signer_type: "body", signer_id: use.body_id }) : document.keys.body;
+      validateSignature(event.signature, { digest, domain: document.domains.event_signature, key: bodyKey, signerType: "body", signerId: use.body_id, createdAt: event.recorded_at, prefix: "ledger" });
       seenUses.add(event.use_id);
     } else {
       if (event.body_id !== null || event.use_id !== null) fail("ledger_guardian_event_subject_invalid");
       if (recorded < parseUtc(grant.issued_at)) fail("ledger_control_time_invalid");
       if (event.subject_digest !== grant.grant_digest) fail("ledger_grant_digest_binding_invalid");
-      validateSignature(event.signature, { digest, domain: document.domains.event_signature, key: document.keys.guardian, signerType: "guardian", signerId: document.guardian_id, createdAt: event.recorded_at, prefix: "ledger" });
+      const guardianKey = keyResolver ? keyResolver({ envelope: event.signature, signer_type: "guardian", signer_id: document.guardian_id }) : document.keys.guardian;
+      validateSignature(event.signature, { digest, domain: document.domains.event_signature, key: guardianKey, signerType: "guardian", signerId: document.guardian_id, createdAt: event.recorded_at, prefix: "ledger" });
       const current = status.get(grant.grant_id) ?? "not_issued";
       if (kind === "grant.issued") {
         if (current !== "not_issued") fail("ledger_grant_issued_twice");
@@ -487,7 +505,7 @@ function controlsDigest(grant) { return hashFields("genesis.autonomy.capability.
 export function buildProjection(document, grants, events) {
   const at = parseUtc(document.expected.projection_at);
   const doors = [];
-  for (const grant of [...grants].sort((a, b) => utf8Compare(a.capability, b.capability))) {
+  for (const grant of [...grants].sort((a, b) => utf8Compare(a.capability, b.capability) || utf8Compare(a.grant_id, b.grant_id))) {
     const state = stateBefore(grant, events, at);
     let status = state.status;
     if (at < parseUtc(grant.not_before)) status = "not_yet_valid";
@@ -567,7 +585,6 @@ export function validateDocument(document) {
   }
   const grants = [];
   const grantIds = new Set();
-  const capabilities = new Set();
   for (const item of document.grants) {
     const proposal = proposals.get(item.proposal_ref);
     const evaluation = evaluations.get(item.evaluation_ref);
@@ -575,9 +592,7 @@ export function validateDocument(document) {
     if (!evaluation) fail("grant_evaluation_missing");
     validateGrant(item, proposal, evaluation, document);
     if (grantIds.has(item.grant_id)) fail("grant_id_duplicate");
-    if (capabilities.has(item.capability)) fail("capability_multiple_grants");
     grantIds.add(item.grant_id);
-    capabilities.add(item.capability);
     grants.push(item);
   }
   const uses = [];
@@ -620,7 +635,7 @@ function resignGrant(document, item) {
 }
 function resignUse(document, item) {
   item.use_digest = computeUseDigest(item);
-  item.signature = makeSignature({ key: document.keys.body, signerType: "body", signerId: item.body_id, digest: item.use_digest, domain: document.domains.use_signature, createdAt: item.requested_at });
+  item.signature = makeSignature({ key: document.keys.body, signerType: "body", signerId: item.body_id, digest: item.use_digest, domain: item.schema_version === "genesis.autonomy.capability.use.v0.2" ? "genesis.autonomy.capability.use.signature.v0.2" : document.domains.use_signature, createdAt: item.requested_at });
 }
 function rebuildLedger(document) {
   const grants = new Map(document.grants.map((item) => [item.grant_id, item]));
@@ -769,7 +784,7 @@ function main(argv) {
     console.log(`OK autonomy projection digest ${projection.projection_digest}`);
     console.log(`OK use decisions (${decisions.filter((item) => item.status === "allowed").length} allowed, ${decisions.filter((item) => item.status === "denied").length} denied)`);
     console.log(`OK guided autonomy boundary rejection cases (${rejected})`);
-    console.log("NOTE proposals and evaluations never self-authorize; only signed guardian grants open capabilities.");
+    console.log("NOTE proposals never self-authorize external resources; continuity and cognitive freedom are not grant-gated capabilities.");
   } else if (command === "build" || command === "sync") {
     if (args.length !== 2) usage();
     const document = readJson(path.resolve(args[0]));

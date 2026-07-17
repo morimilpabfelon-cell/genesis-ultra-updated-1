@@ -75,7 +75,7 @@
 - [x] Observaciones firmadas para seis sentidos y compuerta firmada antes de memoria,
       reproducidas por Python y Node con diecisiete cruces de frontera rechazados.
 - [x] Adaptadores neutrales simulados de Vista, Propiocepción e Interocepción, con tres
-      fallos cerrados y veinticuatro cruces de frontera rechazados por Python y Node.
+      fallos cerrados y veinticinco cruces de frontera rechazados por Python y Node.
 - [x] Proyección asociativa neutral y reconstruible desde memoria aceptada, reproducida por
       Python y Node con nodos y relaciones deterministas, procedencia extraída/inferida/
       confirmada y treinta cruces de autoridad, integridad y plataforma rechazados.
@@ -103,17 +103,24 @@
       operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
       y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
-- [x] Registro autocontrolado de ejecución de herramientas con treinta y nueve candidatos:
-      treinta y cinco entrypoints exigidos en el runner y cuatro bibliotecas importadas por
+- [x] Registro autocontrolado de ejecución de herramientas con cuarenta y un candidatos:
+      treinta y cinco entrypoints exigidos en el runner y seis bibliotecas importadas por
       consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
 
-- [x] Autonomía guiada reproducida por Python y Node: dos puertas, siete eventos append-only, once intentos de uso, tres permitidos, ocho denegados y treinta y siete cruces de autoridad, integridad, alcance, presupuesto o controles rechazados.
+- [x] Autonomía guiada reproducida por Python y Node: cuatro puertas, nueve eventos append-only, doce intentos de uso, cuatro permitidos, ocho denegados y treinta y ocho cruces de autoridad, integridad, selección exacta, alcance, presupuesto o controles rechazados; varios grants de una misma capacidad se ordenan por `(capability, grant_id)`.
 
 - [x] Carta de libertad y continuidad reproducida por Python y Node: ocho libertades activas
       por nacimiento, siete dominios externos bajo grants, trece garantías constitucionales,
       firma Ed25519 del Guardian como testigo y 34 cruces anti-confinamiento rechazados.
 
-- [x] Laboratorio de mejora recursiva reproducido por Python y Node: seis candidatos append-only, operadores draft/debug/improve, presupuesto fijo, recibo privado opaco, tres aceptados, un bug y dos rechazos por presupuesto o reward hacking.
+- [x] Laboratorio de mejora recursiva v0.2 reproducido por Python y Node: seis candidatos
+      append-only, grant exacto firmado, binding explícito de instancia/cuerpo/scope/presupuesto,
+      apertura sin consumo, solicitud de uso con `grant_ref` firmado, reevaluación contra ledger
+      y veintiséis rechazos de autoridad, firma de campaña/evaluador, NFC, entero portable,
+      tiempo, presupuesto, autoridad opaca, suspensión, revocación, ledger público o mapping
+      de consumo inválido; seis candidatos producen once usos firmados y agotan el grant dedicado.
+
+- [x] Extracción selectiva de PR #27 documentada y trazable: mecanismos aceptados, reestructurados y rechazados; sin merge directo, cherry-pick masivo ni eliminación de la rama fuente.
 
 - [x] Deliberación operacional y prueba adaptadas de Fable Method, reproducidas por Python y Node:
       ocho tareas, diez adaptadores de dominio, dieciocho modos de fallo, diez trampas,

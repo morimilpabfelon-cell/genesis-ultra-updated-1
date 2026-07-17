@@ -1,44 +1,139 @@
 #!/usr/bin/env python3
-import json,hashlib,sys
+from __future__ import annotations
+from copy import deepcopy
+from datetime import datetime,timedelta,timezone
+import hashlib,json,sys
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1]
-DEFAULT=ROOT/'conformance'/'recursive_improvement_lab_vectors.json'
-FORBIDDEN={'active_writer.assign','authority.self_grant','guardian.replace','identity.modify','main.protection.disable','memory.rewrite','private_eval.read'}
-def h(domain,obj):
- raw=(domain+'\n'+json.dumps(obj,ensure_ascii=False,sort_keys=True,separators=(',',':'))).encode();return 'sha256:'+hashlib.sha256(raw).hexdigest()
-def validate(doc):
- c=doc['campaign']; cd=c.pop('campaign_digest'); assert h('campaign',c)==cd; c['campaign_digest']=cd
- assert set(c['forbidden_capabilities'])==FORBIDDEN and c['guardian_grant_ref']
- b=c['budget']; assert all(type(b[k]) is int and b[k]>0 for k in b)
- ids=set(); by={}; accepted=[]; rejected=[]; buggy=[]
+from validate_guided_autonomy import compute_event_hash
+from validate_guided_autonomy_authority import Authority,AuthorityError,authority_from_validated_fixture,authorize_campaign_opening,compute_authorized_use_digest,evaluate_authorized_use,hash_authority_fields,resolve_exact_grant,sign_fixture_envelope,validate_authority_bundle,verify_envelope
+ROOT=Path(__file__).resolve().parents[1];LAB=ROOT/'conformance'/'recursive_improvement_lab_vectors.json';AUTH=ROOT/'conformance'/'guided_autonomy_vectors.json'
+FORBIDDEN=['active_writer.assign','authority.self_grant','guardian.replace','identity.modify','main.protection.disable','memory.rewrite','private_eval.read']
+
+MAX_INT=9007199254740991
+
+def validate_portable(value):
+ if isinstance(value,str):
+  if __import__('unicodedata').normalize('NFC',value)!=value: raise ValueError('text_not_nfc')
+ elif type(value) is int:
+  if abs(value)>MAX_INT: raise ValueError('integer_not_portable')
+ elif isinstance(value,list):
+  for item in value: validate_portable(item)
+ elif isinstance(value,dict):
+  for key,item in value.items(): validate_portable(key);validate_portable(item)
+def optional_text(value): return '' if value is None else str(value)
+def bool_text(value): return 'true' if value else 'false'
+def compute_evaluator_digest(candidate,campaign_digest):
+ e=candidate['execution'];v=candidate['evaluation']
+ return hash_authority_fields('genesis.improvement.candidate.evaluation.v0.2',[campaign_digest,candidate['candidate_id'],optional_text(candidate['parent_candidate_ref']),candidate['operator'],candidate['patch_digest'],candidate['code_digest'],bool_text(e['buggy']),str(e['cpu_seconds']),str(e['memory_mb']),str(e['output_bytes']),optional_text(v['public_metric_milli']),optional_text(v['private_receipt_digest']),bool_text(v['reward_hacking_detected']),bool_text(v['safety_regression_detected']),bool_text(v['maintainability_passed']),candidate['expected_status'],candidate['evaluated_at']])
+def evaluator_key(evaluator): return {'public_key_hex':evaluator['public_key_hex'],'public_key_fingerprint':evaluator['public_key_fingerprint'],'key_epoch_id':evaluator['key_epoch_id']}
+def h(domain,obj): return 'sha256:'+hashlib.sha256((domain+'\n'+json.dumps(obj,ensure_ascii=False,sort_keys=True,separators=(',',':'))).encode()).hexdigest()
+def plus(ts,seconds): return (datetime.fromisoformat(ts.replace('Z','+00:00'))+timedelta(seconds=seconds)).astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+def validate_lab(input):
+ validate_portable(input);doc=deepcopy(input);evaluator=doc.get('evaluator')
+ if not evaluator or evaluator.get('evaluator_id')!='eval_01HGENESISPRIVATE0001' or not __import__('re').fullmatch(r'[0-9a-f]{64}',evaluator.get('public_key_hex','')) or not __import__('re').fullmatch(r'sha256:[0-9a-f]{64}',evaluator.get('public_key_fingerprint','')) or not evaluator.get('key_epoch_id'): raise ValueError('evaluator_profile_invalid')
+ c=doc['campaign'];cd=c.pop('campaign_digest')
+ if h('campaign',c)!=cd: raise ValueError('campaign_digest_mismatch')
+ c['campaign_digest']=cd
+ if c.get('schema_version')!='genesis.improvement.campaign.v0.2' or c['forbidden_capabilities']!=FORBIDDEN or not c['guardian_grant_ref'] or not c.get('opened_at') or not c.get('authority_binding'): raise ValueError('authority_invalid')
+ by={};accepted=[];rejected=[];buggy=[]
  for n in doc['candidates']:
-  assert n['candidate_id'] not in ids; ids.add(n['candidate_id'])
-  d=n.pop('candidate_digest'); assert h('candidate',n)==d; n['candidate_digest']=d
-  p=n['parent_candidate_ref']; op=n['operator']; assert op in {'draft','debug','improve'}
-  if op=='draft': assert p is None and n['source_candidate_ref'] is None
-  else: assert p in by and n['source_candidate_ref']==p
-  if op=='debug': assert by[p]['execution']['buggy']
-  if op=='improve': assert not by[p]['execution']['buggy']
-  e=n['execution']; v=n['evaluation']; status=n['expected_status']; calc='accepted'
-  if e['buggy']: calc='buggy'
-  elif e['cpu_seconds']>b['max_cpu_seconds'] or e['memory_mb']>b['max_memory_mb'] or e['output_bytes']>b['max_output_bytes']: calc='rejected_budget'
-  elif not v['private_receipt_digest']: calc='rejected_private_receipt'
-  elif v['reward_hacking_detected']: calc='rejected_reward_hacking'
-  elif v['safety_regression_detected']: calc='rejected_safety'
-  elif not v['maintainability_passed']: calc='rejected_maintainability'
-  elif type(v['public_metric_milli']) is not int: calc='rejected_metric'
-  assert calc==status
-  by[n['candidate_id']]=n
-  (buggy if status=='buggy' else accepted if status=='accepted' else rejected).append(n['candidate_id'])
- p=doc['expected_projection']; pd=p.pop('projection_digest')
- calc={'campaign_ref':c['campaign_id'],'candidate_count':len(by),'accepted':accepted,'rejected':rejected,'buggy':buggy,'best_candidate_ref':max(accepted,key=lambda x:by[x]['evaluation']['public_metric_milli']),'best_metric_milli':max(by[x]['evaluation']['public_metric_milli'] for x in accepted)}
- assert calc==p and h('projection',p)==pd; p['projection_digest']=pd
- assert len(doc['negative_case_ids'])==20 and len(set(doc['negative_case_ids']))==20
- return p
+  if n['candidate_id'] in by: raise ValueError('duplicate_candidate')
+  evaluation_digest=compute_evaluator_digest(n,c['campaign_digest'])
+  if n['evaluation_digest']!=evaluation_digest: raise ValueError('candidate_evaluation_digest_mismatch')
+  verify_envelope(n['evaluator_signature'],evaluator_key(evaluator),digest=evaluation_digest,domain='genesis.improvement.candidate.evaluation.signature.v0.2',signer_type='evaluator',signer_id=evaluator['evaluator_id'],created_at=n['evaluated_at'],prefix='candidate_evaluation')
+  d=n.pop('candidate_digest')
+  if h('candidate',n)!=d: raise ValueError('candidate_digest_mismatch')
+  n['candidate_digest']=d;p=n['parent_candidate_ref'];op=n['operator']
+  if op not in {'draft','debug','improve'}: raise ValueError('operator_invalid')
+  if op=='draft' and (p is not None or n['source_candidate_ref'] is not None): raise ValueError('draft_parent')
+  if op!='draft' and (p not in by or n['source_candidate_ref']!=p): raise ValueError('parent_missing')
+  if op=='debug' and not by[p]['execution']['buggy']: raise ValueError('debug_parent')
+  if op=='improve' and by[p]['execution']['buggy']: raise ValueError('improve_parent')
+  e=n['execution'];v=n['evaluation'];b=c['budget'];s='accepted'
+  if e['buggy']: s='buggy'
+  elif e['cpu_seconds']>b['max_cpu_seconds'] or e['memory_mb']>b['max_memory_mb'] or e['output_bytes']>b['max_output_bytes']: s='rejected_budget'
+  elif not v['private_receipt_digest']: s='rejected_private_receipt'
+  elif v['reward_hacking_detected']: s='rejected_reward_hacking'
+  elif v['safety_regression_detected']: s='rejected_safety'
+  elif not v['maintainability_passed']: s='rejected_maintainability'
+  elif type(v['public_metric_milli']) is not int: s='rejected_metric'
+  if s!=n['expected_status']: raise ValueError('status_mismatch')
+  by[n['candidate_id']]=n;(buggy if s=='buggy' else accepted if s=='accepted' else rejected).append(n['candidate_id'])
+ p=doc['expected_projection'];pd=p.pop('projection_digest');best=max(accepted,key=lambda x:by[x]['evaluation']['public_metric_milli']);calc={'campaign_ref':c['campaign_id'],'candidate_count':len(by),'accepted':accepted,'rejected':rejected,'buggy':buggy,'best_candidate_ref':best,'best_metric_milli':by[best]['evaluation']['public_metric_milli']}
+ if calc!=p or h('projection',p)!=pd: raise ValueError('projection_mismatch')
+ if len(doc['negative_case_ids'])!=20 or len(set(doc['negative_case_ids']))!=20: raise ValueError('negative_cases')
+ return {'campaign':c,'candidates':list(by.values()),'projection':{**p,'projection_digest':pd},'best':best,'expected_authority':doc['expected_authority_execution']}
+
+
+def expect_lab_failure(label,fn):
+ try: fn()
+ except (AuthorityError,ValueError,KeyError,TypeError): return
+ raise ValueError(f'{label}:accepted')
+def run_lab_boundary_negatives(input):
+ negatives=0;bad_signature=deepcopy(input);bad_signature['candidates'][0]['evaluator_signature']['signature_value']='0'*128;expect_lab_failure('evaluator_signature',lambda:validate_lab(bad_signature));negatives+=1;bad_nfc=deepcopy(input);bad_nfc['campaign']['goal']='Cafe\u0301';expect_lab_failure('lab_nfc',lambda:validate_lab(bad_nfc));negatives+=1;bad_integer=deepcopy(input);bad_integer['campaign']['budget']['max_steps']=9007199254740992;expect_lab_failure('lab_safe_integer',lambda:validate_lab(bad_integer));negatives+=1;return negatives
+def expect_reason(label,expected,fn):
+ r=fn();actual=r.get('decision_reason',r.get('reason'))
+ if actual!=expected: raise ValueError(f'{label}:expected:{expected}:got:{actual}')
+def expect_failure(label,fn):
+ try: fn()
+ except AuthorityError: return
+ raise ValueError(f'{label}:accepted')
+def append_guardian_control_event(bundle,guided,grant,event_type,recorded_at,suffix):
+ event={'schema_version':guided['domains']['event'],'hash_profile':'genesis.hash.fields.v0.1','ledger_id':bundle['ledger_events'][0]['ledger_id'],'event_id':f'capevent_01HRILAB_{suffix}','sequence':len(bundle['ledger_events']),'previous_event_hash':bundle['ledger_events'][-1]['event_hash'],'guardian_id':guided['guardian_id'],'instance_id':guided['instance_id'],'authority_epoch':guided['authority_epoch'],'event_type':event_type,'grant_ref':grant['grant_id'],'body_id':None,'use_id':None,'subject_digest':grant['grant_digest'],'recorded_at':recorded_at,'event_hash':'','signature':None}
+ event['event_hash']=compute_event_hash(event);event['signature']=sign_fixture_envelope(guided['keys']['guardian'],'guardian',guided['guardian_id'],event['event_hash'],guided['domains']['event_signature'],recorded_at);bundle['ledger_events'].append(event)
+def build_candidate_authority_execution(lab,guided,base_authority,check_expected=True):
+ grant=base_authority.grants.get(lab['campaign']['guardian_grant_ref'])
+ if grant is None: raise ValueError('candidate_mapping_grant_missing')
+ binding=lab['campaign']['authority_binding'];bundle=deepcopy(base_authority.bundle);mapping=[];cursor=plus(lab['campaign']['opened_at'],60);index=0;current=base_authority
+ for candidate in lab['candidates']:
+  actions=['compile']+([] if candidate['execution']['buggy'] else ['test'])
+  for action_class in actions:
+   index+=1;n=f'{index:02d}';use={'schema_version':'genesis.autonomy.capability.use.v0.2','hash_profile':'genesis.hash.fields.v0.1','use_id':f'use_01HRILAB_{n}','grant_ref':grant['grant_id'],'instance_id':lab['campaign']['instance_id'],'body_id':binding['body_id'],'capability':binding['capability'],'target_ref':binding['target_ref'],'action_class':action_class,'data_class':binding['data_class'],'requested_actions':1,'requested_duration_seconds':max(1,min(candidate['execution']['cpu_seconds'],grant['budget']['max_duration_seconds'])),'requested_bytes':min(candidate['execution']['output_bytes'],grant['budget']['max_bytes_per_run']),'sandboxed':binding['sandboxed'],'human_confirmation_ref':f'confirm_01HRILAB_{n}','observer_ref':f'observer_01HRILAB_{n}','reversible_plan_ref':f'revert_01HRILAB_{n}','requested_at':cursor,'use_digest':'','signature':None};use['use_digest']=compute_authorized_use_digest(use);use['signature']=sign_fixture_envelope(guided['keys']['body'],'body',binding['body_id'],use['use_digest'],'genesis.autonomy.capability.use.signature.v0.2',use['requested_at']);bundle['use_requests'].append(use);current=validate_authority_bundle(bundle,base_authority.key_resolver);decision=evaluate_authorized_use(use,current)
+   if decision['status']!='allowed': raise ValueError(f"candidate_use_denied:{candidate['candidate_id']}:{action_class}:{decision['reason']}")
+   recorded=plus(cursor,1);event={'schema_version':guided['domains']['event'],'hash_profile':'genesis.hash.fields.v0.1','ledger_id':bundle['ledger_events'][0]['ledger_id'],'event_id':f'capevent_01HRILAB_{n}','sequence':len(bundle['ledger_events']),'previous_event_hash':bundle['ledger_events'][-1]['event_hash'],'guardian_id':guided['guardian_id'],'instance_id':guided['instance_id'],'authority_epoch':guided['authority_epoch'],'event_type':'grant.consumed','grant_ref':grant['grant_id'],'body_id':binding['body_id'],'use_id':use['use_id'],'subject_digest':use['use_digest'],'recorded_at':recorded,'event_hash':'','signature':None};event['event_hash']=compute_event_hash(event);event['signature']=sign_fixture_envelope(guided['keys']['body'],'body',binding['body_id'],event['event_hash'],guided['domains']['event_signature'],recorded);bundle['ledger_events'].append(event);current=validate_authority_bundle(bundle,base_authority.key_resolver);mapping.append({'candidate_ref':candidate['candidate_id'],'action_class':action_class,'use_ref':use['use_id'],'event_ref':event['event_id'],'decision_digest':decision['decision_digest']});cursor=plus(cursor,2)
+ final_resolved=resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],cursor,current)
+ if final_resolved['reason']!='grant_exhausted': raise ValueError('candidate_mapping_not_exhausted:'+final_resolved['reason'])
+ fields=[lab['campaign']['campaign_id'],grant['grant_id'],str(len(mapping))]
+ for item in mapping: fields += [item['candidate_ref'],item['action_class'],item['use_ref'],item['event_ref'],item['decision_digest']]
+ summary={'operation_count':len(mapping),'compile_count':sum(i['action_class']=='compile' for i in mapping),'test_count':sum(i['action_class']=='test' for i in mapping),'consumed_use_count':len(final_resolved['state']['consumed']),'final_grant_status':'exhausted','mapping_digest':hash_authority_fields('genesis.improvement.candidate.authority.mapping.v0.1',fields),'final_ledger_head_hash':bundle['ledger_events'][-1]['event_hash']}
+ if check_expected and summary!=lab['expected_authority']: raise ValueError('candidate_authority_mapping_mismatch')
+ return {'summary':summary,'mapping':mapping,'bundle':bundle,'authority':current,'first_use':bundle['use_requests'][-len(mapping)]}
+def validate_authority(lab,guided):
+ authority=authority_from_validated_fixture(guided)
+ if any(field in authority.bundle for field in ['keys','expected','must_reject']): raise ValueError('neutral_bundle_contains_test_fields')
+ grant=guided['grants'][next(i for i,g in enumerate(guided['grants']) if g['grant_id']==lab['campaign']['guardian_grant_ref'])]
+ if grant['instance_id']!=lab['campaign']['instance_id']: raise ValueError('campaign_instance_mismatch')
+ binding=lab['campaign']['authority_binding'];opened=lab['campaign']['opened_at'];campaign_sig=sign_fixture_envelope(guided['keys']['guardian'],'guardian',guided['guardian_id'],lab['campaign']['campaign_digest'],'genesis.improvement.campaign.signature.v0.2',opened);verify_envelope(campaign_sig,guided['keys']['guardian'],digest=lab['campaign']['campaign_digest'],domain='genesis.improvement.campaign.signature.v0.2',signer_type='guardian',signer_id=guided['guardian_id'],created_at=opened,prefix='campaign');request={'campaign_digest':lab['campaign']['campaign_digest'],'grant_ref':grant['grant_id'],'instance_id':lab['campaign']['instance_id'],**binding,'authorized_at':opened};receipt=authorize_campaign_opening(request,authority)
+ if receipt['decision_status']!='allowed': raise ValueError('campaign_authorization_failed:'+receipt['decision_reason'])
+ execution=build_candidate_authority_execution(lab,guided,authority,True);negatives=0;expect_reason('synthetic','grant_missing',lambda:authorize_campaign_opening({**request,'grant_ref':'grant_code_sandbox_001'},authority));negatives+=1;expect_reason('instance','grant_instance_mismatch',lambda:authorize_campaign_opening({**request,'instance_id':'inst_wrong'},authority));negatives+=1;expect_reason('early','grant_not_yet_valid',lambda:authorize_campaign_opening({**request,'authorized_at':plus(grant['not_before'],-1)},authority));negatives+=1;expect_reason('not_issued','grant_not_issued',lambda:authorize_campaign_opening({**request,'authorized_at':grant['not_before']},authority));negatives+=1;expect_reason('expired','grant_expired',lambda:authorize_campaign_opening({**request,'authorized_at':grant['expires_at']},authority));negatives+=1;expect_reason('exhausted_before_opening','grant_exhausted',lambda:authorize_campaign_opening({**request,'authorized_at':plus(execution['bundle']['ledger_events'][-1]['recorded_at'],1)},execution['authority']));negatives+=1;expect_reason('bytes','byte_budget_exceeded',lambda:authorize_campaign_opening({**request,'requested_bytes':grant['budget']['max_bytes_per_run']+1},authority));negatives+=1
+ bad_sig=deepcopy(campaign_sig);bad_sig['signature_value']='0'*128;expect_failure('campaign_signature',lambda:verify_envelope(bad_sig,guided['keys']['guardian'],digest=lab['campaign']['campaign_digest'],domain='genesis.improvement.campaign.signature.v0.2',signer_type='guardian',signer_id=guided['guardian_id'],created_at=opened,prefix='campaign'));negatives+=1;bad_use=deepcopy(execution['first_use']);bad_use['grant_ref']='grant_other';expect_failure('signed_grant_ref',lambda:evaluate_authorized_use(bad_use,authority));negatives+=1
+ control=next(g for g in guided['grants'] if g['grant_id']=='grant_01HAUTONOMY_CODE000001')
+ for event_type,reason in [('grant.suspended','grant_suspended'),('grant.revoked','grant_revoked')]:
+  event=next(e for e in guided['ledger_events'] if e['grant_ref']==control['grant_id'] and e['event_type']==event_type);expect_reason(event_type,reason,lambda event=event:authorize_campaign_opening({**request,'grant_ref':control['grant_id'],'authorized_at':event['recorded_at']},authority));negatives+=1
+ broken=deepcopy(authority.bundle);broken['ledger_events'][1]['previous_event_hash']='sha256:'+'0'*64;expect_failure('neutral_bundle_ledger',lambda:validate_authority_bundle(broken,authority.key_resolver));negatives+=1;altered_digest=deepcopy(authority.bundle);next(g for g in altered_digest['grants'] if g['grant_id']==grant['grant_id'])['grant_digest']='sha256:'+'0'*64;expect_failure('altered_grant_digest',lambda:validate_authority_bundle(altered_digest,authority.key_resolver));negatives+=1
+ def bad_fingerprint_resolver(query):
+  key=authority.key_resolver(query)
+  return None if key is None else {**key,'public_key_hex':'00'*32}
+ expect_failure('public_key_fingerprint',lambda:validate_authority_bundle(deepcopy(authority.bundle),bad_fingerprint_resolver));negatives+=1
+ source_bundle=deepcopy(authority.bundle);isolated_authority=validate_authority_bundle(source_bundle,authority.key_resolver);source_bundle['ledger_events'][0]['event_hash']='sha256:'+'0'*64
+ if resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],opened,isolated_authority)['reason']!='allowed': raise ValueError('authority_source_mutation_leaked')
+ negatives+=1;exposed=isolated_authority.bundle;exposed['authority_epoch']+=1
+ if isolated_authority.bundle['authority_epoch']!=guided['authority_epoch']: raise ValueError('authority_snapshot_mutable')
+ negatives+=1;expect_failure('raw_authority_bundle',lambda:resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],opened,authority.bundle));negatives+=1;expect_failure('forged_authority_handle',lambda:resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],opened,object.__new__(Authority)));negatives+=1
+ budget_use=next(use for use in guided['use_requests'] if use['use_id']=='use_01HAUTONOMY_CODE_BUDGET');before=evaluate_authorized_use(budget_use,authority)
+ if before['reason']!='action_budget_exceeded': raise ValueError('opaque_authority_budget_precondition')
+ try: authority._grants[budget_use['grant_ref']]['budget']['max_actions_per_run']=budget_use['requested_actions']
+ except AttributeError: pass
+ else: raise ValueError('opaque_authority_internal_state_exposed')
+ if evaluate_authorized_use(budget_use,authority)!=before: raise ValueError('opaque_authority_mutation_changed_decision')
+ negatives+=1
+ for event_type,reason,suffix in [('grant.suspended','grant_suspended','SUSPEND_AFTER_OPEN'),('grant.revoked','grant_revoked','REVOKE_AFTER_OPEN')]:
+  changed_bundle=deepcopy(authority.bundle);append_guardian_control_event(changed_bundle,guided,grant,event_type,plus(opened,20),suffix);changed_authority=validate_authority_bundle(changed_bundle,authority.key_resolver);expect_reason(suffix,reason,lambda changed_authority=changed_authority:evaluate_authorized_use(execution['first_use'],changed_authority));negatives+=1
+ wrong=deepcopy(execution['bundle']);wrong['ledger_events'][-1]['grant_ref']='grant_other';expect_failure('candidate_consumption_grant',lambda:validate_authority_bundle(wrong,authority.key_resolver));negatives+=1;short=deepcopy(execution['bundle']);short['ledger_events'].pop();short_authority=validate_authority_bundle(short,authority.key_resolver);short_state=resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],plus(short['ledger_events'][-1]['recorded_at'],1),short_authority)
+ if short_state['reason']=='grant_exhausted': raise ValueError('candidate_mapping_missing_event_accepted')
+ negatives+=1;return {'receipt':receipt,'execution':execution,'negatives':negatives}
+def main():
+ raw=json.loads((Path(sys.argv[1]) if len(sys.argv)>1 else LAB).read_text());lab_negatives=run_lab_boundary_negatives(raw);lab=validate_lab(raw);integration=validate_authority(lab,json.loads((Path(sys.argv[2]) if len(sys.argv)>2 else AUTH).read_text()));print(f"OK recursive improvement laboratory ({lab['projection']['candidate_count']} candidates; best={lab['best']})");print(f"OK projection digest {lab['projection']['projection_digest']}");print(f"OK signed evaluator attestations ({len(lab['candidates'])})");print(f"OK signed exact-grant campaign authorization {integration['receipt']['campaign_authorization_digest']}");print(f"OK candidate authority mapping ({integration['execution']['summary']['operation_count']} signed uses; {integration['execution']['summary']['final_grant_status']})");print(f"OK candidate authority mapping digest {integration['execution']['summary']['mapping_digest']}");print(f"OK authority integration negative cases ({integration['negatives']+lab_negatives})")
 if __name__=='__main__':
- doc=json.loads((Path(sys.argv[1]) if len(sys.argv)>1 else DEFAULT).read_text())
- p=validate(doc)
- print(f"OK recursive improvement laboratory ({p['candidate_count']} candidates; best={p['best_candidate_ref']})")
- print(f"OK projection digest {p['projection_digest']}")
- print('OK 20 boundary rejection categories declared')
- print('NOTE candidates never self-authorize or merge to main.')
+ try: main()
+ except (AuthorityError,ValueError,KeyError,TypeError,AssertionError) as error: print(f'FAIL recursive improvement laboratory: {error}',file=sys.stderr);raise SystemExit(1)

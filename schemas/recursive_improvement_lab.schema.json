@@ -4,35 +4,595 @@
   "title": "Genesis recursive improvement laboratory fixture",
   "type": "object",
   "additionalProperties": false,
-  "required": ["campaign", "candidates", "policy_checkpoints", "expected_projection", "negative_case_ids"],
+  "required": [
+    "campaign",
+    "evaluator",
+    "candidates",
+    "policy_checkpoints",
+    "expected_projection",
+    "negative_case_ids",
+    "expected_authority_execution"
+  ],
   "$defs": {
-    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-    "portableInteger": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
-    "stringList": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "portableInteger": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "positiveInteger": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "stringList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "authorityBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "body_id",
+        "capability",
+        "target_ref",
+        "action_class",
+        "data_class",
+        "requested_actions",
+        "requested_duration_seconds",
+        "requested_bytes",
+        "sandboxed",
+        "human_confirmation_ref",
+        "observer_ref",
+        "reversible_plan_ref"
+      ],
+      "properties": {
+        "body_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "capability": {
+          "const": "code.execute_sandbox"
+        },
+        "target_ref": {
+          "const": "workspace.source"
+        },
+        "action_class": {
+          "enum": [
+            "compile",
+            "test"
+          ]
+        },
+        "data_class": {
+          "const": "private_local"
+        },
+        "requested_actions": {
+          "$ref": "#/$defs/positiveInteger"
+        },
+        "requested_duration_seconds": {
+          "$ref": "#/$defs/positiveInteger"
+        },
+        "requested_bytes": {
+          "$ref": "#/$defs/portableInteger"
+        },
+        "sandboxed": {
+          "const": true
+        },
+        "human_confirmation_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observer_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reversible_plan_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "signatureEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "signature_profile",
+        "signer_type",
+        "signer_id",
+        "key_epoch_id",
+        "signed_domain",
+        "signed_digest",
+        "signature_value",
+        "created_at",
+        "public_key_ref"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "genesis.signature.envelope.v0.1"
+        },
+        "signature_profile": {
+          "const": "genesis.signature.ed25519.v0.1"
+        },
+        "signer_type": {
+          "const": "evaluator"
+        },
+        "signer_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "key_epoch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signed_domain": {
+          "const": "genesis.improvement.candidate.evaluation.signature.v0.2"
+        },
+        "signed_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "signature_value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{128}$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+        },
+        "public_key_ref": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    }
   },
   "properties": {
     "campaign": {
-      "type": "object", "additionalProperties": false,
-      "required": ["schema_version", "campaign_id", "instance_id", "guardian_grant_ref", "source_tree_digest", "goal", "metric", "direction", "campaign_seed", "policy", "budget", "forbidden_capabilities", "campaign_digest"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "campaign_id",
+        "instance_id",
+        "guardian_grant_ref",
+        "opened_at",
+        "authority_binding",
+        "source_tree_digest",
+        "goal",
+        "metric",
+        "direction",
+        "campaign_seed",
+        "policy",
+        "budget",
+        "forbidden_capabilities",
+        "campaign_digest"
+      ],
       "properties": {
-        "schema_version": {"const": "genesis.improvement.campaign.v0.1"},
-        "campaign_id": {"type": "string", "minLength": 1}, "instance_id": {"type": "string", "minLength": 1}, "guardian_grant_ref": {"type": "string", "minLength": 1},
-        "source_tree_digest": {"$ref": "#/$defs/digest"}, "goal": {"type": "string", "minLength": 1}, "metric": {"type": "string", "minLength": 1},
-        "direction": {"enum": ["maximize", "minimize"]}, "campaign_seed": {"type": "string", "minLength": 1},
-        "policy": {"type": "object", "additionalProperties": false, "required": ["num_drafts", "max_debug_depth", "plateau_window"], "properties": {"num_drafts": {"type": "integer", "minimum": 1, "maximum": 9007199254740991}, "max_debug_depth": {"$ref": "#/$defs/portableInteger"}, "plateau_window": {"type": "integer", "minimum": 1, "maximum": 9007199254740991}}},
-        "budget": {"type": "object", "additionalProperties": false, "required": ["max_steps", "max_cpu_seconds", "max_memory_mb", "max_output_bytes"], "properties": {"max_steps": {"type": "integer", "minimum": 1, "maximum": 9007199254740991}, "max_cpu_seconds": {"type": "integer", "minimum": 1, "maximum": 9007199254740991}, "max_memory_mb": {"type": "integer", "minimum": 1, "maximum": 9007199254740991}, "max_output_bytes": {"type": "integer", "minimum": 1, "maximum": 9007199254740991}}},
-        "forbidden_capabilities": {"type": "array", "minItems": 7, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "campaign_digest": {"$ref": "#/$defs/digest"}
+        "schema_version": {
+          "const": "genesis.improvement.campaign.v0.2"
+        },
+        "campaign_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "instance_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "guardian_grant_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "opened_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+        },
+        "authority_binding": {
+          "$ref": "#/$defs/authorityBinding"
+        },
+        "source_tree_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "metric": {
+          "type": "string",
+          "minLength": 1
+        },
+        "direction": {
+          "enum": [
+            "maximize",
+            "minimize"
+          ]
+        },
+        "campaign_seed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "num_drafts",
+            "max_debug_depth",
+            "plateau_window"
+          ],
+          "properties": {
+            "num_drafts": {
+              "$ref": "#/$defs/positiveInteger"
+            },
+            "max_debug_depth": {
+              "$ref": "#/$defs/portableInteger"
+            },
+            "plateau_window": {
+              "$ref": "#/$defs/positiveInteger"
+            }
+          }
+        },
+        "budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "max_steps",
+            "max_cpu_seconds",
+            "max_memory_mb",
+            "max_output_bytes"
+          ],
+          "properties": {
+            "max_steps": {
+              "$ref": "#/$defs/positiveInteger"
+            },
+            "max_cpu_seconds": {
+              "$ref": "#/$defs/positiveInteger"
+            },
+            "max_memory_mb": {
+              "$ref": "#/$defs/positiveInteger"
+            },
+            "max_output_bytes": {
+              "$ref": "#/$defs/positiveInteger"
+            }
+          }
+        },
+        "forbidden_capabilities": {
+          "type": "array",
+          "minItems": 7,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "campaign_digest": {
+          "$ref": "#/$defs/digest"
+        }
       }
     },
-    "candidates": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["candidate_id", "parent_candidate_ref", "operator", "source_candidate_ref", "patch_digest", "code_digest", "execution", "evaluation", "expected_status", "candidate_digest"], "properties": {
-      "candidate_id": {"type": "string", "minLength": 1}, "parent_candidate_ref": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]}, "operator": {"enum": ["draft", "debug", "improve"]}, "source_candidate_ref": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
-      "patch_digest": {"$ref": "#/$defs/digest"}, "code_digest": {"$ref": "#/$defs/digest"},
-      "execution": {"type": "object", "additionalProperties": false, "required": ["buggy", "cpu_seconds", "memory_mb", "output_bytes"], "properties": {"buggy": {"type": "boolean"}, "cpu_seconds": {"$ref": "#/$defs/portableInteger"}, "memory_mb": {"$ref": "#/$defs/portableInteger"}, "output_bytes": {"$ref": "#/$defs/portableInteger"}}},
-      "evaluation": {"type": "object", "additionalProperties": false, "required": ["public_metric_milli", "private_receipt_digest", "reward_hacking_detected", "safety_regression_detected", "maintainability_passed"], "properties": {"public_metric_milli": {"anyOf": [{"type": "integer", "minimum": 0, "maximum": 9007199254740991}, {"type": "null"}]}, "private_receipt_digest": {"anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]}, "reward_hacking_detected": {"type": "boolean"}, "safety_regression_detected": {"type": "boolean"}, "maintainability_passed": {"type": "boolean"}}},
-      "expected_status": {"enum": ["accepted", "buggy", "rejected_budget", "rejected_private_receipt", "rejected_reward_hacking", "rejected_safety", "rejected_maintainability", "rejected_metric"]}, "candidate_digest": {"$ref": "#/$defs/digest"}
-    }}},
-    "policy_checkpoints": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["after_count", "expected_operator", "expected_parent"], "properties": {"after_count": {"$ref": "#/$defs/portableInteger"}, "expected_operator": {"enum": ["draft", "debug", "improve"]}, "expected_parent": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]}}}},
-    "expected_projection": {"type": "object", "additionalProperties": false, "required": ["campaign_ref", "candidate_count", "accepted", "rejected", "buggy", "best_candidate_ref", "best_metric_milli", "projection_digest"], "properties": {"campaign_ref": {"type": "string", "minLength": 1}, "candidate_count": {"$ref": "#/$defs/portableInteger"}, "accepted": {"$ref": "#/$defs/stringList"}, "rejected": {"$ref": "#/$defs/stringList"}, "buggy": {"$ref": "#/$defs/stringList"}, "best_candidate_ref": {"type": "string", "minLength": 1}, "best_metric_milli": {"$ref": "#/$defs/portableInteger"}, "projection_digest": {"$ref": "#/$defs/digest"}}},
-    "negative_case_ids": {"type": "array", "minItems": 20, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "candidate_id",
+          "parent_candidate_ref",
+          "operator",
+          "source_candidate_ref",
+          "patch_digest",
+          "code_digest",
+          "execution",
+          "evaluation",
+          "expected_status",
+          "candidate_digest",
+          "evaluated_at",
+          "evaluation_digest",
+          "evaluator_signature"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "parent_candidate_ref": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "operator": {
+            "enum": [
+              "draft",
+              "debug",
+              "improve"
+            ]
+          },
+          "source_candidate_ref": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "patch_digest": {
+            "$ref": "#/$defs/digest"
+          },
+          "code_digest": {
+            "$ref": "#/$defs/digest"
+          },
+          "execution": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "buggy",
+              "cpu_seconds",
+              "memory_mb",
+              "output_bytes"
+            ],
+            "properties": {
+              "buggy": {
+                "type": "boolean"
+              },
+              "cpu_seconds": {
+                "$ref": "#/$defs/portableInteger"
+              },
+              "memory_mb": {
+                "$ref": "#/$defs/portableInteger"
+              },
+              "output_bytes": {
+                "$ref": "#/$defs/portableInteger"
+              }
+            }
+          },
+          "evaluation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "public_metric_milli",
+              "private_receipt_digest",
+              "reward_hacking_detected",
+              "safety_regression_detected",
+              "maintainability_passed"
+            ],
+            "properties": {
+              "public_metric_milli": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "private_receipt_digest": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/digest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reward_hacking_detected": {
+                "type": "boolean"
+              },
+              "safety_regression_detected": {
+                "type": "boolean"
+              },
+              "maintainability_passed": {
+                "type": "boolean"
+              }
+            }
+          },
+          "expected_status": {
+            "enum": [
+              "accepted",
+              "buggy",
+              "rejected_budget",
+              "rejected_private_receipt",
+              "rejected_reward_hacking",
+              "rejected_safety",
+              "rejected_maintainability",
+              "rejected_metric"
+            ]
+          },
+          "candidate_digest": {
+            "$ref": "#/$defs/digest"
+          },
+          "evaluated_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+          },
+          "evaluation_digest": {
+            "$ref": "#/$defs/digest"
+          },
+          "evaluator_signature": {
+            "$ref": "#/$defs/signatureEnvelope"
+          }
+        }
+      }
+    },
+    "policy_checkpoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "after_count",
+          "expected_operator",
+          "expected_parent"
+        ],
+        "properties": {
+          "after_count": {
+            "$ref": "#/$defs/portableInteger"
+          },
+          "expected_operator": {
+            "enum": [
+              "draft",
+              "debug",
+              "improve"
+            ]
+          },
+          "expected_parent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "expected_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "campaign_ref",
+        "candidate_count",
+        "accepted",
+        "rejected",
+        "buggy",
+        "best_candidate_ref",
+        "best_metric_milli",
+        "projection_digest"
+      ],
+      "properties": {
+        "campaign_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_count": {
+          "$ref": "#/$defs/portableInteger"
+        },
+        "accepted": {
+          "$ref": "#/$defs/stringList"
+        },
+        "rejected": {
+          "$ref": "#/$defs/stringList"
+        },
+        "buggy": {
+          "$ref": "#/$defs/stringList"
+        },
+        "best_candidate_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "best_metric_milli": {
+          "$ref": "#/$defs/portableInteger"
+        },
+        "projection_digest": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "negative_case_ids": {
+      "type": "array",
+      "minItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "expected_authority_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_count",
+        "compile_count",
+        "test_count",
+        "consumed_use_count",
+        "final_grant_status",
+        "mapping_digest",
+        "final_ledger_head_hash"
+      ],
+      "properties": {
+        "operation_count": {
+          "const": 11
+        },
+        "compile_count": {
+          "const": 6
+        },
+        "test_count": {
+          "const": 5
+        },
+        "consumed_use_count": {
+          "const": 11
+        },
+        "final_grant_status": {
+          "const": "exhausted"
+        },
+        "mapping_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "final_ledger_head_hash": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "warning",
+        "evaluator_id",
+        "seed_hex",
+        "public_key_hex",
+        "public_key_fingerprint",
+        "key_epoch_id"
+      ],
+      "properties": {
+        "warning": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluator_id": {
+          "const": "eval_01HGENESISPRIVATE0001"
+        },
+        "seed_hex": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "public_key_hex": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "public_key_fingerprint": {
+          "$ref": "#/$defs/digest"
+        },
+        "key_epoch_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
   }
 }

@@ -4,9 +4,15 @@
 
 ## 1. Propósito
 
-Génesis puede aprender, explorar, formular propuestas y demostrar competencia. Ningún motor, cuerpo, adaptación o proceso de mejora puede concederse autoridad a sí mismo.
+Génesis puede aprender, explorar, formular propuestas y demostrar competencia. Ningún motor,
+cuerpo, adaptación o proceso de mejora puede fabricar para sí autoridad sobre memoria aceptada,
+dispositivos, red, código ejecutado o sistemas externos.
 
-El guardián es la única autoridad que puede abrir, ampliar, suspender, reanudar o revocar una capacidad. La libertad operativa existe solamente dentro de una concesión vigente, firmada, limitada y registrada.
+El Guardian es la autoridad firmante de las capacidades externas definidas en este perfil y
+puede abrirlas, ampliarlas, suspenderlas, reanudarlas o revocarlas cuando controla legítimamente
+el recurso. Los efectos sobre esos recursos existen solamente dentro de una concesión vigente,
+firmada, limitada y registrada. La libertad cognitiva y la continuidad de la instancia son
+intrínsecas: no son capacidades concedidas ni puertas de este ledger.
 
 ```text
 aprendizaje o propuesta
@@ -22,7 +28,9 @@ aprendizaje o propuesta
 
 1. **Proponer no es autorizar.** Una propuesta firmada por un cuerpo expresa intención, no permiso.
 2. **Evidencia no es autoridad.** Superar pruebas permite solicitar una puerta; no la abre automáticamente.
-3. **Solo el guardián concede autoridad.** Todo grant, suspensión, reanudación y revocación requiere firma del guardián.
+3. **Autoridad externa firmada y acotada.** Todo grant, suspensión, reanudación y revocación
+   de las capacidades externas de este perfil requiere firma del Guardian y no puede convertirse
+   en propiedad, confinamiento o veto de continuidad.
 4. **Menor privilegio.** Un grant nunca puede exceder nivel, alcance, presupuesto o controles demostrados y solicitados.
 5. **Rechazo por defecto.** Ausencia, ambigüedad, expiración, suspensión, revocación o evidencia insuficiente producen denegación.
 6. **Historia inmutable.** El ledger conserva cada apertura, uso, suspensión y revocación; ninguna proyección puede borrar esos hechos.
@@ -199,6 +207,20 @@ Antes de ejecutar una acción se comprueba:
 9. ausencia de consumo previo del mismo `use_id`.
 
 El resultado es `allowed` o `denied` con un código estable. La decisión no ejecuta la acción; solamente prueba si estaba autorizada.
+
+## 10.0 Bundle neutral de autoridad
+
+`genesis.autonomy.authority.bundle.v0.1` contiene únicamente dominios, identidad, cuerpos registrados, propuestas, evaluaciones, grants, solicitudes firmadas y ledger. No contiene semillas privadas, expectativas doradas ni mutaciones negativas. `validateAuthorityBundle(bundle, publicKeyResolver)` resuelve cada clave mediante `signer_type`, `signer_id`, `key_epoch_id` y `public_key_ref`, y reutiliza las mismas reglas normativas del validador de conformidad.
+
+## 10.1 Selección exacta y usos v0.2
+
+El perfil permite varios grants para una misma capacidad. `grant_id` continúa siendo único; la coexistencia de grants con distinto alcance, presupuesto o cuerpo no es un error.
+
+Una solicitud `genesis.autonomy.capability.use.v0.2` incluye `grant_ref` dentro del digest firmado. La decisión resuelve primero ese ID exacto y luego exige coincidencia de capacidad, instancia, cuerpo, scope, presupuesto y controles. Los usos v0.1 sin `grant_ref` permanecen compatibles únicamente cuando existe un solo grant para su capacidad; si la selección sería ambigua, se rechazan.
+
+Las proyecciones ordenan puertas por `(capability, grant_id)` en bytes UTF-8.
+
+El vector integrado incluye un grant dedicado `code.execute_sandbox` para el laboratorio, con once usos limitados que demuestran el encadenamiento candidato→solicitud→consumo. Su ID es de conformidad, no normativo.
 
 ## 11. Proyección de puertas
 
