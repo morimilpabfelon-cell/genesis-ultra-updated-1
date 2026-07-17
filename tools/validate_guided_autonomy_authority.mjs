@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { ConformanceError, ensureInt, ensureSortedUniqueStrings, validateDocument, validateEvaluation, validateGrant, validateLedger, validateNfc, validateProposal, validateUse } from "./guided_autonomy.mjs";
 
-const MARK = Symbol("validated-guided-autonomy-authority");
+const VALID_AUTHORITIES = new WeakSet();
 const TS_RE = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$/;
 const USE_FIELDS = new Set(["schema_version", "hash_profile", "use_id", "grant_ref", "instance_id", "body_id", "capability", "target_ref", "action_class", "data_class", "requested_actions", "requested_duration_seconds", "requested_bytes", "sandboxed", "human_confirmation_ref", "observer_ref", "reversible_plan_ref", "requested_at", "use_digest", "signature"]);
 const SIGNATURE_FIELDS = new Set(["schema_version", "signature_profile", "signer_type", "signer_id", "key_epoch_id", "signed_domain", "signed_digest", "signature_value", "created_at", "public_key_ref"]);
@@ -182,7 +182,9 @@ function validateAuthorityBundleInternal(bundle, publicKeyResolver) {
   validateLedger(bundle.ledger_events, grants, uses, { ...base, keys: {} }, ledgerResolver);
   const frozenBundle = deepFreeze(bundle);
   const grantMap = new Map(grants.map((grant) => [grant.grant_id, grant]));
-  return Object.freeze({ [MARK]: true, bundle: frozenBundle, grants: readOnlyMap(grantMap), registered: readOnlySet(new Set(registered)), keyResolver: publicKeyResolver });
+  const authority = Object.freeze({ bundle: frozenBundle, grants: readOnlyMap(grantMap), registered: readOnlySet(new Set(registered)), keyResolver: publicKeyResolver });
+  VALID_AUTHORITIES.add(authority);
+  return authority;
 }
 
 export function validateAuthorityBundle(bundle, publicKeyResolver) {
@@ -198,7 +200,7 @@ export function authorityFromValidatedFixture(document) {
   validateDocument(structuredClone(document));
   return validateAuthorityBundle(publicAuthorityBundleFromFixture(document), publicKeyResolverFromFixture(document));
 }
-function requireAuthority(authority) { if (!authority || authority[MARK] !== true) fail("authority_not_validated"); }
+function requireAuthority(authority) { if (!authority || !VALID_AUTHORITIES.has(authority)) fail("authority_not_validated"); }
 function stateAt(grant, events, at) {
   let status = "not_issued";
   const consumed = new Set();

@@ -5,7 +5,7 @@ from datetime import datetime,timedelta,timezone
 import hashlib,json,sys
 from pathlib import Path
 from validate_guided_autonomy import compute_event_hash
-from validate_guided_autonomy_authority import AuthorityError,authority_from_validated_fixture,authorize_campaign_opening,compute_authorized_use_digest,evaluate_authorized_use,hash_authority_fields,resolve_exact_grant,sign_fixture_envelope,validate_authority_bundle,verify_envelope
+from validate_guided_autonomy_authority import Authority,AuthorityError,authority_from_validated_fixture,authorize_campaign_opening,compute_authorized_use_digest,evaluate_authorized_use,hash_authority_fields,resolve_exact_grant,sign_fixture_envelope,validate_authority_bundle,verify_envelope
 ROOT=Path(__file__).resolve().parents[1];LAB=ROOT/'conformance'/'recursive_improvement_lab_vectors.json';AUTH=ROOT/'conformance'/'guided_autonomy_vectors.json'
 FORBIDDEN=['active_writer.assign','authority.self_grant','guardian.replace','identity.modify','main.protection.disable','memory.rewrite','private_eval.read']
 
@@ -78,6 +78,9 @@ def expect_failure(label,fn):
  try: fn()
  except AuthorityError: return
  raise ValueError(f'{label}:accepted')
+def append_guardian_control_event(bundle,guided,grant,event_type,recorded_at,suffix):
+ event={'schema_version':guided['domains']['event'],'hash_profile':'genesis.hash.fields.v0.1','ledger_id':bundle['ledger_events'][0]['ledger_id'],'event_id':f'capevent_01HRILAB_{suffix}','sequence':len(bundle['ledger_events']),'previous_event_hash':bundle['ledger_events'][-1]['event_hash'],'guardian_id':guided['guardian_id'],'instance_id':guided['instance_id'],'authority_epoch':guided['authority_epoch'],'event_type':event_type,'grant_ref':grant['grant_id'],'body_id':None,'use_id':None,'subject_digest':grant['grant_digest'],'recorded_at':recorded_at,'event_hash':'','signature':None}
+ event['event_hash']=compute_event_hash(event);event['signature']=sign_fixture_envelope(guided['keys']['guardian'],'guardian',guided['guardian_id'],event['event_hash'],guided['domains']['event_signature'],recorded_at);bundle['ledger_events'].append(event)
 def build_candidate_authority_execution(lab,guided,base_authority,check_expected=True):
  grant=base_authority.grants.get(lab['campaign']['guardian_grant_ref'])
  if grant is None: raise ValueError('candidate_mapping_grant_missing')
@@ -102,12 +105,12 @@ def validate_authority(lab,guided):
  if grant['instance_id']!=lab['campaign']['instance_id']: raise ValueError('campaign_instance_mismatch')
  binding=lab['campaign']['authority_binding'];opened=lab['campaign']['opened_at'];campaign_sig=sign_fixture_envelope(guided['keys']['guardian'],'guardian',guided['guardian_id'],lab['campaign']['campaign_digest'],'genesis.improvement.campaign.signature.v0.2',opened);verify_envelope(campaign_sig,guided['keys']['guardian'],digest=lab['campaign']['campaign_digest'],domain='genesis.improvement.campaign.signature.v0.2',signer_type='guardian',signer_id=guided['guardian_id'],created_at=opened,prefix='campaign');request={'campaign_digest':lab['campaign']['campaign_digest'],'grant_ref':grant['grant_id'],'instance_id':lab['campaign']['instance_id'],**binding,'authorized_at':opened};receipt=authorize_campaign_opening(request,authority)
  if receipt['decision_status']!='allowed': raise ValueError('campaign_authorization_failed:'+receipt['decision_reason'])
- execution=build_candidate_authority_execution(lab,guided,authority,True);negatives=0;expect_reason('synthetic','grant_missing',lambda:authorize_campaign_opening({**request,'grant_ref':'grant_code_sandbox_001'},authority));negatives+=1;expect_reason('instance','grant_instance_mismatch',lambda:authorize_campaign_opening({**request,'instance_id':'inst_wrong'},authority));negatives+=1;expect_reason('early','grant_not_yet_valid',lambda:authorize_campaign_opening({**request,'authorized_at':plus(grant['not_before'],-1)},authority));negatives+=1;expect_reason('bytes','byte_budget_exceeded',lambda:authorize_campaign_opening({**request,'requested_bytes':grant['budget']['max_bytes_per_run']+1},authority));negatives+=1
+ execution=build_candidate_authority_execution(lab,guided,authority,True);negatives=0;expect_reason('synthetic','grant_missing',lambda:authorize_campaign_opening({**request,'grant_ref':'grant_code_sandbox_001'},authority));negatives+=1;expect_reason('instance','grant_instance_mismatch',lambda:authorize_campaign_opening({**request,'instance_id':'inst_wrong'},authority));negatives+=1;expect_reason('early','grant_not_yet_valid',lambda:authorize_campaign_opening({**request,'authorized_at':plus(grant['not_before'],-1)},authority));negatives+=1;expect_reason('not_issued','grant_not_issued',lambda:authorize_campaign_opening({**request,'authorized_at':grant['not_before']},authority));negatives+=1;expect_reason('expired','grant_expired',lambda:authorize_campaign_opening({**request,'authorized_at':grant['expires_at']},authority));negatives+=1;expect_reason('exhausted_before_opening','grant_exhausted',lambda:authorize_campaign_opening({**request,'authorized_at':plus(execution['bundle']['ledger_events'][-1]['recorded_at'],1)},execution['authority']));negatives+=1;expect_reason('bytes','byte_budget_exceeded',lambda:authorize_campaign_opening({**request,'requested_bytes':grant['budget']['max_bytes_per_run']+1},authority));negatives+=1
  bad_sig=deepcopy(campaign_sig);bad_sig['signature_value']='0'*128;expect_failure('campaign_signature',lambda:verify_envelope(bad_sig,guided['keys']['guardian'],digest=lab['campaign']['campaign_digest'],domain='genesis.improvement.campaign.signature.v0.2',signer_type='guardian',signer_id=guided['guardian_id'],created_at=opened,prefix='campaign'));negatives+=1;bad_use=deepcopy(execution['first_use']);bad_use['grant_ref']='grant_other';expect_failure('signed_grant_ref',lambda:evaluate_authorized_use(bad_use,authority));negatives+=1
  control=next(g for g in guided['grants'] if g['grant_id']=='grant_01HAUTONOMY_CODE000001')
  for event_type,reason in [('grant.suspended','grant_suspended'),('grant.revoked','grant_revoked')]:
   event=next(e for e in guided['ledger_events'] if e['grant_ref']==control['grant_id'] and e['event_type']==event_type);expect_reason(event_type,reason,lambda event=event:authorize_campaign_opening({**request,'grant_ref':control['grant_id'],'authorized_at':event['recorded_at']},authority));negatives+=1
- broken=deepcopy(authority.bundle);broken['ledger_events'][1]['previous_event_hash']='sha256:'+'0'*64;expect_failure('neutral_bundle_ledger',lambda:validate_authority_bundle(broken,authority.key_resolver));negatives+=1
+ broken=deepcopy(authority.bundle);broken['ledger_events'][1]['previous_event_hash']='sha256:'+'0'*64;expect_failure('neutral_bundle_ledger',lambda:validate_authority_bundle(broken,authority.key_resolver));negatives+=1;altered_digest=deepcopy(authority.bundle);next(g for g in altered_digest['grants'] if g['grant_id']==grant['grant_id'])['grant_digest']='sha256:'+'0'*64;expect_failure('altered_grant_digest',lambda:validate_authority_bundle(altered_digest,authority.key_resolver));negatives+=1
  def bad_fingerprint_resolver(query):
   key=authority.key_resolver(query)
   return None if key is None else {**key,'public_key_hex':'00'*32}
@@ -116,7 +119,17 @@ def validate_authority(lab,guided):
  if resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],opened,isolated_authority)['reason']!='allowed': raise ValueError('authority_source_mutation_leaked')
  negatives+=1;exposed=isolated_authority.bundle;exposed['authority_epoch']+=1
  if isolated_authority.bundle['authority_epoch']!=guided['authority_epoch']: raise ValueError('authority_snapshot_mutable')
- negatives+=1;wrong=deepcopy(execution['bundle']);wrong['ledger_events'][-1]['grant_ref']='grant_other';expect_failure('candidate_consumption_grant',lambda:validate_authority_bundle(wrong,authority.key_resolver));negatives+=1;short=deepcopy(execution['bundle']);short['ledger_events'].pop();short_authority=validate_authority_bundle(short,authority.key_resolver);short_state=resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],plus(short['ledger_events'][-1]['recorded_at'],1),short_authority)
+ negatives+=1;expect_failure('raw_authority_bundle',lambda:resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],opened,authority.bundle));negatives+=1;expect_failure('forged_authority_handle',lambda:resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],opened,object.__new__(Authority)));negatives+=1
+ budget_use=next(use for use in guided['use_requests'] if use['use_id']=='use_01HAUTONOMY_CODE_BUDGET');before=evaluate_authorized_use(budget_use,authority)
+ if before['reason']!='action_budget_exceeded': raise ValueError('opaque_authority_budget_precondition')
+ try: authority._grants[budget_use['grant_ref']]['budget']['max_actions_per_run']=budget_use['requested_actions']
+ except AttributeError: pass
+ else: raise ValueError('opaque_authority_internal_state_exposed')
+ if evaluate_authorized_use(budget_use,authority)!=before: raise ValueError('opaque_authority_mutation_changed_decision')
+ negatives+=1
+ for event_type,reason,suffix in [('grant.suspended','grant_suspended','SUSPEND_AFTER_OPEN'),('grant.revoked','grant_revoked','REVOKE_AFTER_OPEN')]:
+  changed_bundle=deepcopy(authority.bundle);append_guardian_control_event(changed_bundle,guided,grant,event_type,plus(opened,20),suffix);changed_authority=validate_authority_bundle(changed_bundle,authority.key_resolver);expect_reason(suffix,reason,lambda changed_authority=changed_authority:evaluate_authorized_use(execution['first_use'],changed_authority));negatives+=1
+ wrong=deepcopy(execution['bundle']);wrong['ledger_events'][-1]['grant_ref']='grant_other';expect_failure('candidate_consumption_grant',lambda:validate_authority_bundle(wrong,authority.key_resolver));negatives+=1;short=deepcopy(execution['bundle']);short['ledger_events'].pop();short_authority=validate_authority_bundle(short,authority.key_resolver);short_state=resolve_exact_grant(grant['grant_id'],grant['capability'],grant['instance_id'],plus(short['ledger_events'][-1]['recorded_at'],1),short_authority)
  if short_state['reason']=='grant_exhausted': raise ValueError('candidate_mapping_missing_event_accepted')
  negatives+=1;return {'receipt':receipt,'execution':execution,'negatives':negatives}
 def main():
