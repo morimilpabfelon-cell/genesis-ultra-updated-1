@@ -18,7 +18,6 @@ const CAPABILITIES = new Map([
   ["code.execute_sandbox", "high"],
   ["external.action", "high"],
   ["body.device.control", "critical"],
-  ["transfer.prepare", "high"],
 ]);
 const FORBIDDEN_CAPABILITIES = new Set([
   "memory.rewrite",
@@ -294,7 +293,7 @@ function controlsRequired(capability, risk, level) {
   const required = new Set(["observer_required"]);
   if (risk === "critical") for (const field of CONTROL_FIELDS) required.add(field);
   if (risk === "high") for (const field of ["sandbox_required", "observer_required", "reversible_required"]) required.add(field);
-  if (level <= 2 || new Set(["external.action", "body.device.control", "transfer.prepare"]).has(capability)) required.add("human_confirmation_required");
+  if (level <= 2 || new Set(["external.action", "body.device.control"]).has(capability)) required.add("human_confirmation_required");
   if (capability === "code.execute_sandbox") required.add("sandbox_required");
   return required;
 }
@@ -785,7 +784,7 @@ function main(argv) {
     console.log(`OK autonomy projection digest ${projection.projection_digest}`);
     console.log(`OK use decisions (${decisions.filter((item) => item.status === "allowed").length} allowed, ${decisions.filter((item) => item.status === "denied").length} denied)`);
     console.log(`OK guided autonomy boundary rejection cases (${rejected})`);
-    console.log("NOTE proposals and evaluations never self-authorize; only signed guardian grants open capabilities.");
+    console.log("NOTE proposals never self-authorize external resources; continuity and cognitive freedom are not grant-gated capabilities.");
   } else if (command === "build" || command === "sync") {
     if (args.length !== 2) usage();
     const document = readJson(path.resolve(args[0]));

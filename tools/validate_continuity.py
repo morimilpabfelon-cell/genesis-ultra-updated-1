@@ -81,6 +81,53 @@ def compute_body_registry(case: dict) -> str:
     return hash_fields(case["domain"], fields)
 
 
+def compute_continuity_intent(case: dict) -> str:
+    data = case["input"]
+    if data["decision_origin"] != "instance":
+        raise ValueError("continuity_intent_origin_invalid")
+    return hash_fields(
+        case["domain"],
+        [
+            data["schema_version"],
+            data["intent_id"],
+            data["transfer_id"],
+            data["instance_id"],
+            data["source_body_id"],
+            data["destination_body_id"],
+            data["checkpoint_hash"],
+            data["last_event_hash"],
+            data["decision_origin"],
+            data["created_at"],
+            data["expires_at"],
+        ],
+    )
+
+
+def compute_host_consent(case: dict) -> str:
+    data = case["input"]
+    if data["resource_scope"] != "destination_body_runtime":
+        raise ValueError("host_consent_scope_invalid")
+    if data["ownership_claim"] != "none" or data["mobility_veto"] != "none":
+        raise ValueError("host_consent_claim_invalid")
+    return hash_fields(
+        case["domain"],
+        [
+            data["schema_version"],
+            data["consent_id"],
+            data["transfer_id"],
+            data["host_id"],
+            data["host_key_epoch_id"],
+            data["instance_id"],
+            data["destination_body_id"],
+            data["resource_scope"],
+            data["granted_at"],
+            data["expires_at"],
+            data["ownership_claim"],
+            data["mobility_veto"],
+        ],
+    )
+
+
 def compute_transfer_package(case: dict) -> str:
     data = case["input"]
     contents = data["contents"]
@@ -101,7 +148,9 @@ def compute_transfer_package(case: dict) -> str:
         data["checkpoint_hash"],
         data["last_event_hash"],
         data["continuity_status"],
-        data["authorization_ref"],
+        data["continuity_intent_ref"],
+        data["host_consent_ref"],
+        data["destination_possession_ref"],
         str(len(contents)),
     ]
     for item in sorted(contents, key=lambda value: value["path"].encode("utf-8")):
@@ -126,7 +175,9 @@ def compute_transfer_receipt(case: dict) -> str:
         data["accepted_at"],
         data["continuity_status"],
         optional_text(data.get("continuity_gap_ref")),
-        optional_text(data.get("guardian_authorization_ref")),
+        data["continuity_intent_ref"],
+        data["host_consent_ref"],
+        data["destination_possession_ref"],
     ]
     return hash_fields(case["domain"], fields)
 
@@ -149,7 +200,9 @@ def compute_transfer_finalization(case: dict) -> str:
         data["source_final_status"],
         data["destination_final_status"],
         data["finalized_at"],
-        data["guardian_authorization_ref"],
+        data["continuity_intent_ref"],
+        data["host_consent_ref"],
+        data["destination_possession_ref"],
     ]
     return hash_fields(case["domain"], fields)
 
@@ -164,6 +217,16 @@ def main() -> int:
         return 1
 
     checks = [
+        (
+            "continuity_intent",
+            compute_continuity_intent(vectors["continuity_intent"]),
+            vectors["continuity_intent"]["expected_intent_digest"],
+        ),
+        (
+            "host_consent",
+            compute_host_consent(vectors["host_consent"]),
+            vectors["host_consent"]["expected_consent_digest"],
+        ),
         (
             "body_registry",
             compute_body_registry(vectors["body_registry"]),

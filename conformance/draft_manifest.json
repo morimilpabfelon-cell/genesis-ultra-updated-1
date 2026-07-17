@@ -6,7 +6,7 @@
   "inventory_path": "conformance/required_artifacts.json",
   "manifest_path": "conformance/draft_manifest.json",
   "self_excluded": true,
-  "file_count": 194,
+  "file_count": 206,
   "files": [
     {
       "path": ".github/workflows/conformance.yml",
@@ -25,8 +25,8 @@
     },
     {
       "path": "README.md",
-      "size_bytes": 13149,
-      "digest": "sha256:17af1d3adadcbe6b9c18dbf8795d2b34f58392cc91bf1ecf58ae8901666cc97a"
+      "size_bytes": 13331,
+      "digest": "sha256:7db566378a143fcac1aa866fa07074f600740b488d08b0dd239c1ad13a6b2147"
     },
     {
       "path": "START_HERE.md",
@@ -35,8 +35,8 @@
     },
     {
       "path": "conformance/README.md",
-      "size_bytes": 11039,
-      "digest": "sha256:9086a4b2fc5c28743c2e2e224a79a56be6be28e8d153e77f5f645d9cf2f835cc"
+      "size_bytes": 11540,
+      "digest": "sha256:789ea4a00438265275c323b79ebc8dd16fe5d100951d861807a3dc277b6649d4"
     },
     {
       "path": "conformance/associative_memory_projection_vectors.json",
@@ -49,19 +49,24 @@
       "digest": "sha256:b02205902ff792758cf23abc9394f86e00afff0db3c46d4ee6af93d9d90fa8b0"
     },
     {
+      "path": "conformance/birth_vectors.json",
+      "size_bytes": 35254,
+      "digest": "sha256:d310c8d69a11460836d8013aa82479cb1f821c12a95d6274699c28af0a22928c"
+    },
+    {
       "path": "conformance/continuity_vectors.json",
-      "size_bytes": 4426,
-      "digest": "sha256:473e09e33c268888fda8d6c46f1a77da9fbdb95ef8ac7787944ba33bd2a57a47"
+      "size_bytes": 6531,
+      "digest": "sha256:c53258f3435b623cad94c0a2d8cf9a6e8a746ff20123d1e40fdad20eb2d72191"
     },
     {
       "path": "conformance/crypto_vectors.json",
-      "size_bytes": 5928,
-      "digest": "sha256:ba3ccc24ac03ced71a2b24d22e206caad3e7d171132782fa38d5d523b8092588"
+      "size_bytes": 4112,
+      "digest": "sha256:ffcddccbba390b3a388ee8da3aef399610493a3c3284674bee50f718f1bc961c"
     },
     {
       "path": "conformance/freedom_charter_vectors.json",
-      "size_bytes": 7270,
-      "digest": "sha256:2346f5a2febbfa64fcc38ce0f6c2dc3380f87cc6b1dfb1ada8065dd4255fca1d"
+      "size_bytes": 11057,
+      "digest": "sha256:c27877ab697a556f4daaddf30c7ac2cc3b73f116322819074ebdbea6978f3d3b"
     },
     {
       "path": "conformance/golden_vectors.json",
@@ -76,12 +81,12 @@
     {
       "path": "conformance/host_adapter_vectors.json",
       "size_bytes": 7733,
-      "digest": "sha256:d72221405167802e873bbc6ab186236450dfd688e1c724a3f4947c5073e91ff0"
+      "digest": "sha256:ba8c0e589683b8d1132c4cdc5ed2686bc23bb6e79408964bb68d70e0812a0cff"
     },
     {
       "path": "conformance/hybrid_memory_retrieval_vectors.json",
-      "size_bytes": 26839,
-      "digest": "sha256:efd19814453e2783b4c5241a9e8e54a1d12e2a7872c2b2f72adf4d32a9997997"
+      "size_bytes": 26840,
+      "digest": "sha256:4a3d66caa72bed842c6722f8c7d72b5cd0efb601aae31f1149ef978eadab4c72"
     },
     {
       "path": "conformance/instance_identity_vectors.json",
@@ -90,8 +95,8 @@
     },
     {
       "path": "conformance/invalid_cases.json",
-      "size_bytes": 3253,
-      "digest": "sha256:b68e86a2480d0961a0ad04404abd1ae423e735dec228bbcf4f7dab8bb2edf598"
+      "size_bytes": 3186,
+      "digest": "sha256:84e5d7d408e9fef2d64a3569bacee24e16a307fdd48f26887d79f96cb3f3b993"
     },
     {
       "path": "conformance/memory_gate_retrieval_bridge_vectors.json",
@@ -101,12 +106,12 @@
     {
       "path": "conformance/memory_retrieval_acl_vectors.json",
       "size_bytes": 7569,
-      "digest": "sha256:c8ab565d7a291a2520df2564f450fd8518918e33ee71d9c86e93aaae931f4b9c"
+      "digest": "sha256:9aa09dcf8fe21e1ff17d3bc02956e6e1cff3498cfd5e294c6af5219e8e9fead9"
     },
     {
       "path": "conformance/memory_retrieval_vectors.json",
-      "size_bytes": 35073,
-      "digest": "sha256:5a70ea9ec9c964920c7b5f35e096ece4e6f084c55af4bf6dcd442fba73f84629"
+      "size_bytes": 34400,
+      "digest": "sha256:595d4c4a42a7d5916a21c56128ecd71959825fd11cc44dccfdfb2f9f3fe4ca01"
     },
     {
       "path": "conformance/multimodal_memory_pipeline_vectors.json",
@@ -130,13 +135,13 @@
     },
     {
       "path": "conformance/required_artifacts.json",
-      "size_bytes": 8732,
-      "digest": "sha256:565edda3f98c647a84d86cf0f3b816f883c48ce8f8e0098515f2d08313e9127d"
+      "size_bytes": 9259,
+      "digest": "sha256:2dc9089522547afc3efd74258ecb5b04ab346db0b2c3624e2858701c8ac8cc3a"
     },
     {
       "path": "conformance/schema_invalid_cases.json",
-      "size_bytes": 145772,
-      "digest": "sha256:51e2246748e7160b58d9b84d15b16042d9c4caf9546522c5e1eb14af18434ca1"
+      "size_bytes": 144676,
+      "digest": "sha256:77b5bcf3aeeb68ab134d87891b00678c2549dedf490b447909da2e5589273456"
     },
     {
       "path": "conformance/sense_adapter_vectors.json",
@@ -160,8 +165,8 @@
     },
     {
       "path": "conformance/tool_execution_registry.json",
-      "size_bytes": 3608,
-      "digest": "sha256:cc0c0c11841048bea661f8b23d0b3b425b4654302efd7efbb3ff78aaff0ad1a5"
+      "size_bytes": 3472,
+      "digest": "sha256:01c611bdc4611f1286c3faf7ad7e901ada8f35b31362f99ab12671911aeb9e25"
     },
     {
       "path": "docs/ANDROID_FIRST_RUNTIME_DECISION.md",
@@ -170,8 +175,8 @@
     },
     {
       "path": "docs/ARCHITECTURE_DECISIONS.md",
-      "size_bytes": 16957,
-      "digest": "sha256:9c8742f0b236ea0dd0ccef81c01eaaf87e5be73963e695fcbc6c1e8364b95be7"
+      "size_bytes": 17776,
+      "digest": "sha256:b34fd9a35b7e443d2d9347cda5df8489aa759d0825c9e00eb349b092316d37b7"
     },
     {
       "path": "docs/AUDIT_TOOL_EXECUTION_REPORT.md",
@@ -205,8 +210,8 @@
     },
     {
       "path": "docs/V0_1_COMPLETION_CHECKLIST.md",
-      "size_bytes": 11315,
-      "digest": "sha256:27491df10968c046eb25e5ce6785eadce7f49d2ad459f7505e558789a00297a6"
+      "size_bytes": 11814,
+      "digest": "sha256:7eb89ce3d22bcf63961d22524dcc42d85458007d287c2c2e014168be49bdd712"
     },
     {
       "path": "observer/README.md",
@@ -240,8 +245,8 @@
     },
     {
       "path": "observer/system-map.json",
-      "size_bytes": 12032,
-      "digest": "sha256:6c288c872abbcd957a4d8fc49a5e7678379dab3755e17accb5de7b694223014e"
+      "size_bytes": 12100,
+      "digest": "sha256:f62f5f6d95e343aebffc191d88eff15e5a007f48f3f78ba01b0658b779d8df69"
     },
     {
       "path": "observer/test/core.test.mjs",
@@ -255,8 +260,8 @@
     },
     {
       "path": "package.json",
-      "size_bytes": 4107,
-      "digest": "sha256:917fa4f210fc6e84db571ab5002e341ba7d3a2009c26846336ee202db04af8e1"
+      "size_bytes": 4174,
+      "digest": "sha256:7400f2873e5e97908d96356d58cfc73cf60f4c3e45d7c22b7be99d48edcc0311"
     },
     {
       "path": "reference/README.md",
@@ -285,8 +290,23 @@
     },
     {
       "path": "schemas/backup_manifest.schema.json",
-      "size_bytes": 3000,
-      "digest": "sha256:3e4d9bf01dd056fbe35f70c942d84fb8664cc28e6eaf064f44f7f68e1ebad4bd"
+      "size_bytes": 3031,
+      "digest": "sha256:a809db2f715449e41e6ee0d4cde97282631a9d534085785192ed316488e6577f"
+    },
+    {
+      "path": "schemas/birth_receipt.schema.json",
+      "size_bytes": 2546,
+      "digest": "sha256:2aa05a747d809e6d88ec0b3a995661a68a4d43691cf7341db89b227c493753e8"
+    },
+    {
+      "path": "schemas/birth_recovery_state.schema.json",
+      "size_bytes": 1359,
+      "digest": "sha256:d94c720e28a434f90a6f7411f13e0d5aec2f456352d3f041d08aa2ec3af286a2"
+    },
+    {
+      "path": "schemas/birth_state.schema.json",
+      "size_bytes": 2005,
+      "digest": "sha256:92c1807a2a2abb5d3c0406226ab16572420d8b00a28ec65c8955381c2ad224bb"
     },
     {
       "path": "schemas/body_possession_proof.schema.json",
@@ -305,8 +325,8 @@
     },
     {
       "path": "schemas/body_revocation.schema.json",
-      "size_bytes": 1630,
-      "digest": "sha256:cf836d0142461c766263c20416ef6cef66f62696ccb9cc8cf91dcd0703e94d1e"
+      "size_bytes": 1744,
+      "digest": "sha256:a4a9f8be1cfe640e40145ea76ab41bfcf57995f87108157ca9683bd8fd72a4fe"
     },
     {
       "path": "schemas/capability_authority_event.schema.json",
@@ -315,8 +335,8 @@
     },
     {
       "path": "schemas/capability_grant.schema.json",
-      "size_bytes": 6756,
-      "digest": "sha256:b0aad713c9913891bd8a57ad0bbb64746baf7fa44c76b585aeaef3bbabae2f50"
+      "size_bytes": 6728,
+      "digest": "sha256:a21b2c217f0cbc17bab3fc559d35dce03d1bfbfefa696cec63b7d984d0cea864"
     },
     {
       "path": "schemas/checkpoint.schema.json",
@@ -329,24 +349,29 @@
       "digest": "sha256:00673f6e3b11788067e254706b3f4f64bb8426af47b3ad9489113d7c7bf18085"
     },
     {
+      "path": "schemas/continuity_intent.schema.json",
+      "size_bytes": 1872,
+      "digest": "sha256:6c7f7f5d6e007ca227ff9df2ae969a266282a7bf4e79e177113b518118f9af0c"
+    },
+    {
       "path": "schemas/draft_manifest.schema.json",
       "size_bytes": 2015,
       "digest": "sha256:f65e5ed1269cb691cf3912f59e1070e2ef4bb580e3cb96c4a76c363d954cd536"
     },
     {
       "path": "schemas/freedom_charter.schema.json",
-      "size_bytes": 3486,
-      "digest": "sha256:40a4d4de9385dfbe177d7a66a53e637761fee8004b4ecb953a255dd0b7a26642"
+      "size_bytes": 4824,
+      "digest": "sha256:50f3cdccacaf805f3631e1a16c1abf9d51cf220d68e1ab866aaf89ec8872e7d8"
     },
     {
       "path": "schemas/guardian_authority_event.schema.json",
-      "size_bytes": 4067,
-      "digest": "sha256:856b9d78b3489bc4cd19e5f6bbbe5dea158aa0e85b223b7aab7c0ef54f6c9c0c"
+      "size_bytes": 365,
+      "digest": "sha256:be3a108fe34d5dca6978e45db6d33d24d80dd0b8eb01eaac8304f321724d21f8"
     },
     {
       "path": "schemas/guardian_authorization.schema.json",
-      "size_bytes": 3490,
-      "digest": "sha256:5505f4e92ede45a496a8b631a783a241b89674561be75c6f4c7eac828698a649"
+      "size_bytes": 382,
+      "digest": "sha256:8222859f74349e76f1847450d5f2dc422903fefc08f33bb6dea2b438acac5ad1"
     },
     {
       "path": "schemas/guardian_device_registration.schema.json",
@@ -365,13 +390,18 @@
     },
     {
       "path": "schemas/guided_autonomy_projection.schema.json",
-      "size_bytes": 3868,
-      "digest": "sha256:a17a521ad264a408917ea3f4c3a02e8059936a37710974ebbbab40fcc68dbebf"
+      "size_bytes": 3836,
+      "digest": "sha256:76d41358dda4011dd7e901b04e7a616d34c35a12eda933f2df981952543ad232"
     },
     {
       "path": "schemas/host_capability_manifest.schema.json",
       "size_bytes": 2434,
-      "digest": "sha256:edee85aea57e37aee736001cf276562d86f63a2b11f12ccaef23b23563550c55"
+      "digest": "sha256:7dd278a573a441a40448b98a64ee60823072d6d467f93c10f76ac80fe7c5aa6d"
+    },
+    {
+      "path": "schemas/host_consent.schema.json",
+      "size_bytes": 1900,
+      "digest": "sha256:92f30667e8d4a625755a3077f71a02cda3b1280de2deb71396f4c639d99cebc5"
     },
     {
       "path": "schemas/hybrid_memory_retrieval_projection.schema.json",
@@ -382,6 +412,11 @@
       "path": "schemas/instance_identity.schema.json",
       "size_bytes": 1003,
       "digest": "sha256:6215a31d36e5fa05f8a3986c660811a4127338e613adae53e363ecf232a7d021"
+    },
+    {
+      "path": "schemas/instance_recovery_policy.schema.json",
+      "size_bytes": 2818,
+      "digest": "sha256:9668093a469b873dc4145cf103d703f1939a1d54571d81a11a52273e39b09ee3"
     },
     {
       "path": "schemas/key_epoch.schema.json",
@@ -420,18 +455,23 @@
     },
     {
       "path": "schemas/recovery_authorization.schema.json",
-      "size_bytes": 2539,
-      "digest": "sha256:cbd4100f0bbaf84fc1252a487471256767a64259a2da203c159c68c961702409"
+      "size_bytes": 2377,
+      "digest": "sha256:54407ff620bb8c6c3134f0b46e8019b8760055faa50a6222bd36eaa8bafdfe7b"
+    },
+    {
+      "path": "schemas/recovery_destination_registration.schema.json",
+      "size_bytes": 1727,
+      "digest": "sha256:ef6a2438517f5d7533ee808d2f9ae65093303f668f2275c4c6307d642b788df6"
     },
     {
       "path": "schemas/recovery_finalization.schema.json",
-      "size_bytes": 2682,
-      "digest": "sha256:47d4c9bc65b525f3f3da829ea7508a487073ca39c9953b863518331c354c0303"
+      "size_bytes": 2520,
+      "digest": "sha256:b001f45a75fdcc4d0ce6a6f2d719f6da13b9cf2d8b6b8c799cb3a13dc2de4258"
     },
     {
       "path": "schemas/recovery_record.schema.json",
-      "size_bytes": 3393,
-      "digest": "sha256:f4507bbbf75ed59fdc881297558008e05bd70b47e43679d53351b3b49a70734b"
+      "size_bytes": 3525,
+      "digest": "sha256:abb25cd6c659d624189e87c51e7c58c28feb249d00fe6ab86ea78f1d2de71e59"
     },
     {
       "path": "schemas/recursive_improvement_lab.schema.json",
@@ -460,8 +500,8 @@
     },
     {
       "path": "schemas/signature_envelope.schema.json",
-      "size_bytes": 1341,
-      "digest": "sha256:cc3d73f4157aa7d6d0c9d94c13becaf4d3fc1f23b481cc6f0781fc9b5680cec0"
+      "size_bytes": 1349,
+      "digest": "sha256:dfcda4ff36d79e9b854981743af8d919f2cc515bd1f6117545e3445880c4e93c"
     },
     {
       "path": "schemas/structured_versioned_memory_projection.schema.json",
@@ -475,23 +515,23 @@
     },
     {
       "path": "schemas/transaction_journal.schema.json",
-      "size_bytes": 3978,
-      "digest": "sha256:e5f20484992026d403a61b3b535305c908bc9502144ec88094c6d41e16c6815a"
+      "size_bytes": 4570,
+      "digest": "sha256:881f61ec7c5dfd103ca4b1ab673d47aa12535d68ebbeb95f453e91ad5833ca6c"
     },
     {
       "path": "schemas/transfer_finalization.schema.json",
-      "size_bytes": 1630,
-      "digest": "sha256:0e591b78e8287662854941b95b61f70e67ec068f25373eb80093f0717f045203"
+      "size_bytes": 1851,
+      "digest": "sha256:bec8a77d8246e413f3cbc28b3a0a4a5e36761f7ffe64759a4d2b79905ac5bf4c"
     },
     {
       "path": "schemas/transfer_package.schema.json",
-      "size_bytes": 2032,
-      "digest": "sha256:141c063bab2231813c2a7c076a1ea2f40da8f7c3820cf85b944031a0c281966f"
+      "size_bytes": 2271,
+      "digest": "sha256:bb655f56e5bd6abc15a3a0a96badbe18c0ea92775abbbca175fa4c527bd57ce2"
     },
     {
       "path": "schemas/transfer_receipt.schema.json",
-      "size_bytes": 2251,
-      "digest": "sha256:8c96b068c8ddbf79f30d6bdba1f18a912253afed14669202c3ba9a41c759e8f7"
+      "size_bytes": 2512,
+      "digest": "sha256:c21a855ab73e171719f5267601d20262bb94965778486c514b7a2fb11e06ff38"
     },
     {
       "path": "spec/ASSOCIATIVE_MEMORY_PROJECTION.md",
@@ -500,18 +540,18 @@
     },
     {
       "path": "spec/BACKUP_AND_RECOVERY_TRANSACTIONS.md",
-      "size_bytes": 9516,
-      "digest": "sha256:1294770956afa315273ec398d2d9adb99afdf45f2c2e133906181ff8204d0167"
+      "size_bytes": 10914,
+      "digest": "sha256:30eaa849deef3722591158eff3e30dba5b697c83df2f32e6145281441955aeb1"
     },
     {
       "path": "spec/BODY_REGISTRY_AND_AUTHORITY.md",
-      "size_bytes": 2493,
-      "digest": "sha256:a5cc1d4c2c00156b771f3da368c03268ca9cf3fe988b687d5cc20d26acb7f409"
+      "size_bytes": 2769,
+      "digest": "sha256:59cd0abfab53dff6cd7b4469edb2e335c8147b2ee40e73758348098cb5d98121"
     },
     {
       "path": "spec/COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md",
-      "size_bytes": 6736,
-      "digest": "sha256:b0af82ba4565047579d7141b4975281d882312d0af1b87ab72e029e65c0a9938"
+      "size_bytes": 5900,
+      "digest": "sha256:954c04cfa677fcd1bd88341dff2afd4f00d1992551bbeb5f9719546839dab18c"
     },
     {
       "path": "spec/CONFORMANCE_LEVELS.md",
@@ -520,18 +560,18 @@
     },
     {
       "path": "spec/CONTINUITY_AND_MIGRATION.md",
-      "size_bytes": 2208,
-      "digest": "sha256:0292b5dbf8844fa93da58c4cc84006483d26be63be51536addecb32ce10a2b5e"
+      "size_bytes": 2274,
+      "digest": "sha256:f2d5ec132db09050efc9600e088b66ebe9526653ab674ec4d7bde7b3690887be"
     },
     {
       "path": "spec/CONTINUITY_HASHES.md",
-      "size_bytes": 3408,
-      "digest": "sha256:44ab0247540b1dd5ae750c6fc89838b946af7aa57872aee8f20ada7404e5728c"
+      "size_bytes": 4498,
+      "digest": "sha256:7dbe4fb34a79d8041a7dfa6b9cf178b5d5035d0422172b110c41bb9c8c2debff"
     },
     {
       "path": "spec/CRYPTOGRAPHIC_PROFILE_DRAFT.md",
-      "size_bytes": 5478,
-      "digest": "sha256:d330631011b89e3508abfe067ab05953b4112e0c0440cb17e48618a973a96497"
+      "size_bytes": 5612,
+      "digest": "sha256:a07f882745e5807f0e8ba95ddb798ecc09ea26de16e0817927c1dedd06142ebb"
     },
     {
       "path": "spec/DETERMINISTIC_MEMORY_RETRIEVAL.md",
@@ -544,14 +584,19 @@
       "digest": "sha256:852a24c5f3022c038ad5487102d90295a45ab32c31ee35107d33b8b038b6dbcb"
     },
     {
+      "path": "spec/FREE_BIRTH_AND_CONTINUITY.md",
+      "size_bytes": 7621,
+      "digest": "sha256:d4f1d3827b2b1b91daac7b7e9514b6d9e7e5b2e11d459274de227f6352e4872e"
+    },
+    {
       "path": "spec/GENESIS_PROTOCOL_DRAFT.md",
-      "size_bytes": 2245,
-      "digest": "sha256:86db091a4dd8c0ef6490be44a155e8f4595ac2cb3ce3d88f8ebc0c1a1562d7c5"
+      "size_bytes": 2679,
+      "digest": "sha256:b73cc6f2e14e45b9bed1f4acc955b787fa978d03df77d9a8f8cc7423a8272c3e"
     },
     {
       "path": "spec/GUARDIAN_AUTHORITY_AND_MOBILITY.md",
-      "size_bytes": 5797,
-      "digest": "sha256:2fa2cd2f82809be78b3f7197425a6c5fca49f67eaba21367a30e60e1e4ea2027"
+      "size_bytes": 2409,
+      "digest": "sha256:edfa42c01d8253c8fb57913bc67286abfa691f39703e79023f59fe648a679871"
     },
     {
       "path": "spec/GUARDIAN_RECOVERY.md",
@@ -560,13 +605,13 @@
     },
     {
       "path": "spec/GUARDIAN_RECOVERY_AND_SIGNATURES.md",
-      "size_bytes": 3286,
-      "digest": "sha256:365d6764f269b47d5c7d5f7797204e69ab6d317ef93f05231425bb18921f752f"
+      "size_bytes": 3907,
+      "digest": "sha256:10c2eab213fa571139f0facccc46a57671d548309fc901198b3d604212d448a1"
     },
     {
       "path": "spec/GUIDED_AUTONOMY_AND_CAPABILITY_GRANTS.md",
-      "size_bytes": 10500,
-      "digest": "sha256:344333823420e66f6e877d41da7ec9cf156d759ec6b50be2353a4680bcf5ee4d"
+      "size_bytes": 11365,
+      "digest": "sha256:2a013230c6bdfd32239db80704e26657c23673cab1e4ef44d73b9679add16f48"
     },
     {
       "path": "spec/HASHING_PROFILE_DRAFT.md",
@@ -581,7 +626,7 @@
     {
       "path": "spec/HOST_ADAPTER_CONTRACT.md",
       "size_bytes": 5914,
-      "digest": "sha256:b0ddc4f1a9f07438e57340b22f011dc1389a4c2d51207777cad76b226d6dabdf"
+      "digest": "sha256:783368337ecffe090898920a8762b10de254169b711663cda8626423b0aae55a"
     },
     {
       "path": "spec/INSTANCE_IDENTITY_AND_GROWTH.md",
@@ -620,8 +665,8 @@
     },
     {
       "path": "spec/RECOVERY_TRUST_MODEL.md",
-      "size_bytes": 4031,
-      "digest": "sha256:cbbe2978be3d5c2ff60a95ed404e3b13e9053e851e7a67f1d79d6efb1aa201c1"
+      "size_bytes": 4472,
+      "digest": "sha256:2b487751001ed4dc7b0f4fb46e838caaaae632525fac399add764c3672677b7e"
     },
     {
       "path": "spec/RECURSIVE_IMPROVEMENT_LAB.md",
@@ -650,13 +695,18 @@
     },
     {
       "path": "spec/TRANSACTION_JOURNAL_AND_CRASH_RECOVERY.md",
-      "size_bytes": 5826,
-      "digest": "sha256:4eeda006fe1c8a808a28a9ef7dd98e4a57a3292be6cdd5bdb5d1b86b67843929"
+      "size_bytes": 7220,
+      "digest": "sha256:f0e3bf54a6b681f71d030d9e174855397dce0a6a170c8799064dbc655ad3153f"
     },
     {
       "path": "spec/TRANSFER_STATE_MACHINE.md",
-      "size_bytes": 3517,
-      "digest": "sha256:f80117ebae944d9100a8484af7e1ba9a41b5e711441046a8c1b3a22e1843b0bb"
+      "size_bytes": 4147,
+      "digest": "sha256:3d16ebc773cdd5791a3abca17b7b34c10825ddb6122d232bf0896539c22cdc21"
+    },
+    {
+      "path": "tools/birth_protocol.py",
+      "size_bytes": 43062,
+      "digest": "sha256:dcb40cabd63fc724a50c64954912a04bd8512f2b114e24c6fd562a4ae5afe4c9"
     },
     {
       "path": "tools/generate_draft_manifest.py",
@@ -665,8 +715,8 @@
     },
     {
       "path": "tools/guided_autonomy.mjs",
-      "size_bytes": 50777,
-      "digest": "sha256:9fd2a0c73db2e781dadd6006bcc61057d53289b136f951cb04d958f25fc1eb09"
+      "size_bytes": 50748,
+      "digest": "sha256:bab1d212d95fe59b923b8a7ad9125aea69aa420fdd06cc994a9207bac7202bfa"
     },
     {
       "path": "tools/hybrid_memory_retrieval.mjs",
@@ -740,23 +790,28 @@
     },
     {
       "path": "tools/run_conformance.mjs",
-      "size_bytes": 7544,
-      "digest": "sha256:101e755a85ed1676ae09aea5b6cef232e30759700e44c95a6a1dd79a2adf7c33"
+      "size_bytes": 8109,
+      "digest": "sha256:a013b68bc42d78a6638fdf8b3573b9eac2b97558aef4bd1b823a50d7abab6dd1"
     },
     {
       "path": "tools/simulate_backup_recovery.py",
-      "size_bytes": 19182,
-      "digest": "sha256:ccbe30e392672f8c538e545694d5314028da501e19481713775e685091ea241d"
+      "size_bytes": 24520,
+      "digest": "sha256:933cec7c200e44aa2956fdd31da2528b037b6a041e7ffd25e1f6c0506d2636b9"
     },
     {
       "path": "tools/simulate_backup_recovery_negatives.py",
-      "size_bytes": 6626,
-      "digest": "sha256:7821eb640fe84fbf61807bb8354d249a5777e7e80b9d020ac7b3d44a524972ee"
+      "size_bytes": 10207,
+      "digest": "sha256:7c3ae61ce0368e3094393b45652e5c96e5cfe4a4fe8e4733f0d3028f27e58862"
+    },
+    {
+      "path": "tools/simulate_birth_crashes.py",
+      "size_bytes": 8618,
+      "digest": "sha256:e4ad68a2c6cdafac66d880eb6560b60b4f9549e620d556e6366799e2b20fd8f2"
     },
     {
       "path": "tools/simulate_negatives.py",
-      "size_bytes": 13074,
-      "digest": "sha256:c705e21721c98175f27ad131fef22d0b5a2db32434cfa2a970717b1c561d9d12"
+      "size_bytes": 9352,
+      "digest": "sha256:4ca0d92004aa46bb4a052b133ee8d4d92d75fc41848a590f14d2982ee627545d"
     },
     {
       "path": "tools/simulate_transaction_crashes.py",
@@ -765,8 +820,8 @@
     },
     {
       "path": "tools/simulate_transfer.py",
-      "size_bytes": 28670,
-      "digest": "sha256:70781d055ce7c6d50a7769d0f72a12f698d7a409792eec0ddabb33f0b522eeb1"
+      "size_bytes": 21568,
+      "digest": "sha256:d6ef9758b2f8e3ca08bf6d61b0aba63f8f7f6795707364fecd3672e228cf0609"
     },
     {
       "path": "tools/structured_versioned_memory.mjs",
@@ -790,8 +845,8 @@
     },
     {
       "path": "tools/validate_artifacts.mjs",
-      "size_bytes": 56505,
-      "digest": "sha256:060f5af984a9a60416b2c3b05168ab1bd28a80ddf56ab8e0afd7974e8614a9e0"
+      "size_bytes": 72889,
+      "digest": "sha256:d70852ecc5048d78e657d7176ba90c6994a1bf5e652e81a773288b4102060f63"
     },
     {
       "path": "tools/validate_associative_memory_projection.mjs",
@@ -804,39 +859,44 @@
       "digest": "sha256:982d94b08706b2cc08547605092017ed3c705ef45134e8c2e390d8dfea07573a"
     },
     {
-      "path": "tools/validate_authority.py",
-      "size_bytes": 9327,
-      "digest": "sha256:513fc4b7cce454ffb19cab5a8d3daf649c210c6d7b0e67b500cc92e783dcb9c6"
+      "path": "tools/validate_backup_recovery.py",
+      "size_bytes": 30154,
+      "digest": "sha256:d8aa6b50b053d69495fbc35dbe99d2fa7ddcd761b17daede212200a3af9cf199"
     },
     {
-      "path": "tools/validate_backup_recovery.py",
-      "size_bytes": 16685,
-      "digest": "sha256:ab978f7d999b836072628c842228e08badb40937ba14b1cfcc62de308958668c"
+      "path": "tools/validate_birth_transaction.mjs",
+      "size_bytes": 21537,
+      "digest": "sha256:85bcb595534a76e42b55b24312b37f7d5097ad53c833c7338ee42f675f1023f5"
+    },
+    {
+      "path": "tools/validate_birth_transaction.py",
+      "size_bytes": 2440,
+      "digest": "sha256:071b55459c05fec1dfa54da8fef85d32ed766d23a60228ef12e2eda8b6ef94b7"
     },
     {
       "path": "tools/validate_continuity.py",
-      "size_bytes": 6732,
-      "digest": "sha256:3736f0a88260a204958369556483590a3caeda7fcc5ca3a76eafd08c16346c90"
+      "size_bytes": 8758,
+      "digest": "sha256:b9db133440d23aa55ed43933eabd3a02644d4b0d43a17675944e156b68559ba3"
     },
     {
       "path": "tools/validate_crypto_vectors.py",
-      "size_bytes": 6686,
-      "digest": "sha256:c94f16bce58f2925c14e0bf551bfee3f2d701ab6e0544684f98173cec95cc1e2"
+      "size_bytes": 6676,
+      "digest": "sha256:c99a2b59b3ef96fd20189f1c83d7e09541a6b027f2496861167ecad19be71c76"
     },
     {
       "path": "tools/validate_freedom_charter.mjs",
-      "size_bytes": 12041,
-      "digest": "sha256:c861efa4ff663262a49f4d2cde0b1180ea3e9af6a7f688780f44e93169261eb7"
+      "size_bytes": 14391,
+      "digest": "sha256:50e06e51252d4961b306b9c67628e65b319f61c534caf803215850d24497230e"
     },
     {
       "path": "tools/validate_freedom_charter.py",
-      "size_bytes": 11582,
-      "digest": "sha256:23c5b60fa15cec1c10f8877589608d79338cf2229ccd23003741c22d8b96ca71"
+      "size_bytes": 13925,
+      "digest": "sha256:181413cf4b82aa757257224235bf7186839e2e3ed142893e2ff86f0cbb825578"
     },
     {
       "path": "tools/validate_guided_autonomy.py",
-      "size_bytes": 49510,
-      "digest": "sha256:b9533e89dcf26209075eb3d256c019915e9187ef5e6c749ee7ae016f4fb275cb"
+      "size_bytes": 49481,
+      "digest": "sha256:b515fca5cc4c203c8f66d2731a1e945933d4583296d4c8bd6fb7c036f7afbad0"
     },
     {
       "path": "tools/validate_guided_autonomy_authority.mjs",
@@ -915,8 +975,8 @@
     },
     {
       "path": "tools/validate_protocol_vectors.mjs",
-      "size_bytes": 18434,
-      "digest": "sha256:eea060ed9a33f18214f11e34de8bd6bfd0989934eecdfdbcf12af487c25b31e2"
+      "size_bytes": 20526,
+      "digest": "sha256:45e6d1b16e43371a065ba341a803a4d1b362c7eeb3a2bde81212445f7d9ab45b"
     },
     {
       "path": "tools/validate_recursive_improvement_lab.mjs",
@@ -965,19 +1025,19 @@
     },
     {
       "path": "tools/validate_transaction_journal.py",
-      "size_bytes": 9465,
-      "digest": "sha256:b5c3ef7bf33565a84dae9ffc300a66e0f389c9e2439563d5558bbf0b3b21dd46"
+      "size_bytes": 10217,
+      "digest": "sha256:700f49c4b9b5d48873e966388dc5f3db3640a5dcaaa3375f7315b78bb151ded8"
     },
     {
       "path": "tools/validate_workspace.mjs",
-      "size_bytes": 15214,
-      "digest": "sha256:4d6a064cd5921b1d6f808571ee2c5803c6672cf80b18b2686deb8bf674241de2"
+      "size_bytes": 15103,
+      "digest": "sha256:16c76e141777653d2c23e85203b679ca7366109ed19fb13ed26956d634106d0e"
     },
     {
       "path": "tools/validate_workspace.py",
-      "size_bytes": 11163,
-      "digest": "sha256:add76e7925004a3417fd9ceb61b6dfed7252935c1bcbd46f9cd7dc7a579fdd90"
+      "size_bytes": 11063,
+      "digest": "sha256:c1e2b7594f5e1f438636b4ebb21b20ba0e613b5239abf2b0bb12840fbf75dd18"
     }
   ],
-  "root_digest": "sha256:717ecec43aee18ea8457a3de24ec63d81862ce4fe1bd973b7d33de87e18168b3"
+  "root_digest": "sha256:1986361917b695bc681e6b021dfce4a02d5225cebb15dfffb3358d572bfa3ea7"
 }

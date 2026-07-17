@@ -49,7 +49,7 @@
           "genesis.host.atomic_commit.v0.1",
           "genesis.host.body_key_storage.v0.1",
           "genesis.host.durable_storage.v0.1",
-          "genesis.host.guardian_authorization.v0.1",
+          "genesis.host.recovery_authorization.v0.1",
           "genesis.host.restart_recovery.v0.1",
           "genesis.host.secure_random.v0.1",
           "genesis.host.transfer_export.v0.1",

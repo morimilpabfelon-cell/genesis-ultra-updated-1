@@ -16,6 +16,7 @@ const INSTANCE_IDENTITY_VECTORS = path.join(
   ROOT,
   "conformance/instance_identity_vectors.json"
 );
+const BIRTH_VECTORS = path.join(ROOT, "conformance/birth_vectors.json");
 const SENSE_OBSERVATION_VECTORS = path.join(
   ROOT,
   "conformance/sense_observation_vectors.json"
@@ -132,7 +133,7 @@ function signatureEnvelopeBytes(envelope) {
 }
 
 const FIXTURE_PUBLIC_KEYS = new Map(
-  [0xa1, 0xb2, 0xc3, 0xd4].map((seedByte) => {
+  [0xa1, 0xb2, 0xc3, 0xd4, 0xe5, 0xf6].map((seedByte) => {
     const publicKey = crypto.createPublicKey(
       privateEd25519KeyFromSeed(Buffer.alloc(32, seedByte))
     );
@@ -192,64 +193,22 @@ function computeDeviceRegistrationDigest(registration) {
   ]);
 }
 
-function computeAuthorizationDigest(authorization) {
-  const destinations = [...authorization.destination_body_ids].sort((left, right) =>
-    Buffer.compare(Buffer.from(left, "utf8"), Buffer.from(right, "utf8"))
-  );
-  return hashFields("genesis.guardian.authorization.v0.1", [
-    authorization.schema_version,
-    authorization.authorization_id,
-    authorization.guardian_id,
-    authorization.guardian_key_epoch_id,
-    authorization.instance_id,
-    String(authorization.authority_epoch),
-    authorization.permission,
-    authorization.mode,
-    optionalText(authorization.source_body_id),
-    authorization.destination_scope,
-    String(destinations.length),
-    ...destinations,
-    authorization.issued_at,
-    authorization.not_before,
-    optionalText(authorization.expires_at),
-    optionalText(authorization.use_limit)
-  ]);
-}
-
-function computeAuthorityEventHash(event) {
-  return hashFields("genesis.guardian.authority.event.v0.1", [
-    event.schema_version,
-    event.ledger_id,
-    event.event_id,
-    String(event.sequence),
-    event.previous_event_hash,
-    event.guardian_id,
-    event.instance_id,
-    String(event.authority_epoch),
-    event.event_type,
-    optionalText(event.authorization_ref),
-    optionalText(event.body_id),
-    optionalText(event.transfer_id),
-    event.subject_digest,
-    event.recorded_at
-  ]);
-}
-
-function computeAuthorizationUseDigest(authorizationId, transferId, sourceBodyId, destinationBodyId) {
-  return hashFields("genesis.guardian.authorization.use.v0.1", [
-    authorizationId,
-    transferId,
-    sourceBodyId,
-    destinationBodyId
-  ]);
-}
-
 function boolText(value) {
   return value ? "true" : "false";
 }
 
 function sha256Bytes(value) {
   return `sha256:${crypto.createHash("sha256").update(value).digest("hex")}`;
+}
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value).sort().map((key) =>
+      `${JSON.stringify(key)}:${canonicalJson(value[key])}`
+    ).join(",")}}`;
+  }
+  return JSON.stringify(value);
 }
 
 function computeBackupManifestDigest(manifest) {
@@ -337,10 +296,11 @@ function computeRecoveryAuthorizationDigest(authorization) {
     authorization.schema_version,
     authorization.authorization_id,
     authorization.recovery_id,
-    authorization.guardian_id,
-    authorization.guardian_key_epoch_id,
     authorization.instance_id,
-    String(authorization.authority_epoch),
+    authorization.recovery_policy_id,
+    authorization.recovery_policy_digest,
+    String(authorization.policy_epoch),
+    authorization.authorization_path,
     authorization.source_backup_id,
     authorization.source_backup_commit_digest,
     authorization.previous_body_id,
@@ -349,6 +309,57 @@ function computeRecoveryAuthorizationDigest(authorization) {
     authorization.issued_at,
     authorization.not_before,
     authorization.expires_at
+  ]);
+}
+
+function computeInstanceRecoveryPolicyDigest(policy) {
+  const factors = [...policy.factors].sort((left, right) =>
+    Buffer.compare(Buffer.from(left.factor_id, "utf8"), Buffer.from(right.factor_id, "utf8"))
+  );
+  if (new Set(factors.map((factor) => factor.factor_id)).size !== factors.length) {
+    throw new Error("recovery_policy_duplicate_factor");
+  }
+  return hashFields("genesis.instance.recovery.policy.v0.1", [
+    policy.schema_version,
+    policy.policy_id,
+    policy.instance_id,
+    String(policy.policy_epoch),
+    policy.guardian_id,
+    policy.guardian_factor_id,
+    String(policy.fallback_threshold),
+    String(policy.fallback_wait_seconds),
+    boolText(policy.cancellation_allowed),
+    boolText(policy.single_use),
+    String(factors.length),
+    ...factors.flatMap((factor) => {
+      const paths = [...factor.allowed_paths].sort((left, right) =>
+        Buffer.compare(Buffer.from(left, "utf8"), Buffer.from(right, "utf8"))
+      );
+      return [
+        factor.factor_id,
+        factor.factor_type,
+        factor.key_epoch_id,
+        factor.public_key_ref,
+        String(paths.length),
+        ...paths
+      ];
+    }),
+    policy.created_at
+  ]);
+}
+
+function computeRecoveryDestinationRegistrationDigest(registration) {
+  return hashFields("genesis.recovery.destination.registration.v0.1", [
+    registration.schema_version,
+    registration.registration_id,
+    registration.recovery_id,
+    registration.recovery_authorization_ref,
+    registration.recovery_authorization_digest,
+    registration.instance_id,
+    registration.body_id,
+    registration.platform_profile,
+    registration.public_key_fingerprint,
+    registration.registered_at
   ]);
 }
 
@@ -375,7 +386,8 @@ function computeBodyRevocationDigest(revocation) {
     revocation.revoked_at,
     revocation.reason,
     revocation.last_trusted_event_hash,
-    revocation.guardian_authorization_ref
+    revocation.recovery_authorization_ref,
+    revocation.recovery_authorization_digest
   ]);
 }
 
@@ -389,6 +401,163 @@ function computeBodyPossessionDigest(proof) {
     proof.issued_at,
     proof.expires_at,
     proof.public_key_fingerprint
+  ]);
+}
+
+function computeBodyRegistryDigest(registry) {
+  const bodies = [...registry.bodies].sort((left, right) =>
+    Buffer.compare(Buffer.from(left.body_id, "utf8"), Buffer.from(right.body_id, "utf8"))
+  );
+  if (new Set(bodies.map((body) => body.body_id)).size !== bodies.length) {
+    throw new Error("duplicate_body_id");
+  }
+  if (bodies.filter((body) => body.status === "active_writer").length > 1) {
+    throw new Error("multiple_active_writers");
+  }
+  return hashFields("genesis.body.registry.v0.1", [
+    registry.schema_version,
+    registry.instance_id,
+    String(registry.registry_epoch),
+    String(bodies.length),
+    ...bodies.flatMap((body) => [
+      body.body_id,
+      body.status,
+      body.platform_profile,
+      body.public_key_fingerprint,
+      body.created_at,
+      optionalText(body.last_seen_at),
+      optionalText(body.revocation_ref)
+    ]),
+    registry.updated_at
+  ]);
+}
+
+function computeCheckpointHash(checkpoint) {
+  return hashFields("genesis.checkpoint.v0.1", [
+    checkpoint.schema_version,
+    checkpoint.hash_profile,
+    checkpoint.checkpoint_id,
+    checkpoint.instance_id,
+    checkpoint.created_by_body_id,
+    String(checkpoint.sequence),
+    checkpoint.last_event_hash,
+    checkpoint.seed_root_hash,
+    checkpoint.body_registry_digest,
+    checkpoint.state_digest,
+    checkpoint.created_at
+  ]);
+}
+
+function computeMemoryEventHash(event) {
+  const digest = hashFields("genesis.memory.event.v0.1", [
+    event.schema_version,
+    event.hash_profile,
+    event.event_id,
+    event.instance_id,
+    event.body_id,
+    String(event.sequence),
+    event.previous_event_hash,
+    event.event_type,
+    event.actor,
+    event.content_digest,
+    event.content_type,
+    event.observed_at,
+    event.provenance_digest,
+    event.privacy
+  ]);
+  return `evsha256:${digest.slice("sha256:".length)}`;
+}
+
+function computeContinuityIntentDigest(intent) {
+  return hashFields("genesis.continuity.intent.v0.1", [
+    intent.schema_version,
+    intent.intent_id,
+    intent.transfer_id,
+    intent.instance_id,
+    intent.source_body_id,
+    intent.destination_body_id,
+    intent.checkpoint_hash,
+    intent.last_event_hash,
+    intent.decision_origin,
+    intent.created_at,
+    intent.expires_at
+  ]);
+}
+
+function computeHostConsentDigest(consent) {
+  return hashFields("genesis.host.consent.v0.1", [
+    consent.schema_version,
+    consent.consent_id,
+    consent.transfer_id,
+    consent.host_id,
+    consent.host_key_epoch_id,
+    consent.instance_id,
+    consent.destination_body_id,
+    consent.resource_scope,
+    consent.granted_at,
+    consent.expires_at,
+    consent.ownership_claim,
+    consent.mobility_veto
+  ]);
+}
+
+function computeTransferPackageDigest(pkg) {
+  const contents = [...pkg.contents].sort((left, right) =>
+    Buffer.compare(Buffer.from(left.path, "utf8"), Buffer.from(right.path, "utf8"))
+  );
+  return hashFields("genesis.transfer.package.v0.1", [
+    pkg.schema_version,
+    pkg.transfer_id,
+    pkg.instance_id,
+    pkg.source_body_id,
+    optionalText(pkg.destination_body_id),
+    pkg.mode,
+    pkg.created_at,
+    pkg.checkpoint_hash,
+    pkg.last_event_hash,
+    pkg.continuity_status,
+    pkg.continuity_intent_ref,
+    pkg.host_consent_ref,
+    pkg.destination_possession_ref,
+    String(contents.length),
+    ...contents.flatMap((item) => [item.kind, item.path, item.digest])
+  ]);
+}
+
+function computeTransferReceiptDigest(receipt) {
+  return hashFields("genesis.transfer.receipt.v0.1", [
+    receipt.schema_version,
+    receipt.transfer_id,
+    receipt.instance_id,
+    receipt.source_body_id,
+    receipt.destination_body_id,
+    receipt.accepted_package_digest,
+    receipt.accepted_checkpoint_hash,
+    receipt.accepted_last_event_hash,
+    String(receipt.accepted_last_sequence),
+    receipt.accepted_at,
+    receipt.continuity_status,
+    optionalText(receipt.continuity_gap_ref),
+    receipt.continuity_intent_ref,
+    receipt.host_consent_ref,
+    receipt.destination_possession_ref
+  ]);
+}
+
+function computeTransferFinalizationDigest(finalization) {
+  return hashFields("genesis.transfer.finalization.v0.1", [
+    finalization.schema_version,
+    finalization.transfer_id,
+    finalization.instance_id,
+    finalization.source_body_id,
+    finalization.destination_body_id,
+    finalization.receipt_digest,
+    finalization.source_final_status,
+    finalization.destination_final_status,
+    finalization.finalized_at,
+    finalization.continuity_intent_ref,
+    finalization.host_consent_ref,
+    finalization.destination_possession_ref
   ]);
 }
 
@@ -407,7 +576,8 @@ function computeRecoveryRecordDigest(record) {
     String(record.last_known_sequence),
     record.continuity_status,
     optionalText(record.continuity_gap_ref),
-    record.guardian_authorization_ref,
+    record.recovery_authorization_ref,
+    record.recovery_authorization_digest,
     record.previous_body_revocation_ref,
     record.destination_registration_ref,
     record.destination_possession_ref,
@@ -429,7 +599,8 @@ function computeRecoveryFinalizationDigest(finalization) {
     finalization.final_body_registry_digest,
     finalization.previous_body_status,
     finalization.destination_body_status,
-    finalization.guardian_authorization_ref,
+    finalization.recovery_authorization_ref,
+    finalization.recovery_authorization_digest,
     finalization.recovery_event_hash,
     finalization.finalized_at
   ]);
@@ -471,18 +642,9 @@ function requireValid(validators, schema, artifact, label) {
 function validateGeneratedArtifacts(validators, artifactPath) {
   const generated = readJson(artifactPath);
   verifyAllFixtureSignatures(generated, "transfer");
-  const forgedAuthorization = structuredClone(generated.guardian_authorization.signature);
-  forgedAuthorization.signature_value = "00".repeat(64);
-  try {
-    verifyFixtureSignature(forgedAuthorization, "transfer.forged_authorization");
-    throw new Error("forged_transfer_signature_accepted");
-  } catch (error) {
-    if (!error.message.startsWith("fixture_signature_invalid:")) throw error;
-  }
   const requiredTopLevel = [
-    "guardian_device_registrations",
-    "guardian_authorization",
-    "guardian_authority_events",
+    "continuity_intent",
+    "host_consent",
     "body_registry_before",
     "body_registry",
     "memory_events",
@@ -497,250 +659,243 @@ function validateGeneratedArtifacts(validators, artifactPath) {
     if (!(field in generated)) throw new Error(`missing_generated_artifact:${field}`);
   }
 
-  for (const [index, registration] of generated.guardian_device_registrations.entries()) {
-    requireValid(
-      validators,
-      "guardian_device_registration.schema.json",
-      registration,
-      `guardian_device_registrations[${index}]`
-    );
-    requireValid(
-      validators,
-      "signature_envelope.schema.json",
-      registration.signature,
-      `guardian_device_registrations[${index}].signature`
-    );
-    if (registration.registration_digest !== computeDeviceRegistrationDigest(registration)) {
-      throw new Error(`device_registration_digest_mismatch:${index}`);
-    }
-    if (
-      registration.signature.signed_digest !== registration.registration_digest
-      || registration.signature.signer_id !== registration.guardian_id
-      || registration.signature.key_epoch_id !== registration.guardian_key_epoch_id
-      || registration.signature.signed_domain !== "genesis.guardian.device.registration.signature.v0.1"
-    ) {
-      throw new Error(`device_registration_signature_unbound:${index}`);
-    }
-  }
-  requireValid(
-    validators,
-    "guardian_authorization.schema.json",
-    generated.guardian_authorization,
-    "guardian_authorization"
-  );
-  requireValid(
-    validators,
-    "signature_envelope.schema.json",
-    generated.guardian_authorization.signature,
-    "guardian_authorization.signature"
-  );
-  if (generated.guardian_authorization.authorization_digest !== computeAuthorizationDigest(generated.guardian_authorization)) {
-    throw new Error("guardian_authorization_digest_mismatch");
-  }
-  if (
-    generated.guardian_authorization.signature.signed_digest
-      !== generated.guardian_authorization.authorization_digest
-    || generated.guardian_authorization.signature.signer_id !== generated.guardian_authorization.guardian_id
-    || generated.guardian_authorization.signature.key_epoch_id
-      !== generated.guardian_authorization.guardian_key_epoch_id
-    || generated.guardian_authorization.signature.signed_domain
-      !== "genesis.guardian.authorization.signature.v0.1"
-  ) {
-    throw new Error("guardian_authorization_signature_unbound");
-  }
-  let previousAuthorityEpoch = -1;
-  for (const [index, event] of generated.guardian_authority_events.entries()) {
-    requireValid(validators, "guardian_authority_event.schema.json", event, `guardian_authority_events[${index}]`);
-    requireValid(
-      validators,
-      "signature_envelope.schema.json",
-      event.signature,
-      `guardian_authority_events[${index}].signature`
-    );
-    const expectedPrevious = index === 0 ? "GENESIS" : generated.guardian_authority_events[index - 1].event_hash;
-    if (event.sequence !== index) throw new Error(`authority_ledger_sequence_invalid:${index}`);
-    if (event.previous_event_hash !== expectedPrevious) throw new Error(`authority_ledger_chain_broken:${index}`);
-    if (event.event_hash !== computeAuthorityEventHash(event)) throw new Error(`authority_event_hash_mismatch:${index}`);
-    if (event.signature.signed_digest !== event.event_hash) throw new Error(`authority_event_signature_unbound:${index}`);
-    if (event.signature.signed_domain !== "genesis.guardian.authority.event.signature.v0.1") {
-      throw new Error(`authority_event_signature_domain_invalid:${index}`);
-    }
-    if (event.guardian_id !== generated.guardian_authorization.guardian_id) {
-      throw new Error(`authority_event_guardian_mismatch:${index}`);
-    }
-    if (event.instance_id !== generated.guardian_authorization.instance_id) {
-      throw new Error(`authority_event_instance_mismatch:${index}`);
-    }
-    if (event.authority_epoch < previousAuthorityEpoch) {
-      throw new Error(`authority_epoch_regression:${index}`);
-    }
-    if (previousAuthorityEpoch >= 0 && event.authority_epoch > previousAuthorityEpoch) {
-      if (event.event_type !== "authority.epoch.rotated" || event.authority_epoch !== previousAuthorityEpoch + 1) {
-        throw new Error(`authority_epoch_change_without_rotation:${index}`);
-      }
-    }
-    if (event.event_type === "authorization.consumed") {
-      if (event.signature.signer_id !== event.body_id) throw new Error(`authority_consumption_signer_invalid:${index}`);
-    } else if (event.signature.signer_id !== event.guardian_id) {
-      throw new Error(`authority_guardian_signer_invalid:${index}`);
-    }
-    previousAuthorityEpoch = event.authority_epoch;
-  }
-
-  requireValid(validators, "body_registry.schema.json", generated.body_registry_before, "body_registry_before");
-  requireValid(validators, "body_registry.schema.json", generated.body_registry, "body_registry");
-  for (const [index, event] of generated.memory_events.entries()) {
-    requireValid(validators, "memory_event.schema.json", event, `memory_events[${index}]`);
-    if (event.signature) {
-      requireValid(validators, "signature_envelope.schema.json", event.signature, `memory_events[${index}].signature`);
-    }
-  }
-  requireValid(validators, "checkpoint.schema.json", generated.checkpoint, "checkpoint");
-  if (generated.checkpoint.signature) {
-    requireValid(validators, "signature_envelope.schema.json", generated.checkpoint.signature, "checkpoint.signature");
-  }
-  requireValid(validators, "body_possession_proof.schema.json", generated.body_possession_proof, "body_possession_proof");
-  requireValid(
-    validators,
-    "signature_envelope.schema.json",
-    generated.body_possession_signature,
-    "body_possession_signature"
-  );
-  requireValid(validators, "transfer_package.schema.json", generated.transfer_package, "transfer_package");
-  requireValid(validators, "transfer_receipt.schema.json", generated.transfer_receipt, "transfer_receipt");
-  if (generated.transfer_receipt.signature) {
-    requireValid(validators, "signature_envelope.schema.json", generated.transfer_receipt.signature, "transfer_receipt.signature");
-  }
-  requireValid(validators, "transfer_finalization.schema.json", generated.transfer_finalization, "transfer_finalization");
-  for (const field of ["source_acknowledgement", "destination_acknowledgement"]) {
-    const acknowledgement = generated.transfer_finalization[field];
-    if (acknowledgement) {
-      requireValid(validators, "signature_envelope.schema.json", acknowledgement, `transfer_finalization.${field}`);
-    }
-  }
-
-  const events = generated.memory_events;
-  for (let index = 0; index < events.length; index += 1) {
-    const event = events[index];
-    if (event.sequence !== index) throw new Error(`non_contiguous_sequence:${index}`);
-    const expectedPrevious = index === 0 ? "GENESIS" : events[index - 1].event_hash;
-    if (event.previous_event_hash !== expectedPrevious) throw new Error(`broken_memory_chain:${index}`);
-  }
-
-  const preTransferTip = events.at(-2);
-  const completedEvent = events.at(-1);
+  const intent = generated.continuity_intent;
+  const consent = generated.host_consent;
+  const possession = generated.body_possession_proof;
   const pkg = generated.transfer_package;
   const receipt = generated.transfer_receipt;
   const finalization = generated.transfer_finalization;
   const checkpoint = generated.checkpoint;
   const registryBefore = generated.body_registry_before;
-  const authorization = generated.guardian_authorization;
-  const registrations = generated.guardian_device_registrations;
-  const authorityEvents = generated.guardian_authority_events;
+  const registryAfter = generated.body_registry;
 
+  requireValid(validators, "continuity_intent.schema.json", intent, "continuity_intent");
+  requireValid(validators, "host_consent.schema.json", consent, "host_consent");
+  requireValid(validators, "body_registry.schema.json", registryBefore, "body_registry_before");
+  requireValid(validators, "body_registry.schema.json", generated.body_registry, "body_registry");
+  requireValid(validators, "checkpoint.schema.json", checkpoint, "checkpoint");
+  requireValid(validators, "signature_envelope.schema.json", checkpoint.signature, "checkpoint.signature");
+  requireValid(validators, "body_possession_proof.schema.json", possession, "body_possession_proof");
+  requireValid(validators, "signature_envelope.schema.json", generated.body_possession_signature, "body_possession_signature");
+  requireValid(validators, "transfer_package.schema.json", pkg, "transfer_package");
+  requireValid(validators, "transfer_receipt.schema.json", receipt, "transfer_receipt");
+  requireValid(validators, "signature_envelope.schema.json", receipt.signature, "transfer_receipt.signature");
+  requireValid(validators, "transfer_finalization.schema.json", finalization, "transfer_finalization");
+  for (const field of ["source_acknowledgement", "destination_acknowledgement"]) {
+    requireValid(validators, "signature_envelope.schema.json", finalization[field], `transfer_finalization.${field}`);
+  }
+
+  const forgedIntent = structuredClone(intent.signature);
+  forgedIntent.signature_value = "00".repeat(64);
+  try {
+    verifyFixtureSignature(forgedIntent, "transfer.forged_intent");
+    throw new Error("forged_transfer_intent_accepted");
+  } catch (error) {
+    if (!error.message.startsWith("fixture_signature_invalid:")) throw error;
+  }
+
+  if (intent.intent_digest !== computeContinuityIntentDigest(intent)) throw new Error("continuity_intent_digest_mismatch");
+  if (registryBefore.registry_digest !== computeBodyRegistryDigest(registryBefore)) {
+    throw new Error("body_registry_before_digest_mismatch");
+  }
+  if (registryAfter.registry_digest !== computeBodyRegistryDigest(registryAfter)) {
+    throw new Error("final_body_registry_digest_mismatch");
+  }
+  const sourceBefore = registryBefore.bodies.find((body) => body.body_id === intent.source_body_id);
+  const destinationBefore = registryBefore.bodies.find((body) => body.body_id === intent.destination_body_id);
+  const activeBefore = registryBefore.bodies.filter((body) => body.status === "active_writer");
   if (
-    pkg.authorization_ref !== authorization.authorization_id
-    || receipt.guardian_authorization_ref !== authorization.authorization_id
-    || finalization.guardian_authorization_ref !== authorization.authorization_id
-  ) {
-    throw new Error("transfer_authorization_ref_mismatch");
-  }
-  if (authorization.mode !== "standing" || authorization.destination_scope !== "registered_guardian_devices") {
-    throw new Error("generated_scenario_not_standing_mobility");
-  }
-  const activeAuthorityEpoch = Math.max(...authorityEvents.map((event) => event.authority_epoch));
-  if (authorization.authority_epoch !== activeAuthorityEpoch) {
-    throw new Error("authorization_epoch_inactive");
-  }
-  const destinationRegistration = registrations.find((item) => item.body_id === pkg.destination_body_id);
-  if (!destinationRegistration) throw new Error("destination_not_registered");
+    registryBefore.instance_id !== intent.instance_id
+    || activeBefore.length !== 1
+    || activeBefore[0].body_id !== intent.source_body_id
+    || !sourceBefore
+    || !destinationBefore
+  ) throw new Error("pre_transfer_registry_authority_invalid");
   if (
-    destinationRegistration.guardian_id !== authorization.guardian_id
-    || destinationRegistration.instance_id !== authorization.instance_id
-    || destinationRegistration.authority_epoch !== authorization.authority_epoch
-  ) {
-    throw new Error("destination_registration_authority_mismatch");
+    intent.signature.signed_digest !== intent.intent_digest
+    || intent.signature.signer_type !== "body"
+    || intent.signature.signer_id !== intent.source_body_id
+    || intent.signature.signed_domain !== "genesis.continuity.intent.signature.v0.1"
+    || intent.signature.created_at !== intent.created_at
+    || intent.signature.public_key_ref !== sourceBefore.public_key_fingerprint
+  ) throw new Error("continuity_intent_signature_unbound");
+  if (consent.consent_digest !== computeHostConsentDigest(consent)) throw new Error("host_consent_digest_mismatch");
+  if (
+    consent.signature.signed_digest !== consent.consent_digest
+    || consent.signature.signer_type !== "host"
+    || consent.signature.signer_id !== consent.host_id
+    || consent.signature.key_epoch_id !== consent.host_key_epoch_id
+    || consent.signature.signed_domain !== "genesis.host.consent.signature.v0.1"
+    || consent.signature.created_at !== consent.granted_at
+  ) throw new Error("host_consent_signature_unbound");
+  if (possession.proof_digest !== computeBodyPossessionDigest(possession)) throw new Error("destination_possession_digest_mismatch");
+  if (
+    generated.body_possession_signature.signed_digest !== possession.proof_digest
+    || generated.body_possession_signature.signer_type !== "body"
+    || generated.body_possession_signature.signer_id !== possession.body_id
+    || generated.body_possession_signature.signed_domain !== "genesis.body.possession.signature.v0.1"
+    || generated.body_possession_signature.key_epoch_id !== possession.signature.key_epoch_id
+    || generated.body_possession_signature.created_at !== possession.issued_at
+    || generated.body_possession_signature.public_key_ref !== possession.public_key_fingerprint
+    || generated.body_possession_signature.signature_value !== possession.signature.value
+    || possession.public_key_fingerprint !== destinationBefore.public_key_fingerprint
+  ) throw new Error("destination_possession_signature_unbound");
+  if (!(Date.parse(intent.created_at) < Date.parse(intent.expires_at))) throw new Error("continuity_intent_window_invalid");
+  if (!(Date.parse(consent.granted_at) < Date.parse(consent.expires_at))) throw new Error("host_consent_window_invalid");
+  if (!(Date.parse(possession.issued_at) < Date.parse(possession.expires_at))) throw new Error("destination_possession_window_invalid");
+
+  const transferArtifacts = [intent, consent, possession, pkg, receipt, finalization];
+  if (transferArtifacts.some((artifact) => artifact.instance_id !== pkg.instance_id)) {
+    throw new Error("transfer_instance_id_mismatch");
   }
-  const destinationBody = registryBefore.bodies.find((item) => item.body_id === pkg.destination_body_id);
-  if (!destinationBody) throw new Error("destination_missing_from_body_registry");
-  if (destinationRegistration.public_key_fingerprint !== destinationBody.public_key_fingerprint) {
-    throw new Error("destination_registration_key_mismatch");
-  }
-  if (destinationRegistration.public_key_fingerprint !== generated.body_possession_proof.public_key_fingerprint) {
-    throw new Error("destination_possession_key_mismatch");
+  if (
+    checkpoint.checkpoint_hash !== computeCheckpointHash(checkpoint)
+    || checkpoint.signature.signed_digest !== checkpoint.checkpoint_hash
+    || checkpoint.signature.signer_type !== "body"
+    || checkpoint.signature.signer_id !== checkpoint.created_by_body_id
+    || checkpoint.signature.signed_domain !== "genesis.checkpoint.signature.v0.1"
+    || checkpoint.signature.created_at !== checkpoint.created_at
+    || checkpoint.signature.public_key_ref !== sourceBefore.public_key_fingerprint
+  ) throw new Error("checkpoint_signature_or_digest_invalid");
+  if (
+    intent.transfer_id !== pkg.transfer_id
+    || consent.transfer_id !== pkg.transfer_id
+    || receipt.transfer_id !== pkg.transfer_id
+    || finalization.transfer_id !== pkg.transfer_id
+  ) throw new Error("transfer_id_mismatch");
+  if (
+    intent.source_body_id !== pkg.source_body_id
+    || intent.destination_body_id !== pkg.destination_body_id
+    || consent.destination_body_id !== pkg.destination_body_id
+    || possession.body_id !== pkg.destination_body_id
+  ) throw new Error("transfer_body_scope_mismatch");
+
+  for (const artifact of [pkg, receipt, finalization]) {
+    if (
+      artifact.continuity_intent_ref !== intent.intent_id
+      || artifact.host_consent_ref !== consent.consent_id
+      || artifact.destination_possession_ref !== possession.proof_id
+    ) throw new Error("transfer_evidence_ref_mismatch");
   }
   const packageContents = new Map(pkg.contents.map((item) => [item.path, item.digest]));
-  if (packageContents.get("authority/guardian-authorization.json") !== authorization.authorization_digest) {
-    throw new Error("package_missing_bound_authorization");
-  }
-  if (
-    packageContents.get("authority/destination-device-registration.json")
-      !== destinationRegistration.registration_digest
-  ) {
-    throw new Error("package_missing_bound_destination_registration");
-  }
-  if (packageContents.get("authority/ledger-tip.json") !== authorityEvents.at(-1).event_hash) {
-    throw new Error("package_missing_bound_authority_ledger_tip");
-  }
-  const registrationEvent = authorityEvents.find(
-    (event) => event.event_type === "device.registered"
-      && event.body_id === pkg.destination_body_id
-      && event.subject_digest === destinationRegistration.registration_digest
-  );
-  if (!registrationEvent) throw new Error("destination_registration_not_recorded");
-  if (authorityEvents.some((event) => event.event_type === "device.revoked" && event.body_id === pkg.destination_body_id)) {
-    throw new Error("destination_device_revoked");
-  }
-  const grant = authorityEvents.find(
-    (event) => event.event_type === "authorization.granted"
-      && event.authorization_ref === authorization.authorization_id
-      && event.subject_digest === authorization.authorization_digest
-  );
-  if (!grant) throw new Error("authorization_grant_not_recorded");
-  if (
-    authorityEvents.some(
-      (event) => event.event_type === "authorization.revoked"
-        && event.authorization_ref === authorization.authorization_id
-    )
-  ) {
-    throw new Error("authorization_revoked");
-  }
-  const consumptions = authorityEvents.filter(
-    (event) => event.event_type === "authorization.consumed"
-      && event.authorization_ref === authorization.authorization_id
-      && event.transfer_id === pkg.transfer_id
-  );
-  if (consumptions.length !== 1 || consumptions[0].body_id !== pkg.source_body_id) {
-    throw new Error("authorization_consumption_not_recorded");
-  }
-  const [consumption] = consumptions;
-  const expectedUseDigest = computeAuthorizationUseDigest(
-    authorization.authorization_id,
-    pkg.transfer_id,
-    pkg.source_body_id,
-    pkg.destination_body_id
-  );
-  if (consumption.subject_digest !== expectedUseDigest) throw new Error("authorization_use_digest_mismatch");
+  if (packageContents.size !== pkg.contents.length) throw new Error("package_content_path_duplicate");
+  if (packageContents.get("continuity/intent.json") !== intent.intent_digest) throw new Error("package_missing_continuity_intent");
+  if (packageContents.get("host/destination-consent.json") !== consent.consent_digest) throw new Error("package_missing_host_consent");
+  if (packageContents.get("body/destination-possession.json") !== possession.proof_digest) throw new Error("package_missing_destination_possession");
+  if (packageContents.get("continuity/checkpoint.json") !== checkpoint.checkpoint_hash) throw new Error("package_missing_checkpoint");
+  if (packageContents.get("continuity/body-registry.json") !== registryBefore.registry_digest) throw new Error("package_missing_body_registry");
+  if (packageContents.get("seed/manifest.json") !== checkpoint.seed_root_hash) throw new Error("package_seed_root_mismatch");
+  if (pkg.package_digest !== computeTransferPackageDigest(pkg)) throw new Error("transfer_package_digest_mismatch");
+  if (receipt.receipt_digest !== computeTransferReceiptDigest(receipt)) throw new Error("transfer_receipt_digest_mismatch");
+  if (finalization.finalization_digest !== computeTransferFinalizationDigest(finalization)) throw new Error("transfer_finalization_digest_mismatch");
 
-  if (checkpoint.last_event_hash !== preTransferTip.event_hash || checkpoint.sequence !== preTransferTip.sequence) {
-    throw new Error("checkpoint_not_bound_to_pre_transfer_tip");
+  const events = generated.memory_events;
+  for (let index = 0; index < events.length; index += 1) {
+    const event = events[index];
+    requireValid(validators, "memory_event.schema.json", event, `memory_events[${index}]`);
+    requireValid(validators, "signature_envelope.schema.json", event.signature, `memory_events[${index}].signature`);
+    const expectedPrevious = index === 0 ? "GENESIS" : events[index - 1].event_hash;
+    if (event.sequence !== index) throw new Error(`non_contiguous_sequence:${index}`);
+    if (event.previous_event_hash !== expectedPrevious) throw new Error(`broken_memory_chain:${index}`);
+    if (event.event_hash !== computeMemoryEventHash(event)) throw new Error(`memory_event_digest_mismatch:${index}`);
+    const body = registryBefore.bodies.find((record) => record.body_id === event.body_id)
+      ?? registryAfter.bodies.find((record) => record.body_id === event.body_id);
+    if (
+      !body
+      || event.signature.signed_digest !== event.event_hash
+      || event.signature.signer_type !== "body"
+      || event.signature.signer_id !== event.body_id
+      || event.signature.signed_domain !== "genesis.memory.event.signature.v0.1"
+      || event.signature.created_at !== event.observed_at
+      || event.signature.public_key_ref !== body.public_key_fingerprint
+    ) throw new Error(`memory_event_signature_unbound:${index}`);
   }
-  if (checkpoint.body_registry_digest !== registryBefore.registry_digest) {
-    throw new Error("checkpoint_not_bound_to_pre_transfer_registry");
+  const preTransferTip = events.at(-2);
+  const completedEvent = events.at(-1);
+  const preTransferBytes = Buffer.from(canonicalJson(events.slice(0, -1)), "utf8");
+  if (packageContents.get("memory/events.json") !== sha256Bytes(preTransferBytes)) {
+    throw new Error("package_memory_digest_mismatch");
   }
-  if (pkg.checkpoint_hash !== checkpoint.checkpoint_hash || pkg.last_event_hash !== preTransferTip.event_hash) {
-    throw new Error("package_not_bound_to_checkpoint");
-  }
+  if (
+    checkpoint.last_event_hash !== preTransferTip.event_hash
+    || checkpoint.sequence !== preTransferTip.sequence
+    || checkpoint.body_registry_digest !== registryBefore.registry_digest
+  ) throw new Error("checkpoint_not_bound_to_pre_transfer_state");
+  if (
+    intent.checkpoint_hash !== checkpoint.checkpoint_hash
+    || intent.last_event_hash !== preTransferTip.event_hash
+    || pkg.checkpoint_hash !== checkpoint.checkpoint_hash
+    || pkg.last_event_hash !== preTransferTip.event_hash
+  ) throw new Error("transfer_not_bound_to_checkpoint");
   if (receipt.accepted_package_digest !== pkg.package_digest) throw new Error("receipt_not_bound_to_package");
   if (receipt.accepted_checkpoint_hash !== checkpoint.checkpoint_hash) throw new Error("receipt_not_bound_to_checkpoint");
+  if (
+    receipt.source_body_id !== intent.source_body_id
+    || receipt.destination_body_id !== intent.destination_body_id
+    || receipt.accepted_last_event_hash !== preTransferTip.event_hash
+    || receipt.accepted_last_sequence !== preTransferTip.sequence
+  ) throw new Error("receipt_transfer_scope_invalid");
+  if (
+    receipt.signature.signed_digest !== receipt.receipt_digest
+    || receipt.signature.signer_type !== "body"
+    || receipt.signature.signer_id !== receipt.destination_body_id
+    || receipt.signature.signed_domain !== "genesis.transfer.receipt.signature.v0.1"
+    || receipt.signature.created_at !== receipt.accepted_at
+    || receipt.signature.public_key_ref !== destinationBefore.public_key_fingerprint
+  ) throw new Error("transfer_receipt_signature_unbound");
   if (finalization.receipt_digest !== receipt.receipt_digest) throw new Error("finalization_not_bound_to_receipt");
-  if (completedEvent.body_id !== finalization.destination_body_id) throw new Error("completion_event_wrong_body");
+  if (
+    finalization.source_body_id !== intent.source_body_id
+    || finalization.destination_body_id !== intent.destination_body_id
+  ) throw new Error("finalization_transfer_scope_invalid");
+  for (const [field, body, keyRef] of [
+    ["source_acknowledgement", finalization.source_body_id, sourceBefore.public_key_fingerprint],
+    ["destination_acknowledgement", finalization.destination_body_id, destinationBefore.public_key_fingerprint]
+  ]) {
+    const acknowledgement = finalization[field];
+    if (
+      acknowledgement.signed_digest !== finalization.finalization_digest
+      || acknowledgement.signer_type !== "body"
+      || acknowledgement.signer_id !== body
+      || acknowledgement.signed_domain !== "genesis.transfer.finalization.signature.v0.1"
+      || acknowledgement.created_at !== finalization.finalized_at
+      || acknowledgement.public_key_ref !== keyRef
+    ) throw new Error(`transfer_finalization_signature_unbound:${field}`);
+  }
+  const packageTime = Date.parse(pkg.created_at);
+  const acceptedTime = Date.parse(receipt.accepted_at);
+  const finalizedTime = Date.parse(finalization.finalized_at);
+  const windows = [
+    [Date.parse(intent.created_at), Date.parse(intent.expires_at), "continuity_intent_expired"],
+    [Date.parse(consent.granted_at), Date.parse(consent.expires_at), "host_consent_expired"],
+    [Date.parse(possession.issued_at), Date.parse(possession.expires_at), "destination_possession_expired"]
+  ];
+  for (const [start, end, error] of windows) {
+    if (packageTime < start || packageTime >= end || acceptedTime < start || acceptedTime >= end || finalizedTime < start || finalizedTime >= end) {
+      throw new Error(error);
+    }
+  }
+  if (acceptedTime > finalizedTime) throw new Error("transfer_finalization_time_invalid");
+  if (
+    completedEvent.body_id !== finalization.destination_body_id
+    || completedEvent.event_type !== "transfer.completed"
+    || completedEvent.actor !== "instance"
+    || Date.parse(completedEvent.observed_at) < finalizedTime
+  ) throw new Error("completion_event_invalid");
   if (completedEvent.previous_event_hash !== preTransferTip.event_hash) throw new Error("completion_event_wrong_parent");
 
-  const activeWriters = generated.body_registry.bodies.filter((body) => body.status === "active_writer");
+  const activeWriters = registryAfter.bodies.filter((body) => body.status === "active_writer");
   if (activeWriters.length !== 1 || activeWriters[0].body_id !== finalization.destination_body_id) {
     throw new Error("final_registry_authority_invalid");
   }
+  const sourceAfter = registryAfter.bodies.find((body) => body.body_id === finalization.source_body_id);
+  const destinationAfter = registryAfter.bodies.find((body) => body.body_id === finalization.destination_body_id);
+  if (
+    registryAfter.instance_id !== intent.instance_id
+    || registryAfter.registry_epoch !== registryBefore.registry_epoch + 1
+    || sourceAfter?.status !== finalization.source_final_status
+    || destinationAfter?.status !== finalization.destination_final_status
+  ) throw new Error("final_registry_state_mismatch");
 }
 
 function validateBackupRecoveryArtifacts(validators, artifactPath) {
@@ -752,6 +907,7 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
     "backup_encryption",
     "backup_ciphertext_hex",
     "backup_commit",
+    "recovery_policy",
     "recovery_authorization",
     "destination_registration",
     "destination_possession",
@@ -771,6 +927,7 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
   const manifest = generated.backup_manifest;
   const encryption = generated.backup_encryption;
   const commit = generated.backup_commit;
+  const policy = generated.recovery_policy;
   const authorization = generated.recovery_authorization;
   const registration = generated.destination_registration;
   const possession = generated.destination_possession;
@@ -786,6 +943,7 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
     checkpoint,
     encryption,
     commit,
+    policy,
     authorization,
     registration,
     possession,
@@ -813,19 +971,17 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
   requireValid(validators, "backup_encryption.schema.json", encryption, "backup_encryption");
   requireValid(validators, "backup_commit.schema.json", commit, "backup_commit");
   requireValid(validators, "signature_envelope.schema.json", commit.signature, "backup_commit.signature");
+  requireValid(validators, "instance_recovery_policy.schema.json", policy, "recovery_policy");
+  requireValid(validators, "signature_envelope.schema.json", policy.body_commitment, "recovery_policy.body_commitment");
+  requireValid(validators, "signature_envelope.schema.json", policy.guardian_witness, "recovery_policy.guardian_witness");
   requireValid(validators, "recovery_authorization.schema.json", authorization, "recovery_authorization");
-  requireValid(
+  authorization.approvals.forEach((approval, index) => requireValid(
     validators,
     "signature_envelope.schema.json",
-    authorization.signature,
-    "recovery_authorization.signature"
-  );
-  requireValid(
-    validators,
-    "guardian_device_registration.schema.json",
-    registration,
-    "destination_registration"
-  );
+    approval,
+    `recovery_authorization.approvals[${index}]`
+  ));
+  requireValid(validators, "recovery_destination_registration.schema.json", registration, "destination_registration");
   requireValid(
     validators,
     "signature_envelope.schema.json",
@@ -850,18 +1006,54 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
   requireValid(
     validators,
     "signature_envelope.schema.json",
-    finalization.guardian_acknowledgement,
-    "recovery_finalization.guardian_acknowledgement"
-  );
-  requireValid(
-    validators,
-    "signature_envelope.schema.json",
     finalization.destination_acknowledgement,
     "recovery_finalization.destination_acknowledgement"
   );
 
+  const policyDigest = computeInstanceRecoveryPolicyDigest(policy);
+  if (policy.policy_digest !== policyDigest) throw new Error("recovery_policy_digest_mismatch");
+  const factors = new Map(policy.factors.map((factor) => [factor.factor_id, factor]));
+  if (factors.size !== policy.factors.length) throw new Error("recovery_policy_duplicate_factor");
+  const guardianFactor = factors.get(policy.guardian_factor_id);
+  const fallbackFactors = policy.factors.filter((factor) =>
+    factor.factor_type !== "guardian" && factor.allowed_paths.includes("policy_fallback")
+  );
+  if (
+    policy.fallback_threshold < 2
+    || policy.fallback_wait_seconds < 1
+    || policy.cancellation_allowed !== true
+    || policy.single_use !== true
+    || guardianFactor?.factor_type !== "guardian"
+    || !guardianFactor.allowed_paths.includes("guardian_assisted")
+    || fallbackFactors.length < policy.fallback_threshold
+  ) throw new Error("recovery_policy_invalid");
+  if (
+    policy.body_commitment.signer_type !== "body"
+    || policy.body_commitment.signer_id !== manifest.created_by_body_id
+    || policy.body_commitment.key_epoch_id !== checkpoint.signature.key_epoch_id
+    || policy.body_commitment.public_key_ref !== checkpoint.signature.public_key_ref
+    || policy.body_commitment.signed_domain !== "genesis.instance.recovery.policy.body-commitment.v0.1"
+    || policy.body_commitment.signed_digest !== policyDigest
+    || policy.body_commitment.created_at !== policy.created_at
+  ) throw new Error("recovery_policy_body_commitment_invalid");
+  if (
+    policy.guardian_witness.signer_type !== "guardian"
+    || policy.guardian_witness.signer_id !== policy.guardian_id
+    || policy.guardian_witness.key_epoch_id !== guardianFactor.key_epoch_id
+    || policy.guardian_witness.public_key_ref !== guardianFactor.public_key_ref
+    || policy.guardian_witness.signed_domain !== "genesis.instance.recovery.policy.guardian-witness.v0.1"
+    || policy.guardian_witness.signed_digest !== policyDigest
+    || policy.guardian_witness.created_at !== policy.created_at
+  ) throw new Error("recovery_policy_guardian_witness_invalid");
+
   if (manifest.package_digest !== computeBackupManifestDigest(manifest)) {
     throw new Error("backup_manifest_digest_mismatch");
+  }
+  const policyEntries = manifest.contents.filter((item) =>
+    item.kind === "recovery_policy" && item.path === "recovery/policy.json"
+  );
+  if (policyEntries.length !== 1 || policyEntries[0].digest !== policyDigest) {
+    throw new Error("backup_recovery_policy_not_bound");
   }
   if (encryption.encryption_digest !== computeBackupEncryptionDigest(encryption)) {
     throw new Error("backup_encryption_digest_mismatch");
@@ -915,6 +1107,11 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
   if (authorization.authorization_digest !== computeRecoveryAuthorizationDigest(authorization)) {
     throw new Error("recovery_authorization_digest_mismatch");
   }
+  if (
+    authorization.recovery_policy_id !== policy.policy_id
+    || authorization.recovery_policy_digest !== policyDigest
+    || authorization.policy_epoch !== policy.policy_epoch
+  ) throw new Error("recovery_authorization_policy_mismatch");
   const issuedAt = Date.parse(authorization.issued_at);
   const notBefore = Date.parse(authorization.not_before);
   const expiresAt = Date.parse(authorization.expires_at);
@@ -922,13 +1119,9 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
     throw new Error("recovery_authorization_time_window_invalid");
   }
   if (
-    authorization.signature.signed_digest !== authorization.authorization_digest
-    || authorization.signature.signer_id !== authorization.guardian_id
-    || authorization.signature.key_epoch_id !== authorization.guardian_key_epoch_id
-    || authorization.signature.signed_domain !== "genesis.recovery.authorization.signature.v0.1"
-  ) {
-    throw new Error("recovery_authorization_signature_unbound");
-  }
+    authorization.authorization_path === "policy_fallback"
+    && notBefore < issuedAt + policy.fallback_wait_seconds * 1000
+  ) throw new Error("recovery_fallback_wait_not_satisfied");
   if (
     authorization.source_backup_id !== commit.backup_id
     || authorization.source_backup_commit_digest !== commit.commit_digest
@@ -939,12 +1132,44 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
     throw new Error("recovery_authorization_scope_mismatch");
   }
 
-  if (registration.registration_digest !== computeDeviceRegistrationDigest(registration)) {
+  const approvalIds = authorization.approvals.map((approval) => approval.signer_id);
+  if (new Set(approvalIds).size !== approvalIds.length) {
+    throw new Error("recovery_authorization_duplicate_approval");
+  }
+  const approvedFactors = authorization.approvals.map((approval) => {
+    const factor = factors.get(approval.signer_id);
+    if (!factor || !factor.allowed_paths.includes(authorization.authorization_path)) {
+      throw new Error("recovery_authorization_factor_not_allowed");
+    }
+    const signerType = factor.factor_type === "guardian" ? "guardian" : "recovery_authority";
+    if (
+      approval.signer_type !== signerType
+      || approval.key_epoch_id !== factor.key_epoch_id
+      || approval.public_key_ref !== factor.public_key_ref
+      || approval.signed_domain !== "genesis.recovery.authorization.approval.v0.1"
+      || approval.signed_digest !== authorization.authorization_digest
+      || approval.created_at !== authorization.issued_at
+    ) throw new Error("recovery_authorization_approval_invalid");
+    return factor;
+  });
+  if (authorization.authorization_path === "guardian_assisted") {
+    if (approvedFactors.length !== 1 || approvedFactors[0].factor_id !== policy.guardian_factor_id) {
+      throw new Error("recovery_guardian_approval_missing");
+    }
+  } else if (
+    approvedFactors.some((factor) => factor.factor_type === "guardian")
+    || approvedFactors.length < policy.fallback_threshold
+  ) throw new Error("recovery_fallback_threshold_not_met");
+
+  if (registration.registration_digest !== computeRecoveryDestinationRegistrationDigest(registration)) {
     throw new Error("recovery_destination_registration_invalid");
   }
   if (
     registration.signature.signed_digest !== registration.registration_digest
-    || registration.signature.signer_id !== registration.guardian_id
+    || registration.signature.signer_id !== registration.body_id
+    || registration.signature.signer_type !== "body"
+    || registration.signature.public_key_ref !== registration.public_key_fingerprint
+    || registration.signature.signed_domain !== "genesis.recovery.destination.registration.signature.v0.1"
   ) {
     throw new Error("recovery_destination_registration_signature_unbound");
   }
@@ -965,11 +1190,11 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
     throw new Error("recovery_destination_identity_mismatch");
   }
   if (
-    registration.guardian_id !== authorization.guardian_id
-    || registration.guardian_key_epoch_id !== authorization.guardian_key_epoch_id
-    || registration.authority_epoch !== authorization.authority_epoch
+    registration.recovery_id !== authorization.recovery_id
+    || registration.recovery_authorization_ref !== authorization.authorization_id
+    || registration.recovery_authorization_digest !== authorization.authorization_digest
   ) {
-    throw new Error("recovery_guardian_scope_mismatch");
+    throw new Error("recovery_destination_scope_mismatch");
   }
 
   if (gap.gap_digest !== computeContinuityGapDigest(gap)) {
@@ -980,7 +1205,8 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
   }
   if (
     revocation.body_id !== record.previous_body_id
-    || revocation.guardian_authorization_ref !== authorization.authorization_id
+    || revocation.recovery_authorization_ref !== authorization.authorization_id
+    || revocation.recovery_authorization_digest !== authorization.authorization_digest
   ) {
     throw new Error("previous_body_not_revoked");
   }
@@ -1000,7 +1226,8 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
     || record.restored_checkpoint_hash !== manifest.checkpoint_hash
     || record.restored_last_event_hash !== manifest.last_event_hash
     || record.restored_last_sequence !== manifest.last_sequence
-    || record.guardian_authorization_ref !== authorization.authorization_id
+    || record.recovery_authorization_ref !== authorization.authorization_id
+    || record.recovery_authorization_digest !== authorization.authorization_digest
   ) {
     throw new Error("recovery_record_links_invalid");
   }
@@ -1027,16 +1254,18 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
     || finalization.destination_registration_digest !== registration.registration_digest
     || finalization.destination_possession_digest !== possession.proof_digest
     || finalization.final_body_registry_digest !== registry.registry_digest
-    || finalization.guardian_authorization_ref !== authorization.authorization_id
+    || finalization.recovery_authorization_ref !== authorization.authorization_id
+    || finalization.recovery_authorization_digest !== authorization.authorization_digest
     || finalization.recovery_event_hash !== recoveryEvent.event_hash
   ) {
     throw new Error("recovery_finalization_links_invalid");
   }
   if (
-    finalization.guardian_acknowledgement.signed_digest !== finalization.finalization_digest
-    || finalization.guardian_acknowledgement.signer_id !== authorization.guardian_id
-    || finalization.destination_acknowledgement.signed_digest !== finalization.finalization_digest
+    finalization.destination_acknowledgement.signed_digest !== finalization.finalization_digest
     || finalization.destination_acknowledgement.signer_id !== record.new_body_id
+    || finalization.destination_acknowledgement.signer_type !== "body"
+    || finalization.destination_acknowledgement.public_key_ref !== registration.public_key_fingerprint
+    || finalization.destination_acknowledgement.signed_domain !== "genesis.recovery.finalization.signature.v0.1"
   ) {
     throw new Error("recovery_finalization_signatures_unbound");
   }
@@ -1061,10 +1290,11 @@ function validateBackupRecoveryArtifacts(validators, artifactPath) {
 }
 
 const JOURNAL_PHASES = {
+  birth: ["prepared", "seed_bound", "identity_bound", "body_bound", "memory_initialized", "finalizing", "born"],
   transfer: ["prepared", "frozen", "exported", "verified", "accepted", "finalizing", "completed"],
   recovery: ["discovered", "verified", "authorized", "restored", "finalizing", "finalized"]
 };
-const JOURNAL_TERMINAL_PHASE = { transfer: "completed", recovery: "finalized" };
+const JOURNAL_TERMINAL_PHASE = { birth: "born", transfer: "completed", recovery: "finalized" };
 
 function validateTransactionJournalChain(entries) {
   if (entries.length === 0) return "journal_empty";
@@ -1192,7 +1422,13 @@ function evaluateJournalRestart(entries, observed, previous, candidate, finaliza
 
   if (latest.status === "committed") {
     if (latest.commit_marker_digest !== finalization) throw new Error("journal_commit_untrusted");
+    if (latest.operation_kind === "birth") {
+      return observed === candidate ? "accept_committed_birth" : "replay_committed_birth";
+    }
     return observed === candidate ? "accept_committed_authority" : "replay_committed_authority";
+  }
+  if (latest.operation_kind === "birth") {
+    return observed === previous ? "remain_absent" : "discard_uncommitted_birth";
   }
   return observed === previous ? "retain_previous_authority" : "rollback_uncommitted_authority";
 }
@@ -1316,6 +1552,69 @@ function validateInstanceIdentityFixture(validators) {
   return vectors.continuity_cases.length;
 }
 
+function validateBirthFixtureSchemas(validators) {
+  const vectors = readJson(BIRTH_VECTORS);
+  const fixture = vectors.fixture;
+  const artifacts = [
+    ["seed_manifest.schema.json", fixture.seed_manifest, "birth.seed_manifest"],
+    ["instance_identity.schema.json", fixture.instance_identity, "birth.instance_identity"],
+    ["body_record.schema.json", fixture.initial_body_record, "birth.initial_body_record"],
+    ["body_registry.schema.json", fixture.initial_body_registry, "birth.initial_body_registry"],
+    ["key_epoch.schema.json", fixture.initial_body_key_epoch, "birth.initial_body_key_epoch"],
+    ["body_possession_proof.schema.json", fixture.initial_body_possession, "birth.initial_body_possession"],
+    ["memory_event.schema.json", fixture.first_memory_event, "birth.first_memory_event"],
+    ["instance_recovery_policy.schema.json", fixture.recovery_policy, "birth.recovery_policy"],
+    ["birth_recovery_state.schema.json", fixture.birth_recovery_state, "birth.recovery_state"],
+    ["birth_state.schema.json", fixture.birth_state, "birth.state"],
+    ["birth_receipt.schema.json", fixture.birth_receipt, "birth.receipt"]
+  ];
+  for (const [schema, artifact, label] of artifacts) {
+    requireValid(validators, schema, artifact, label);
+  }
+  const envelopes = [
+    [fixture.first_memory_event.signature, "birth.first_memory_event.signature"],
+    [fixture.recovery_policy.body_commitment, "birth.recovery_policy.body_commitment"],
+    [fixture.recovery_policy.guardian_witness, "birth.recovery_policy.guardian_witness"],
+    [fixture.birth_receipt.body_acknowledgement, "birth.receipt.body_acknowledgement"],
+    [fixture.birth_receipt.guardian_witness, "birth.receipt.guardian_witness"]
+  ];
+  for (const [envelope, label] of envelopes) {
+    requireValid(validators, "signature_envelope.schema.json", envelope, label);
+  }
+  for (const [index, entry] of fixture.journal_entries.entries()) {
+    requireValid(validators, "transaction_journal.schema.json", entry, `birth.journal_entries[${index}]`);
+    requireValid(validators, "signature_envelope.schema.json", entry.signature, `birth.journal_entries[${index}].signature`);
+  }
+  return fixture.journal_entries.length;
+}
+
+function validateBirthCrashArtifacts(artifactPath) {
+  const generated = readJson(artifactPath);
+  const vectors = readJson(BIRTH_VECTORS);
+  if (
+    generated.schema_version !== "genesis.birth.crash.simulation.v0.1"
+    || generated.birth_id !== vectors.fixture.birth_state.birth_id
+    || generated.instance_id !== vectors.fixture.birth_state.instance_id
+    || generated.absent_state_digest !== vectors.fixture.absent_state_digest
+    || generated.birth_state_digest !== vectors.expected.birth_state_digest
+    || generated.receipt_digest !== vectors.expected.receipt_digest
+  ) {
+    throw new Error("birth_crash_bundle_link_invalid");
+  }
+  if (
+    generated.restart_cases.length !== vectors.expected.restart_case_count
+    || generated.negative_cases.length !== 13
+    || generated.restart_cases.some((testCase) => !testCase.passed)
+    || generated.negative_cases.some((testCase) => !testCase.detected)
+    || generated.guardian_release_required !== false
+    || generated.half_born_state_accepted !== false
+    || generated.active_writer_count_after_commit !== 1
+    || generated.all_passed !== true
+  ) {
+    throw new Error("birth_crash_simulation_summary_invalid");
+  }
+}
+
 function validateSenseObservationFixtures(validators) {
   const vectors = readJson(SENSE_OBSERVATION_VECTORS);
   for (const observation of vectors.sense_observations) {
@@ -1382,11 +1681,19 @@ function validateSenseAdapterFixtures(validators) {
 }
 
 function main() {
+  if (process.argv[2] === "--transfer-only") {
+    const artifactPath = process.argv[3];
+    if (!artifactPath) throw new Error("transfer_artifact_path_missing");
+    validateGeneratedArtifacts(loadValidators(), path.resolve(artifactPath));
+    console.log("Generated A -> B artifacts and cross-links: OK.");
+    return;
+  }
   const scalarCounts = validatePortableSchemaScalars();
   const validators = loadValidators();
   const invalidCount = validateNegativeSchemaCases(validators);
   const hostAdapterCount = validateHostAdapterFixtures(validators);
   const identityPlatformCount = validateInstanceIdentityFixture(validators);
+  const birthPhaseCount = validateBirthFixtureSchemas(validators);
   const senseObservationCount = validateSenseObservationFixtures(validators);
   const senseAdapterCounts = validateSenseAdapterFixtures(validators);
   const associativeVectors = readJson(ASSOCIATIVE_MEMORY_PROJECTION_VECTORS);
@@ -1405,9 +1712,11 @@ function main() {
   const artifactPath = process.argv[2];
   const backupRecoveryPath = process.argv[3];
   const transactionCrashPath = process.argv[4];
+  const birthCrashPath = process.argv[5];
   if (artifactPath) validateGeneratedArtifacts(validators, path.resolve(artifactPath));
   if (backupRecoveryPath) validateBackupRecoveryArtifacts(validators, path.resolve(backupRecoveryPath));
   if (transactionCrashPath) validateTransactionCrashArtifacts(validators, path.resolve(transactionCrashPath));
+  if (birthCrashPath) validateBirthCrashArtifacts(path.resolve(birthCrashPath));
 
   console.log(`JSON Schema 2020-12: OK (${validators.size} schemas compiled).`);
   console.log(
@@ -1419,6 +1728,7 @@ function main() {
   console.log(
     `Immutable birth identity fixture: OK (${identityPlatformCount} platform declarations).`
   );
+  console.log(`Atomic birth schema fixtures: OK (${birthPhaseCount} journal phases).`);
   console.log(`Signed sense observation fixtures: OK (${senseObservationCount} senses).`);
   console.log(
     `Neutral sense adapter fixtures: OK (${senseAdapterCounts.adapterCount} adapters, ` +
@@ -1429,6 +1739,7 @@ function main() {
   if (artifactPath) console.log("Generated A -> B artifacts and cross-links: OK.");
   if (backupRecoveryPath) console.log("Generated backup -> recovery artifacts and cross-links: OK.");
   if (transactionCrashPath) console.log("Generated transaction journal and crash recovery decisions: OK.");
+  if (birthCrashPath) console.log("Generated atomic birth crash decisions: OK.");
 }
 
 try {

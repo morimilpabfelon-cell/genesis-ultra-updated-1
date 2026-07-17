@@ -9,11 +9,13 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED_ARTIFACTS = path.join(os.tmpdir(), `genesis-ultra-transfer-${process.pid}.json`);
 const BACKUP_RECOVERY_ARTIFACTS = path.join(os.tmpdir(), `genesis-ultra-backup-recovery-${process.pid}.json`);
 const TRANSACTION_CRASH_ARTIFACTS = path.join(os.tmpdir(), `genesis-ultra-transaction-crash-${process.pid}.json`);
+const BIRTH_CRASH_ARTIFACTS = path.join(os.tmpdir(), `genesis-ultra-birth-crash-${process.pid}.json`);
 
 process.on("exit", () => {
   fs.rmSync(GENERATED_ARTIFACTS, { force: true });
   fs.rmSync(BACKUP_RECOVERY_ARTIFACTS, { force: true });
   fs.rmSync(TRANSACTION_CRASH_ARTIFACTS, { force: true });
+  fs.rmSync(BIRTH_CRASH_ARTIFACTS, { force: true });
 });
 
 function resolvePython() {
@@ -34,6 +36,8 @@ const commands = [
   ["Validate guided autonomy capability grants independently (Node)", process.execPath, ["tools/guided_autonomy.mjs", "validate"]],
   ["Validate cognitive freedom charter (Python)", python, ["tools/validate_freedom_charter.py"]],
   ["Validate cognitive freedom charter independently (Node)", process.execPath, ["tools/validate_freedom_charter.mjs", "validate"]],
+  ["Validate atomic birth transaction (Python)", python, ["tools/validate_birth_transaction.py"]],
+  ["Validate atomic birth transaction independently (Node)", process.execPath, ["tools/validate_birth_transaction.mjs"]],
   ["Validate recursive improvement laboratory (Python)", python, ["tools/validate_recursive_improvement_lab.py"]],
   ["Validate recursive improvement laboratory independently (Node)", process.execPath, ["tools/validate_recursive_improvement_lab.mjs"]],
   ["Validate operational deliberation and proof (Python)", python, ["tools/validate_operational_deliberation.py"]],
@@ -69,11 +73,12 @@ const commands = [
   ["Validate neutral host contract independently (Node)", process.execPath, ["tools/validate_host_adapter.mjs"]],
   ["Validate protocol vectors independently (Node)", process.execPath, ["tools/validate_protocol_vectors.mjs"]],
   ["Validate crypto vectors", python, ["tools/validate_crypto_vectors.py"]],
+  ["Simulate atomic birth crash recovery", python, ["tools/simulate_birth_crashes.py", "--artifacts-output", BIRTH_CRASH_ARTIFACTS]],
   ["Simulate transfer A -> B", python, ["tools/simulate_transfer.py", "--artifacts-output", GENERATED_ARTIFACTS]],
   ["Simulate committed backup and authorized recovery B -> C", python, ["tools/simulate_backup_recovery.py", "--source-artifacts", GENERATED_ARTIFACTS, "--artifacts-output", BACKUP_RECOVERY_ARTIFACTS]],
   ["Simulate transaction journal crash recovery", python, ["tools/simulate_transaction_crashes.py", "--transfer-artifacts", GENERATED_ARTIFACTS, "--recovery-artifacts", BACKUP_RECOVERY_ARTIFACTS, "--artifacts-output", TRANSACTION_CRASH_ARTIFACTS]],
-  ["Validate generated artifacts", process.execPath, ["tools/validate_artifacts.mjs", GENERATED_ARTIFACTS, BACKUP_RECOVERY_ARTIFACTS, TRANSACTION_CRASH_ARTIFACTS]],
-  ["Simulate transfer and authority negative cases", python, ["tools/simulate_negatives.py"]],
+  ["Validate generated artifacts", process.execPath, ["tools/validate_artifacts.mjs", GENERATED_ARTIFACTS, BACKUP_RECOVERY_ARTIFACTS, TRANSACTION_CRASH_ARTIFACTS, BIRTH_CRASH_ARTIFACTS]],
+  ["Simulate real transfer negative mutations", python, ["tools/simulate_negatives.py", "--artifacts", GENERATED_ARTIFACTS]],
   ["Simulate backup and recovery negative cases", python, ["tools/simulate_backup_recovery_negatives.py", "--artifacts", BACKUP_RECOVERY_ARTIFACTS]]
 ];
 

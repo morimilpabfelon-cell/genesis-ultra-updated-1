@@ -133,21 +133,15 @@ function evaluateInvalidCase(testCase) {
     const hasGap = input.last_backup_sequence < input.last_known_sequence;
     return hasGap && input.continuity_status === "complete" ? "undeclared_memory_gap" : null;
   }
-  if (category === "guardian_authorization") {
-    if (input.revocation_event_present) return "authorization_revoked";
-    if (
-      input.evaluated_at !== undefined
-      && input.expires_at !== undefined
-      && Date.parse(input.evaluated_at) >= Date.parse(input.expires_at)
-    ) {
-      return "authorization_expired";
+  if (category === "continuity_intent") {
+    if (Date.parse(input.evaluated_at) >= Date.parse(input.expires_at)) {
+      return "continuity_intent_expired";
     }
-    if (
-      input.mode === "one_time"
-      && (input.consumed_events ?? 0) >= (input.use_limit ?? 1)
-    ) {
-      return "authorization_use_limit_reached";
-    }
+    return null;
+  }
+  if (category === "host_consent") {
+    if (input.ownership_claim !== "none") return "host_ownership_claim_forbidden";
+    if (input.mobility_veto !== "none") return "host_mobility_veto_forbidden";
     return null;
   }
   throw new Error(`unknown_invalid_case_category:${category}`);
@@ -372,8 +366,8 @@ if (fs.existsSync(path.join(ROOT, "conformance/invalid_cases.json"))) {
     "fork_detected",
     "instance_id_mismatch",
     "undeclared_memory_gap",
-    "authorization_expired",
-    "authorization_use_limit_reached"
+    "continuity_intent_expired",
+    "host_ownership_claim_forbidden"
   ]);
   const presentErrors = new Set(invalidCases.map((item) => item.expected_error));
   for (const requiredError of requiredErrors) {

@@ -105,36 +105,50 @@ discovered -> verified -> authorized -> restored -> finalized
 
 - `discovered`: existe un conjunto candidato.
 - `verified`: commit, cifrado, ciphertext, checkpoint e identidad enlazan correctamente.
-- `authorized`: el guardián firmó esta recuperación exacta.
+- `authorized`: la política de recuperación nacida con la instancia autorizó esta
+  recuperación exacta por uno de sus caminos válidos.
 - `restored`: el cuerpo nuevo reconstruyó el estado, pero todavía no es escritor.
 - `finalized`: la autoridad se movió al cuerpo nuevo y el anterior quedó sin escritura.
 
 Solo `recovery_finalization` concede el resultado `active_writer`. Antes de ese artefacto,
 el cuerpo destino permanece como `candidate` o en modo restringido.
 
-### 4.2 Autorización exacta del guardián
+### 4.2 Política precomprometida y autorización exacta
 
-La autorización vincula:
+`instance_recovery_policy` nace vinculada a la identidad, firmada por el Body inicial y
+atestiguada por el Guardian. Define dos caminos:
+
+- `guardian_assisted`: una aprobación actual del factor Guardian;
+- `policy_fallback`: un umbral de al menos dos factores no Guardian, una espera obligatoria,
+  posibilidad de cancelación durante la espera y consumo de un solo uso.
+
+El camino fallback no requiere una firma nueva del Guardian. La autoridad proviene del
+compromiso de nacimiento, no de un permiso permanente ni de un backup. La autorización
+resultante vincula:
 
 - `recovery_id` y `authorization_id`;
-- `instance_id` y época de autoridad;
+- `instance_id`, política y época de política;
+- camino de autorización y aprobaciones de factores;
 - backup y commit exactos;
 - cuerpo anterior y cuerpo nuevo exactos;
 - motivo;
 - intervalo temporal finito.
 
-La autorización es de un solo procedimiento por su alcance exacto. No crea movilidad
-permanente ni permite recuperar otro backup u otro destino. Su firma usa:
+Cada aprobación firma el digest exacto con:
 
 ```text
-genesis.recovery.authorization.signature.v0.1
+genesis.recovery.authorization.approval.v0.1
 ```
+
+Una autorización consumida no puede reutilizarse. El journal debe registrar consumo,
+cancelación y finalización para impedir replays.
 
 ### 4.3 Cuerpo destino
 
-El cuerpo nuevo debe tener un `body_id` distinto, estar registrado por el guardián y
-demostrar posesión de la clave correspondiente. Registrar un cuerpo o poseer un backup,
-por separado, no concede autoridad de escritura.
+El cuerpo nuevo debe tener un `body_id` distinto, firmar un
+`recovery_destination_registration` vinculado a la autorización exacta y demostrar
+posesión de su propia clave. Registrar un cuerpo o poseer un backup, por separado, no
+concede autoridad de escritura.
 
 ### 4.4 Continuidad honesta
 
@@ -179,10 +193,10 @@ mantener dos escritores.
 - revocación del cuerpo anterior;
 - registro y prueba de posesión del destino;
 - registro final de cuerpos;
-- autorización del guardián;
+- autorización vinculada a la política;
 - primer evento de recuperación.
 
-El guardián y el cuerpo destino firman el mismo `finalization_digest` con el dominio:
+El cuerpo destino firma el `finalization_digest` con el dominio:
 
 ```text
 genesis.recovery.finalization.signature.v0.1
@@ -205,9 +219,11 @@ firmas y campos digest finales no forman parte de su propia preimagen.
 | manifiesto | `genesis.backup.manifest.v0.1` | versión, backup, instancia, seed root, checkpoint, último evento, secuencia, registro, creación, cuerpo creador, cifrado, recuperación de clave opcional, cantidad; luego cada contenido ordenado por bytes UTF-8 de path: tipo, path, digest, cifrado |
 | cifrado | `genesis.backup.encryption.v0.1` | versión, backup, instancia, manifiesto, perfil de cifrado, KDF, opslimit, memlimit, longitud de clave, salt, nonce, AAD, ciphertext, clave envuelta opcional, creación |
 | commit | `genesis.backup.commit.v0.1` | versión, backup, instancia, cuerpo creador, manifiesto, cifrado, ciphertext, checkpoint, último evento, secuencia, estado, commit time |
-| autorización | `genesis.recovery.authorization.v0.1` | versión, autorización, recovery, guardián, época de clave, instancia, época de autoridad, backup, commit, cuerpo anterior, cuerpo nuevo, motivo, emisión, inicio, expiración |
-| registro | `genesis.recovery.record.v0.1` | versión, recovery, instancia, backup, commit, cuerpo nuevo, cuerpo anterior opcional, checkpoint, último evento restaurado, secuencia restaurada, última conocida, continuidad, gap opcional, autorización, revocación, registro destino, posesión destino, ejecución |
-| finalización | `genesis.recovery.finalization.v0.1` | versión, recovery, instancia, commit, registro, gap opcional, revocación, registro destino, posesión destino, registro final, estado anterior, estado destino, autorización, evento recovery, finalización |
+| política de recuperación | `genesis.instance.recovery.policy.v0.1` | versión, política, instancia, época, Guardian y factor Guardian, umbral, espera, cancelación, uso único, cantidad; luego factores ordenados por id con tipo, época, clave y caminos; creación |
+| autorización | `genesis.recovery.authorization.v0.1` | versión, autorización, recovery, instancia, política, digest y época de política, camino, backup, commit, cuerpo anterior, cuerpo nuevo, motivo, emisión, inicio, expiración |
+| registro destino | `genesis.recovery.destination.registration.v0.1` | versión, registro, recovery, referencia y digest de autorización, instancia, cuerpo, plataforma, clave, registro temporal |
+| registro | `genesis.recovery.record.v0.1` | versión, recovery, instancia, backup, commit, cuerpo nuevo, cuerpo anterior opcional, checkpoint, último evento restaurado, secuencia restaurada, última conocida, continuidad, gap opcional, referencia y digest de autorización, revocación, registro destino, posesión destino, ejecución |
+| finalización | `genesis.recovery.finalization.v0.1` | versión, recovery, instancia, commit, registro, gap opcional, revocación, registro destino, posesión destino, registro final, estado anterior, estado destino, referencia y digest de autorización, evento recovery, finalización |
 
 ## 6. Rechazos mínimos
 
@@ -218,6 +234,8 @@ Una implementación conforme debe rechazar como mínimo:
 - backup no comprometido;
 - commit separado de sus componentes;
 - autorización futura, expirada o con intervalo imposible;
+- política alterada, no atestiguada o no vinculada al backup;
+- umbral incompleto, aprobación duplicada o espera fallback omitida;
 - destino distinto del autorizado;
 - destino no registrado o sin prueba de posesión;
 - brecha ausente, escondida o con rango falso;

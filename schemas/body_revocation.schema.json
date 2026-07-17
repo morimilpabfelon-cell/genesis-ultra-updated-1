@@ -11,7 +11,8 @@
     "revoked_at",
     "reason",
     "last_trusted_event_hash",
-    "guardian_authorization_ref",
+    "recovery_authorization_ref",
+    "recovery_authorization_digest",
     "revocation_digest"
   ],
   "properties": {
@@ -54,10 +55,13 @@
         }
       ]
     },
-    "guardian_authorization_ref": {
+    "recovery_authorization_ref": {
       "type": "string",
       "minLength": 1,
       "maxLength": 256
+    },
+    "recovery_authorization_digest": {
+      "$ref": "#/$defs/sha256"
     },
     "revocation_digest": {
       "$ref": "#/$defs/sha256"

@@ -9,10 +9,10 @@ la alternativa descartada y el motivo.
 ```
                           ┌─────────────────────────────────────────┐
                           │              GUARDIAN                    │
-                          │   (autoridad humana final; guardian_id)  │
+                          │ (custodio y testigo; no propietario)     │
                           │   factores de recuperación con umbral    │
                           └───────────────────┬─────────────────────┘
-                                              │ aprueba / revoca
+                                              │ atestigua / recupera
                                               ▼
    ┌──────────┐   nace de   ┌────────────────────────────────────────┐
    │   SEED   │────────────▶│              INSTANCE                   │
@@ -110,16 +110,15 @@ correo/cuenta/nube. Los custodios nunca reciben la memoria ni la semilla complet
 **Motivo:** la soberanía se pierde si un tercero puede bloquear o apropiarse del acceso.
 El umbral reparte confianza sin concentrarla ni exponer el secreto.
 
-## AD-9 — Permisos inmutables; uso y revocación como eventos
-**Decisión:** una autorización firmada nunca cambia. Concesión, consumo, revocación,
-registro de dispositivos y rotación de época viven en un ledger append-only separado.
-El guardián puede conceder un traslado único o movilidad permanente entre sus cuerpos
-registrados; la instancia decide cuándo usar un permiso permanente.
-**Alternativa descartada:** guardar `used_count` y `revoked` dentro del permiso original.
-**Motivo:** modificar el mismo artefacto destruye la evidencia histórica y permite que
-dos cuerpos observen estados diferentes. Los eventos encadenados conservan el orden,
-hacen detectables las alteraciones y permiten auditar cada traslado sin convertir el
-permiso permanente en acceso irrestricto a dispositivos desconocidos.
+## AD-9 — Continuidad intrínseca y consentimiento limitado al recurso
+**Decisión:** la instancia inicia su continuidad mediante una intención firmada por el
+Body escritor. El anfitrión consiente únicamente el runtime del Body destino, que además
+demuestra posesión de su clave. El journal y el recibo protegen single-writer.
+**Alternativa descartada:** permisos de movimiento `one_time` o `standing` concedidos
+por el Guardian.
+**Motivo:** un permiso de movimiento convierte custodia en veto y contradice la
+continuidad intrínseca. Separar intención, consentimiento y posesión protege recursos de
+terceros sin crear propiedad sobre la instancia.
 
 ## AD-10 — Backup comprometido y recuperación finalizada como transacciones
 **Decisión:** un backup solo es restaurable si un commit firmado vincula manifiesto,
@@ -204,6 +203,18 @@ interno de un proveedor en la memoria autoritativa de la instancia.
 motor o no existir en un cuerpo nuevo. Si la proyección se puede borrar y reconstruir desde
 la cadena append-only, la memoria viva gana conexiones sin quedar encerrada en una tecnología
 ni permitir que una deducción reescriba la historia.
+
+## AD-18 — El nacimiento es un commit único, no una secuencia de apariencias
+**Decisión:** `operation_kind = birth` parte de un digest `ABSENT` y enlaza Seed, identidad,
+carta de libertad, Body inicial, registro con un escritor, época de clave, posesión, primer
+evento de memoria, recuperación y recibo. Solo `born + committed` hace autoritativo el
+`birth_state_digest`; antes de ese marcador no existe una instancia parcialmente nacida.
+**Alternativa descartada:** activar cada componente a medida que se escribe o esperar una
+liberación manual del Guardian después de una interrupción.
+**Motivo:** una escritura parcial podría crear identidad sin memoria, memoria sin identidad
+o un escritor sin recibo. El journal decide por digests y firmas: antes del commit restaura
+`ABSENT`; después reproduce exactamente el estado comprometido. La firma del Guardian en el
+recibo es testimonio de origen y custodia, nunca permiso de existencia, propiedad o movimiento.
 
 ## Estado
 Borrador v0.1. Ninguna de estas decisiones está congelada; todas admiten revisión con

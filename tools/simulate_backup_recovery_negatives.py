@@ -77,6 +77,38 @@ def main() -> int:
 
     expect("backup-not-committed", "backup_not_committed", leave_backup_partial)
 
+    expect(
+        "backup-checkpoint-signature-forged",
+        "backup_checkpoint_signature_invalid",
+        lambda item: item["backup_checkpoint"]["signature"].__setitem__(
+            "signature_value", "00" * 64
+        ),
+    )
+
+    expect(
+        "backup-commit-signature-forged",
+        "backup_commit_signature_invalid",
+        lambda item: item["backup_commit"]["signature"].__setitem__(
+            "signature_value", "00" * 64
+        ),
+    )
+
+    expect(
+        "recovery-policy-tampered",
+        "recovery_policy_digest_mismatch",
+        lambda item: item["recovery_policy"].__setitem__("fallback_wait_seconds", 1),
+    )
+
+    def forge_policy_witness(item: dict) -> None:
+        witness = item["recovery_policy"]["guardian_witness"]
+        witness["signature_value"] = "00" * 64
+
+    expect(
+        "recovery-policy-witness-forged",
+        "recovery_policy_guardian_witness_invalid",
+        forge_policy_witness,
+    )
+
     def expire_authorization(item: dict) -> None:
         authorization = item["recovery_authorization"]
         authorization["expires_at"] = "2026-07-12T03:04:00Z"
@@ -102,6 +134,78 @@ def main() -> int:
         authorization["authorization_digest"] = compute_recovery_authorization_digest(authorization)
 
     expect("recovery-destination-not-authorized", "recovery_authorization_scope_mismatch", change_authorized_destination)
+
+    def skip_fallback_wait(item: dict) -> None:
+        authorization = item["recovery_authorization"]
+        authorization["not_before"] = "2026-07-12T02:01:01Z"
+        authorization["authorization_digest"] = compute_recovery_authorization_digest(authorization)
+
+    expect(
+        "recovery-fallback-wait-skipped",
+        "recovery_fallback_wait_not_satisfied",
+        skip_fallback_wait,
+    )
+
+    expect(
+        "recovery-fallback-threshold-not-met",
+        "recovery_fallback_threshold_not_met",
+        lambda item: item["recovery_authorization"].__setitem__(
+            "approvals", item["recovery_authorization"]["approvals"][:1]
+        ),
+    )
+
+    def duplicate_approval(item: dict) -> None:
+        approvals = item["recovery_authorization"]["approvals"]
+        approvals[1] = deepcopy(approvals[0])
+
+    expect(
+        "recovery-duplicate-approval",
+        "recovery_authorization_duplicate_approval",
+        duplicate_approval,
+    )
+
+    expect(
+        "recovery-approval-forged",
+        "recovery_authorization_approval_invalid",
+        lambda item: item["recovery_authorization"]["approvals"][0].__setitem__(
+            "signature_value", "00" * 64
+        ),
+    )
+
+    expect(
+        "recovery-destination-possession-forged",
+        "recovery_destination_possession_signature_invalid",
+        lambda item: item["destination_possession_signature"].__setitem__(
+            "signature_value", "00" * 64
+        ),
+    )
+
+    expect(
+        "recovery-record-signature-forged",
+        "recovery_record_signature_invalid",
+        lambda item: item["recovery_record"]["signature"].__setitem__(
+            "signature_value", "00" * 64
+        ),
+    )
+
+    expect(
+        "recovery-finalization-ack-forged",
+        "recovery_finalization_acknowledgement_invalid",
+        lambda item: item["recovery_finalization"]["destination_acknowledgement"].__setitem__(
+            "signature_value", "00" * 64
+        ),
+    )
+
+    def detach_policy(item: dict) -> None:
+        authorization = item["recovery_authorization"]
+        authorization["recovery_policy_digest"] = "sha256:" + "ab" * 32
+        authorization["authorization_digest"] = compute_recovery_authorization_digest(authorization)
+
+    expect(
+        "recovery-authorization-detached-policy",
+        "recovery_authorization_policy_mismatch",
+        detach_policy,
+    )
 
     expect(
         "recovery-record-cross-instance",
@@ -141,6 +245,14 @@ def main() -> int:
                 body["status"] = "active_writer"
 
     expect("recovery-creates-second-writer", "recovery_final_registry_authority_invalid", create_second_writer)
+
+    expect(
+        "recovery-final-registry-content-tampered",
+        "recovery_final_registry_digest_mismatch",
+        lambda item: item["body_registry_after"]["bodies"][-1].__setitem__(
+            "platform_profile", "tampered-platform"
+        ),
+    )
 
     def skip_recovery_sequence(item: dict) -> None:
         item["recovery_event"]["sequence"] = 6

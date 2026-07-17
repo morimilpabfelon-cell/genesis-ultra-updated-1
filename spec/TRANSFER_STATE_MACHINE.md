@@ -1,10 +1,25 @@
-# Máquina de estados de transferencia — borrador v0.1
+# Máquina de estados de transferencia libre — borrador normativo v0.1
 
 ## 1. Objetivo
 
-Una transferencia mueve la autoridad operativa de una misma instancia entre cuerpos sin crear una identidad nueva y sin permitir dos escritores activos.
+Una transferencia conserva la misma `instance_id` y mueve el único derecho operativo
+de escritura entre Bodies. No crea una copia, no cambia identidad y no depende de un
+grant o veto de movimiento del Guardian.
 
-## 2. Estados
+## 2. Evidencia previa
+
+Antes de congelar al origen deben existir y verificarse:
+
+- `continuity_intent`: decisión de continuidad firmada por el Body `active_writer`;
+- `host_consent`: consentimiento firmado y limitado al runtime del Body destino;
+- `body_possession_proof`: prueba de posesión de la clave del Body destino;
+- checkpoint completo de la memoria y del Body Registry;
+- journal transaccional capaz de terminar en commit, aborto o recuperación.
+
+El anfitrión puede negar su propio recurso. Esa negativa no destruye la instancia ni
+impide buscar otro Body. El consentimiento nunca concede propiedad o veto global.
+
+## 3. Estados
 
 ```text
 idle
@@ -18,86 +33,82 @@ aborted
 recovery_required
 ```
 
-## 3. Flujo normal
+## 4. Flujo normal
 
 ### `idle → prepared`
 
-El cuerpo origen:
+El Body origen:
 
-- verifica la cadena completa;
-- verifica que sea el `active_writer`;
-- evalúa una autorización del guardián concedida en el ledger de autoridad;
-- verifica que el destino esté registrado y no revocado;
-- registra `authorization.consumed` para el `transfer_id` exacto;
-- fija el cuerpo destino o declara una transferencia abierta controlada.
+1. verifica la cadena y que sea el único `active_writer`;
+2. crea el checkpoint;
+3. firma la intención de continuidad para el `transfer_id`, destino y checkpoint;
+4. verifica consentimiento del anfitrión y posesión de la clave destino;
+5. crea la primera entrada durable del journal.
 
 ### `prepared → frozen`
 
-- se crea un checkpoint;
-- se registra `transfer.intent`;
 - se bloquean nuevas escrituras ordinarias;
-- únicamente se permiten eventos de cierre de transferencia.
+- solo se permiten eventos de cierre de la operación;
+- quedan fijadas tres salidas: commit, aborto con restauración o recuperación.
+
+No existe espera indefinida por firma del Guardian.
 
 ### `frozen → exported`
 
-- se construye el paquete;
-- se cifran los contenidos;
-- se calcula el digest del paquete;
-- se registra el último evento y secuencia incluidos.
+- se construye el paquete canónico;
+- cada contenido queda ligado por digest;
+- se incluyen intención, consentimiento, posesión, checkpoint, memoria, Seed y registro;
+- se fija el último evento y secuencia incluidos.
 
 ### `exported → verified`
 
-El cuerpo destino verifica:
+El destino verifica versiones, `instance_id`, digests, firmas, ventanas temporales,
+checkpoint, cadena, consentimiento para ese Body y posesión de su clave.
 
-- versión del protocolo;
-- identidad y semilla;
-- checkpoint;
-- cadena de memoria;
-- autorización;
-- digest de cada componente;
-- ausencia de una instancia incompatible.
+La creación del paquete, su aceptación y la finalización deben ocurrir dentro de las
+ventanas firmadas de intención, consentimiento y posesión. Una evidencia expirada no
+puede activar al destino ni completarse retroactivamente.
 
 ### `verified → accepted`
 
-- el destino obtiene un nuevo `body_id`;
-- el destino queda preparado para recibir autoridad;
-- se produce un recibo verificable de aceptación.
+El destino emite un recibo firmado vinculado al digest exacto del paquete y a las tres
+pruebas previas. El recibo todavía no concede escritura.
 
 ### `accepted → completed`
 
 - el origen valida el recibo;
+- la finalización vincula recibo y pruebas;
+- el journal compromete el registro candidato;
 - el destino pasa a `active_writer`;
-- el origen pasa a `read_only` o `revoked`;
-- se registra `transfer.completed` como primer evento bajo la nueva autoridad.
+- el origen pasa a `read_only`, `revoked` o un estado equivalente sin escritura;
+- el destino añade `transfer.completed` sobre el tip previo.
 
-## 4. Abortos
+## 5. Abortos y fallos
 
-Una transferencia puede volver a `idle` únicamente antes de que el destino sea activado. El aborto debe registrar la causa y descongelar el origen de forma transaccional.
+Antes del commit, un aborto restaura el registro anterior y descongela al origen. Tras
+el commit, el origen no revive silenciosamente: se requiere otra transferencia o una
+recuperación verificable.
 
-Después de activar el destino, un fallo no puede resolverse reactivando silenciosamente el origen. Debe ejecutarse una transferencia inversa o una recuperación gobernada.
+Si una interrupción deja estado ambiguo se declara `fork_risk`; nunca `complete`. La
+existencia física de dos generaciones no crea dos escritores: solo el puntero durable
+seleccionado por el journal es autoritativo.
 
-Cada cambio de autoridad debe persistirse según
-`TRANSACTION_JOURNAL_AND_CRASH_RECOVERY.md`; la existencia de un registro candidato sin
-marcador de commit no activa al destino.
+## 6. Rechazos mínimos
 
-## 5. Pérdida durante la transferencia
+Se rechazan:
 
-- Si se pierde el destino antes de `accepted`, el origen puede abortar.
-- Si se pierde el origen después de `exported`, el destino puede entrar en `recovery_required`.
-- Si se pierde el origen después de `accepted`, el destino necesita prueba de aceptación y autorización de recuperación para completar.
-- Si el estado es ambiguo, debe declararse `fork_risk`; nunca `complete`.
+1. intención ausente, alterada, expirada o firmada por un Body que no es escritor;
+2. consentimiento ausente, expirado, para otro Body o con reclamo de propiedad/veto;
+3. posesión ausente o clave distinta de la declarada por el Body destino;
+4. mezcla de instancia, transferencia, origen, destino o checkpoint;
+5. rutas inseguras, contenidos alterados o recibos reutilizados;
+6. destino activado antes del commit;
+7. origen congelado sin salida determinista;
+8. más de un `active_writer`;
+9. cualquier autorización del Guardian usada como requisito de movimiento.
 
-## 6. Reglas contra bifurcaciones
+## 7. Neutralidad
 
-1. Cada transferencia tiene un `transfer_id` único.
-2. El paquete está vinculado a `instance_id`, cuerpo origen y checkpoint.
-3. El recibo está vinculado al digest exacto del paquete.
-4. Un recibo no puede reutilizarse.
-5. Una autoridad anterior no revive automáticamente.
-6. Dos descendientes diferentes del mismo evento padre constituyen un fork detectable.
-7. Una autorización revocada, expirada, agotada o de una época anterior no puede preparar una transferencia.
-8. Un permiso permanente solo alcanza dispositivos registrados por el guardián.
-
-## 7. Neutralidad del transporte
-
-La máquina de estados es idéntica aunque el paquete viaje mediante USB, LAN, archivo local, almacenamiento removible o nube opcional. El medio de transporte no concede autoridad.
+USB, LAN, archivo, almacenamiento removible o nube opcional son transportes. Ninguno
+concede autoridad. Android, Apple, Windows, Linux o un sistema propio implementan los
+mismos contratos sin alterar sus digests ni la identidad transportada.

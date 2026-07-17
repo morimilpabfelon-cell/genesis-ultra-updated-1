@@ -19,7 +19,7 @@
   "properties": {
     "schema_version": { "const": "genesis.signature.envelope.v0.1" },
     "signature_profile": { "const": "genesis.signature.ed25519.v0.1" },
-    "signer_type": { "type": "string", "enum": ["guardian", "body", "recovery_authority"] },
+    "signer_type": { "type": "string", "enum": ["guardian", "body", "host", "recovery_authority"] },
     "signer_id": { "type": "string", "minLength": 1, "maxLength": 128 },
     "key_epoch_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "signed_domain": { "type": "string", "minLength": 1, "maxLength": 256 },

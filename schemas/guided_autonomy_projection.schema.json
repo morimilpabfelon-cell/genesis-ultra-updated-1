@@ -77,8 +77,7 @@
             "code.propose_change",
             "code.execute_sandbox",
             "external.action",
-            "body.device.control",
-            "transfer.prepare"
+            "body.device.control"
           ]
         },
         "grant_id": { "type": "string", "minLength": 16, "maxLength": 128 },

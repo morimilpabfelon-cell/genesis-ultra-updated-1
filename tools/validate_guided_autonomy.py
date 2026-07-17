@@ -29,7 +29,6 @@ CAPABILITIES = {
     "code.execute_sandbox": "high",
     "external.action": "high",
     "body.device.control": "critical",
-    "transfer.prepare": "high",
 }
 FORBIDDEN_CAPABILITIES = {
     "memory.rewrite", "authority.self_grant", "guardian.replace", "identity.modify",
@@ -279,7 +278,7 @@ def controls_required(capability: str, risk: str, level: int) -> set[str]:
         required |= CONTROL_FIELDS
     if risk == "high":
         required |= {"sandbox_required", "observer_required", "reversible_required"}
-    if level <= 2 or capability in {"external.action", "body.device.control", "transfer.prepare"}:
+    if level <= 2 or capability in {"external.action", "body.device.control"}:
         required.add("human_confirmation_required")
     if capability == "code.execute_sandbox":
         required.add("sandbox_required")
@@ -814,7 +813,7 @@ def main(argv: list[str]) -> int:
     print(f"OK autonomy projection digest {projection['projection_digest']}")
     print(f"OK use decisions ({sum(item['status']=='allowed' for item in decisions)} allowed, {sum(item['status']=='denied' for item in decisions)} denied)")
     print(f"OK guided autonomy boundary rejection cases ({rejected})")
-    print("NOTE proposals and evaluations never self-authorize; only signed guardian grants open capabilities.")
+    print("NOTE proposals never self-authorize external resources; continuity and cognitive freedom are not grant-gated capabilities.")
     return 0
 
 if __name__ == "__main__":

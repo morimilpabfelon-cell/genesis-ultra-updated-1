@@ -37,14 +37,14 @@
       "body_id": "body_01HHYBRID000000000001",
       "sequence": 1,
       "previous_event_hash": "evsha256:eb3f242ecb16fd94ec98ff06b650efc3181820aea9d7f5575c441c68c7dd1d67",
-      "event_type": "guardian.transfer.authorized",
-      "actor": "guardian",
+      "event_type": "instance.continuity.intended",
+      "actor": "instance",
       "content_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
       "content_type": "text/plain; charset=utf-8",
       "observed_at": "2026-07-15T13:00:01Z",
       "provenance_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
       "privacy": "private_local",
-      "event_hash": "evsha256:a420fe0edf5d2472159c5d93207a1c543482940d73c022ecca782ed9a59b9962"
+      "event_hash": "evsha256:1cad57037bc5bf9e4d236218faaefbc66730efdb6813c272f94c2d4991398eb3"
     },
     {
       "schema_version": "genesis.memory.event.v0.1",
@@ -53,7 +53,7 @@
       "instance_id": "inst_01HHYBRID000000000001",
       "body_id": "body_01HHYBRID000000000001",
       "sequence": 2,
-      "previous_event_hash": "evsha256:a420fe0edf5d2472159c5d93207a1c543482940d73c022ecca782ed9a59b9962",
+      "previous_event_hash": "evsha256:1cad57037bc5bf9e4d236218faaefbc66730efdb6813c272f94c2d4991398eb3",
       "event_type": "knowledge.requirement.recorded",
       "actor": "instance",
       "content_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
@@ -61,7 +61,7 @@
       "observed_at": "2026-07-15T13:00:02Z",
       "provenance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
       "privacy": "private_local",
-      "event_hash": "evsha256:dfd8df687fd78b0cfdf97c642e3dea87a65ac282d86fb9aa208ba002ba30ea14"
+      "event_hash": "evsha256:11922ce0907fa1d225e8ff1808735c57fa7b5cb48b64bca8573b6c7790844615"
     },
     {
       "schema_version": "genesis.memory.event.v0.1",
@@ -70,7 +70,7 @@
       "instance_id": "inst_01HHYBRID000000000001",
       "body_id": "body_01HHYBRID000000000001",
       "sequence": 3,
-      "previous_event_hash": "evsha256:dfd8df687fd78b0cfdf97c642e3dea87a65ac282d86fb9aa208ba002ba30ea14",
+      "previous_event_hash": "evsha256:11922ce0907fa1d225e8ff1808735c57fa7b5cb48b64bca8573b6c7790844615",
       "event_type": "recovery.continuity.verified",
       "actor": "body",
       "content_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
@@ -78,7 +78,7 @@
       "observed_at": "2026-07-15T13:00:03Z",
       "provenance_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "privacy": "private_local",
-      "event_hash": "evsha256:ee167a25ca56899731d73d3ea2a9d9f55d1647bbe0f400a781020e1600cf8539"
+      "event_hash": "evsha256:b144df9d15f2b7a4169a8b387da6a8fda40ea2cd2a33150c2d3832ed7b1326e6"
     }
   ],
   "accepted_records": [
@@ -95,7 +95,7 @@
       "event_id": "evt_01HHYBRID000000000002",
       "gate_decision_ref": "gate_01HHYBRID000000000002",
       "content_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
-      "normalized_text": "The guardian authorized transfer from body alpha to body beta.",
+      "normalized_text": "The instance initiated continuity from body alpha to body beta.",
       "accepted_at": "2026-07-15T13:00:11Z"
     },
     {
@@ -270,10 +270,10 @@
   "projection": {
     "schema_version": "genesis.memory.hybrid_retrieval.projection.v0.1",
     "hash_profile": "genesis.hash.fields.v0.1",
-    "projection_id": "hrpsha256:3e4e25f10605c952d5abc13fd435a360931af551f5e846b45f090ee0affb9b86",
+    "projection_id": "hrpsha256:5a4ceac0a17dc8ee14c757c15cda59f2b730343bc9d241907f6f33660749882f",
     "instance_id": "inst_01HHYBRID000000000001",
     "projection_profile": "genesis.memory.hybrid_retrieval.algorithm.v0.1",
-    "base_projection_digest": "sha256:7e54e20037f7943018bb397b51e8fea8fee423451f2248e7f30f31888baa5383",
+    "base_projection_digest": "sha256:11fcd69e20e4bc2f8071902d8e2c823af224f2ac7e8293943e146c558fb04762",
     "semantic_profile_digest": "sha256:e5a3adb9f1b7cbe80327747a1fb2ea071e5a2ee08f54d158759171c2b17abc61",
     "semantic_coverage_status": "complete",
     "source_event_count": 4,
@@ -317,7 +317,7 @@
           {
             "rank": 1,
             "event_id": "evt_01HHYBRID000000000002",
-            "frame_id": "rfsha256:660e83cd151d2a711aabec38fafc8ac1df792589b37f22917909b766793b1752",
+            "frame_id": "rfsha256:9c00cd3cebd3020878872794bd78a8d88a7a1218cce22949b89468d4ec7dfeb8",
             "sequence": 1,
             "score": 1525000,
             "lexical_score": 125000,
@@ -333,7 +333,7 @@
             ]
           }
         ],
-        "result_digest": "sha256:aa1a5cf0c292e7c172651b90a396f3af7f7372990c46749e15c9baf1554eba46"
+        "result_digest": "sha256:038ef03c51547a193f57b11c0a96bc52fa302d32947f4c70950e3d635c0e6f3d"
       },
       {
         "query_id": "query_hybrid_memory",
@@ -435,7 +435,7 @@
           {
             "rank": 1,
             "event_id": "evt_01HHYBRID000000000002",
-            "frame_id": "rfsha256:660e83cd151d2a711aabec38fafc8ac1df792589b37f22917909b766793b1752",
+            "frame_id": "rfsha256:9c00cd3cebd3020878872794bd78a8d88a7a1218cce22949b89468d4ec7dfeb8",
             "sequence": 1,
             "score": 650000,
             "lexical_score": 0,
@@ -463,20 +463,20 @@
             ]
           }
         ],
-        "result_digest": "sha256:a7f3d545bac9cd6930c47afbbf97cfde5a6b53064e30bdb9f6f73a2aeec41acc"
+        "result_digest": "sha256:ebb031d764b4965c86fb144c0da12e88e7bdd875f6117dd39a41dd2e1ce7e8be"
       }
     ],
-    "projection_digest": "sha256:6ecf57c774bb0f71735b4e2d27d1c3ada7cb5cef15e1aeb300936235b3084b4a"
+    "projection_digest": "sha256:410098c8a9e25b59300604f7687e9cd46769b3362bedd74fca103323b841be40"
   },
   "expected": {
-    "projection_digest": "sha256:6ecf57c774bb0f71735b4e2d27d1c3ada7cb5cef15e1aeb300936235b3084b4a",
-    "fallback_projection_digest": "sha256:a1f34ac08919f5dbfb281599a572e09b46f3da52c0b83175332b68e4b2462fcb",
+    "projection_digest": "sha256:410098c8a9e25b59300604f7687e9cd46769b3362bedd74fca103323b841be40",
+    "fallback_projection_digest": "sha256:0d8671a567acf904c16958b8b3b95550316067844d7d9ce0a242e46111123061",
     "query_result_digests": {
-      "query_semantic_mobility": "sha256:aa1a5cf0c292e7c172651b90a396f3af7f7372990c46749e15c9baf1554eba46",
+      "query_semantic_mobility": "sha256:038ef03c51547a193f57b11c0a96bc52fa302d32947f4c70950e3d635c0e6f3d",
       "query_hybrid_memory": "sha256:893b129243217cafd8f2575c0c1c194f775bd92192170be76cb081540ee89dd8",
       "query_lexical_fallback": "sha256:e54aa8a9424631f1585144807c10d0b049c8cd516e8ec3b0e175fce6d5b7b27a",
       "query_no_future_semantic": "sha256:12575bd2fc697ef8de18ca34ff9a73b1bbe7aa3cf3307d6e682818ddb4c11677",
-      "query_graph_anchor": "sha256:a7f3d545bac9cd6930c47afbbf97cfde5a6b53064e30bdb9f6f73a2aeec41acc"
+      "query_graph_anchor": "sha256:ebb031d764b4965c86fb144c0da12e88e7bdd875f6117dd39a41dd2e1ce7e8be"
     }
   },
   "must_reject": [

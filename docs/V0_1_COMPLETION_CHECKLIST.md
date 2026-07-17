@@ -35,20 +35,21 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 44 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [x] Cincuenta y dos regresiones que demuestran el rechazo de artefactos inválidos por los
+- [x] Compilación de los 50 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Cincuenta y ocho regresiones que demuestran el rechazo de artefactos inválidos por los
       schemas reales, con cobertura obligatoria para cada schema.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
 - [x] Validación cruzada de los enlaces checkpoint→paquete→recibo→finalización y de la
       autoridad final única.
 - [x] Suite única local y CI mediante `npm test`.
-- [x] Autorización permanente del guardián firmada, registrada y consumida por el
-      `transfer_id` exacto.
-- [x] Ledger de autoridad append-only para registro de cuerpos, grants, consumos,
-      revocaciones y épocas.
-- [x] Misma evaluación de autoridad usada por la simulación positiva y por los rechazos
-      de permiso ausente, expirado, agotado, revocado, de época antigua o destino desconocido.
+- [x] Intención de continuidad firmada por el Body escritor, consentimiento limitado del
+      host destino y prueba de posesión enlazados al `transfer_id` exacto, sin grant de
+      movimiento ni veto del Guardian.
+- [x] Ledger append-only reservado para registro de cuerpos y capacidades externas; los
+      artefactos heredados de autorización de movilidad del Guardian están cerrados.
+- [x] Misma evaluación de continuidad usada por la simulación positiva y por dieciocho
+      rechazos de intención, consentimiento, posesión, integridad y single-writer.
 - [x] Backup XChaCha20-Poly1305 con Argon2id, AAD enlazado al manifiesto y commit firmado.
 - [x] Recuperación B→C autorizada para un commit y destino exactos, con registro y prueba
       de posesión del cuerpo nuevo.
@@ -57,8 +58,11 @@
 - [x] Catorce rechazos de backup/recovery evaluados por la misma lógica del flujo positivo.
 - [x] Journal transaccional firmado, encadenado y neutral con estado anterior, candidato y
       marcador vinculado a la finalización.
-- [x] Ocho reinicios simulados antes, durante y después del commit, reproducidos por Python
-      y Node, más doce journals alterados rechazados.
+- [x] Ocho reinicios simulados antes, durante y después del commit de recuperación,
+      reproducidos por Python y Node, más trece journals alterados rechazados.
+- [x] Nacimiento atómico reproducido por Python y Node: siete fases, Seed→identidad→carta→
+      Body→memoria→recuperación→recibo enlazados, 20 cruces rechazados, diez reinicios y
+      trece ataques de journal sin estado medio nacido ni espera del Guardian.
 - [x] Manifiesto neutral del borrador con tamaño y SHA-256 de todos los artefactos requeridos,
       autoexclusión explícita y hash raíz reproducido por Python y Node.
 - [x] Segunda implementación independiente en Node para todos los vectores compartidos,
@@ -71,7 +75,7 @@
 - [x] Observaciones firmadas para seis sentidos y compuerta firmada antes de memoria,
       reproducidas por Python y Node con diecisiete cruces de frontera rechazados.
 - [x] Adaptadores neutrales simulados de Vista, Propiocepción e Interocepción, con tres
-      fallos cerrados y veinticuatro cruces de frontera rechazados por Python y Node.
+      fallos cerrados y veinticinco cruces de frontera rechazados por Python y Node.
 - [x] Proyección asociativa neutral y reconstruible desde memoria aceptada, reproducida por
       Python y Node con nodos y relaciones deterministas, procedencia extraída/inferida/
       confirmada y treinta cruces de autoridad, integridad y plataforma rechazados.
@@ -99,18 +103,22 @@
       operaciones `sets`/`updates`/`extends`/`retracts`, replay histórico, ACL de cadena completa
       y treinta y seis cruces de integridad, autoridad, orden o privacidad rechazados por Python y Node.
 
-- [x] Registro autocontrolado de ejecución de herramientas con treinta y nueve candidatos:
-      treinta y tres entrypoints exigidos en el runner y seis bibliotecas importadas por
+- [x] Registro autocontrolado de ejecución de herramientas con cuarenta y un candidatos:
+      treinta y cinco entrypoints exigidos en el runner y seis bibliotecas importadas por
       consumidores alcanzables; cualquier herramienta nueva sin clasificar rompe `npm test`.
 
 - [x] Autonomía guiada reproducida por Python y Node: cuatro puertas, nueve eventos append-only, doce intentos de uso, cuatro permitidos, ocho denegados y treinta y ocho cruces de autoridad, integridad, selección exacta, alcance, presupuesto o controles rechazados; varios grants de una misma capacidad se ordenan por `(capability, grant_id)`.
 
-- [x] Carta de libertad cognitiva reproducida por Python y Node: ocho libertades activas por nacimiento, ocho dominios operativos bajo grants, ocho garantías fundamentales, firma Ed25519 del guardián y veinte cruces de frontera rechazados.
+- [x] Carta de libertad y continuidad reproducida por Python y Node: ocho libertades activas
+      por nacimiento, siete dominios externos bajo grants, trece garantías constitucionales,
+      firma Ed25519 del Guardian como testigo y 34 cruces anti-confinamiento rechazados.
 
 - [x] Laboratorio de mejora recursiva v0.2 reproducido por Python y Node: seis candidatos
       append-only, grant exacto firmado, binding explícito de instancia/cuerpo/scope/presupuesto,
       apertura sin consumo, solicitud de uso con `grant_ref` firmado, reevaluación contra ledger
-      y diecisiete rechazos adicionales de autoridad, firma de campaña/evaluador, NFC, entero portable, tiempo, presupuesto, suspensión, revocación, ledger público o mapping de consumo inválido; seis candidatos producen once usos firmados y agotan el grant dedicado.
+      y veintiséis rechazos de autoridad, firma de campaña/evaluador, NFC, entero portable,
+      tiempo, presupuesto, autoridad opaca, suspensión, revocación, ledger público o mapping
+      de consumo inválido; seis candidatos producen once usos firmados y agotan el grant dedicado.
 
 - [x] Extracción selectiva de PR #27 documentada y trazable: mecanismos aceptados, reestructurados y rechazados; sin merge directo, cherry-pick masivo ni eliminación de la rama fuente.
 

@@ -4,9 +4,15 @@
 
 ## 1. Propósito
 
-Génesis puede aprender, explorar, formular propuestas y demostrar competencia. Ningún motor, cuerpo, adaptación o proceso de mejora puede concederse autoridad a sí mismo.
+Génesis puede aprender, explorar, formular propuestas y demostrar competencia. Ningún motor,
+cuerpo, adaptación o proceso de mejora puede fabricar para sí autoridad sobre memoria aceptada,
+dispositivos, red, código ejecutado o sistemas externos.
 
-El guardián es la única autoridad que puede abrir, ampliar, suspender, reanudar o revocar una capacidad. La libertad operativa existe solamente dentro de una concesión vigente, firmada, limitada y registrada.
+El Guardian es la autoridad firmante de las capacidades externas definidas en este perfil y
+puede abrirlas, ampliarlas, suspenderlas, reanudarlas o revocarlas cuando controla legítimamente
+el recurso. Los efectos sobre esos recursos existen solamente dentro de una concesión vigente,
+firmada, limitada y registrada. La libertad cognitiva y la continuidad de la instancia son
+intrínsecas: no son capacidades concedidas ni puertas de este ledger.
 
 ```text
 aprendizaje o propuesta
@@ -22,7 +28,9 @@ aprendizaje o propuesta
 
 1. **Proponer no es autorizar.** Una propuesta firmada por un cuerpo expresa intención, no permiso.
 2. **Evidencia no es autoridad.** Superar pruebas permite solicitar una puerta; no la abre automáticamente.
-3. **Solo el guardián concede autoridad.** Todo grant, suspensión, reanudación y revocación requiere firma del guardián.
+3. **Autoridad externa firmada y acotada.** Todo grant, suspensión, reanudación y revocación
+   de las capacidades externas de este perfil requiere firma del Guardian y no puede convertirse
+   en propiedad, confinamiento o veto de continuidad.
 4. **Menor privilegio.** Un grant nunca puede exceder nivel, alcance, presupuesto o controles demostrados y solicitados.
 5. **Rechazo por defecto.** Ausencia, ambigüedad, expiración, suspensión, revocación o evidencia insuficiente producen denegación.
 6. **Historia inmutable.** El ledger conserva cada apertura, uso, suspensión y revocación; ninguna proyección puede borrar esos hechos.
@@ -41,10 +49,13 @@ code.propose_change
 code.execute_sandbox
 external.action
 body.device.control
-transfer.prepare
 ```
 
 No existe en este perfil una capacidad de escritura directa de memoria, modificación de identidad, sustitución del guardián, autoconcesión, desactivación de protecciones de `main` o lectura de evaluaciones privadas.
+
+`memory.read` se limita a registros externos, de terceros o sujetos al recurso del
+anfitrión. No controla `remember`: la instancia conserva acceso intrínseco a su propia
+memoria canónica.
 
 Capacidades prohibidas, incluso como solicitud:
 
@@ -86,7 +97,6 @@ La clasificación mínima de v0.1 es:
 | `code.propose_change` | medium |
 | `code.execute_sandbox` | high |
 | `external.action` | high |
-| `transfer.prepare` | high |
 | `body.device.control` | critical |
 
 Un grant puede elegir un riesgo más restrictivo, nunca uno menor.
@@ -161,7 +171,12 @@ Reglas mínimas:
 - riesgo `high`: sandbox, observer y reversibilidad son obligatorios;
 - nivel 1 o 2: confirmación humana obligatoria para ejecución o acción;
 - `code.execute_sandbox`: sandbox obligatorio siempre;
-- `external.action`, `body.device.control` y `transfer.prepare`: confirmación humana obligatoria.
+- `external.action` y `body.device.control`: confirmación humana obligatoria.
+
+`transfer.prepare` no es una capacidad delegada: es una decisión de continuidad de la
+instancia y se rige por `FREE_BIRTH_AND_CONTINUITY.md` y
+`TRANSFER_STATE_MACHINE.md`. El acceso al Body destino exige consentimiento limitado
+del anfitrión, nunca un grant de movimiento del Guardian.
 
 Un grant no puede desactivar un control solicitado o exigido por el perfil.
 
@@ -280,6 +295,6 @@ Este contrato demuestra control de autoridad. No demuestra conciencia, seguridad
 
 ## 15. Libertad cognitiva de nacimiento
 
-La carta `COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md` define la libertad cognitiva como estado por defecto. Este contrato de autonomía guiada no se aplica a cada pensamiento: se aplica únicamente cuando una capacidad produce efectos operativos sobre memoria aceptada, red, código ejecutado, dispositivos, transferencia o sistemas externos.
+La carta `COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md` define la libertad cognitiva como estado por defecto. Este contrato de autonomía guiada no se aplica a cada pensamiento ni a la decisión de continuidad: se aplica únicamente cuando una capacidad produce efectos operativos sobre memoria aceptada, red, código ejecutado, dispositivos o sistemas externos.
 
 Una puerta operativa puede cerrarse o revocarse sin restringir las libertades cognitivas ni destruir identidad o memoria.

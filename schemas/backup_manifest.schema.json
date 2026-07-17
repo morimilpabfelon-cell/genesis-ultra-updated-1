@@ -116,6 +116,7 @@
             "memory",
             "checkpoint",
             "body_registry",
+            "recovery_policy",
             "policy_state",
             "attachment_index",
             "attachment",

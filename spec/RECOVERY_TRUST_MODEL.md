@@ -14,7 +14,7 @@ sin control: significa reconstruir continuidad verificable y declarar cualquier 
 4. El último checkpoint verificable determina el punto de confianza.
 5. La memoria ausente se declara como brecha; nunca se inventa.
 6. Una copia de backup no adquiere autoridad por existir.
-7. El guardián debe aprobar la recuperación.
+7. La política de recuperación comprometida al nacer debe autorizar la operación.
 8. Todo resultado deja un registro verificable en la cadena.
 9. Solo una finalización válida puede mover la autoridad al cuerpo nuevo.
 
@@ -27,7 +27,7 @@ Una recuperación debe verificar, como mínimo:
 - checkpoint restaurado;
 - último evento verificable;
 - registro de cuerpos disponible;
-- autorización del guardián;
+- política de recuperación firmada al nacer y autorización exacta derivada de ella;
 - integridad del paquete de backup;
 - commit firmado que vincule manifiesto, cifrado, ciphertext y checkpoint;
 - estado conocido del cuerpo anterior.
@@ -56,14 +56,16 @@ El cuerpo nuevo solo puede convertirse en `active_writer` después de:
 1. verificar el paquete de recuperación;
 2. crear un registro de recuperación;
 3. registrar su clave o huella de cuerpo;
-4. aplicar la autorización del guardián;
+4. aplicar una autorización exacta por `guardian_assisted` o `policy_fallback`;
 5. revocar, marcar como perdido o suspender el cuerpo anterior;
 6. crear el primer evento posterior a la recuperación.
-7. firmar con el guardián y el destino una finalización que vincule toda la evidencia.
+7. hacer que el destino firme una finalización que vincule toda la evidencia.
 
-La autorización del guardián se limita al `recovery_id`, commit, cuerpo anterior, cuerpo
-nuevo e intervalo exactos. Restaurar archivos deja al destino como candidato; no lo vuelve
-escritor hasta que la transacción finaliza.
+La ruta asistida usa una aprobación actual del Guardian. La ruta fallback usa al menos dos
+factores independientes no Guardian, una espera obligatoria, una ventana de cancelación y
+consumo de un solo uso, todos comprometidos en el nacimiento. No exige que el Guardian esté
+disponible en ese momento ni le entrega propiedad o veto permanente. Restaurar archivos
+deja al destino como candidato; no lo vuelve escritor hasta que la transacción finaliza.
 
 ## 6. Prevención de clones
 
@@ -78,6 +80,7 @@ Se debe rechazar o poner en cuarentena:
 - dos descendientes del mismo hash previo;
 - un paquete de recuperación para otra instancia;
 - una autorización expirada, revocada o agotada.
+- una ruta fallback sin umbral, que omita la espera o que intente reutilizar autorización.
 - un backup sin commit, con ciphertext alterado o separado de su manifiesto.
 
 ## 7. Operación sin red

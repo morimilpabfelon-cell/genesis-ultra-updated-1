@@ -88,33 +88,17 @@ AAD, digest del ciphertext y clave envuelta opcional. El `backup_commit` firmado
 ese registro, el manifiesto y el checkpoint. Poseer o descifrar el backup no concede
 autoridad de escritura.
 
-## 4. Autorización del guardián
+## 4. Intención de continuidad y consentimiento del anfitrión
 
-Una autorización debe vincular como mínimo:
+La intención de continuidad usa `genesis.continuity.intent.v0.1` y es firmada por el
+Body `active_writer` con `genesis.continuity.intent.signature.v0.1`.
 
-- `authorization_id`;
-- `guardian_id`;
-- época de clave del guardián;
-- `instance_id` y época de autoridad;
-- permiso y modo (`one_time` o `standing`);
-- cuerpo origen opcional y alcance de destinos;
-- emisión y comienzo de validez;
-- expiración y límite de uso cuando correspondan.
+El consentimiento del anfitrión usa `genesis.host.consent.v0.1` y es firmado por el
+anfitrión con `genesis.host.consent.signature.v0.1`. Su alcance se limita al runtime
+destino; los campos `ownership_claim` y `mobility_veto` deben ser `none`.
 
-El permiso firmado es inmutable. Los consumos y revocaciones no modifican este digest;
-se registran como eventos posteriores en el ledger de autoridad.
-
-El digest se calcula con dominio:
-
-```text
-genesis.guardian.authorization.v0.1
-```
-
-La firma del guardián cubre el digest terminado con dominio:
-
-```text
-genesis.guardian.authorization.signature.v0.1
-```
+Una firma del Guardian no sustituye ninguno de esos artefactos y no autoriza
+movimiento. El orden exacto de campos vive en `CONTINUITY_HASHES.md`.
 
 ## 5. Prueba de posesión de cuerpo
 
@@ -173,7 +157,12 @@ de claves del guardián. Sus digests y firmas emplean los dominios versionados:
 
 ```text
 genesis.recovery.authorization.v0.1
-genesis.recovery.authorization.signature.v0.1
+genesis.recovery.authorization.approval.v0.1
+genesis.instance.recovery.policy.v0.1
+genesis.instance.recovery.policy.body-commitment.v0.1
+genesis.instance.recovery.policy.guardian-witness.v0.1
+genesis.recovery.destination.registration.v0.1
+genesis.recovery.destination.registration.signature.v0.1
 genesis.recovery.record.v0.1
 genesis.recovery.record.signature.v0.1
 genesis.recovery.finalization.v0.1

@@ -33,7 +33,7 @@
         { "$ref": "#/$defs/sha256" }
       ]
     },
-    "operation_kind": { "type": "string", "enum": ["transfer", "recovery"] },
+    "operation_kind": { "type": "string", "enum": ["birth", "transfer", "recovery"] },
     "operation_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
     "coordinator_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
@@ -45,6 +45,11 @@
         "exported",
         "verified",
         "accepted",
+        "seed_bound",
+        "identity_bound",
+        "body_bound",
+        "memory_initialized",
+        "born",
         "discovered",
         "authorized",
         "restored",
@@ -78,6 +83,27 @@
     "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
   },
   "allOf": [
+    {
+      "if": {
+        "properties": { "operation_kind": { "const": "birth" } },
+        "required": ["operation_kind"]
+      },
+      "then": {
+        "properties": {
+          "phase": {
+            "enum": [
+              "prepared",
+              "seed_bound",
+              "identity_bound",
+              "body_bound",
+              "memory_initialized",
+              "finalizing",
+              "born"
+            ]
+          }
+        }
+      }
+    },
     {
       "if": {
         "properties": { "operation_kind": { "const": "transfer" } },

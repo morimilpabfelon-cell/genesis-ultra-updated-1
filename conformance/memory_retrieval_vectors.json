@@ -37,14 +37,14 @@
       "body_id": "body_01HRETRIEVAL00000000001",
       "sequence": 1,
       "previous_event_hash": "evsha256:bf12c5c95c24534392d34845c33c95c237ed3d8a49fec00159d5a772c05b1076",
-      "event_type": "guardian.transfer.authorized",
-      "actor": "guardian",
+      "event_type": "instance.continuity.intended",
+      "actor": "instance",
       "content_digest": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
       "content_type": "text/plain; charset=utf-8",
       "observed_at": "2026-07-15T12:00:01Z",
       "provenance_digest": "sha256:7272727272727272727272727272727272727272727272727272727272727272",
       "privacy": "guardian_shared",
-      "event_hash": "evsha256:15548a8694ada76358d72bb2c74ba49efc1f851cfb431b68983bd3553812f716"
+      "event_hash": "evsha256:c17dba3bb4553b1dbd96d359e554302fee428eb39b203a76c3e4192c3179a2d1"
     },
     {
       "schema_version": "genesis.memory.event.v0.1",
@@ -53,7 +53,7 @@
       "instance_id": "inst_01HRETRIEVAL00000000001",
       "body_id": "body_01HRETRIEVAL00000000001",
       "sequence": 2,
-      "previous_event_hash": "evsha256:15548a8694ada76358d72bb2c74ba49efc1f851cfb431b68983bd3553812f716",
+      "previous_event_hash": "evsha256:c17dba3bb4553b1dbd96d359e554302fee428eb39b203a76c3e4192c3179a2d1",
       "event_type": "knowledge.requirement.recorded",
       "actor": "instance",
       "content_digest": "sha256:1313131313131313131313131313131313131313131313131313131313131313",
@@ -61,7 +61,7 @@
       "observed_at": "2026-07-15T12:00:02Z",
       "provenance_digest": "sha256:7373737373737373737373737373737373737373737373737373737373737373",
       "privacy": "private_local",
-      "event_hash": "evsha256:0f602da20afec001cb5d4bbaa4dfd7a5794352260b56ef593200375b2bd1aca0"
+      "event_hash": "evsha256:b7a420913500eca7baf40ce74880c376006ee5567dfa019e72647fd25c81ada7"
     },
     {
       "schema_version": "genesis.memory.event.v0.1",
@@ -70,7 +70,7 @@
       "instance_id": "inst_01HRETRIEVAL00000000001",
       "body_id": "body_01HRETRIEVAL00000000001",
       "sequence": 3,
-      "previous_event_hash": "evsha256:0f602da20afec001cb5d4bbaa4dfd7a5794352260b56ef593200375b2bd1aca0",
+      "previous_event_hash": "evsha256:b7a420913500eca7baf40ce74880c376006ee5567dfa019e72647fd25c81ada7",
       "event_type": "knowledge.relation.confirmed",
       "actor": "guardian",
       "content_digest": "sha256:1414141414141414141414141414141414141414141414141414141414141414",
@@ -78,7 +78,7 @@
       "observed_at": "2026-07-15T12:00:03Z",
       "provenance_digest": "sha256:7474747474747474747474747474747474747474747474747474747474747474",
       "privacy": "guardian_shared",
-      "event_hash": "evsha256:37431d3d75184f09fc47771146ec29f3bd07db55e073aacc71b6c1614182276e"
+      "event_hash": "evsha256:a63c0cf612e1c95af6dbc6894ae12c3b143f3d134228bea7bfea6c209f546a90"
     },
     {
       "schema_version": "genesis.memory.event.v0.1",
@@ -87,7 +87,7 @@
       "instance_id": "inst_01HRETRIEVAL00000000001",
       "body_id": "body_01HRETRIEVAL00000000001",
       "sequence": 4,
-      "previous_event_hash": "evsha256:37431d3d75184f09fc47771146ec29f3bd07db55e073aacc71b6c1614182276e",
+      "previous_event_hash": "evsha256:a63c0cf612e1c95af6dbc6894ae12c3b143f3d134228bea7bfea6c209f546a90",
       "event_type": "recovery.continuity.verified",
       "actor": "body",
       "content_digest": "sha256:1515151515151515151515151515151515151515151515151515151515151515",
@@ -95,7 +95,7 @@
       "observed_at": "2026-07-15T12:00:04Z",
       "provenance_digest": "sha256:7575757575757575757575757575757575757575757575757575757575757575",
       "privacy": "private_local",
-      "event_hash": "evsha256:61c3f801f69117e36b5f2efc983abedbe0a98610b0213802150c94365668b28a"
+      "event_hash": "evsha256:0504ecd204e5413bb3d8bb18c9e5422d8994731bf7551a7952db1ae580799ce8"
     }
   ],
   "accepted_records": [
@@ -112,7 +112,7 @@
       "event_id": "evt_01HRETRIEVAL00000000002",
       "gate_decision_ref": "gate_01HRETRIEVAL00000000002",
       "content_digest": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
-      "normalized_text": "The guardian authorized memory transfer from body alpha to body beta.",
+      "normalized_text": "The instance initiated continuity from body alpha to body beta.",
       "accepted_at": "2026-07-15T12:00:11Z"
     },
     {
@@ -207,14 +207,14 @@
   "projection": {
     "schema_version": "genesis.memory.retrieval.projection.v0.1",
     "hash_profile": "genesis.hash.fields.v0.1",
-    "projection_id": "rpsha256:8c2287aaaf8c3027ab0dac0f6f97e96d94fafdee4f8510f2f9e9d0efdf8ce00c",
+    "projection_id": "rpsha256:48b705335606685a4ff05108aa44526b54e32571152b6b2050193ea1e0eb1f72",
     "instance_id": "inst_01HRETRIEVAL00000000001",
     "projection_profile": "genesis.memory.retrieval.algorithm.v0.1",
     "coverage_status": "complete",
     "source_first_sequence": 0,
     "source_last_sequence": 4,
     "source_event_count": 5,
-    "source_last_event_hash": "evsha256:61c3f801f69117e36b5f2efc983abedbe0a98610b0213802150c94365668b28a",
+    "source_last_event_hash": "evsha256:0504ecd204e5413bb3d8bb18c9e5422d8994731bf7551a7952db1ae580799ce8",
     "record_count": 5,
     "frames": [
       {
@@ -269,20 +269,16 @@
         ]
       },
       {
-        "frame_id": "rfsha256:b1e061d569b3da9d9b7cdbadf7b61416a68aeb4958a095ce54d41c6db7e21e92",
+        "frame_id": "rfsha256:40d6dfcdcfa69bcc9599b51caf4371a0722fc2a4645145c13c7aac1caae61270",
         "event_id": "evt_01HRETRIEVAL00000000002",
         "sequence": 1,
         "observed_at": "2026-07-15T12:00:01Z",
         "content_digest": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
         "content_type": "text/plain; charset=utf-8",
-        "token_count": 11,
+        "token_count": 10,
         "terms": [
           {
             "term": "alpha",
-            "frequency": 1
-          },
-          {
-            "term": "authorized",
             "frequency": 1
           },
           {
@@ -294,15 +290,19 @@
             "frequency": 2
           },
           {
+            "term": "continuity",
+            "frequency": 1
+          },
+          {
             "term": "from",
             "frequency": 1
           },
           {
-            "term": "guardian",
+            "term": "initiated",
             "frequency": 1
           },
           {
-            "term": "memory",
+            "term": "instance",
             "frequency": 1
           },
           {
@@ -311,10 +311,6 @@
           },
           {
             "term": "to",
-            "frequency": 1
-          },
-          {
-            "term": "transfer",
             "frequency": 1
           }
         ]
@@ -524,13 +520,6 @@
         ]
       },
       {
-        "term": "authorized",
-        "document_frequency": 1,
-        "event_refs": [
-          "evt_01HRETRIEVAL00000000002"
-        ]
-      },
-      {
         "term": "beta",
         "document_frequency": 1,
         "event_refs": [
@@ -561,8 +550,9 @@
       },
       {
         "term": "continuity",
-        "document_frequency": 1,
+        "document_frequency": 2,
         "event_refs": [
+          "evt_01HRETRIEVAL00000000002",
           "evt_01HRETRIEVAL00000000005"
         ]
       },
@@ -623,18 +613,25 @@
         ]
       },
       {
-        "term": "guardian",
+        "term": "index",
+        "document_frequency": 2,
+        "event_refs": [
+          "evt_01HRETRIEVAL00000000003",
+          "evt_01HRETRIEVAL00000000005"
+        ]
+      },
+      {
+        "term": "initiated",
         "document_frequency": 1,
         "event_refs": [
           "evt_01HRETRIEVAL00000000002"
         ]
       },
       {
-        "term": "index",
-        "document_frequency": 2,
+        "term": "instance",
+        "document_frequency": 1,
         "event_refs": [
-          "evt_01HRETRIEVAL00000000003",
-          "evt_01HRETRIEVAL00000000005"
+          "evt_01HRETRIEVAL00000000002"
         ]
       },
       {
@@ -646,9 +643,8 @@
       },
       {
         "term": "memory",
-        "document_frequency": 3,
+        "document_frequency": 2,
         "event_refs": [
-          "evt_01HRETRIEVAL00000000002",
           "evt_01HRETRIEVAL00000000003",
           "evt_01HRETRIEVAL00000000004"
         ]
@@ -729,9 +725,8 @@
       },
       {
         "term": "transfer",
-        "document_frequency": 2,
+        "document_frequency": 1,
         "event_refs": [
-          "evt_01HRETRIEVAL00000000002",
           "evt_01HRETRIEVAL00000000004"
         ]
       },
@@ -767,22 +762,22 @@
       {
         "sequence": 1,
         "frame_count": 2,
-        "frames_digest": "sha256:5a2047a77502a030fc653899207b713e6ca3b4334f3839688ad4f47ca946cdac"
+        "frames_digest": "sha256:ee31c89ee834eb92fe446150512a7a5b0c36a77bf8e4c2ce297cc28f996cec00"
       },
       {
         "sequence": 2,
         "frame_count": 3,
-        "frames_digest": "sha256:d1135278031aba5160f367a01b9196fa65650e8f2349d23ed36b6a15cd98fc0f"
+        "frames_digest": "sha256:91fb35c79fe73bc0d2f84ef2c45e4aa1fc9c4cf96419c0f271a58a5951db1437"
       },
       {
         "sequence": 3,
         "frame_count": 4,
-        "frames_digest": "sha256:3fc7821fb1d3f165687ddb8dd5990755dcc9ccfb1ca1fc7fd9edf03f388b3f9f"
+        "frames_digest": "sha256:a33ee63e43877fbb06bbe2285d7acaadbc3120e715b92def1f755cb84921cf72"
       },
       {
         "sequence": 4,
         "frame_count": 5,
-        "frames_digest": "sha256:1f8906d43bf99f62c10cfe6bc7552b08fa20f62ef6329921212af763e70f0840"
+        "frames_digest": "sha256:bd4c48e270ce4bf697d17eff1c02565e956b04c8a248845a65d291d1224f2a9e"
       }
     ],
     "query_results": [
@@ -803,8 +798,8 @@
             "event_id": "evt_01HRETRIEVAL00000000003",
             "frame_id": "rfsha256:6b231a3dd7344b9268dfdc7f67fb022d1b138421872ebb43f904575da19e226d",
             "sequence": 2,
-            "score": 2160000,
-            "lexical_score": 300000,
+            "score": 2335000,
+            "lexical_score": 325000,
             "graph_score": 0,
             "temporal_score": 60000,
             "matched_terms": [
@@ -821,8 +816,8 @@
             "event_id": "evt_01HRETRIEVAL00000000004",
             "frame_id": "rfsha256:fe8c676fa8ce43aceaedcd9e56dc1388bd57698f919b0c7f8748692ab1633492",
             "sequence": 3,
-            "score": 1130000,
-            "lexical_score": 150000,
+            "score": 1305000,
+            "lexical_score": 175000,
             "graph_score": 0,
             "temporal_score": 80000,
             "matched_terms": [
@@ -850,7 +845,7 @@
             ]
           }
         ],
-        "result_digest": "sha256:a4c72d6904f16ac51d8f5d2d59a8b65b0e592fc67fa326dddfe940836575a2dc"
+        "result_digest": "sha256:3e42a6d0d5747e1e737cdade85a7771ec7d4565cc6103c46f71d06ec39abd637"
       },
       {
         "query_id": "query_guardian_transfer",
@@ -862,26 +857,8 @@
         "as_of_sequence": 2,
         "top_k": 3,
         "candidate_count": 3,
-        "results": [
-          {
-            "rank": 1,
-            "event_id": "evt_01HRETRIEVAL00000000002",
-            "frame_id": "rfsha256:b1e061d569b3da9d9b7cdbadf7b61416a68aeb4958a095ce54d41c6db7e21e92",
-            "sequence": 1,
-            "score": 1466666,
-            "lexical_score": 200000,
-            "graph_score": 0,
-            "temporal_score": 66666,
-            "matched_terms": [
-              "guardian",
-              "transfer"
-            ],
-            "reason_codes": [
-              "lexical_match"
-            ]
-          }
-        ],
-        "result_digest": "sha256:046b28b3d4344e2712ff4665c8b3b17ffacab087e1a528cf24ee343b7a10230f"
+        "results": [],
+        "result_digest": "sha256:4cb6da72d848bb8ba68294dc4280e86465ed5c7d7078085ea1576a33bafc87a0"
       },
       {
         "query_id": "query_graph_neighbors",
@@ -954,7 +931,7 @@
         "result_digest": "sha256:70ba4f7d6eda80b86808ca3ac70b6b901aeb25113b8cc557860b9beb9ff3dd8b"
       }
     ],
-    "projection_digest": "sha256:6737752e07cd2ef180181e89d8d01a3148737449ea6801d00e3558af4f1f08a6"
+    "projection_digest": "sha256:20e57af89be9e29f6983d01f8d44216efdc25687ea4020d04dddf93bead37533"
   },
   "must_reject": [
     {
