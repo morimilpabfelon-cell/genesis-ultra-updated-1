@@ -45,9 +45,28 @@
         "1",
         "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "2026-07-12T00:00:00Z",
-        "active"
+        "active",
+        "",
+        ""
       ],
-      "expected_digest": "sha256:87e9286776d2ed339bdea91c54f0078a57192d8f0d9c5bd85663b24625ebc7df"
+      "expected_digest": "sha256:d8bb77c80131b4faebec7a385b00e29a3ce2d70c0e414bff340e21c325155053"
+    },
+    {
+      "case_id": "key-epoch-rotation-digest-001",
+      "domain": "genesis.key.epoch.v0.1",
+      "fields": [
+        "genesis.key.epoch.v0.1",
+        "epoch_01HNEUTRAL0000000000002",
+        "inst_01HNEUTRAL00000000000001",
+        "body_01HNEUTRAL00000000000001",
+        "2",
+        "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "2026-07-13T00:00:00Z",
+        "active",
+        "epoch_01HNEUTRAL0000000000001",
+        "grant_01HNEUTRAL_ROTATE0000001"
+      ],
+      "expected_digest": "sha256:c004cc8c49659b0f7ae913a2bdf644bf611bad0211bb5bc22ac6f07d2ae755a2"
     }
   ],
   "algorithms": {

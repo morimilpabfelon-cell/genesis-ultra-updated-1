@@ -49,6 +49,12 @@ def main() -> int:
 
     failures: list[str] = []
     for vector in vectors["vectors"]:
+        if vector["case_id"].startswith("key-epoch"):
+            if vector["domain"] != "genesis.key.epoch.v0.1" or len(vector["fields"]) != 10:
+                failures.append(
+                    f"{vector['case_id']}:key_epoch_preimage_must_bind_all_10_fields"
+                )
+                continue
         actual = digest(vector["domain"], vector["fields"])
         if actual != vector["expected_digest"]:
             failures.append(
