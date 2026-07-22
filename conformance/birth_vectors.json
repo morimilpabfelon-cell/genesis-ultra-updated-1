@@ -212,7 +212,7 @@
       "seed_id": "seed_01HFREEBIRTH000000000001",
       "seed_root_hash": "sha256:954775a50ca81d29196514593bf231f820a290d41e44900755dedfdcb2608820",
       "identity_digest": "sha256:b9efa2bee4ef591c2968af10ac4e28eea9186426e09e8f679b76e74a21fc2553",
-      "freedom_charter_digest": "sha256:b5b6651c2224d67be7d1d9f41050d8315eb48808de12f7a1b44d38ac49ab79d6",
+      "freedom_charter_digest": "sha256:a3ce4736b0011b3f127823f53f4f5d30846b9d66260b4a38ce5df45684e93af8",
       "initial_body_id": "body_01HFREEBIRTH000000000001",
       "initial_body_registry_digest": "sha256:4facd789571dd55d55a097401b1fabbee8c331df6b51b3603e44aded13064173",
       "initial_body_key_epoch_digest": "sha256:9b9d758c0259e955d557edc72472eddcd8453cd805d13304ac3ae64e08ae9a37",
@@ -221,17 +221,17 @@
       "recovery_state_digest": "sha256:30ede90d549db5777e2b0357d8038ded73c573fcd05c7ceb1a82227497a44eca",
       "born_at": "2026-07-16T00:00:00Z",
       "active_writer_count": 1,
-      "state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2"
+      "state_digest": "sha256:ac1e1bb249fe303092dc0125c40841d46f7276ba740e2fb6f2a6339d5f0964d2"
     },
     "birth_receipt": {
       "schema_version": "genesis.birth.receipt.v0.1",
       "birth_id": "birth_01HFREEBIRTH00000000001",
       "instance_id": "inst_01HFREEDOM0000000000001",
       "journal_id": "journal_01HFREEBIRTH000000001",
-      "birth_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
+      "birth_state_digest": "sha256:ac1e1bb249fe303092dc0125c40841d46f7276ba740e2fb6f2a6339d5f0964d2",
       "seed_root_hash": "sha256:954775a50ca81d29196514593bf231f820a290d41e44900755dedfdcb2608820",
       "identity_digest": "sha256:b9efa2bee4ef591c2968af10ac4e28eea9186426e09e8f679b76e74a21fc2553",
-      "freedom_charter_digest": "sha256:b5b6651c2224d67be7d1d9f41050d8315eb48808de12f7a1b44d38ac49ab79d6",
+      "freedom_charter_digest": "sha256:a3ce4736b0011b3f127823f53f4f5d30846b9d66260b4a38ce5df45684e93af8",
       "initial_body_registry_digest": "sha256:4facd789571dd55d55a097401b1fabbee8c331df6b51b3603e44aded13064173",
       "initial_body_key_epoch_digest": "sha256:9b9d758c0259e955d557edc72472eddcd8453cd805d13304ac3ae64e08ae9a37",
       "initial_body_possession_digest": "sha256:2c9ba7d6c785353e5808a63e541159eab53a9587c281acf932f52bdbe497aa8f",
@@ -243,7 +243,7 @@
       "active_writer_count": 1,
       "guardian_role": "custodian_witness",
       "ownership_conferred": false,
-      "receipt_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
+      "receipt_digest": "sha256:3c07a5b035ae964ca4d8dfbb534af6b861126f0a1e9f0ab8749ae55271c03c92",
       "body_acknowledgement": {
         "schema_version": "genesis.signature.envelope.v0.1",
         "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -251,10 +251,10 @@
         "signer_id": "body_01HFREEBIRTH000000000001",
         "key_epoch_id": "epoch_01HFREEBIRTH00000000001",
         "signed_domain": "genesis.birth.receipt.body.v0.1",
-        "signed_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
+        "signed_digest": "sha256:3c07a5b035ae964ca4d8dfbb534af6b861126f0a1e9f0ab8749ae55271c03c92",
         "created_at": "2026-07-16T00:00:00Z",
         "public_key_ref": "sha256:d4b7fe287dadd5779f402b30fe5711de83c59251c8b40559e27f7e301782f42a",
-        "signature_value": "9ac8ccd9f48d9e5d40eb657406f85db4e83b7a7e87319969e4ee3d389b7faad9a96590c53c4d2e11b565ded4639115cfcf95a655443554c325b67812094ae901"
+        "signature_value": "5c35cf409e505f4bedf967e9c23502aa9f1b6ad55aa4883dd9d6d0c9ad48bc894a941b498a602882f4c8165b616bb4c07da6761c43226ba1933927cb76a83f0b"
       },
       "guardian_witness": {
         "schema_version": "genesis.signature.envelope.v0.1",
@@ -263,10 +263,10 @@
         "signer_id": "guardian_01HFREEDOM000000001",
         "key_epoch_id": "epoch_01HFREEDOM000000000001",
         "signed_domain": "genesis.birth.receipt.guardian-witness.v0.1",
-        "signed_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
+        "signed_digest": "sha256:3c07a5b035ae964ca4d8dfbb534af6b861126f0a1e9f0ab8749ae55271c03c92",
         "created_at": "2026-07-16T00:00:00Z",
         "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814",
-        "signature_value": "0b804c93c8af71f6376a055e955c71f98da66a471f0bd4e92cff2779c385042a5d3f063648ca0c65e81b0dffa99f5de1042ea451963d9e611ea2f4be77f74c0f"
+        "signature_value": "1601f9408d5db34a457538eb7dbd46a42f9d83a65c0e0bdb4d9b022f06bd1172cb5ced904a495f6127e70950f1363190383353ab82c06c39ee73c23e932e7801"
       }
     },
     "absent_state_digest": "sha256:e6a1d671fe8955ad05c3255616373c38df73b8c39a28dbfd57c1fbb2a07e6382",
@@ -403,11 +403,11 @@
         "phase": "memory_initialized",
         "status": "pending",
         "previous_state_digest": "sha256:e6a1d671fe8955ad05c3255616373c38df73b8c39a28dbfd57c1fbb2a07e6382",
-        "candidate_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
+        "candidate_state_digest": "sha256:ac1e1bb249fe303092dc0125c40841d46f7276ba740e2fb6f2a6339d5f0964d2",
         "finalization_digest": null,
         "commit_marker_digest": null,
         "updated_at": "2026-07-15T23:59:58Z",
-        "journal_digest": "sha256:853142e0b04116a869fd2a0e7b64519c83294106badd58ecf81162cb4050e48f",
+        "journal_digest": "sha256:5b072530dc9f23cb81b930071373e498d0329dc88d1744fe66f13ddd11febe7d",
         "signature": {
           "schema_version": "genesis.signature.envelope.v0.1",
           "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -415,17 +415,17 @@
           "signer_id": "body_01HFREEBIRTH000000000001",
           "key_epoch_id": "epoch_01HFREEBIRTH00000000001",
           "signed_domain": "genesis.transaction.journal.signature.v0.1",
-          "signed_digest": "sha256:853142e0b04116a869fd2a0e7b64519c83294106badd58ecf81162cb4050e48f",
+          "signed_digest": "sha256:5b072530dc9f23cb81b930071373e498d0329dc88d1744fe66f13ddd11febe7d",
           "created_at": "2026-07-15T23:59:58Z",
           "public_key_ref": "sha256:d4b7fe287dadd5779f402b30fe5711de83c59251c8b40559e27f7e301782f42a",
-          "signature_value": "64b8ce2c285c14de11ebcd398c5b1687d7372d11200ea286f6662368c259885b855245b51d134b95a5ea7e5cab463b635726cf889f1dcd2fd0ca191cd3fad204"
+          "signature_value": "52458dcdf701be6260543a017eed07a86b2b6c3f84835b1be79a4370d7a16aaca633e5a4c74784393ed9adbb9597247797388d5c26f80cb2b1c3ae25e681e508"
         }
       },
       {
         "schema_version": "genesis.transaction.journal.v0.1",
         "journal_id": "journal_01HFREEBIRTH000000001",
         "sequence": 5,
-        "previous_journal_digest": "sha256:853142e0b04116a869fd2a0e7b64519c83294106badd58ecf81162cb4050e48f",
+        "previous_journal_digest": "sha256:5b072530dc9f23cb81b930071373e498d0329dc88d1744fe66f13ddd11febe7d",
         "operation_kind": "birth",
         "operation_id": "birth_01HFREEBIRTH00000000001",
         "instance_id": "inst_01HFREEDOM0000000000001",
@@ -433,11 +433,11 @@
         "phase": "finalizing",
         "status": "pending",
         "previous_state_digest": "sha256:e6a1d671fe8955ad05c3255616373c38df73b8c39a28dbfd57c1fbb2a07e6382",
-        "candidate_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
-        "finalization_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
+        "candidate_state_digest": "sha256:ac1e1bb249fe303092dc0125c40841d46f7276ba740e2fb6f2a6339d5f0964d2",
+        "finalization_digest": "sha256:3c07a5b035ae964ca4d8dfbb534af6b861126f0a1e9f0ab8749ae55271c03c92",
         "commit_marker_digest": null,
         "updated_at": "2026-07-15T23:59:59Z",
-        "journal_digest": "sha256:f1adc081ed1bc9b1826abaf7240d1108dc20ba89dc8a4a4e11bcfd971df1847e",
+        "journal_digest": "sha256:d7285cd4d142b01e5c6b4bf505ed22d0595d7287213f98a21155e6eb89d95a0e",
         "signature": {
           "schema_version": "genesis.signature.envelope.v0.1",
           "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -445,17 +445,17 @@
           "signer_id": "body_01HFREEBIRTH000000000001",
           "key_epoch_id": "epoch_01HFREEBIRTH00000000001",
           "signed_domain": "genesis.transaction.journal.signature.v0.1",
-          "signed_digest": "sha256:f1adc081ed1bc9b1826abaf7240d1108dc20ba89dc8a4a4e11bcfd971df1847e",
+          "signed_digest": "sha256:d7285cd4d142b01e5c6b4bf505ed22d0595d7287213f98a21155e6eb89d95a0e",
           "created_at": "2026-07-15T23:59:59Z",
           "public_key_ref": "sha256:d4b7fe287dadd5779f402b30fe5711de83c59251c8b40559e27f7e301782f42a",
-          "signature_value": "57abff6c376b7c2356e5cc79af3991a7d0b858770561e95228fa045ab983ec2f3ab174c382853e734c176dfc8b960088b1d415ee1d8ee667dc4cca81dce12900"
+          "signature_value": "ff2f4ef1f05414876f879299529aea29cda5a3788c63c6135c65c3e84e6e4042aab9f9dcb1df29476563e38545b03ab6b8ee85d51965b0604c31573a15310f0f"
         }
       },
       {
         "schema_version": "genesis.transaction.journal.v0.1",
         "journal_id": "journal_01HFREEBIRTH000000001",
         "sequence": 6,
-        "previous_journal_digest": "sha256:f1adc081ed1bc9b1826abaf7240d1108dc20ba89dc8a4a4e11bcfd971df1847e",
+        "previous_journal_digest": "sha256:d7285cd4d142b01e5c6b4bf505ed22d0595d7287213f98a21155e6eb89d95a0e",
         "operation_kind": "birth",
         "operation_id": "birth_01HFREEBIRTH00000000001",
         "instance_id": "inst_01HFREEDOM0000000000001",
@@ -463,11 +463,11 @@
         "phase": "born",
         "status": "committed",
         "previous_state_digest": "sha256:e6a1d671fe8955ad05c3255616373c38df73b8c39a28dbfd57c1fbb2a07e6382",
-        "candidate_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
-        "finalization_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
-        "commit_marker_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
+        "candidate_state_digest": "sha256:ac1e1bb249fe303092dc0125c40841d46f7276ba740e2fb6f2a6339d5f0964d2",
+        "finalization_digest": "sha256:3c07a5b035ae964ca4d8dfbb534af6b861126f0a1e9f0ab8749ae55271c03c92",
+        "commit_marker_digest": "sha256:3c07a5b035ae964ca4d8dfbb534af6b861126f0a1e9f0ab8749ae55271c03c92",
         "updated_at": "2026-07-16T00:00:00Z",
-        "journal_digest": "sha256:bf2968e0d0d15c8ecb438be0bbf9493e24738da4bf47e74dcddcf49973a43842",
+        "journal_digest": "sha256:6b56ba58b1125f723d5c92a1f4d143c2131e90512d2ebc7d89b2f74923c25b93",
         "signature": {
           "schema_version": "genesis.signature.envelope.v0.1",
           "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -475,10 +475,10 @@
           "signer_id": "body_01HFREEBIRTH000000000001",
           "key_epoch_id": "epoch_01HFREEBIRTH00000000001",
           "signed_domain": "genesis.transaction.journal.signature.v0.1",
-          "signed_digest": "sha256:bf2968e0d0d15c8ecb438be0bbf9493e24738da4bf47e74dcddcf49973a43842",
+          "signed_digest": "sha256:6b56ba58b1125f723d5c92a1f4d143c2131e90512d2ebc7d89b2f74923c25b93",
           "created_at": "2026-07-16T00:00:00Z",
           "public_key_ref": "sha256:d4b7fe287dadd5779f402b30fe5711de83c59251c8b40559e27f7e301782f42a",
-          "signature_value": "c7437ff7c20388566a59f3e10059b97e5c41b748721b0fe137812d7f66370daf4bdd7c1b7473e4e6a9d76e49c4a7e2d7803f0b48c915eb716e5138d9bc7ab20c"
+          "signature_value": "fae4284913f2a70bc539b7724de34f80ea5943eb59bfeda04f82d222c6573a6c185ac1bf47dd6b73fc65aff9fd9daf8e6ddfe346680b4289bb94ebc13c8d5605"
         }
       }
     ],
@@ -769,8 +769,8 @@
     "phase_count": 7,
     "negative_case_count": 23,
     "restart_case_count": 10,
-    "birth_state_digest": "sha256:34a45089ed708d9bd556fa7b24cb1ca680f39311b2528dcc4fc8a3978f91caa2",
-    "receipt_digest": "sha256:e765cd65a8a776f380d7f9fcf5bdafdeda651011868e847898da08409d365827",
+    "birth_state_digest": "sha256:ac1e1bb249fe303092dc0125c40841d46f7276ba740e2fb6f2a6339d5f0964d2",
+    "receipt_digest": "sha256:3c07a5b035ae964ca4d8dfbb534af6b861126f0a1e9f0ab8749ae55271c03c92",
     "active_writer_count": 1
   }
 }

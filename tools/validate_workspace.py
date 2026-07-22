@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from pathlib import Path
+import ast
 import hashlib
 import json
 import re
@@ -103,6 +104,27 @@ def validate_workspace_hygiene() -> list[str]:
                 failures.append(f"unlisted_tracked_file:{relative}")
 
     root_resolved = ROOT.resolve()
+
+    for source in ROOT.rglob("*.py"):
+        if any(part in {".git", "node_modules"} for part in source.parts):
+            continue
+        try:
+            tree = ast.parse(source.read_text(encoding="utf-8"), filename=str(source))
+        except (OSError, SyntaxError, UnicodeError) as error:
+            failures.append(
+                f"python_source_unreadable:{source.relative_to(ROOT)}:{error}"
+            )
+            continue
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute):
+                continue
+            if node.func.attr not in {"read_text", "write_text"}:
+                continue
+            if not any(keyword.arg == "encoding" for keyword in node.keywords):
+                failures.append(
+                    f"python_text_encoding_implicit:{source.relative_to(ROOT)}:{node.lineno}"
+                )
+
     for markdown in ROOT.rglob("*.md"):
         if any(part in {".git", "node_modules"} for part in markdown.parts):
             continue
@@ -303,7 +325,7 @@ def main() -> int:
         return 1
     print("OK behavior parity cases")
     print("OK workspace structure")
-    print("OK workspace hygiene and Markdown links")
+    print("OK workspace hygiene, explicit Python text encodings, and Markdown links")
     print("OK JSON syntax")
     print("OK hashing vectors")
     print("OK invalid-case reference checks")

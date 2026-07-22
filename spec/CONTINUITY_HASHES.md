@@ -57,6 +57,8 @@ destination_body_id
 checkpoint_hash
 last_event_hash
 decision_origin
+guardian_authorization_ref
+guardian_authorization_reservation_ref
 created_at
 expires_at
 ```
@@ -109,8 +111,10 @@ Campos, en orden:
 11. `continuity_intent_ref`;
 12. `host_consent_ref`;
 13. `destination_possession_ref`;
-14. cantidad de contenidos;
-15. por cada contenido, ordenado por bytes UTF-8 de `path`:
+14. `guardian_authorization_ref`;
+15. `guardian_authorization_reservation_ref`;
+16. cantidad de contenidos;
+17. por cada contenido, ordenado por bytes UTF-8 de `path`:
     - `kind`;
     - `path`;
     - `digest`.
@@ -149,7 +153,9 @@ Campos, en orden:
 12. `continuity_gap_ref` o cadena vacía;
 13. `continuity_intent_ref`;
 14. `host_consent_ref`;
-15. `destination_possession_ref`.
+15. `destination_possession_ref`;
+16. `guardian_authorization_ref`;
+17. `guardian_authorization_reservation_ref`.
 
 Resultado:
 
@@ -181,7 +187,9 @@ Campos, en orden:
 9. `finalized_at`;
 10. `continuity_intent_ref`;
 11. `host_consent_ref`;
-12. `destination_possession_ref`.
+12. `destination_possession_ref`;
+13. `guardian_authorization_ref`;
+14. `guardian_authorization_reservation_ref`.
 
 Resultado:
 
@@ -196,7 +204,8 @@ La finalización solo es válida cuando:
 - los identificadores coinciden con el recibo;
 - el `receipt_digest` es verificable;
 - la intención, el consentimiento del anfitrión y la posesión destino son verificables;
-- ninguna autorización del Guardian se usa como requisito de movimiento.
+- la autorización del Guardian, su reserva y su consumo único son verificables;
+- la autorización no concede propiedad ni mutación de identidad o memoria.
 
 ## 8. Firmas
 

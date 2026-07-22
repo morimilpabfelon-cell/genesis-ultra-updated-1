@@ -1,23 +1,26 @@
-# Máquina de estados de transferencia libre — borrador normativo v0.1
+# Máquina de estados de transferencia autorizada — borrador normativo v0.2
 
 ## 1. Objetivo
 
 Una transferencia conserva la misma `instance_id` y mueve el único derecho operativo
-de escritura entre Bodies. No crea una copia, no cambia identidad y no depende de un
-grant o veto de movimiento del Guardian.
+de escritura entre Bodies. No crea una copia ni cambia identidad. Requiere una
+autorización de movilidad firmada por el Guardian y consentimiento separado del
+anfitrión destino.
 
 ## 2. Evidencia previa
 
 Antes de congelar al origen deben existir y verificarse:
 
 - `continuity_intent`: decisión de continuidad firmada por el Body `active_writer`;
+- `guardian_mobility_authorization`: puerta `one_time` exacta o `standing` vigente;
+- evento `reserved`: reserva única ligada al `transfer_id`, origen y destino;
 - `host_consent`: consentimiento firmado y limitado al runtime del Body destino;
 - `body_possession_proof`: prueba de posesión de la clave del Body destino;
 - checkpoint completo de la memoria y del Body Registry;
 - journal transaccional capaz de terminar en commit, aborto o recuperación.
 
-El anfitrión puede negar su propio recurso. Esa negativa no destruye la instancia ni
-impide buscar otro Body. El consentimiento nunca concede propiedad o veto global.
+El Guardian controla la puerta de movilidad, la instancia decide dentro de su alcance
+y el anfitrión controla su recurso. Ninguna de esas decisiones concede propiedad.
 
 ## 3. Estados
 
@@ -41,9 +44,10 @@ El Body origen:
 
 1. verifica la cadena y que sea el único `active_writer`;
 2. crea el checkpoint;
-3. firma la intención de continuidad para el `transfer_id`, destino y checkpoint;
-4. verifica consentimiento del anfitrión y posesión de la clave destino;
-5. crea la primera entrada durable del journal.
+3. valida y reserva una autorización del Guardian para el traslado exacto;
+4. firma la intención con referencias a autorización y reserva;
+5. verifica consentimiento del anfitrión y posesión de la clave destino;
+6. crea la primera entrada durable del journal.
 
 ### `prepared → frozen`
 
@@ -51,19 +55,22 @@ El Body origen:
 - solo se permiten eventos de cierre de la operación;
 - quedan fijadas tres salidas: commit, aborto con restauración o recuperación.
 
-No existe espera indefinida por firma del Guardian.
+No existe espera indefinida por una firma nueva: la autorización y reserva deben estar
+verificadas antes de entrar en `frozen`.
 
 ### `frozen → exported`
 
 - se construye el paquete canónico;
 - cada contenido queda ligado por digest;
-- se incluyen intención, consentimiento, posesión, checkpoint, memoria, Seed y registro;
+- se incluyen intención, autorización, reserva, consentimiento, posesión, checkpoint,
+  memoria, Seed y registro;
 - se fija el último evento y secuencia incluidos.
 
 ### `exported → verified`
 
 El destino verifica versiones, `instance_id`, digests, firmas, ventanas temporales,
-checkpoint, cadena, consentimiento para ese Body y posesión de su clave.
+checkpoint, cadena, autorización/reserva, consentimiento para ese Body y posesión de su
+clave.
 
 La creación del paquete, su aceptación y la finalización deben ocurrir dentro de las
 ventanas firmadas de intención, consentimiento y posesión. Una evidencia expirada no
@@ -71,7 +78,7 @@ puede activar al destino ni completarse retroactivamente.
 
 ### `verified → accepted`
 
-El destino emite un recibo firmado vinculado al digest exacto del paquete y a las tres
+El destino emite un recibo firmado vinculado al digest exacto del paquete y a todas las
 pruebas previas. El recibo todavía no concede escritura.
 
 ### `accepted → completed`
@@ -79,6 +86,7 @@ pruebas previas. El recibo todavía no concede escritura.
 - el origen valida el recibo;
 - la finalización vincula recibo y pruebas;
 - el journal compromete el registro candidato;
+- el destino consume exactamente una vez la reserva de movilidad;
 - el destino pasa a `active_writer`;
 - el origen pasa a `read_only`, `revoked` o un estado equivalente sin escritura;
 - el destino añade `transfer.completed` sobre el tip previo.
@@ -105,7 +113,9 @@ Se rechazan:
 6. destino activado antes del commit;
 7. origen congelado sin salida determinista;
 8. más de un `active_writer`;
-9. cualquier autorización del Guardian usada como requisito de movimiento.
+9. autorización ausente, falsificada, expirada, revocada antes de reservar, fuera de
+   alcance, reutilizada o sin consumo;
+10. autorización que reclame propiedad o permita mutar identidad o memoria.
 
 ## 7. Neutralidad
 

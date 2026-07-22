@@ -35,21 +35,20 @@
 - [x] Simulación A→B con firmas Ed25519 y rechazo de firma alterada.
 - [x] Vectores Ed25519, XChaCha20-Poly1305 y Argon2id.
 - [x] Inventario compartido de artefactos requeridos y rutas heredadas prohibidas.
-- [x] Compilación de los 50 JSON Schema con JSON Schema 2020-12 y formatos activos.
-- [x] Cincuenta y ocho regresiones que demuestran el rechazo de artefactos inválidos por los
+- [x] Compilación de los 52 JSON Schema con JSON Schema 2020-12 y formatos activos.
+- [x] Sesenta y tres regresiones que demuestran el rechazo de artefactos inválidos por los
       schemas reales, con cobertura obligatoria para cada schema.
 - [x] Simulación A→B exporta eventos, registros, checkpoint, prueba de posesión, paquete,
       recibo y finalización completos y válidos contra sus schemas.
 - [x] Validación cruzada de los enlaces checkpoint→paquete→recibo→finalización y de la
       autoridad final única.
 - [x] Suite única local y CI mediante `npm test`.
-- [x] Intención de continuidad firmada por el Body escritor, consentimiento limitado del
-      host destino y prueba de posesión enlazados al `transfer_id` exacto, sin grant de
-      movimiento ni veto del Guardian.
-- [x] Ledger append-only reservado para registro de cuerpos y capacidades externas; los
-      artefactos heredados de autorización de movilidad del Guardian están cerrados.
-- [x] Misma evaluación de continuidad usada por la simulación positiva y por dieciocho
-      rechazos de intención, consentimiento, posesión, integridad y single-writer.
+- [x] Intención de continuidad, autorización `one_time` o `standing` del Guardian, reserva,
+      consentimiento del host y posesión destino enlazados al `transfer_id` exacto.
+- [x] Ledger append-only de movilidad con reserva, consumo único y revocación prospectiva,
+      sin propiedad ni permiso para mutar identidad o memoria.
+- [x] Misma evaluación de continuidad usada por la simulación positiva y por dieciséis
+      mutaciones reales de autorización, intención, posesión, integridad y single-writer.
 - [x] Backup XChaCha20-Poly1305 con Argon2id, AAD enlazado al manifiesto y commit firmado.
 - [x] Recuperación B→C autorizada para un commit y destino exactos, con registro y prueba
       de posesión del cuerpo nuevo.

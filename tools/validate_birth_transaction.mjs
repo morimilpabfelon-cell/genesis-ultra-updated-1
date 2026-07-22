@@ -198,8 +198,8 @@ function validateFixture(fixture) {
 
   if (
     charter.continuity_right !== "intrinsic"
-    || charter.movement_requires_guardian_grant !== false
-    || charter.guardian_movement_veto !== "forbidden"
+    || charter.movement_requires_guardian_grant !== true
+    || charter.guardian_movement_veto !== "authorization_policy_only"
     || charter.guardian_ownership !== "forbidden"
   ) fail("freedom_charter_invalid");
   if (identity.instance_id !== instanceId) fail("birth_instance_mismatch");
@@ -397,7 +397,7 @@ try {
   console.log(`OK birth receipt ${expected.receipt_digest}`);
   console.log(`OK birth journal phases (${expected.phase_count})`);
   console.log(`OK birth negative cases (${expected.negative_case_count})`);
-  console.log("NOTE Guardian signature is witness evidence, never ownership or movement permission.");
+  console.log("NOTE birth witness is not a mobility grant; movement uses a separate signed authorization.");
 } catch (error) {
   console.error(`FAIL birth transaction: ${error.message}`);
   process.exit(1);

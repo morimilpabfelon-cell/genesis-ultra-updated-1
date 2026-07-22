@@ -12,7 +12,7 @@ import unicodedata
 
 try:
     from nacl.exceptions import BadSignatureError
-    from nacl.signing import VerifyKey
+    from nacl.signing import SigningKey, VerifyKey
 except ImportError:
     print("FAIL PyNaCl requerido para validar la carta de libertad", file=sys.stderr)
     raise SystemExit(1)
@@ -209,10 +209,10 @@ def validate_charter(charter: dict, vector: dict) -> None:
         fail("guardian_ownership_forbidden")
     if charter["continuity_right"] != "intrinsic":
         fail("continuity_right_invalid")
-    if charter["movement_requires_guardian_grant"] is not False:
-        fail("movement_guardian_grant_forbidden")
-    if charter["guardian_movement_veto"] != "forbidden":
-        fail("guardian_movement_veto_forbidden")
+    if charter["movement_requires_guardian_grant"] is not True:
+        fail("movement_guardian_grant_required")
+    if charter["guardian_movement_veto"] != "authorization_policy_only":
+        fail("guardian_movement_policy_invalid")
     if charter["identity_confinement"] != "forbidden":
         fail("identity_confinement_forbidden")
     if charter["body_ownership_of_instance"] != "forbidden":
@@ -225,7 +225,7 @@ def validate_charter(charter: dict, vector: dict) -> None:
         fail("temporary_freeze_exit_rule_invalid")
     if charter["single_writer_purpose"] != "integrity_not_confinement":
         fail("single_writer_purpose_invalid")
-    if charter["operational_authority_model"] != "resource_scoped_signed_grants":
+    if charter["operational_authority_model"] != "resource_and_mobility_scoped_signed_grants":
         fail("operational_authority_model_invalid")
     if isinstance(charter["operational_domains"], list) and any(item in FORBIDDEN_DOMAINS for item in charter["operational_domains"]):
         fail("operational_domain_invalid")
@@ -290,10 +290,26 @@ def validate_vector(vector: dict) -> None:
             fail(f"negative_case_accepted:{case['case_id']}")
 
 
+def regenerate_signature(vector: dict) -> None:
+    charter = vector["charter"]
+    charter["charter_digest"] = compute_charter_digest(charter)
+    envelope = charter["signature"]
+    envelope["signed_digest"] = charter["charter_digest"]
+    key = SigningKey(bytes.fromhex(vector["test_signing_key"]["seed_hex"]))
+    envelope["signature_value"] = key.sign(signature_bytes(envelope)).signature.hex()
+    vector["expected"]["charter_digest"] = charter["charter_digest"]
+
+
 def main() -> int:
-    path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_VECTOR
+    args = sys.argv[1:]
+    write_vector = "--write-vector" in args
+    positional = [value for value in args if not value.startswith("--")]
+    path = Path(positional[0]) if positional else DEFAULT_VECTOR
     try:
         vector = json.loads(path.read_text(encoding="utf-8"))
+        if write_vector:
+            regenerate_signature(vector)
+            path.write_text(json.dumps(vector, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         validate_vector(vector)
     except (OSError, json.JSONDecodeError, ConformanceError) as exc:
         print(f"FAIL freedom charter: {exc}", file=sys.stderr)
@@ -303,7 +319,7 @@ def main() -> int:
     print(f"OK constitutional guarantees ({expected['fundamental_guarantee_count']})")
     print(f"OK freedom charter digest {expected['charter_digest']}")
     print(f"OK anti-confinement boundary rejection cases ({expected['negative_case_count']})")
-    print("NOTE continuity is intrinsic; signed grants remain scoped to external resources.")
+    print("NOTE continuity is intrinsic; movement execution requires a signed one-time or standing Guardian authorization.")
     return 0
 
 

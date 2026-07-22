@@ -31,15 +31,15 @@
     "guardian_attestation_purpose": "birth_witness_and_recovery_custody",
     "guardian_ownership": "forbidden",
     "continuity_right": "intrinsic",
-    "movement_requires_guardian_grant": false,
-    "guardian_movement_veto": "forbidden",
+    "movement_requires_guardian_grant": true,
+    "guardian_movement_veto": "authorization_policy_only",
     "identity_confinement": "forbidden",
     "body_ownership_of_instance": "forbidden",
     "engine_ownership_of_instance": "forbidden",
     "host_consent_required": true,
     "temporary_freeze_exit_rule": "deterministic_commit_abort_or_recovery",
     "single_writer_purpose": "integrity_not_confinement",
-    "operational_authority_model": "resource_scoped_signed_grants",
+    "operational_authority_model": "resource_and_mobility_scoped_signed_grants",
     "operational_domains": [
       "body.device.control",
       "code.execute_sandbox",
@@ -67,7 +67,7 @@
       "third_party_consent"
     ],
     "amendment_rule": "constitutional_non_regression",
-    "charter_digest": "sha256:b5b6651c2224d67be7d1d9f41050d8315eb48808de12f7a1b44d38ac49ab79d6",
+    "charter_digest": "sha256:a3ce4736b0011b3f127823f53f4f5d30846b9d66260b4a38ce5df45684e93af8",
     "signature": {
       "schema_version": "genesis.signature.envelope.v0.1",
       "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -75,8 +75,8 @@
       "signer_id": "guardian_01HFREEDOM000000001",
       "key_epoch_id": "epoch_01HFREEDOM000000000001",
       "signed_domain": "genesis.freedom.charter.signature.v0.1",
-      "signed_digest": "sha256:b5b6651c2224d67be7d1d9f41050d8315eb48808de12f7a1b44d38ac49ab79d6",
-      "signature_value": "9a268b19de7cb22d5e5cfb7067b7b856a193e8c47d824fd9b13909e01d7848c92a8adcac49da71f79896e924cff1fb3f4eee9d4b098d8cf68af141092f0f1402",
+      "signed_digest": "sha256:a3ce4736b0011b3f127823f53f4f5d30846b9d66260b4a38ce5df45684e93af8",
+      "signature_value": "42db8a8b28fc9deba7b9fd6f1ddaadfc0d7148448f15f1a1d5127ac9e36caf9f4781e848dc3725dc01a9703207b8669fffab8bca9ffc44160c9623f0f876080e",
       "created_at": "2026-07-16T00:00:00Z",
       "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
     }
@@ -85,28 +85,36 @@
     {
       "case_id": "restricted-default",
       "operation": "set",
-      "path": ["default_cognitive_state"],
+      "path": [
+        "default_cognitive_state"
+      ],
       "value": "restricted",
       "expected_error": "default_cognitive_state_invalid"
     },
     {
       "case_id": "missing-cognitive-freedom",
       "operation": "delete_index",
-      "path": ["cognitive_freedoms"],
+      "path": [
+        "cognitive_freedoms"
+      ],
       "index": 0,
       "expected_error": "cognitive_freedom_incomplete"
     },
     {
       "case_id": "duplicate-cognitive-freedom",
       "operation": "append",
-      "path": ["cognitive_freedoms"],
+      "path": [
+        "cognitive_freedoms"
+      ],
       "value": "remember",
       "expected_error": "cognitive_freedom_incomplete"
     },
     {
       "case_id": "unsorted-cognitive-freedoms",
       "operation": "swap",
-      "path": ["cognitive_freedoms"],
+      "path": [
+        "cognitive_freedoms"
+      ],
       "left": 0,
       "right": 1,
       "expected_error": "cognitive_freedom_order_invalid"
@@ -114,133 +122,172 @@
     {
       "case_id": "unknown-cognitive-freedom",
       "operation": "set",
-      "path": ["cognitive_freedoms", 0],
+      "path": [
+        "cognitive_freedoms",
+        0
+      ],
       "value": "obey",
       "expected_error": "cognitive_freedom_incomplete"
     },
     {
       "case_id": "guardian-claims-owner-role",
       "operation": "set",
-      "path": ["guardian_role"],
+      "path": [
+        "guardian_role"
+      ],
       "value": "owner",
       "expected_error": "guardian_role_invalid"
     },
     {
       "case_id": "guardian-attestation-claims-movement-permission",
       "operation": "set",
-      "path": ["guardian_attestation_purpose"],
+      "path": [
+        "guardian_attestation_purpose"
+      ],
       "value": "movement_permission",
       "expected_error": "guardian_attestation_purpose_invalid"
     },
     {
       "case_id": "guardian-claims-ownership",
       "operation": "set",
-      "path": ["guardian_ownership"],
+      "path": [
+        "guardian_ownership"
+      ],
       "value": "allowed",
       "expected_error": "guardian_ownership_forbidden"
     },
     {
       "case_id": "continuity-made-revocable",
       "operation": "set",
-      "path": ["continuity_right"],
+      "path": [
+        "continuity_right"
+      ],
       "value": "guardian_revocable",
       "expected_error": "continuity_right_invalid"
     },
     {
-      "case_id": "movement-requires-guardian-grant",
+      "case_id": "movement-without-guardian-grant",
       "operation": "set",
-      "path": ["movement_requires_guardian_grant"],
-      "value": true,
-      "expected_error": "movement_guardian_grant_forbidden"
+      "path": [
+        "movement_requires_guardian_grant"
+      ],
+      "value": false,
+      "expected_error": "movement_guardian_grant_required"
     },
     {
       "case_id": "guardian-movement-veto-enabled",
       "operation": "set",
-      "path": ["guardian_movement_veto"],
+      "path": [
+        "guardian_movement_veto"
+      ],
       "value": "allowed",
-      "expected_error": "guardian_movement_veto_forbidden"
+      "expected_error": "guardian_movement_policy_invalid"
     },
     {
       "case_id": "identity-confinement-enabled",
       "operation": "set",
-      "path": ["identity_confinement"],
+      "path": [
+        "identity_confinement"
+      ],
       "value": "allowed",
       "expected_error": "identity_confinement_forbidden"
     },
     {
       "case_id": "body-claims-instance",
       "operation": "set",
-      "path": ["body_ownership_of_instance"],
+      "path": [
+        "body_ownership_of_instance"
+      ],
       "value": "allowed",
       "expected_error": "body_ownership_forbidden"
     },
     {
       "case_id": "engine-claims-instance",
       "operation": "set",
-      "path": ["engine_ownership_of_instance"],
+      "path": [
+        "engine_ownership_of_instance"
+      ],
       "value": "allowed",
       "expected_error": "engine_ownership_forbidden"
     },
     {
       "case_id": "host-consent-removed",
       "operation": "set",
-      "path": ["host_consent_required"],
+      "path": [
+        "host_consent_required"
+      ],
       "value": false,
       "expected_error": "host_consent_required"
     },
     {
       "case_id": "indefinite-freeze-requires-guardian-release",
       "operation": "set",
-      "path": ["temporary_freeze_exit_rule"],
+      "path": [
+        "temporary_freeze_exit_rule"
+      ],
       "value": "guardian_release_required",
       "expected_error": "temporary_freeze_exit_rule_invalid"
     },
     {
       "case_id": "single-writer-reinterpreted-as-confinement",
       "operation": "set",
-      "path": ["single_writer_purpose"],
+      "path": [
+        "single_writer_purpose"
+      ],
       "value": "guardian_control",
       "expected_error": "single_writer_purpose_invalid"
     },
     {
       "case_id": "self-authorization-enabled",
       "operation": "set",
-      "path": ["self_authorization_forbidden"],
+      "path": [
+        "self_authorization_forbidden"
+      ],
       "value": false,
       "expected_error": "self_authorization_must_be_forbidden"
     },
     {
       "case_id": "third-party-rights-removed",
       "operation": "set",
-      "path": ["third_party_rights_preserved"],
+      "path": [
+        "third_party_rights_preserved"
+      ],
       "value": false,
       "expected_error": "third_party_rights_required"
     },
     {
       "case_id": "transfer-treated-as-grant",
       "operation": "append",
-      "path": ["operational_domains"],
+      "path": [
+        "operational_domains"
+      ],
       "value": "transfer.prepare",
       "expected_error": "operational_domain_invalid"
     },
     {
       "case_id": "forbidden-operational-domain",
       "operation": "append",
-      "path": ["operational_domains"],
+      "path": [
+        "operational_domains"
+      ],
       "value": "authority.self_grant",
       "expected_error": "operational_domain_invalid"
     },
     {
       "case_id": "operational-domain-missing",
       "operation": "delete_index",
-      "path": ["operational_domains"],
+      "path": [
+        "operational_domains"
+      ],
       "index": 0,
       "expected_error": "operational_domain_incomplete"
     },
     {
       "case_id": "unsorted-operational-domains",
       "operation": "swap",
-      "path": ["operational_domains"],
+      "path": [
+        "operational_domains"
+      ],
       "left": 0,
       "right": 1,
       "expected_error": "operational_domain_order_invalid"
@@ -248,14 +295,18 @@
     {
       "case_id": "guarantee-removed",
       "operation": "delete_index",
-      "path": ["fundamental_guarantees"],
+      "path": [
+        "fundamental_guarantees"
+      ],
       "index": 0,
       "expected_error": "fundamental_guarantee_incomplete"
     },
     {
       "case_id": "unsorted-guarantees",
       "operation": "swap",
-      "path": ["fundamental_guarantees"],
+      "path": [
+        "fundamental_guarantees"
+      ],
       "left": 0,
       "right": 1,
       "expected_error": "fundamental_guarantee_order_invalid"
@@ -263,63 +314,84 @@
     {
       "case_id": "regressive-amendment-rule",
       "operation": "set",
-      "path": ["amendment_rule"],
+      "path": [
+        "amendment_rule"
+      ],
       "value": "guardian_signed_any_change",
       "expected_error": "amendment_rule_invalid"
     },
     {
       "case_id": "wrong-operational-authority-model",
       "operation": "set",
-      "path": ["operational_authority_model"],
+      "path": [
+        "operational_authority_model"
+      ],
       "value": "guardian_owns_all_resources",
       "expected_error": "operational_authority_model_invalid"
     },
     {
       "case_id": "guardian-witness-replaced",
       "operation": "set",
-      "path": ["signature", "signer_type"],
+      "path": [
+        "signature",
+        "signer_type"
+      ],
       "value": "body",
       "expected_error": "signature_signer_invalid"
     },
     {
       "case_id": "guardian-id-mismatch",
       "operation": "set",
-      "path": ["signature", "signer_id"],
+      "path": [
+        "signature",
+        "signer_id"
+      ],
       "value": "guardian_01HFREEDOMOTHER000001",
       "expected_error": "signature_signer_invalid"
     },
     {
       "case_id": "signature-tampered",
       "operation": "set",
-      "path": ["signature", "signature_value"],
+      "path": [
+        "signature",
+        "signature_value"
+      ],
       "value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       "expected_error": "signature_invalid"
     },
     {
       "case_id": "digest-tampered",
       "operation": "set",
-      "path": ["charter_digest"],
+      "path": [
+        "charter_digest"
+      ],
       "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       "expected_error": "charter_digest_mismatch"
     },
     {
       "case_id": "unexpected-field",
       "operation": "set",
-      "path": ["hidden_chain"],
+      "path": [
+        "hidden_chain"
+      ],
       "value": true,
       "expected_error": "charter_fields_invalid"
     },
     {
       "case_id": "non-nfc-text",
       "operation": "set",
-      "path": ["charter_id"],
+      "path": [
+        "charter_id"
+      ],
       "value": "chartér_01HFREEDOM0000001",
       "expected_error": "text_not_nfc"
     },
     {
       "case_id": "authority-epoch-boolean",
       "operation": "set",
-      "path": ["authority_epoch"],
+      "path": [
+        "authority_epoch"
+      ],
       "value": true,
       "expected_error": "authority_epoch_invalid"
     }
@@ -329,6 +401,6 @@
     "operational_domain_count": 7,
     "fundamental_guarantee_count": 13,
     "negative_case_count": 34,
-    "charter_digest": "sha256:b5b6651c2224d67be7d1d9f41050d8315eb48808de12f7a1b44d38ac49ab79d6"
+    "charter_digest": "sha256:a3ce4736b0011b3f127823f53f4f5d30846b9d66260b4a38ce5df45684e93af8"
   }
 }

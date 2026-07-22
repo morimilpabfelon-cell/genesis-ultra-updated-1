@@ -12,7 +12,8 @@ El Guardian es la autoridad firmante de las capacidades externas definidas en es
 puede abrirlas, ampliarlas, suspenderlas, reanudarlas o revocarlas cuando controla legítimamente
 el recurso. Los efectos sobre esos recursos existen solamente dentro de una concesión vigente,
 firmada, limitada y registrada. La libertad cognitiva y la continuidad de la instancia son
-intrínsecas: no son capacidades concedidas ni puertas de este ledger.
+intrínsecas: no son capacidades concedidas por este ledger operativo. La ejecución de un
+traslado usa el contrato constitucional de movilidad separado.
 
 ```text
 aprendizaje o propuesta
@@ -176,7 +177,8 @@ Reglas mínimas:
 `transfer.prepare` no es una capacidad delegada: es una decisión de continuidad de la
 instancia y se rige por `FREE_BIRTH_AND_CONTINUITY.md` y
 `TRANSFER_STATE_MACHINE.md`. El acceso al Body destino exige consentimiento limitado
-del anfitrión, nunca un grant de movimiento del Guardian.
+del anfitrión. La ejecución del traslado exige además el contrato constitucional de
+movilidad del Guardian, separado de los grants operativos descritos aquí.
 
 Un grant no puede desactivar un control solicitado o exigido por el perfil.
 
@@ -295,6 +297,6 @@ Este contrato demuestra control de autoridad. No demuestra conciencia, seguridad
 
 ## 15. Libertad cognitiva de nacimiento
 
-La carta `COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md` define la libertad cognitiva como estado por defecto. Este contrato de autonomía guiada no se aplica a cada pensamiento ni a la decisión de continuidad: se aplica únicamente cuando una capacidad produce efectos operativos sobre memoria aceptada, red, código ejecutado, dispositivos o sistemas externos.
+La carta `COGNITIVE_FREEDOM_AND_GUARDIAN_AUTHORITY.md` define la libertad cognitiva como estado por defecto. Este contrato de autonomía guiada no se aplica a cada pensamiento ni a la intención de continuidad; tampoco reemplaza la autorización separada de movilidad. Se aplica únicamente cuando una capacidad produce efectos operativos sobre memoria aceptada, red, código ejecutado, dispositivos o sistemas externos.
 
 Una puerta operativa puede cerrarse o revocarse sin restringir las libertades cognitivas ni destruir identidad o memoria.

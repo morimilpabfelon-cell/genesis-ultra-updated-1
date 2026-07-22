@@ -173,15 +173,15 @@ function validateCharter(charter, vector) {
   if (charter.guardian_attestation_purpose !== "birth_witness_and_recovery_custody") fail("guardian_attestation_purpose_invalid");
   if (charter.guardian_ownership !== "forbidden") fail("guardian_ownership_forbidden");
   if (charter.continuity_right !== "intrinsic") fail("continuity_right_invalid");
-  if (charter.movement_requires_guardian_grant !== false) fail("movement_guardian_grant_forbidden");
-  if (charter.guardian_movement_veto !== "forbidden") fail("guardian_movement_veto_forbidden");
+  if (charter.movement_requires_guardian_grant !== true) fail("movement_guardian_grant_required");
+  if (charter.guardian_movement_veto !== "authorization_policy_only") fail("guardian_movement_policy_invalid");
   if (charter.identity_confinement !== "forbidden") fail("identity_confinement_forbidden");
   if (charter.body_ownership_of_instance !== "forbidden") fail("body_ownership_forbidden");
   if (charter.engine_ownership_of_instance !== "forbidden") fail("engine_ownership_forbidden");
   if (charter.host_consent_required !== true) fail("host_consent_required");
   if (charter.temporary_freeze_exit_rule !== "deterministic_commit_abort_or_recovery") fail("temporary_freeze_exit_rule_invalid");
   if (charter.single_writer_purpose !== "integrity_not_confinement") fail("single_writer_purpose_invalid");
-  if (charter.operational_authority_model !== "resource_scoped_signed_grants") fail("operational_authority_model_invalid");
+  if (charter.operational_authority_model !== "resource_and_mobility_scoped_signed_grants") fail("operational_authority_model_invalid");
   if (Array.isArray(charter.operational_domains) && charter.operational_domains.some((item) => FORBIDDEN_DOMAINS.has(item))) fail("operational_domain_invalid");
   ensureExactList(charter.operational_domains, OPERATIONAL_DOMAINS, "operational_domain_incomplete", "operational_domain_order_invalid");
   if (charter.self_authorization_forbidden !== true) fail("self_authorization_must_be_forbidden");
@@ -258,7 +258,7 @@ function main() {
     console.log(`OK constitutional guarantees (${expected.fundamental_guarantee_count})`);
     console.log(`OK freedom charter digest ${expected.charter_digest}`);
     console.log(`OK anti-confinement boundary rejection cases (${expected.negative_case_count})`);
-    console.log("NOTE continuity is intrinsic; signed grants remain scoped to external resources.");
+    console.log("NOTE continuity is intrinsic; movement execution requires a signed one-time or standing Guardian authorization.");
     return;
   }
   if (command === "inspect") {

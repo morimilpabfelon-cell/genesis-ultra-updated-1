@@ -17,12 +17,12 @@
       "artifact": {}
     },
     {
-      "case_id": "guardian-mobility-authorization-tombstoned",
+      "case_id": "guardian-mobility-authorization-requires-complete-contract",
       "schema": "guardian_authorization.schema.json",
       "artifact": {}
     },
     {
-      "case_id": "guardian-mobility-ledger-tombstoned",
+      "case_id": "guardian-mobility-event-requires-complete-contract",
       "schema": "guardian_authority_event.schema.json",
       "artifact": {}
     },
@@ -892,6 +892,35 @@
       }
     },
     {
+      "case_id": "transfer-package-requires-destination-body",
+      "schema": "transfer_package.schema.json",
+      "expected_error_keyword": "required",
+      "artifact": {
+        "schema_version": "genesis.transfer.package.v0.1",
+        "transfer_id": "xfer_01HSCHEMA000000000000001",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "source_body_id": "body_01HSCHEMA000000000000001",
+        "mode": "transfer",
+        "created_at": "2026-07-14T00:00:00Z",
+        "checkpoint_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "last_event_hash": "evsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "continuity_intent_ref": "intent_01HSCHEMA000000000001",
+        "host_consent_ref": "consent_01HSCHEMA00000000001",
+        "destination_possession_ref": "proof_01HSCHEMA000000000001",
+        "guardian_authorization_ref": "authorization_01HSCHEMA0000001",
+        "guardian_authorization_reservation_ref": "mobevent_01HSCHEMA000000001",
+        "continuity_status": "complete",
+        "contents": [
+          {
+            "kind": "memory",
+            "path": "memory/events.json",
+            "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        ],
+        "package_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      }
+    },
+    {
       "case_id": "receipt-known-gap-without-reference",
       "schema": "transfer_receipt.schema.json",
       "artifact": {
@@ -910,6 +939,30 @@
         "host_consent_ref": "consent_01HSCHEMA00000000001",
         "destination_possession_ref": "proof_01HSCHEMA000000000001",
         "continuity_gap_ref": null,
+        "receipt_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      }
+    },
+    {
+      "case_id": "transfer-receipt-requires-destination-signature",
+      "schema": "transfer_receipt.schema.json",
+      "expected_error_keyword": "required",
+      "artifact": {
+        "schema_version": "genesis.transfer.receipt.v0.1",
+        "transfer_id": "xfer_01HSCHEMA000000000000001",
+        "instance_id": "inst_01HSCHEMA000000000000001",
+        "source_body_id": "body_01HSCHEMA000000000000001",
+        "destination_body_id": "body_01HSCHEMA000000000000002",
+        "accepted_package_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "accepted_checkpoint_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "accepted_last_event_hash": "evsha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "accepted_last_sequence": 2,
+        "accepted_at": "2026-07-14T00:00:00Z",
+        "continuity_status": "complete",
+        "continuity_intent_ref": "intent_01HSCHEMA000000000001",
+        "host_consent_ref": "consent_01HSCHEMA00000000001",
+        "destination_possession_ref": "proof_01HSCHEMA000000000001",
+        "guardian_authorization_ref": "authorization_01HSCHEMA0000001",
+        "guardian_authorization_reservation_ref": "mobevent_01HSCHEMA000000001",
         "receipt_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
       }
     },
@@ -1656,6 +1709,40 @@
       }
     },
     {
+      "case_id": "transfer-finalization-requires-source-acknowledgement",
+      "schema": "transfer_finalization.schema.json",
+      "expected_error_keyword": "required",
+      "artifact": {
+        "schema_version": "genesis.transfer.finalization.v0.1",
+        "transfer_id": "xfer_01HSIM0000000000000001",
+        "instance_id": "inst_01HSIMULATION0000000001",
+        "source_body_id": "body_01HSIM_A000000000000001",
+        "destination_body_id": "body_01HSIM_B000000000000001",
+        "receipt_digest": "sha256:477b33e1ad04f6380f929ab8840417be4cea008c2b043ed7a48b9223c49e59e2",
+        "source_final_status": "revoked",
+        "destination_final_status": "active_writer",
+        "finalized_at": "2026-07-12T01:06:00Z",
+        "continuity_intent_ref": "intent_01HSIM000000000000001",
+        "host_consent_ref": "consent_01HSIM00000000000001",
+        "destination_possession_ref": "proof_01HSIM_B00000000000001",
+        "guardian_authorization_ref": "authorization_01HSIM_MOBILITY0001",
+        "guardian_authorization_reservation_ref": "mobevent_01HSIM_MOBILITY_RESERVE",
+        "finalization_digest": "sha256:3753db501fdb9630e4d48e7df616ccabbf945d08b0a59ca17007496fca55a936",
+        "destination_acknowledgement": {
+          "schema_version": "genesis.signature.envelope.v0.1",
+          "signature_profile": "genesis.signature.ed25519.v0.1",
+          "signer_type": "body",
+          "signer_id": "body_01HSIM_B000000000000001",
+          "key_epoch_id": "epoch_01HSIM_B00000000000001",
+          "signed_domain": "genesis.transfer.finalization.signature.v0.1",
+          "signed_digest": "sha256:3753db501fdb9630e4d48e7df616ccabbf945d08b0a59ca17007496fca55a936",
+          "created_at": "2026-07-12T01:06:00Z",
+          "public_key_ref": "sha256:b28baab33e1f95a78c7e9547554c3e95a2e38030a2c64ce45378f15d33a4ddd6",
+          "signature_value": "ba13c556f750c49481c17e328d135825924670b3582b0d368b16c5191c88c5aaaf028dbefe8a31dddf41b54610a7ea6a50c062f72beea7cc68d9abe5a7eabf0f"
+        }
+      }
+    },
+    {
       "case_id": "transfer-finalization-rejects-unexpected-field",
       "schema": "transfer_finalization.schema.json",
       "expected_error_keyword": "additionalProperties",
@@ -1672,6 +1759,8 @@
         "continuity_intent_ref": "intent_01HSIM000000000000001",
         "host_consent_ref": "consent_01HSIM00000000000001",
         "destination_possession_ref": "proof_01HSIM_B00000000000001",
+        "guardian_authorization_ref": "authorization_01HSIM_MOBILITY0001",
+        "guardian_authorization_reservation_ref": "mobevent_01HSIM_MOBILITY_RESERVE",
         "finalization_digest": "sha256:3753db501fdb9630e4d48e7df616ccabbf945d08b0a59ca17007496fca55a936",
         "source_acknowledgement": {
           "schema_version": "genesis.signature.envelope.v0.1",
@@ -2824,15 +2913,15 @@
         "guardian_attestation_purpose": "birth_witness_and_recovery_custody",
         "guardian_ownership": "forbidden",
         "continuity_right": "intrinsic",
-        "movement_requires_guardian_grant": false,
-        "guardian_movement_veto": "forbidden",
+        "movement_requires_guardian_grant": true,
+        "guardian_movement_veto": "authorization_policy_only",
         "identity_confinement": "forbidden",
         "body_ownership_of_instance": "forbidden",
         "engine_ownership_of_instance": "forbidden",
         "host_consent_required": true,
         "temporary_freeze_exit_rule": "deterministic_commit_abort_or_recovery",
         "single_writer_purpose": "integrity_not_confinement",
-        "operational_authority_model": "resource_scoped_signed_grants",
+        "operational_authority_model": "resource_and_mobility_scoped_signed_grants",
         "operational_domains": [
           "body.device.control",
           "code.execute_sandbox",
@@ -2860,7 +2949,7 @@
           "third_party_consent"
         ],
         "amendment_rule": "constitutional_non_regression",
-        "charter_digest": "sha256:b5b6651c2224d67be7d1d9f41050d8315eb48808de12f7a1b44d38ac49ab79d6",
+        "charter_digest": "sha256:a3ce4736b0011b3f127823f53f4f5d30846b9d66260b4a38ce5df45684e93af8",
         "signature": {
           "schema_version": "genesis.signature.envelope.v0.1",
           "signature_profile": "genesis.signature.ed25519.v0.1",
@@ -2868,8 +2957,8 @@
           "signer_id": "guardian_01HFREEDOM000000001",
           "key_epoch_id": "epoch_01HFREEDOM000000000001",
           "signed_domain": "genesis.freedom.charter.signature.v0.1",
-          "signed_digest": "sha256:b5b6651c2224d67be7d1d9f41050d8315eb48808de12f7a1b44d38ac49ab79d6",
-          "signature_value": "9a268b19de7cb22d5e5cfb7067b7b856a193e8c47d824fd9b13909e01d7848c92a8adcac49da71f79896e924cff1fb3f4eee9d4b098d8cf68af141092f0f1402",
+          "signed_digest": "sha256:a3ce4736b0011b3f127823f53f4f5d30846b9d66260b4a38ce5df45684e93af8",
+          "signature_value": "42db8a8b28fc9deba7b9fd6f1ddaadfc0d7148448f15f1a1d5127ac9e36caf9f4781e848dc3725dc01a9703207b8669fffab8bca9ffc44160c9623f0f876080e",
           "created_at": "2026-07-16T00:00:00Z",
           "public_key_ref": "sha256:d2f381d7b0b5f1d39239f186fdee4dd3bdba42ce9448709c1d54741131e7f814"
         },

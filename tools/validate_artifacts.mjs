@@ -7,6 +7,8 @@ import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
+import { validateTransferAuthorization } from "./validate_guardian_mobility.mjs";
+
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SCHEMA_DIR = path.join(ROOT, "schemas");
 const INVALID_CASES = path.join(ROOT, "conformance/schema_invalid_cases.json");
@@ -17,6 +19,10 @@ const INSTANCE_IDENTITY_VECTORS = path.join(
   "conformance/instance_identity_vectors.json"
 );
 const BIRTH_VECTORS = path.join(ROOT, "conformance/birth_vectors.json");
+const GUARDIAN_MOBILITY_VECTORS = path.join(
+  ROOT,
+  "conformance/guardian_mobility_vectors.json"
+);
 const SENSE_OBSERVATION_VECTORS = path.join(
   ROOT,
   "conformance/sense_observation_vectors.json"
@@ -479,6 +485,8 @@ function computeContinuityIntentDigest(intent) {
     intent.checkpoint_hash,
     intent.last_event_hash,
     intent.decision_origin,
+    intent.guardian_authorization_ref,
+    intent.guardian_authorization_reservation_ref,
     intent.created_at,
     intent.expires_at
   ]);
@@ -519,6 +527,8 @@ function computeTransferPackageDigest(pkg) {
     pkg.continuity_intent_ref,
     pkg.host_consent_ref,
     pkg.destination_possession_ref,
+    pkg.guardian_authorization_ref,
+    pkg.guardian_authorization_reservation_ref,
     String(contents.length),
     ...contents.flatMap((item) => [item.kind, item.path, item.digest])
   ]);
@@ -541,6 +551,8 @@ function computeTransferReceiptDigest(receipt) {
     receipt.continuity_intent_ref,
     receipt.host_consent_ref,
     receipt.destination_possession_ref
+    ,receipt.guardian_authorization_ref
+    ,receipt.guardian_authorization_reservation_ref
   ]);
 }
 
@@ -558,6 +570,8 @@ function computeTransferFinalizationDigest(finalization) {
     finalization.continuity_intent_ref,
     finalization.host_consent_ref,
     finalization.destination_possession_ref
+    ,finalization.guardian_authorization_ref
+    ,finalization.guardian_authorization_reservation_ref
   ]);
 }
 
@@ -645,6 +659,8 @@ function validateGeneratedArtifacts(validators, artifactPath) {
   const requiredTopLevel = [
     "continuity_intent",
     "host_consent",
+    "guardian_mobility_authorization",
+    "guardian_mobility_events",
     "body_registry_before",
     "body_registry",
     "memory_events",
@@ -661,6 +677,8 @@ function validateGeneratedArtifacts(validators, artifactPath) {
 
   const intent = generated.continuity_intent;
   const consent = generated.host_consent;
+  const guardianAuthorization = generated.guardian_mobility_authorization;
+  const guardianEvents = generated.guardian_mobility_events;
   const possession = generated.body_possession_proof;
   const pkg = generated.transfer_package;
   const receipt = generated.transfer_receipt;
@@ -671,6 +689,11 @@ function validateGeneratedArtifacts(validators, artifactPath) {
 
   requireValid(validators, "continuity_intent.schema.json", intent, "continuity_intent");
   requireValid(validators, "host_consent.schema.json", consent, "host_consent");
+  requireValid(validators, "guardian_authorization.schema.json", guardianAuthorization, "guardian_mobility_authorization");
+  if (!Array.isArray(guardianEvents) || guardianEvents.length < 2) throw new Error("guardian_mobility_events_missing");
+  for (const [index, event] of guardianEvents.entries()) {
+    requireValid(validators, "guardian_authority_event.schema.json", event, `guardian_mobility_events[${index}]`);
+  }
   requireValid(validators, "body_registry.schema.json", registryBefore, "body_registry_before");
   requireValid(validators, "body_registry.schema.json", generated.body_registry, "body_registry");
   requireValid(validators, "checkpoint.schema.json", checkpoint, "checkpoint");
@@ -770,11 +793,18 @@ function validateGeneratedArtifacts(validators, artifactPath) {
     || possession.body_id !== pkg.destination_body_id
   ) throw new Error("transfer_body_scope_mismatch");
 
+  if (
+    intent.guardian_authorization_ref !== guardianAuthorization.authorization_id
+    || intent.guardian_authorization_reservation_ref !== guardianEvents[0].event_id
+  ) throw new Error("guardian_authorization_intent_ref_mismatch");
+
   for (const artifact of [pkg, receipt, finalization]) {
     if (
       artifact.continuity_intent_ref !== intent.intent_id
       || artifact.host_consent_ref !== consent.consent_id
       || artifact.destination_possession_ref !== possession.proof_id
+      || artifact.guardian_authorization_ref !== guardianAuthorization.authorization_id
+      || artifact.guardian_authorization_reservation_ref !== guardianEvents[0].event_id
     ) throw new Error("transfer_evidence_ref_mismatch");
   }
   const packageContents = new Map(pkg.contents.map((item) => [item.path, item.digest]));
@@ -782,6 +812,8 @@ function validateGeneratedArtifacts(validators, artifactPath) {
   if (packageContents.get("continuity/intent.json") !== intent.intent_digest) throw new Error("package_missing_continuity_intent");
   if (packageContents.get("host/destination-consent.json") !== consent.consent_digest) throw new Error("package_missing_host_consent");
   if (packageContents.get("body/destination-possession.json") !== possession.proof_digest) throw new Error("package_missing_destination_possession");
+  if (packageContents.get("guardian/mobility-authorization.json") !== guardianAuthorization.authorization_digest) throw new Error("package_missing_guardian_authorization");
+  if (packageContents.get("guardian/mobility-reservation.json") !== guardianEvents[0].event_digest) throw new Error("package_missing_guardian_reservation");
   if (packageContents.get("continuity/checkpoint.json") !== checkpoint.checkpoint_hash) throw new Error("package_missing_checkpoint");
   if (packageContents.get("continuity/body-registry.json") !== registryBefore.registry_digest) throw new Error("package_missing_body_registry");
   if (packageContents.get("seed/manifest.json") !== checkpoint.seed_root_hash) throw new Error("package_seed_root_mismatch");
@@ -862,6 +894,23 @@ function validateGeneratedArtifacts(validators, artifactPath) {
       || acknowledgement.public_key_ref !== keyRef
     ) throw new Error(`transfer_finalization_signature_unbound:${field}`);
   }
+  validateTransferAuthorization(
+    guardianAuthorization,
+    guardianEvents,
+    {
+      authorization_id: guardianAuthorization.authorization_id,
+      reservation_event_id: guardianEvents[0].event_id,
+      transfer_id: pkg.transfer_id,
+      instance_id: pkg.instance_id,
+      source_body_id: pkg.source_body_id,
+      destination_body_id: pkg.destination_body_id,
+      authority_epoch: guardianAuthorization.authority_epoch,
+      prepared_at: pkg.created_at,
+      finalized_at: finalization.finalized_at,
+      host_consent_verified: true
+    },
+    FIXTURE_PUBLIC_KEYS
+  );
   const packageTime = Date.parse(pkg.created_at);
   const acceptedTime = Date.parse(receipt.accepted_at);
   const finalizedTime = Date.parse(finalization.finalized_at);
@@ -1680,6 +1729,41 @@ function validateSenseAdapterFixtures(validators) {
   };
 }
 
+function validateGuardianMobilityFixtures(validators) {
+  const vectors = readJson(GUARDIAN_MOBILITY_VECTORS);
+  let eventCount = 0;
+  for (const fixture of vectors.positive_cases) {
+    requireValid(
+      validators,
+      "guardian_authorization.schema.json",
+      fixture.authorization,
+      fixture.case_id
+    );
+    requireValid(
+      validators,
+      "signature_envelope.schema.json",
+      fixture.authorization.signature,
+      `${fixture.case_id}.authorization.signature`
+    );
+    for (const [index, event] of fixture.events.entries()) {
+      requireValid(
+        validators,
+        "guardian_authority_event.schema.json",
+        event,
+        `${fixture.case_id}.events[${index}]`
+      );
+      requireValid(
+        validators,
+        "signature_envelope.schema.json",
+        event.signature,
+        `${fixture.case_id}.events[${index}].signature`
+      );
+      eventCount += 1;
+    }
+  }
+  return { authorizationCount: vectors.positive_cases.length, eventCount };
+}
+
 function main() {
   if (process.argv[2] === "--transfer-only") {
     const artifactPath = process.argv[3];
@@ -1696,6 +1780,7 @@ function main() {
   const birthPhaseCount = validateBirthFixtureSchemas(validators);
   const senseObservationCount = validateSenseObservationFixtures(validators);
   const senseAdapterCounts = validateSenseAdapterFixtures(validators);
+  const guardianMobilityCounts = validateGuardianMobilityFixtures(validators);
   const associativeVectors = readJson(ASSOCIATIVE_MEMORY_PROJECTION_VECTORS);
   requireValid(
     validators,
@@ -1733,6 +1818,10 @@ function main() {
   console.log(
     `Neutral sense adapter fixtures: OK (${senseAdapterCounts.adapterCount} adapters, ` +
     `${senseAdapterCounts.failClosedCount} fail-closed results).`
+  );
+  console.log(
+    `Guardian mobility schema fixtures: OK (${guardianMobilityCounts.authorizationCount} ` +
+    `authorizations, ${guardianMobilityCounts.eventCount} authority events).`
   );
   console.log("Associative memory projection schema fixture: OK.");
   console.log("Draft integrity manifest schema: OK.");

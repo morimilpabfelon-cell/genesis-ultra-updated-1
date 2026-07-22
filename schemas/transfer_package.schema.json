@@ -9,6 +9,7 @@
     "transfer_id",
     "instance_id",
     "source_body_id",
+    "destination_body_id",
     "mode",
     "created_at",
     "checkpoint_hash",
@@ -18,6 +19,8 @@
     "continuity_intent_ref",
     "host_consent_ref",
     "destination_possession_ref",
+    "guardian_authorization_ref",
+    "guardian_authorization_reservation_ref",
     "continuity_status"
   ],
   "properties": {
@@ -48,9 +51,21 @@
     "continuity_intent_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "host_consent_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "destination_possession_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_authorization_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_authorization_reservation_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "continuity_status": {
       "type": "string",
       "enum": ["complete", "known_gap", "fork_risk"]
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "mode": { "const": "transfer" } }, "required": ["mode"] },
+      "then": {
+        "properties": {
+          "destination_body_id": { "type": "string", "minLength": 16, "maxLength": 128 }
+        }
+      }
+    }
+  ]
 }
