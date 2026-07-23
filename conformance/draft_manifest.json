@@ -15,8 +15,8 @@
     },
     {
       "path": ".github/workflows/conformance.yml",
-      "size_bytes": 948,
-      "digest": "sha256:d3e43662cbf25f7447458ac5e9cebb35898f6d55db468e43fd9f7bf7d594fd92"
+      "size_bytes": 1772,
+      "digest": "sha256:fe09475da5f5a2648f9b3bf86504176a30fc0434bccd41605d7339a185146488"
     },
     {
       "path": ".gitignore",
@@ -1059,5 +1059,5 @@
       "digest": "sha256:37a1e0a97b6cb17bf47aa29cca0a93d6c224e72f3b8c493011f3a66ff3e8bc3e"
     }
   ],
-  "root_digest": "sha256:f7b4a07d0c785b274183f7176173a274ac42d7ffd09f03a898096ed69ede767f"
+  "root_digest": "sha256:65016254f31181e9f99aeb66082a2bd58ac70b4ac72dbc52426e04119f653765"
 }
