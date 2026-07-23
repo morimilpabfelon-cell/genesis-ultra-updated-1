@@ -97,6 +97,8 @@ def compute_continuity_intent(case: dict) -> str:
             data["checkpoint_hash"],
             data["last_event_hash"],
             data["decision_origin"],
+            data["guardian_authorization_ref"],
+            data["guardian_authorization_reservation_ref"],
             data["created_at"],
             data["expires_at"],
         ],
@@ -151,6 +153,8 @@ def compute_transfer_package(case: dict) -> str:
         data["continuity_intent_ref"],
         data["host_consent_ref"],
         data["destination_possession_ref"],
+        data["guardian_authorization_ref"],
+        data["guardian_authorization_reservation_ref"],
         str(len(contents)),
     ]
     for item in sorted(contents, key=lambda value: value["path"].encode("utf-8")):
@@ -178,6 +182,8 @@ def compute_transfer_receipt(case: dict) -> str:
         data["continuity_intent_ref"],
         data["host_consent_ref"],
         data["destination_possession_ref"],
+        data["guardian_authorization_ref"],
+        data["guardian_authorization_reservation_ref"],
     ]
     return hash_fields(case["domain"], fields)
 
@@ -203,12 +209,26 @@ def compute_transfer_finalization(case: dict) -> str:
         data["continuity_intent_ref"],
         data["host_consent_ref"],
         data["destination_possession_ref"],
+        data["guardian_authorization_ref"],
+        data["guardian_authorization_reservation_ref"],
     ]
     return hash_fields(case["domain"], fields)
 
 
 def main() -> int:
     vectors = json.loads(VECTORS.read_text(encoding="utf-8"))
+    if "--write-vector" in sys.argv[1:]:
+        vectors["continuity_intent"]["expected_intent_digest"] = compute_continuity_intent(vectors["continuity_intent"])
+        vectors["host_consent"]["expected_consent_digest"] = compute_host_consent(vectors["host_consent"])
+        vectors["body_registry"]["expected_registry_digest"] = compute_body_registry(vectors["body_registry"])
+        package_digest = compute_transfer_package(vectors["transfer_package"])
+        vectors["transfer_package"]["expected_package_digest"] = package_digest
+        vectors["transfer_receipt"]["input"]["accepted_package_digest"] = package_digest
+        receipt_digest = compute_transfer_receipt(vectors["transfer_receipt"])
+        vectors["transfer_receipt"]["expected_receipt_digest"] = receipt_digest
+        vectors["transfer_finalization"]["input"]["receipt_digest"] = receipt_digest
+        vectors["transfer_finalization"]["expected_finalization_digest"] = compute_transfer_finalization(vectors["transfer_finalization"])
+        VECTORS.write_text(json.dumps(vectors, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     package_actual = compute_transfer_package(vectors["transfer_package"])
     package_expected = vectors["transfer_package"]["expected_package_digest"]
 

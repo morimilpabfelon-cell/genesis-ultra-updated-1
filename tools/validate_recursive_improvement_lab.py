@@ -133,7 +133,20 @@ def validate_authority(lab,guided):
  if short_state['reason']=='grant_exhausted': raise ValueError('candidate_mapping_missing_event_accepted')
  negatives+=1;return {'receipt':receipt,'execution':execution,'negatives':negatives}
 def main():
- raw=json.loads((Path(sys.argv[1]) if len(sys.argv)>1 else LAB).read_text());lab_negatives=run_lab_boundary_negatives(raw);lab=validate_lab(raw);integration=validate_authority(lab,json.loads((Path(sys.argv[2]) if len(sys.argv)>2 else AUTH).read_text()));print(f"OK recursive improvement laboratory ({lab['projection']['candidate_count']} candidates; best={lab['best']})");print(f"OK projection digest {lab['projection']['projection_digest']}");print(f"OK signed evaluator attestations ({len(lab['candidates'])})");print(f"OK signed exact-grant campaign authorization {integration['receipt']['campaign_authorization_digest']}");print(f"OK candidate authority mapping ({integration['execution']['summary']['operation_count']} signed uses; {integration['execution']['summary']['final_grant_status']})");print(f"OK candidate authority mapping digest {integration['execution']['summary']['mapping_digest']}");print(f"OK authority integration negative cases ({integration['negatives']+lab_negatives})")
+ lab_path=Path(sys.argv[1]) if len(sys.argv)>1 else LAB
+ authority_path=Path(sys.argv[2]) if len(sys.argv)>2 else AUTH
+ raw=json.loads(lab_path.read_text(encoding='utf-8'))
+ guided=json.loads(authority_path.read_text(encoding='utf-8'))
+ lab_negatives=run_lab_boundary_negatives(raw)
+ lab=validate_lab(raw)
+ integration=validate_authority(lab,guided)
+ print(f"OK recursive improvement laboratory ({lab['projection']['candidate_count']} candidates; best={lab['best']})")
+ print(f"OK projection digest {lab['projection']['projection_digest']}")
+ print(f"OK signed evaluator attestations ({len(lab['candidates'])})")
+ print(f"OK signed exact-grant campaign authorization {integration['receipt']['campaign_authorization_digest']}")
+ print(f"OK candidate authority mapping ({integration['execution']['summary']['operation_count']} signed uses; {integration['execution']['summary']['final_grant_status']})")
+ print(f"OK candidate authority mapping digest {integration['execution']['summary']['mapping_digest']}")
+ print(f"OK authority integration negative cases ({integration['negatives']+lab_negatives})")
 if __name__=='__main__':
  try: main()
  except (AuthorityError,ValueError,KeyError,TypeError,AssertionError) as error: print(f'FAIL recursive improvement laboratory: {error}',file=sys.stderr);raise SystemExit(1)

@@ -71,13 +71,15 @@ Ningún método es obligatorio para todas las plataformas. Cada implementación 
 Requiere:
 
 - intención de continuidad firmada por el Body escritor activo;
+- autorización de movilidad `one_time` o `standing` del Guardian, con reserva exacta;
 - consentimiento del anfitrión limitado al recurso destino;
 - prueba de posesión del cuerpo destino;
 - recibo firmado por el destino;
 - finalización firmada o reconocida por las partes disponibles.
 
-No requiere autorización de movimiento del Guardian. Su firma no puede convertirse en
-permiso, propiedad o veto de continuidad.
+La autorización de movilidad es distinta de la atestación de nacimiento y de una
+autorización de recuperación. Su firma no puede convertirse en propiedad, cambio de
+identidad o permiso para reescribir memoria.
 
 ### Recuperación de emergencia
 

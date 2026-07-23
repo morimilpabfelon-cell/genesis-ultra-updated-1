@@ -19,7 +19,10 @@
     "continuity_intent_ref",
     "host_consent_ref",
     "destination_possession_ref",
-    "receipt_digest"
+    "guardian_authorization_ref",
+    "guardian_authorization_reservation_ref",
+    "receipt_digest",
+    "signature"
   ],
   "properties": {
     "schema_version": { "const": "genesis.transfer.receipt.v0.1" },
@@ -42,8 +45,10 @@
     "continuity_intent_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "host_consent_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "destination_possession_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_authorization_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_authorization_reservation_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "receipt_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
-    "signature": { "type": ["object", "null"] }
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
   },
   "allOf": [
     {
@@ -54,6 +59,17 @@
       "then": {
         "required": ["continuity_gap_ref"],
         "properties": { "continuity_gap_ref": { "type": "string", "minLength": 1 } }
+      }
+    },
+    {
+      "properties": {
+        "signature": {
+          "type": "object",
+          "properties": {
+            "signer_type": { "const": "body" },
+            "signed_domain": { "const": "genesis.transfer.receipt.signature.v0.1" }
+          }
+        }
       }
     }
   ]

@@ -17,7 +17,11 @@
     "continuity_intent_ref",
     "host_consent_ref",
     "destination_possession_ref",
-    "finalization_digest"
+    "guardian_authorization_ref",
+    "guardian_authorization_reservation_ref",
+    "finalization_digest",
+    "source_acknowledgement",
+    "destination_acknowledgement"
   ],
   "properties": {
     "schema_version": { "const": "genesis.transfer.finalization.v0.1" },
@@ -32,8 +36,30 @@
     "continuity_intent_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "host_consent_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "destination_possession_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_authorization_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "guardian_authorization_reservation_ref": { "type": "string", "minLength": 16, "maxLength": 128 },
     "finalization_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
-    "source_acknowledgement": { "type": ["object", "null"] },
-    "destination_acknowledgement": { "type": ["object", "null"] }
-  }
+    "source_acknowledgement": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" },
+    "destination_acknowledgement": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "source_acknowledgement": {
+          "type": "object",
+          "properties": {
+            "signer_type": { "const": "body" },
+            "signed_domain": { "const": "genesis.transfer.finalization.signature.v0.1" }
+          }
+        },
+        "destination_acknowledgement": {
+          "type": "object",
+          "properties": {
+            "signer_type": { "const": "body" },
+            "signed_domain": { "const": "genesis.transfer.finalization.signature.v0.1" }
+          }
+        }
+      }
+    }
+  ]
 }

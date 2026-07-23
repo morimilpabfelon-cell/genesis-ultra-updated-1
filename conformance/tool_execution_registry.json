@@ -21,6 +21,8 @@
     "tools/validate_crypto_vectors.py",
     "tools/validate_freedom_charter.mjs",
     "tools/validate_freedom_charter.py",
+    "tools/validate_guardian_mobility.mjs",
+    "tools/validate_guardian_mobility.py",
     "tools/validate_guided_autonomy.py",
     "tools/validate_host_adapter.mjs",
     "tools/validate_host_adapter.py",

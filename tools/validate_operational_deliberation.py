@@ -71,7 +71,7 @@ def validate(d):
  assert len(d["negative_cases"])==40 and len(set(d["negative_cases"]))==40
  return pr
 if __name__=="__main__":
- d=json.loads((Path(sys.argv[1]) if len(sys.argv)>1 else DEFAULT).read_text())
+ d=json.loads((Path(sys.argv[1]) if len(sys.argv)>1 else DEFAULT).read_text(encoding="utf-8"))
  p=validate(d)
  print(f"OK operational deliberation and proof ({p['tasks']} tasks; {p['domains']} domains; {p['traps']} traps)")
  print(f"OK projection digest {p['digest']}")

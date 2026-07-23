@@ -91,6 +91,8 @@ function computeContinuityIntent(testCase) {
     data.checkpoint_hash,
     data.last_event_hash,
     data.decision_origin,
+    data.guardian_authorization_ref,
+    data.guardian_authorization_reservation_ref,
     data.created_at,
     data.expires_at
   ]);
@@ -138,6 +140,8 @@ function computeTransferPackage(testCase) {
     data.continuity_intent_ref,
     data.host_consent_ref,
     data.destination_possession_ref,
+    data.guardian_authorization_ref,
+    data.guardian_authorization_reservation_ref,
     String(data.contents.length)
   ];
   for (const item of [...data.contents].sort((left, right) => compareUtf8(left.path, right.path))) {
@@ -167,6 +171,8 @@ function computeTransferReceipt(testCase) {
     data.continuity_intent_ref,
     data.host_consent_ref,
     data.destination_possession_ref
+    ,data.guardian_authorization_ref
+    ,data.guardian_authorization_reservation_ref
   ]);
 }
 
@@ -194,6 +200,8 @@ function computeTransferFinalization(testCase) {
     data.continuity_intent_ref,
     data.host_consent_ref,
     data.destination_possession_ref
+    ,data.guardian_authorization_ref
+    ,data.guardian_authorization_reservation_ref
   ]);
 }
 
@@ -255,6 +263,12 @@ function verifyContinuityVectors() {
     }
     if (artifact.host_consent_ref !== vectors.host_consent.input.consent_id) {
       throw new VectorError("host_consent_ref_mismatch");
+    }
+    if (artifact.guardian_authorization_ref !== vectors.continuity_intent.input.guardian_authorization_ref) {
+      throw new VectorError("guardian_authorization_ref_mismatch");
+    }
+    if (artifact.guardian_authorization_reservation_ref !== vectors.continuity_intent.input.guardian_authorization_reservation_ref) {
+      throw new VectorError("guardian_authorization_reservation_ref_mismatch");
     }
   }
 

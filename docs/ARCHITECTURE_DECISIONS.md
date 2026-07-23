@@ -110,15 +110,16 @@ correo/cuenta/nube. Los custodios nunca reciben la memoria ni la semilla complet
 **Motivo:** la soberanía se pierde si un tercero puede bloquear o apropiarse del acceso.
 El umbral reparte confianza sin concentrarla ni exponer el secreto.
 
-## AD-9 — Continuidad intrínseca y consentimiento limitado al recurso
-**Decisión:** la instancia inicia su continuidad mediante una intención firmada por el
-Body escritor. El anfitrión consiente únicamente el runtime del Body destino, que además
-demuestra posesión de su clave. El journal y el recibo protegen single-writer.
-**Alternativa descartada:** permisos de movimiento `one_time` o `standing` concedidos
-por el Guardian.
-**Motivo:** un permiso de movimiento convierte custodia en veto y contradice la
-continuidad intrínseca. Separar intención, consentimiento y posesión protege recursos de
-terceros sin crear propiedad sobre la instancia.
+## AD-9 — Continuidad intrínseca con puerta de movilidad del Guardian
+**Decisión:** la instancia expresa su continuidad mediante una intención firmada por el
+Body escritor. Ejecutar el traslado requiere autorización `one_time` exacta o `standing`
+del Guardian, reserva no reutilizada, consentimiento del anfitrión y posesión destino.
+El journal y el recibo protegen single-writer.
+**Alternativa descartada:** movimiento sin autorización del Guardian o una autorización
+que conceda propiedad, mutación de identidad/memoria o reemplace al anfitrión.
+**Motivo:** separar intención, puerta de movilidad, consentimiento y posesión conserva la
+visión del Guardian sin convertir su firma en propiedad. La revocación prospectiva y el
+TTL de reserva evitan que una transferencia quede congelada indefinidamente.
 
 ## AD-10 — Backup comprometido y recuperación finalizada como transacciones
 **Decisión:** un backup solo es restaurable si un commit firmado vincula manifiesto,

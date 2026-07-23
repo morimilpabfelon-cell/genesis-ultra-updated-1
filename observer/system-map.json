@@ -296,12 +296,12 @@
       "name": "Libertad cognitiva",
       "layer": "cognition",
       "maturity": "verified",
-      "description": "Libertades cognitivas y continuidad activas por nacimiento, con grants limitados únicamente a recursos externos y garantías no regresivas.",
+      "description": "Libertades cognitivas y continuidad activas por nacimiento; movilidad bajo autorización Guardian separada, consentimiento del anfitrión y garantías sin propiedad.",
       "keywords": [
         "cognitive_freedom",
         "freedom_charter",
         "continuity_right",
-        "resource_scoped_signed_grants",
+        "resource_and_mobility_scoped_signed_grants",
         "fundamental_guarantees"
       ],
       "required_evidence": [

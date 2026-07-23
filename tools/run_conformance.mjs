@@ -36,6 +36,8 @@ const commands = [
   ["Validate guided autonomy capability grants independently (Node)", process.execPath, ["tools/guided_autonomy.mjs", "validate"]],
   ["Validate cognitive freedom charter (Python)", python, ["tools/validate_freedom_charter.py"]],
   ["Validate cognitive freedom charter independently (Node)", process.execPath, ["tools/validate_freedom_charter.mjs", "validate"]],
+  ["Validate Guardian-authorized mobility (Python)", python, ["tools/validate_guardian_mobility.py"]],
+  ["Validate Guardian-authorized mobility independently (Node)", process.execPath, ["tools/validate_guardian_mobility.mjs"]],
   ["Validate atomic birth transaction (Python)", python, ["tools/validate_birth_transaction.py"]],
   ["Validate atomic birth transaction independently (Node)", process.execPath, ["tools/validate_birth_transaction.mjs"]],
   ["Validate recursive improvement laboratory (Python)", python, ["tools/validate_recursive_improvement_lab.py"]],

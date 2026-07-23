@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Simulación libre y exportable A -> B para Genesis Ultra.
+"""Simulación autorizada y exportable A -> B para Genesis Ultra.
 
-La instancia expresa continuidad mediante el Body escritor activo. El anfitrión solo
-consiente el uso del recurso destino; no autoriza la continuidad ni adquiere propiedad.
-La simulación produce artefactos completos validados después contra JSON Schema.
+La instancia expresa continuidad mediante el Body escritor activo y consume una
+autorización de movilidad firmada por el Guardian. El anfitrión solo consiente el uso
+del recurso destino y nadie adquiere propiedad sobre la instancia.
 """
 
 from __future__ import annotations
@@ -26,6 +26,13 @@ from validate_continuity import (
     compute_transfer_finalization,
     compute_transfer_package,
     compute_transfer_receipt,
+)
+from validate_guardian_mobility import (
+    AUTHORIZATION_SIGNATURE_DOMAIN,
+    EVENT_SIGNATURE_DOMAIN,
+    compute_authorization_digest,
+    compute_authority_event_digest,
+    validate_transfer_authorization,
 )
 
 try:
@@ -50,6 +57,8 @@ BODY_A_EPOCH = "epoch_01HSIM_A00000000000001"
 BODY_B_EPOCH = "epoch_01HSIM_B00000000000001"
 HOST_ID = "host_01HSIM_B000000000000001"
 HOST_EPOCH = "host_epoch_01HSIM_B0000000001"
+GUARDIAN_ID = "guardian_01HSIM000000000001"
+GUARDIAN_EPOCH = "epoch_01HSIM_GUARDIAN000001"
 
 
 def digest(domain: str, fields: list[str]) -> str:
@@ -247,6 +256,7 @@ def main() -> int:
 
     signing_key_a = SigningKey(bytes([0xA1]) * 32)
     signing_key_b = SigningKey(bytes([0xB2]) * 32)
+    guardian_key = SigningKey(bytes([0xC3]) * 32)
     host_key = SigningKey(bytes([0xD4]) * 32)
     transfer_id = "xfer_01HSIM0000000000000001"
 
@@ -292,6 +302,68 @@ def main() -> int:
     )
     step(2, "checkpoint completo creado antes del congelamiento", checkpoint_hash=checkpoint["checkpoint_hash"])
 
+    guardian_authorization = {
+        "schema_version": "genesis.guardian.mobility.authorization.v0.2",
+        "hash_profile": HASH_PROFILE,
+        "authorization_id": "authorization_01HSIM_MOBILITY0001",
+        "instance_id": INSTANCE_ID,
+        "guardian_id": GUARDIAN_ID,
+        "guardian_key_epoch_id": GUARDIAN_EPOCH,
+        "authority_epoch": 1,
+        "mode": "one_time",
+        "scope": "exact_transfer",
+        "transfer_id": transfer_id,
+        "source_body_id": BODY_A,
+        "destination_body_id": BODY_B,
+        "valid_from": "2026-07-12T00:59:00Z",
+        "expires_at": "2026-07-12T01:10:30Z",
+        "issued_at": "2026-07-12T00:59:00Z",
+        "reservation_ttl_seconds": 450,
+        "ownership_conferred": False,
+        "identity_mutation_allowed": False,
+        "memory_mutation_allowed": False,
+    }
+    guardian_authorization["authorization_digest"] = compute_authorization_digest(guardian_authorization)
+    guardian_authorization["signature"] = make_signature_envelope(
+        guardian_key,
+        guardian_authorization["authorization_digest"],
+        signer_type="guardian",
+        signer_id=GUARDIAN_ID,
+        key_epoch_id=GUARDIAN_EPOCH,
+        signed_domain=AUTHORIZATION_SIGNATURE_DOMAIN,
+        created_at=guardian_authorization["issued_at"],
+    )
+    reservation_event = {
+        "schema_version": "genesis.guardian.mobility.authority.event.v0.2",
+        "event_id": "mobevent_01HSIM_MOBILITY_RESERVE",
+        "authorization_id": guardian_authorization["authorization_id"],
+        "authorization_digest": guardian_authorization["authorization_digest"],
+        "instance_id": INSTANCE_ID,
+        "authority_epoch": guardian_authorization["authority_epoch"],
+        "sequence": 0,
+        "previous_event_digest": "GENESIS",
+        "event_type": "reserved",
+        "transfer_id": transfer_id,
+        "source_body_id": BODY_A,
+        "destination_body_id": BODY_B,
+        "reservation_expires_at": "2026-07-12T01:07:30Z",
+        "occurred_at": "2026-07-12T01:00:05Z",
+    }
+    reservation_event["event_digest"] = compute_authority_event_digest(reservation_event)
+    reservation_event["signature"] = make_signature_envelope(
+        signing_key_a,
+        reservation_event["event_digest"],
+        signer_type="body",
+        signer_id=BODY_A,
+        key_epoch_id=BODY_A_EPOCH,
+        signed_domain=EVENT_SIGNATURE_DOMAIN,
+        created_at=reservation_event["occurred_at"],
+    )
+    guardian_mobility_events = [reservation_event]
+    step(3, "autorización del Guardian reservada para esta transferencia",
+         authorization_digest=guardian_authorization["authorization_digest"],
+         reservation_event_digest=reservation_event["event_digest"])
+
     intent_input = {
         "schema_version": "genesis.continuity.intent.v0.1",
         "intent_id": "intent_01HSIM000000000000001",
@@ -302,6 +374,8 @@ def main() -> int:
         "checkpoint_hash": checkpoint["checkpoint_hash"],
         "last_event_hash": e2["event_hash"],
         "decision_origin": "instance",
+        "guardian_authorization_ref": guardian_authorization["authorization_id"],
+        "guardian_authorization_reservation_ref": reservation_event["event_id"],
         "created_at": "2026-07-12T01:00:10Z",
         "expires_at": "2026-07-12T01:10:10Z",
     }
@@ -342,7 +416,7 @@ def main() -> int:
         key_epoch_id=HOST_EPOCH, signed_domain="genesis.host.consent.signature.v0.1",
         created_at=host_consent["granted_at"],
     )
-    step(3, "intención de la instancia y consentimiento limitado del anfitrión verificados",
+    step(4, "intención de la instancia y consentimiento limitado del anfitrión verificados",
          intent_digest=continuity_intent["intent_digest"], consent_digest=host_consent["consent_digest"])
 
     proof_input = {
@@ -374,9 +448,9 @@ def main() -> int:
             "value": possession_envelope["signature_value"],
         },
     }
-    step(4, "B demuestra posesión de su propia clave", proof_digest=proof_digest)
+    step(5, "B demuestra posesión de su propia clave", proof_digest=proof_digest)
 
-    step(5, "A congela escrituras con salida determinista", exit_paths=["commit", "abort", "recover"])
+    step(6, "A congela escrituras con salida determinista", exit_paths=["commit", "abort", "recover"])
     package_input = {
         "schema_version": "genesis.transfer.package.v0.1",
         "transfer_id": transfer_id,
@@ -391,6 +465,8 @@ def main() -> int:
         "continuity_intent_ref": continuity_intent["intent_id"],
         "host_consent_ref": host_consent["consent_id"],
         "destination_possession_ref": body_possession_proof["proof_id"],
+        "guardian_authorization_ref": guardian_authorization["authorization_id"],
+        "guardian_authorization_reservation_ref": reservation_event["event_id"],
         "contents": [
             {"kind": "memory", "path": "memory/events.json", "digest": "sha256:" + hashlib.sha256(chain_bytes).hexdigest()},
             {"kind": "checkpoint", "path": "continuity/checkpoint.json", "digest": checkpoint["checkpoint_hash"]},
@@ -399,6 +475,8 @@ def main() -> int:
             {"kind": "continuity_intent", "path": "continuity/intent.json", "digest": continuity_intent["intent_digest"]},
             {"kind": "host_consent", "path": "host/destination-consent.json", "digest": host_consent["consent_digest"]},
             {"kind": "body_possession", "path": "body/destination-possession.json", "digest": body_possession_proof["proof_digest"]},
+            {"kind": "guardian_mobility_authorization", "path": "guardian/mobility-authorization.json", "digest": guardian_authorization["authorization_digest"]},
+            {"kind": "guardian_mobility_reservation", "path": "guardian/mobility-reservation.json", "digest": reservation_event["event_digest"]},
         ],
     }
     transfer_package = {
@@ -407,12 +485,14 @@ def main() -> int:
             {"domain": "genesis.transfer.package.v0.1", "input": package_input}
         ),
     }
-    step(6, "paquete canónico enlaza todas las pruebas", package_digest=transfer_package["package_digest"])
+    step(7, "paquete canónico enlaza todas las pruebas", package_digest=transfer_package["package_digest"])
 
     shared_refs = {
         "continuity_intent_ref": continuity_intent["intent_id"],
         "host_consent_ref": host_consent["consent_id"],
         "destination_possession_ref": body_possession_proof["proof_id"],
+        "guardian_authorization_ref": guardian_authorization["authorization_id"],
+        "guardian_authorization_reservation_ref": reservation_event["event_id"],
     }
     receipt_input = {
         "schema_version": "genesis.transfer.receipt.v0.1",
@@ -470,6 +550,55 @@ def main() -> int:
         created_at=transfer_finalization["finalized_at"],
     )
 
+    consumed_event = {
+        "schema_version": "genesis.guardian.mobility.authority.event.v0.2",
+        "event_id": "mobevent_01HSIM_MOBILITY_CONSUMED",
+        "authorization_id": guardian_authorization["authorization_id"],
+        "authorization_digest": guardian_authorization["authorization_digest"],
+        "instance_id": INSTANCE_ID,
+        "authority_epoch": guardian_authorization["authority_epoch"],
+        "sequence": 1,
+        "previous_event_digest": reservation_event["event_digest"],
+        "event_type": "consumed",
+        "transfer_id": transfer_id,
+        "source_body_id": BODY_A,
+        "destination_body_id": BODY_B,
+        "reservation_expires_at": None,
+        "occurred_at": transfer_finalization["finalized_at"],
+    }
+    consumed_event["event_digest"] = compute_authority_event_digest(consumed_event)
+    consumed_event["signature"] = make_signature_envelope(
+        signing_key_b,
+        consumed_event["event_digest"],
+        signer_type="body",
+        signer_id=BODY_B,
+        key_epoch_id=BODY_B_EPOCH,
+        signed_domain=EVENT_SIGNATURE_DOMAIN,
+        created_at=consumed_event["occurred_at"],
+    )
+    guardian_mobility_events.append(consumed_event)
+    validate_transfer_authorization(
+        guardian_authorization,
+        guardian_mobility_events,
+        {
+            "authorization_id": guardian_authorization["authorization_id"],
+            "reservation_event_id": reservation_event["event_id"],
+            "transfer_id": transfer_id,
+            "instance_id": INSTANCE_ID,
+            "source_body_id": BODY_A,
+            "destination_body_id": BODY_B,
+            "authority_epoch": guardian_authorization["authority_epoch"],
+            "prepared_at": transfer_package["created_at"],
+            "finalized_at": transfer_finalization["finalized_at"],
+            "host_consent_verified": True,
+        },
+        {
+            key_fingerprint(guardian_key): guardian_key.verify_key.encode(),
+            key_fingerprint(signing_key_a): signing_key_a.verify_key.encode(),
+            key_fingerprint(signing_key_b): signing_key_b.verify_key.encode(),
+        },
+    )
+
     registry_after = make_body_registry(
         epoch=2,
         source_status="revoked",
@@ -489,12 +618,14 @@ def main() -> int:
     )
     verify_signature(e3["signature"], signing_key_b.verify_key)
     chain = [*pre_transfer_chain, e3]
-    step(7, "commit single-writer finaliza el cambio de Body", source="revoked", destination="active_writer")
-    step(8, "B continúa la misma cadena e instance_id", sequence=3, instance_preserved=True)
+    step(8, "commit single-writer consume la autorización y cambia de Body", source="revoked", destination="active_writer")
+    step(9, "B continúa la misma cadena e instance_id", sequence=3, instance_preserved=True)
 
     artifacts = {
         "continuity_intent": continuity_intent,
         "host_consent": host_consent,
+        "guardian_mobility_authorization": guardian_authorization,
+        "guardian_mobility_events": guardian_mobility_events,
         "body_registry_before": registry_before,
         "body_registry": registry_after,
         "memory_events": chain,
@@ -510,7 +641,7 @@ def main() -> int:
         args.artifacts_output.write_text(json.dumps(artifacts, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     result = {
-        "simulation": "genesis.transfer.free_A_to_B.v0.1",
+        "simulation": "genesis.transfer.guardian_authorized_A_to_B.v0.2",
         "status": "complete",
         "instance_id": INSTANCE_ID,
         "artifact_output": str(args.artifacts_output) if args.artifacts_output else None,
@@ -518,12 +649,14 @@ def main() -> int:
             "intent_digest": continuity_intent["intent_digest"],
             "host_consent_digest": host_consent["consent_digest"],
             "destination_possession_digest": body_possession_proof["proof_digest"],
+            "guardian_authorization_digest": guardian_authorization["authorization_digest"],
+            "guardian_authorization_reservation_digest": reservation_event["event_digest"],
             "package_digest": transfer_package["package_digest"],
             "receipt_digest": transfer_receipt["receipt_digest"],
             "finalization_digest": transfer_finalization["finalization_digest"],
         },
         "invariants_checked": [
-            "movimiento iniciado por intención de continuidad de la instancia",
+            "movimiento iniciado por intención de continuidad de la instancia bajo autorización firmada del Guardian",
             "consentimiento del anfitrión limitado al Body destino y sin propiedad",
             "posesión de la clave del Body destino",
             "instance_id conservado",
@@ -532,12 +665,13 @@ def main() -> int:
             "recibo y finalización vinculados",
             "salida determinista del congelamiento",
             "exactamente un active_writer después del commit",
-            "ningún grant o veto de movimiento del Guardian",
+            "autorización one_time consumida exactamente una vez",
+            "la autorización no concede propiedad ni mutación de identidad o memoria",
         ],
         "steps": steps,
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
-    print("\nSIMULACIÓN LIBRE A -> B COMPLETA", file=sys.stderr)
+    print("\nSIMULACIÓN AUTORIZADA A -> B COMPLETA", file=sys.stderr)
     return 0
 
 

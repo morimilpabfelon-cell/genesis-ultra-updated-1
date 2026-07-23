@@ -79,11 +79,11 @@ npm test
 
 En Windows, `py -m pip install -r requirements.txt` puede sustituir el primer comando.
 
-La suite ejecuta los validadores Python y Node, compila los 50 JSON Schema y verifica en ambos
+La suite ejecuta los validadores Python y Node, compila los 52 JSON Schema y verifica en ambos
 lenguajes identidad, libertad, nacimiento atómico, sentidos, compuerta de memoria, proyecciones
 y recuperación. También exige que los artefactos A→B enlacen intención de continuidad,
-consentimiento limitado del host, posesión, checkpoint, paquete, recibo y finalización sin un
-permiso de movimiento del Guardian. Simula backup cifrado, recuperación B→C, reinicios de
+autorización del Guardian, reserva/consumo únicos, consentimiento limitado del host, posesión,
+checkpoint, paquete, recibo y finalización. Simula backup cifrado, recuperación B→C, reinicios de
 nacimiento y recuperación, y ejecuta los vectores criptográficos y casos negativos. Pasar la
 suite no constituye una certificación de seguridad ni convierte el borrador en producción.
 

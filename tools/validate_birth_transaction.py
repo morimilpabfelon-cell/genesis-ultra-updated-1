@@ -56,7 +56,7 @@ def main() -> int:
     print(f"OK birth receipt {expected['receipt_digest']}")
     print(f"OK birth journal phases ({expected['phase_count']})")
     print(f"OK birth negative cases ({expected['negative_case_count']})")
-    print("NOTE Guardian signature is witness evidence, never ownership or movement permission.")
+    print("NOTE birth witness is not a mobility grant; movement uses a separate signed authorization.")
     return 0
 
 

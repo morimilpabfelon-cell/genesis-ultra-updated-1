@@ -59,7 +59,7 @@
     "validate:operational-proof": "node tools/validate_operational_deliberation.mjs"
   },
   "devDependencies": {
-    "ajv": "8.17.1",
+    "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "hash-wasm": "4.12.0"
   },

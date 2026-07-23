@@ -5,6 +5,7 @@
     "APPLY_CHANGES_POWERSHELL.md"
   ],
   "required": [
+    ".gitattributes",
     ".github/workflows/conformance.yml",
     ".gitignore",
     "NOTICE.md",
@@ -19,6 +20,7 @@
     "conformance/draft_manifest.json",
     "conformance/freedom_charter_vectors.json",
     "conformance/golden_vectors.json",
+    "conformance/guardian_mobility_vectors.json",
     "conformance/guided_autonomy_vectors.json",
     "conformance/host_adapter_vectors.json",
     "conformance/hybrid_memory_retrieval_vectors.json",
@@ -183,6 +185,8 @@
     "tools/validate_crypto_vectors.py",
     "tools/validate_freedom_charter.mjs",
     "tools/validate_freedom_charter.py",
+    "tools/validate_guardian_mobility.mjs",
+    "tools/validate_guardian_mobility.py",
     "tools/validate_guided_autonomy.py",
     "tools/validate_guided_autonomy_authority.mjs",
     "tools/validate_guided_autonomy_authority.py",

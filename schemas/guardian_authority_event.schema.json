@@ -1,9 +1,110 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:genesis:schema:guardian-authority-event:v0.1",
-  "title": "Removed Genesis Guardian Mobility Authority Event",
-  "description": "Tombstone: every guardian mobility authority event is invalid under intrinsic continuity.",
+  "$id": "urn:genesis:schema:guardian-mobility-authority-event:v0.2",
+  "title": "Genesis Guardian Mobility Authority Event",
   "type": "object",
   "additionalProperties": false,
-  "not": {}
+  "required": [
+    "schema_version",
+    "event_id",
+    "authorization_id",
+    "authorization_digest",
+    "instance_id",
+    "authority_epoch",
+    "sequence",
+    "previous_event_digest",
+    "event_type",
+    "transfer_id",
+    "source_body_id",
+    "destination_body_id",
+    "reservation_expires_at",
+    "occurred_at",
+    "event_digest",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "genesis.guardian.mobility.authority.event.v0.2" },
+    "event_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "authorization_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "authorization_digest": { "$ref": "#/$defs/sha256" },
+    "instance_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "authority_epoch": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "sequence": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "previous_event_digest": {
+      "oneOf": [
+        { "const": "GENESIS" },
+        { "$ref": "#/$defs/sha256" }
+      ]
+    },
+    "event_type": { "type": "string", "enum": ["reserved", "consumed", "revoked"] },
+    "transfer_id": { "type": ["string", "null"], "minLength": 16, "maxLength": 128 },
+    "source_body_id": { "type": ["string", "null"], "minLength": 16, "maxLength": 128 },
+    "destination_body_id": { "type": ["string", "null"], "minLength": 16, "maxLength": 128 },
+    "reservation_expires_at": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/timestamp" }
+      ]
+    },
+    "occurred_at": { "$ref": "#/$defs/timestamp" },
+    "event_digest": { "$ref": "#/$defs/sha256" },
+    "signature": { "$ref": "urn:genesis:schema:signature-envelope:v0.1" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "event_type": { "enum": ["reserved", "consumed"] } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "transfer_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+          "source_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+          "destination_body_id": { "type": "string", "minLength": 16, "maxLength": 128 },
+          "signature": {
+            "type": "object",
+            "properties": { "signer_type": { "const": "body" } }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "reserved" } }, "required": ["event_type"] },
+      "then": { "properties": { "reservation_expires_at": { "$ref": "#/$defs/timestamp" } } }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "consumed" } }, "required": ["event_type"] },
+      "then": { "properties": { "reservation_expires_at": { "type": "null" } } }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "revoked" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "transfer_id": { "type": "null" },
+          "source_body_id": { "type": "null" },
+          "destination_body_id": { "type": "null" },
+          "reservation_expires_at": { "type": "null" },
+          "signature": {
+            "type": "object",
+            "properties": { "signer_type": { "const": "guardian" } }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "signature": {
+          "type": "object",
+          "properties": {
+            "signed_domain": { "const": "genesis.guardian.mobility.authority.event.signature.v0.2" }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$"
+    }
+  }
 }

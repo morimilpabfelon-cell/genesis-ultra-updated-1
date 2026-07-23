@@ -201,7 +201,7 @@ def mutate(v,m):
   x.append(deepcopy(m['value']))
  return c
 def run(path=DEFAULT):
- v=json.loads(Path(path).read_text()); p=build(v); projection(p)
+ v=json.loads(Path(path).read_text(encoding='utf-8')); p=build(v); projection(p)
  if p!=v['expected_projection']: raise E('expected_projection_mismatch')
  bad=[]
  for m in v['boundary_mutations']:

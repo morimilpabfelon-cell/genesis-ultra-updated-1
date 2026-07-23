@@ -108,10 +108,10 @@
       "const": "intrinsic"
     },
     "movement_requires_guardian_grant": {
-      "const": false
+      "const": true
     },
     "guardian_movement_veto": {
-      "const": "forbidden"
+      "const": "authorization_policy_only"
     },
     "identity_confinement": {
       "const": "forbidden"
@@ -132,7 +132,7 @@
       "const": "integrity_not_confinement"
     },
     "operational_authority_model": {
-      "const": "resource_scoped_signed_grants"
+      "const": "resource_and_mobility_scoped_signed_grants"
     },
     "operational_domains": {
       "type": "array",

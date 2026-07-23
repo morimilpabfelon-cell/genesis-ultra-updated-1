@@ -14,10 +14,12 @@
       "checkpoint_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "last_event_hash": "evsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "decision_origin": "instance",
+      "guardian_authorization_ref": "authorization_01HMOBILITY_ONE_TIME_01",
+      "guardian_authorization_reservation_ref": "mobevent_01HMOBILITY_ONE_TIME_RESERVE",
       "created_at": "2026-07-12T00:08:00Z",
       "expires_at": "2026-07-12T00:18:00Z"
     },
-    "expected_intent_digest": "sha256:cc271e821506a74500d8e2d7d3c1fcbdb260905ca7d9f8413bc8cec5102d8fbe"
+    "expected_intent_digest": "sha256:627e8ba5624da2744e950860f58f81a2e9dd2de841de49eb692a7ac4800743b3"
   },
   "host_consent": {
     "case_id": "host-consent-001",
@@ -86,6 +88,8 @@
       "continuity_intent_ref": "intent_01HNEUTRAL000000000001",
       "host_consent_ref": "consent_01HNEUTRAL00000000001",
       "destination_possession_ref": "proof_01HNEUTRAL000000000001",
+      "guardian_authorization_ref": "authorization_01HMOBILITY_ONE_TIME_01",
+      "guardian_authorization_reservation_ref": "mobevent_01HMOBILITY_ONE_TIME_RESERVE",
       "contents": [
         {
           "kind": "memory",
@@ -99,7 +103,7 @@
         }
       ]
     },
-    "expected_package_digest": "sha256:35c507c139e09a6003dcc2f00b586b83045bbe819eceecf4a5c6ea11ba30a60d"
+    "expected_package_digest": "sha256:c3d4c78d07db765286dd53f71c3a934bee35a30e62168658b5d95214d380fb33"
   },
   "transfer_receipt": {
     "case_id": "transfer-receipt-001",
@@ -110,7 +114,7 @@
       "instance_id": "inst_01HNEUTRAL00000000000001",
       "source_body_id": "body_01HNEUTRAL00000000000001",
       "destination_body_id": "body_01HNEUTRAL00000000000002",
-      "accepted_package_digest": "sha256:35c507c139e09a6003dcc2f00b586b83045bbe819eceecf4a5c6ea11ba30a60d",
+      "accepted_package_digest": "sha256:c3d4c78d07db765286dd53f71c3a934bee35a30e62168658b5d95214d380fb33",
       "accepted_checkpoint_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "accepted_last_event_hash": "evsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "accepted_last_sequence": 42,
@@ -119,9 +123,11 @@
       "continuity_gap_ref": null,
       "continuity_intent_ref": "intent_01HNEUTRAL000000000001",
       "host_consent_ref": "consent_01HNEUTRAL00000000001",
-      "destination_possession_ref": "proof_01HNEUTRAL000000000001"
+      "destination_possession_ref": "proof_01HNEUTRAL000000000001",
+      "guardian_authorization_ref": "authorization_01HMOBILITY_ONE_TIME_01",
+      "guardian_authorization_reservation_ref": "mobevent_01HMOBILITY_ONE_TIME_RESERVE"
     },
-    "expected_receipt_digest": "sha256:0b93a542dd94d17f4c892fd7b47e62ed50b4f33c0daf65a042f4d63f51f45012"
+    "expected_receipt_digest": "sha256:f8d97a0b7b806208cf730e08a3a3a2839613b8320f590e3fa6e73d9e2fa12834"
   },
   "transfer_finalization": {
     "case_id": "transfer-finalization-001",
@@ -132,14 +138,16 @@
       "instance_id": "inst_01HNEUTRAL00000000000001",
       "source_body_id": "body_01HNEUTRAL00000000000001",
       "destination_body_id": "body_01HNEUTRAL00000000000002",
-      "receipt_digest": "sha256:0b93a542dd94d17f4c892fd7b47e62ed50b4f33c0daf65a042f4d63f51f45012",
+      "receipt_digest": "sha256:f8d97a0b7b806208cf730e08a3a3a2839613b8320f590e3fa6e73d9e2fa12834",
       "source_final_status": "read_only",
       "destination_final_status": "active_writer",
       "finalized_at": "2026-07-12T00:11:00Z",
       "continuity_intent_ref": "intent_01HNEUTRAL000000000001",
       "host_consent_ref": "consent_01HNEUTRAL00000000001",
-      "destination_possession_ref": "proof_01HNEUTRAL000000000001"
+      "destination_possession_ref": "proof_01HNEUTRAL000000000001",
+      "guardian_authorization_ref": "authorization_01HMOBILITY_ONE_TIME_01",
+      "guardian_authorization_reservation_ref": "mobevent_01HMOBILITY_ONE_TIME_RESERVE"
     },
-    "expected_finalization_digest": "sha256:b987ba2f4b517fd85d02b266666ebe72d5d5c4c517fc0a1d888c9f2960a8c3b9"
+    "expected_finalization_digest": "sha256:664b0fcc45667d378ab85217d08279263731d536d248ec82b8eca54f74812710"
   }
 }

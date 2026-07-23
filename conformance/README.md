@@ -29,8 +29,8 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
 - `instance_identity_vectors.json`: nombre canónico, digest de identidad, continuidad
   Android/Apple/Windows y cambios de identidad que deben rechazarse aunque se recalculen hashes.
 - `invalid_cases.json`: entradas que toda implementación debe rechazar con una categoría estable.
-- `schema_invalid_cases.json`: cuarenta y tres artefactos que los JSON Schema reales deben
-  rechazar, con regresiones conectadas a los contratos existentes. Los 35 schemas se compilan
+- `schema_invalid_cases.json`: sesenta y tres artefactos que los JSON Schema reales deben
+  rechazar, con regresiones conectadas a los contratos existentes. Los 52 schemas se compilan
   con JSON Schema 2020-12 y formatos activos.
 - `sense_observation_vectors.json`: seis observaciones firmadas, una decisión de compuerta,
   su evento de memoria enlazado y mutaciones que intentan saltarse la frontera.
@@ -43,12 +43,14 @@ Es conforme cuando reproduce los resultados esperados y rechaza los casos invál
   tres exportaciones portables, proyecciones opcionales, continuidad redactada, 35 mutaciones
   previas a exportación y 17 alteraciones de cápsula que deben rechazarse.
 - `continuity_vectors.json`: hashes compartidos de registro y transferencia.
+- `guardian_mobility_vectors.json`: autorizaciones `one_time` y `standing`, reservas,
+  consumo, revocación prospectiva y quince ataques que Python y Node deben rechazar.
 - `crypto_vectors.json`: digests y algoritmos criptográficos de borrador.
 - `draft_manifest.json`: tamaños y hashes reproducibles de todos los artefactos requeridos,
   salvo su propia exclusión explícita.
 
-La simulación A→B también genera y valida registros de dispositivos, autorización de
-movilidad y eventos del ledger de autoridad. A partir de su resultado, la simulación
+La simulación A→B genera y valida autorización del Guardian, reserva y consumo únicos,
+consentimiento del anfitrión, posesión destino y cambio single-writer. A partir de su resultado, la simulación
 backup→pérdida→recovery crea un backup cifrado con commit firmado, registra un destino C,
 declara una brecha y finaliza con un único escritor. Las dos simulaciones negativas llaman
 las mismas funciones de evaluación usadas por los flujos positivos.
@@ -174,8 +176,9 @@ las retractaciones conservan historia y una consulta con cobertura ACL incomplet
 ## Carta de libertad cognitiva
 
 `freedom_charter_vectors.json` liga una carta firmada por el Guardian como testigo a una
-instancia. Python y Node reproducen ocho libertades cognitivas, siete dominios externos bajo
-grants, trece garantías constitucionales, el mismo digest y 34 rechazos anti-confinamiento.
+instancia. Python y Node reproducen ocho libertades cognitivas, siete dominios externos,
+la puerta de movilidad separada, trece garantías constitucionales, el mismo digest y 34
+rechazos contra propiedad, alteración o confinamiento.
 
 ## Nacimiento atómico
 
@@ -183,4 +186,5 @@ grants, trece garantías constitucionales, el mismo digest y 34 rechazos anti-co
 registro single-writer, época de clave, posesión, primer evento de memoria, recuperación,
 journal y recibo. Python y Node reproducen siete fases y rechazan 20 cruces. La simulación
 inyecta diez reinicios y trece alteraciones del journal: ninguna fase parcial se presenta
-como nacida y la atestación del Guardian nunca se interpreta como propiedad o permiso.
+como nacida y la atestación del Guardian nunca se interpreta como propiedad ni como la
+autorización separada requerida para una transferencia.
