@@ -13,6 +13,8 @@
 - [x] Suite completa verde para cápsulas portables verificables en el [PR #21](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/21).
 - [x] Suite completa verde para extracción multimodal neutral en el [PR #22](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/22).
 - [x] Suite completa verde para memoria estructurada y versionada en el [PR #23](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/23).
+- [x] Suite completa verde en Ubuntu 24.04, Windows 2025 y macOS 15, con compuerta
+      agregada `reference-checks`, en el [PR #36](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/36).
 - [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
 
 - [x] Suite completa verde para autonomía guiada y grants progresivos en el [PR #25](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/25).
@@ -131,11 +133,14 @@
 
 ## Pendiente del Génesis neutral
 
-- [ ] Endurecimiento reproducible de CI y tooling sin alterar los contratos normativos.
+- [x] Endurecimiento reproducible de CI y tooling sin alterar los contratos normativos:
+      runners explícitos, Actions fijadas por SHA y compuerta agregada estable en el
+      [PR #36](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/36).
 - [ ] Conteos documentales derivados automáticamente de los artefactos comprobados.
 - [ ] Reglas neutrales de evolución, compatibilidad y migración entre versiones del protocolo.
 - [ ] Modelo de amenazas unificado para identidad, memoria, autoridad, herramientas y supply chain.
-- [ ] Conformidad del workspace reproducida en Ubuntu, Windows y macOS.
+- [x] Conformidad del workspace reproducida en Ubuntu 24.04, Windows 2025 y macOS 15
+      por la matriz verde del [PR #36](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/36).
 - [ ] Revisión criptográfica y de seguridad externa.
 - [ ] Decisiones definitivas de licencia, nombre, contribuciones, marca, certificación y publicación.
 
