@@ -15,7 +15,8 @@
 - [x] Suite completa verde para memoria estructurada y versionada en el [PR #23](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/23).
 - [x] Suite completa verde en Ubuntu 24.04, Windows 2025 y macOS 15, con compuerta
       agregada `reference-checks`, en el [PR #36](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/36).
-- [ ] Protección de `main` exige el check `reference-checks` antes de cada fusión.
+- [x] Protección de `main` exige el check `reference-checks` antes de cada fusión mediante
+      el ruleset activo [`main-release-gate`](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/rules/19598502).
 
 - [x] Suite completa verde para autonomía guiada y grants progresivos en el [PR #25](https://github.com/morimilpabfelon-cell/genesis-ultra-updated-1/pull/25).
 
